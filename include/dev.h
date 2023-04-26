@@ -1,1 +1,4 @@
-#include "tools.h"
+#include "dev.c"
+
+
+int debug();
