@@ -3,18 +3,16 @@
 
 int debug() {
 
-    // char str1[] = "string 1\n";
-    // char str2[] = "string 2\n";
-    // char *p1 = &str1[0];
-    // char *p2 = &str2[0];
+    // int a = 12;
+    // int b = 14;
+    // swap_intp(&a, &b);
+    // printf("value of a is %d.\n", a);
+    // printf("value of b is %d.\n", b);
 
-    int a = 12;
-    int b = 14;
-
-    swap_intp(&a, &b);
-
-    printf("value of a is %d.\n", a);
-    printf("value of b is %d.\n", b);
+    char *str1 = "string 1";
+    char *str2 = "string 2";
+    swap_charp(&str1, &str2);
+    printf("str1 is %s, str2 is %s\n", str1, str2);
 
     return 0;
 }
