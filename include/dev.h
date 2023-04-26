@@ -1,4 +1,4 @@
 #include "dev.c"
 
 
-int debug();
+int swap_intp(int *a, int *b);

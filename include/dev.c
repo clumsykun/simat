@@ -2,10 +2,9 @@
 #include <stdio.h>
 
 
-int debug() {
-
-    char str[] = "this is a string\n";
-    printf(str);
-
+int swap_intp(int* a, int* b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
     return 0;
 }
