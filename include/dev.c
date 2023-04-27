@@ -92,14 +92,28 @@ double stats_min(double *arr, unsigned int len) {
 }
 
 
-// int stats_normalize(double *arr, unsigned int len) {
+int stats_normalize_by_stats(double *arr, unsigned int len) {
 
-//     double mean = stats_mean(arr, len);
-//     double std = stats_mean(arr, len);
+    double mean = stats_mean(arr, len);
+    double std = stats_std(arr, len, 0);
 
-//     for (unsigned int i=0; i < len; i++) {
-//         *(arr+i) = *(arr+i) / mean;
-//     }
+    for (unsigned int i=0; i < len; i++) {
+        *(arr+i) = ( *(arr+i) - mean ) / std;
+    }
 
-//     return 0;
-// }
+    return 0;
+}
+
+
+int stats_normalize_by_scale(double *arr, unsigned int len, double min, double max) {
+
+    double arr_min = stats_min(arr, len);
+    double diff = stats_max(arr, len) - arr_min;
+    double target_diff = max - min;
+
+    for (unsigned int i=0; i < len; i++) {
+        *(arr+i) = min + (*(arr+i) - arr_min)*target_diff/diff;
+    }
+
+    return 0;
+}
