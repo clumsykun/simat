@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 
 int swap_intp(int *a, int* b) {
@@ -29,15 +30,37 @@ int swap_charp(char **a, char **b) {
 }
 
 
-float stats_mean(float *arr, unsigned int len) {
+double stats_mean(double *arr, unsigned int len) {
 
-    float sum = 0;
-    float mean;
+    double sum = 0;
+    double mean;
 
     for (unsigned int i = 0; i < len; i++) {
         sum += *(arr+i);
     }
 
-    mean = sum / (float) len;
+    mean = sum / (double) len;
     return mean;
+}
+
+
+double stats_var(double *arr, unsigned int len, unsigned int freedom) {
+
+    double mean = stats_mean(arr, len);
+    double sum_sq_diff = 0;
+    double variance;
+
+    for (unsigned int i = 0; i < len; i++) {
+        sum_sq_diff += ( *(arr+i)-mean ) * ( *(arr+i)-mean );
+    }
+
+    variance = sum_sq_diff / (double) (len-freedom);
+    return variance;
+}
+
+
+double stats_std(double *arr, unsigned int len, unsigned int freedom) {
+
+    double std = sqrt(stats_var(arr, len, freedom));
+    return std;
 }
