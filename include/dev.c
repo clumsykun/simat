@@ -35,7 +35,7 @@ double stats_mean(double *arr, unsigned int len) {
     double sum = 0;
     double mean;
 
-    for (unsigned int i = 0; i < len; i++) {
+    for (unsigned int i=0; i < len; i++) {
         sum += *(arr+i);
     }
 
@@ -50,7 +50,7 @@ double stats_var(double *arr, unsigned int len, unsigned int freedom) {
     double sum_sq_diff = 0;
     double variance;
 
-    for (unsigned int i = 0; i < len; i++) {
+    for (unsigned int i=0; i < len; i++) {
         sum_sq_diff += ( *(arr+i)-mean ) * ( *(arr+i)-mean );
     }
 
@@ -64,3 +64,42 @@ double stats_std(double *arr, unsigned int len, unsigned int freedom) {
     double std = sqrt(stats_var(arr, len, freedom));
     return std;
 }
+
+
+double stats_max(double *arr, unsigned int len) {
+    double max = *arr;
+
+    for (unsigned int i=0; i < len; i++) {
+        if (*(arr+i) > max) {
+            max = *(arr+i);
+        }
+    }
+
+    return max;
+}
+
+
+double stats_min(double *arr, unsigned int len) {
+    double min = *arr;
+
+    for (unsigned int i=0; i < len; i++) {
+        if (min > *(arr+i)) {
+            min = *(arr+i);
+        }
+    }
+
+    return min;
+}
+
+
+// int stats_normalize(double *arr, unsigned int len) {
+
+//     double mean = stats_mean(arr, len);
+//     double std = stats_mean(arr, len);
+
+//     for (unsigned int i=0; i < len; i++) {
+//         *(arr+i) = *(arr+i) / mean;
+//     }
+
+//     return 0;
+// }
