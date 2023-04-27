@@ -27,3 +27,17 @@ int swap_charp(char **a, char **b) {
 
     return 0;
 }
+
+
+float stats_mean(float *arr, unsigned int len) {
+
+    float sum = 0;
+    float mean;
+
+    for (unsigned int i = 0; i < len; i++) {
+        sum += *(arr+i);
+    }
+
+    mean = sum / (float) len;
+    return mean;
+}
