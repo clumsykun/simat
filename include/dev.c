@@ -4,6 +4,8 @@
 #include <math.h>
 #include <time.h>
 
+#define loc(arr,i) arr->head[i]
+
 
 typedef struct _Array{
 
@@ -42,9 +44,9 @@ int swap_charp(char **a, char **b) {
 
 
 Array *create_array(unsigned int len) {
-    Array *arr = (Array *) malloc(sizeof(Array));
+    Array *arr = malloc(sizeof(Array));
     arr->len = len;
-    arr->head = (double *) malloc(len*sizeof(double));
+    arr->head = malloc(len*sizeof(double));
     return arr;
 }
 
@@ -63,8 +65,8 @@ double array_max(Array *arr) {
     double max = *(arr->head);
 
     for (unsigned int i=0; i < arr->len; i++) {
-        if (*(arr->head+i) > max) {
-            max = *(arr->head+i);
+        if (loc(arr, i) > max) {
+            max = loc(arr, i);
         }
     }
 
@@ -76,8 +78,8 @@ double array_min(Array *arr) {
     double min = *(arr->head);
 
     for (unsigned int i=0; i < arr->len; i++) {
-        if (min > *(arr->head+i)) {
-            min = *(arr->head+i);
+        if (min > loc(arr, i)) {
+            min = loc(arr, i);
         }
     }
 
@@ -90,7 +92,7 @@ double stats_mean(Array *arr) {
     double sum = 0;
 
     for (unsigned int i=0; i < arr->len; i++) {
-        sum += *(arr->head+i);
+        sum += loc(arr, i);
     }
 
     return sum / (double) arr->len;
@@ -103,7 +105,7 @@ double stats_var(Array *arr, unsigned int freedom) {
     double sum_sq_diff = 0;
 
     for (unsigned int i=0; i < arr->len; i++) {
-        sum_sq_diff += ( *(arr->head+i)-mean ) * ( *(arr->head+i)-mean );
+        sum_sq_diff += ( loc(arr, i)-mean ) * ( loc(arr, i)-mean );
     }
 
     return sum_sq_diff / (double) (arr->len-freedom);
@@ -111,7 +113,6 @@ double stats_var(Array *arr, unsigned int freedom) {
 
 
 double stats_std(Array *arr, unsigned int freedom) {
-
     return sqrt(stats_var(arr, freedom));
 }
 
@@ -123,7 +124,7 @@ void array_normalize(Array *arr) {
     double std = stats_std(arr, 0);
 
     for (unsigned int i=0; i < arr->len; i++) {
-        *(arr->head+i) = ( *(arr->head+i) - mean ) / std;
+        loc(arr, i) = ( loc(arr, i) - mean ) / std;
     }
 }
 
@@ -136,7 +137,7 @@ void array_scale(Array *arr, double min, double max) {
     double target_scale = max - min;
 
     for (unsigned int i=0; i < arr->len; i++) {
-        *(arr->head+i) = min + (*(arr->head+i) - arr_min)*target_scale/scale;
+        loc(arr, i) = min + (loc(arr, i) - arr_min) * target_scale / scale;
     }
 }
 
@@ -146,17 +147,8 @@ void array_set_rand(Array *arr) {
 
     srand(time(NULL));
     for (unsigned int i = 0; i < arr->len; i++) {
-        *(arr->head+i) = rand() + ( (double) rand() / RAND_MAX );
+        loc(arr, i) = rand() + ( (double) rand() / RAND_MAX );
     }
-}
-
-
-// Function to swap two elements
-void swap(int *a, int *b)
-{
-    int t = *a;
-    *a = *b;
-    *b = t;
 }
 
 
@@ -168,8 +160,7 @@ void _swap_double(double *left, double *right) {
 }
 
 
-// Partition the array using the last element as the pivot
-unsigned int _partition(double *head, unsigned int len)
+unsigned int _partition_double(double *head, unsigned int len)
 {
     double pivot = head[len-1]; // Choosing the last value as pivot
     int candidate = -1; // Candidate position of pivot
@@ -187,17 +178,17 @@ unsigned int _partition(double *head, unsigned int len)
 }
 
 
-void _quick_sort(double *head, unsigned int len)
+void _quick_sort_double(double *head, unsigned int len)
 {
     if (len > 1)
     {
-        unsigned int pi = _partition(head, len);
-        _quick_sort(head, pi);
-        _quick_sort(head+pi+1, len-pi-1);
+        unsigned int pi = _partition_double(head, len);
+        _quick_sort_double(head, pi);
+        _quick_sort_double(head+pi+1, len-pi-1);
     }
 }
 
 
 void array_sort(Array *arr) {
-    _quick_sort(arr->head, arr->len);
+    _quick_sort_double(arr->head, arr->len);
 }
