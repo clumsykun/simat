@@ -15,3 +15,4 @@ double stats_var(Array *arr, unsigned int freedom);
 double stats_std(Array *arr, unsigned int freedom);
 
 void array_normalize(Array *arr);
+void array_scale(Array *arr, double min, double max);

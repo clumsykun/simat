@@ -126,15 +126,14 @@ void array_normalize(Array *arr) {
 }
 
 
-// int stats_normalize_by_scale(double *arr, unsigned int len, double min, double max) {
+/* Scale the array to make sure that its max value and min value match param max and min. */
+void array_scale(Array *arr, double min, double max) {
 
-//     double arr_min = stats_min(arr, len);
-//     double diff = stats_max(arr, len) - arr_min;
-//     double target_diff = max - min;
+    double arr_min = array_min(arr);
+    double scale = array_max(arr) - arr_min;
+    double target_scale = max - min;
 
-//     for (unsigned int i=0; i < len; i++) {
-//         *(arr+i) = min + (*(arr+i) - arr_min)*target_diff/diff;
-//     }
-
-//     return 0;
-// }
+    for (unsigned int i=0; i < arr->len; i++) {
+        *(arr->head+i) = min + (*(arr->head+i) - arr_min)*target_scale/scale;
+    }
+}

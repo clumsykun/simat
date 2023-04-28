@@ -28,6 +28,16 @@ int debug() {
     mean = stats_mean(arr);
     var = stats_var(arr, 0);
     std = stats_std(arr, 0);
+    max = array_max(arr);
+    min = array_min(arr);
+
+    array_scale(arr, 0, 4);
+
+    mean = stats_mean(arr);
+    var = stats_var(arr, 0);
+    std = stats_std(arr, 0);
+    max = array_max(arr);
+    min = array_min(arr);
 
     free_array(arr);
     printf("arr: %s\n", *arr);
