@@ -57,90 +57,86 @@ void free_array(Array *arr) {
 }
 
 
-double stats_mean(double *arr, unsigned int len) {
+double stats_mean(Array *arr) {
 
     double sum = 0;
-    double mean;
 
-    for (unsigned int i=0; i < len; i++) {
-        sum += *(arr+i);
+    for (unsigned int i=0; i < arr->len; i++) {
+        sum += *(arr->head+i);
     }
 
-    mean = sum / (double) len;
-    return mean;
+    return sum / (double) arr->len;
 }
 
 
-double stats_var(double *arr, unsigned int len, unsigned int freedom) {
+double stats_var(Array *arr, unsigned int freedom) {
 
-    double mean = stats_mean(arr, len);
+    double mean = stats_mean(arr);
     double sum_sq_diff = 0;
-    double variance;
 
-    for (unsigned int i=0; i < len; i++) {
-        sum_sq_diff += ( *(arr+i)-mean ) * ( *(arr+i)-mean );
+    for (unsigned int i=0; i < arr->len; i++) {
+        sum_sq_diff += ( *(arr->head+i)-mean ) * ( *(arr->head+i)-mean );
     }
 
-    variance = sum_sq_diff / (double) (len-freedom);
-    return variance;
+    return sum_sq_diff / (double) (arr->len-freedom);
 }
 
 
-double stats_std(double *arr, unsigned int len, unsigned int freedom) {
+// double stats_std(double *arr, unsigned int len, unsigned int freedom) {
 
-    double std = sqrt(stats_var(arr, len, freedom));
-    return std;
-}
-
-
-double stats_max(double *arr, unsigned int len) {
-    double max = *arr;
-
-    for (unsigned int i=0; i < len; i++) {
-        if (*(arr+i) > max) {
-            max = *(arr+i);
-        }
-    }
-
-    return max;
-}
+//     double std = sqrt(stats_var(arr, len, freedom));
+//     return std;
+// }
 
 
-double stats_min(double *arr, unsigned int len) {
-    double min = *arr;
+// double stats_max(double *arr, unsigned int len) {
+//     double max = *arr;
 
-    for (unsigned int i=0; i < len; i++) {
-        if (min > *(arr+i)) {
-            min = *(arr+i);
-        }
-    }
+//     for (unsigned int i=0; i < len; i++) {
+//         if (*(arr+i) > max) {
+//             max = *(arr+i);
+//         }
+//     }
 
-    return min;
-}
-
-
-int stats_normalize_by_stats(double *arr, unsigned int len) {
-
-    double mean = stats_mean(arr, len);
-    double std = stats_std(arr, len, 0);
-
-    for (unsigned int i=0; i < len; i++) {
-        *(arr+i) = ( *(arr+i) - mean ) / std;
-    }
-
-    return 0;
-}
+//     return max;
+// }
 
 
-int stats_normalize_by_scale(double *arr, unsigned int len, double min, double max) {
+// double stats_min(double *arr, unsigned int len) {
+//     double min = *arr;
 
-    double arr_min = stats_min(arr, len);
-    double diff = stats_max(arr, len) - arr_min;
-    double target_diff = max - min;
+//     for (unsigned int i=0; i < len; i++) {
+//         if (min > *(arr+i)) {
+//             min = *(arr+i);
+//         }
+//     }
 
-    for (unsigned int i=0; i < len; i++) {
-        *(arr+i) = min + (*(arr+i) - arr_min)*target_diff/diff;
-    }
+//     return min;
+// }
 
-    return 0;
-}
+
+// int stats_normalize_by_stats(double *arr, unsigned int len) {
+
+//     double mean = stats_mean(arr, len);
+//     double std = stats_std(arr, len, 0);
+
+//     for (unsigned int i=0; i < len; i++) {
+//         *(arr+i) = ( *(arr+i) - mean ) / std;
+//     }
+
+//     return 0;
+// }
+
+
+// int stats_normalize_by_scale(double *arr, unsigned int len, double min, double max) {
+
+//     double arr_min = stats_min(arr, len);
+//     double diff = stats_max(arr, len) - arr_min;
+//     double target_diff = max - min;
+
+//     for (unsigned int i=0; i < len; i++) {
+//         *(arr+i) = min + (*(arr+i) - arr_min)*target_diff/diff;
+//     }
+
+//     return 0;
+// }
