@@ -109,11 +109,10 @@ double stats_var(Array *arr, unsigned int freedom) {
 }
 
 
-// double stats_std(double *arr, unsigned int len, unsigned int freedom) {
+double stats_std(Array *arr, unsigned int freedom) {
 
-//     double std = sqrt(stats_var(arr, len, freedom));
-//     return std;
-// }
+    return sqrt(stats_var(arr, freedom));
+}
 
 
 // int stats_normalize_by_stats(double *arr, unsigned int len) {

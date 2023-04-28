@@ -21,6 +21,7 @@ int debug() {
     double min = array_min(arr);
     double mean = stats_mean(arr);
     double var = stats_var(arr, 0);
+    double std = stats_std(arr, 0);
     free_array(arr);
     printf("arr: %s\n", *arr);
 
