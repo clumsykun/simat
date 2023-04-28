@@ -114,18 +114,16 @@ double stats_std(Array *arr, unsigned int freedom) {
     return sqrt(stats_var(arr, freedom));
 }
 
+/* Scale the array to make sure that its mean equals 0, its standard variance equals 1. */
+void array_normalize(Array *arr) {
 
-// int stats_normalize_by_stats(double *arr, unsigned int len) {
+    double mean = stats_mean(arr);
+    double std = stats_std(arr, 0);
 
-//     double mean = stats_mean(arr, len);
-//     double std = stats_std(arr, len, 0);
-
-//     for (unsigned int i=0; i < len; i++) {
-//         *(arr+i) = ( *(arr+i) - mean ) / std;
-//     }
-
-//     return 0;
-// }
+    for (unsigned int i=0; i < arr->len; i++) {
+        *(arr->head+i) = ( *(arr->head+i) - mean ) / std;
+    }
+}
 
 
 // int stats_normalize_by_scale(double *arr, unsigned int len, double min, double max) {

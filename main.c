@@ -22,9 +22,15 @@ int debug() {
     double mean = stats_mean(arr);
     double var = stats_var(arr, 0);
     double std = stats_std(arr, 0);
+
+    array_normalize(arr);
+
+    mean = stats_mean(arr);
+    var = stats_var(arr, 0);
+    std = stats_std(arr, 0);
+
     free_array(arr);
     printf("arr: %s\n", *arr);
-
 
     return 0;
 }
