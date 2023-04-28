@@ -1,6 +1,15 @@
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+
+
+typedef struct _Array{
+
+    double *head;
+    unsigned int len;
+
+} Array;
 
 
 int swap_intp(int *a, int* b) {
@@ -27,6 +36,24 @@ int swap_charp(char **a, char **b) {
     *b = tmp;  // *b = tmp -> char1
 
     return 0;
+}
+
+
+
+Array *create_array(unsigned int len) {
+    Array *arr = (Array *) malloc(sizeof(Array));
+    arr->len = len;
+    arr->head = (double *) malloc(len*sizeof(double));
+    return arr;
+}
+
+
+void free_array(Array *arr) {
+
+    free(arr->head);
+    arr->head = NULL;
+    free(arr);
+    arr = NULL;
 }
 
 

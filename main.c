@@ -8,7 +8,18 @@ int debug() {
     // printf("%f\n", out);
     stats_normalize_by_stats(data, 5);
 
-    printf("%f, %f\n", stats_mean(data, 5), stats_std(data, 5, 0));
+    unsigned int len = 5;
+    Array *arr = create_array(len);
+
+    for (unsigned int i = 0; i < len; i++) 
+        *(arr->head+i) = i;
+
+    for (unsigned int i = 0; i < len; i++)
+        printf("arr[%d]: %f\n", i, *(arr->head+i));
+
+    free_array(arr);
+    printf("arr: %s\n", *arr);
+
 
     return 0;
 }
