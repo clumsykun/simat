@@ -7,11 +7,13 @@
 #define loc(arr,i) arr->head[i]
 
 
+/**
+ * @head: address of the first number of the array
+ * @len: length of the array
+ */
 typedef struct _Array{
-
     double *head;
     unsigned int len;
-
 } Array;
 
 
@@ -44,6 +46,7 @@ int swap_charp(char **a, char **b) {
 
 
 Array *create_array(unsigned int len) {
+
     Array *arr = malloc(sizeof(Array));
     arr->len = len;
     arr->head = malloc(len*sizeof(double));
@@ -159,16 +162,20 @@ void _swap_double(double *left, double *right) {
     *right = tmp;
 }
 
+/** 
+ * choosing the last value as pivot
+ * @head: address of the first number of the array
+ * @len: length of the array
+ * @candidate: the candidate position of pivot
+ */
+unsigned int _partition_double(double *head, unsigned int len) {
 
-unsigned int _partition_double(double *head, unsigned int len)
-{
-    double pivot = head[len-1]; // Choosing the last value as pivot
-    int candidate = -1; // Candidate position of pivot
+    double pivot = head[len-1];
+    int candidate = -1;
 
-    for (int i=0; i<=len-1; i++)
-    {
-        if (head[i] < pivot)
-        {
+    for (int i=0; i<=len-1; i++) {
+        if (head[i] < pivot) {
+
             candidate++;
             _swap_double(&head[candidate], &head[i]);
         }
@@ -178,10 +185,10 @@ unsigned int _partition_double(double *head, unsigned int len)
 }
 
 
-void _quick_sort_double(double *head, unsigned int len)
-{
-    if (len > 1)
-    {
+void _quick_sort_double(double *head, unsigned int len) {
+
+    if (len > 1) {
+        /* [head, head + len] --> [head, head + pi], [head + pi + 1, head + len] */
         unsigned int pi = _partition_double(head, len);
         _quick_sort_double(head, pi);
         _quick_sort_double(head+pi+1, len-pi-1);
