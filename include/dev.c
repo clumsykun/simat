@@ -149,3 +149,55 @@ void array_set_rand(Array *arr) {
         *(arr->head+i) = rand() + ( (double) rand() / RAND_MAX );
     }
 }
+
+
+// Function to swap two elements
+void swap(int *a, int *b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+
+void _swap_double(double *left, double *right) {
+
+    double tmp = *left;
+    *left = *right;
+    *right = tmp;
+}
+
+
+// Partition the array using the last element as the pivot
+unsigned int _partition(double *head, unsigned int len)
+{
+    double pivot = head[len-1]; // Choosing the last value as pivot
+    int candidate = -1; // Candidate position of pivot
+
+    for (int i=0; i<=len-1; i++)
+    {
+        if (head[i] < pivot)
+        {
+            candidate++;
+            _swap_double(&head[candidate], &head[i]);
+        }
+    }
+    _swap_double(&head[candidate+1], &head[len-1]);
+    return (unsigned int) (candidate + 1);
+}
+
+
+void _quick_sort(double *head, unsigned int len)
+{
+    if (len > 1)
+    {
+        unsigned int pi = _partition(head, len);
+        _quick_sort(head, pi);
+        _quick_sort(head+pi+1, len-pi-1);
+    }
+}
+
+
+void array_sort(Array *arr) {
+    _quick_sort(arr->head, arr->len);
+}
