@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 
 
 typedef struct _Array{
@@ -21,6 +22,7 @@ int swap_intp(int *a, int* b) {
     return 0;
 }
 
+
 /*
  * int:
  * a -> *a -> char1
@@ -37,7 +39,6 @@ int swap_charp(char **a, char **b) {
 
     return 0;
 }
-
 
 
 Array *create_array(unsigned int len) {
@@ -114,6 +115,7 @@ double stats_std(Array *arr, unsigned int freedom) {
     return sqrt(stats_var(arr, freedom));
 }
 
+
 /* Scale the array to make sure that its mean equals 0, its standard variance equals 1. */
 void array_normalize(Array *arr) {
 
@@ -135,5 +137,15 @@ void array_scale(Array *arr, double min, double max) {
 
     for (unsigned int i=0; i < arr->len; i++) {
         *(arr->head+i) = min + (*(arr->head+i) - arr_min)*target_scale/scale;
+    }
+}
+
+
+/* Set random double value to array. */
+void array_set_rand(Array *arr) {
+
+    srand(time(NULL));
+    for (unsigned int i = 0; i < arr->len; i++) {
+        *(arr->head+i) = rand() + ( (double) rand() / RAND_MAX );
     }
 }

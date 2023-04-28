@@ -10,9 +10,7 @@ int debug() {
 
     unsigned int len = 5;
     Array *arr = create_array(len);
-
-    for (unsigned int i = 0; i < len; i++) 
-        *(arr->head+i) = i;
+    array_set_rand(arr);
 
     for (unsigned int i = 0; i < len; i++)
         printf("arr[%d]: %f\n", i, *(arr->head+i));

@@ -6,6 +6,7 @@ int swap_charp(char **a, char **b);
 
 Array *create_array(unsigned int len);
 void free_array(Array *arr);
+void array_set_rand(Array *arr);
 
 double array_max(Array *arr);
 double array_min(Array *arr);
