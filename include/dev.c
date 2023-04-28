@@ -57,6 +57,33 @@ void free_array(Array *arr) {
 }
 
 
+double array_max(Array *arr) {
+
+    double max = *(arr->head);
+
+    for (unsigned int i=0; i < arr->len; i++) {
+        if (*(arr->head+i) > max) {
+            max = *(arr->head+i);
+        }
+    }
+
+    return max;
+}
+
+
+double array_min(Array *arr) {
+    double min = *(arr->head);
+
+    for (unsigned int i=0; i < arr->len; i++) {
+        if (min > *(arr->head+i)) {
+            min = *(arr->head+i);
+        }
+    }
+
+    return min;
+}
+
+
 double stats_mean(Array *arr) {
 
     double sum = 0;
@@ -86,32 +113,6 @@ double stats_var(Array *arr, unsigned int freedom) {
 
 //     double std = sqrt(stats_var(arr, len, freedom));
 //     return std;
-// }
-
-
-// double stats_max(double *arr, unsigned int len) {
-//     double max = *arr;
-
-//     for (unsigned int i=0; i < len; i++) {
-//         if (*(arr+i) > max) {
-//             max = *(arr+i);
-//         }
-//     }
-
-//     return max;
-// }
-
-
-// double stats_min(double *arr, unsigned int len) {
-//     double min = *arr;
-
-//     for (unsigned int i=0; i < len; i++) {
-//         if (min > *(arr+i)) {
-//             min = *(arr+i);
-//         }
-//     }
-
-//     return min;
 // }
 
 
