@@ -120,7 +120,7 @@ double stats_std(Array *arr, unsigned int freedom) {
 }
 
 
-/* Scale the array to make sure that its mean equals 0, its standard variance equals 1. */
+/* scale the array to make sure that its mean equals 0, its standard variance equals 1. */
 void array_normalize(Array *arr) {
 
     double mean = stats_mean(arr);
@@ -132,7 +132,7 @@ void array_normalize(Array *arr) {
 }
 
 
-/* Scale the array to make sure that its max value and min value match param max and min. */
+/* scale the array to make sure that its max value and min value match param max and min. */
 void array_scale(Array *arr, double min, double max) {
 
     double arr_min = array_min(arr);
@@ -145,7 +145,7 @@ void array_scale(Array *arr, double min, double max) {
 }
 
 
-/* Set random double value to array. */
+/* set random double value to array. */
 void array_set_rand(Array *arr) {
 
     srand(time(NULL));
