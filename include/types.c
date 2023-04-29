@@ -22,21 +22,67 @@ void _swap_double(double *left, double *right)
 }
 
 
+/* the standrd way to free memory */
+void _std_free(void *ptr)
+{
+    free(ptr);
+    ptr = NULL;
+}
+
+
 Array *create_array(unsigned int len)
 {
-    Array *arr = malloc(sizeof(Array));
+    Array *arr = malloc( sizeof(Array) );
     arr->len = len;
-    arr->head = malloc(len*sizeof(double));
+    arr->head = malloc( len * sizeof(double) );
     return arr;
+}
+
+
+Matrix *create_matrix(unsigned int len, unsigned int num)
+{
+    Matrix *mat = malloc(sizeof(Matrix));
+    mat->len = len;
+    mat->num = num;
+    mat->head = malloc(len * num * sizeof(double));
+    return mat;
+}
+
+
+/**
+ * @idx: the index of array which you want locate
+ */
+void loc_array(Array *arr, Matrix *mat, unsigned int idx)
+{
+    arr->len = mat->len;
+    arr->head = &(mat->head[idx * mat->len]);
 }
 
 
 void free_array(Array *arr)
 {
-    free(arr->head);
-    arr->head = NULL;
-    free(arr);
-    arr = NULL;
+    _std_free(arr->head);
+    _std_free(arr);
+}
+
+
+void free_matrix(Matrix *mat)
+{
+    _std_free(mat->head);
+    _std_free(mat);
+}
+
+
+void matrix_display(Matrix *mat)
+{
+    double(*head)[mat->len] = (double(*)[mat->len]) mat->head;
+
+    for (size_t i = 0; i < mat->len; i++) {
+        for (size_t j = 0; j < mat->num; j++) {
+            printf("%.2f    ", head[j][i]);
+        }
+        printf("\n");
+    }
 }
 
 

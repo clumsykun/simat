@@ -1,26 +1,39 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "include/types.h"
 
 
 int debug()
 {
-    Array *arr = create_array(10);
-    array_set_rand(arr);
+    unsigned int len = 10;
+    unsigned int num = 5;
+    // double (*head)[num] = malloc(len * num * sizeof(double));
+    Matrix *mat = create_matrix(len, num);
 
-    for (unsigned int i = 0; i < 10; i++)
-        printf("arr[%d]: %f\n", i, loc(arr, i));
+    double(*head)[mat->num] = (double(*)[mat->num])mat->head;
 
-    printf("------------------------\n");
-    array_sort(arr);
-    // // Function call
-    // quickSort(arr, 0, N - 1);
-    // printf("Sorted array: \n");
-    // for (int i = 0; i < N; i++)
-    //     printf("%d ", arr[i]);
+    int idx = 1;
+    for (size_t i = 0; i < len; i++) {
+        for (size_t j = 0; j < num; j++) {
+            head[i][j] = idx++;
+            printf("%.2f    ", head[i][j]);
+        }
+        printf("\n");
+    }
 
-    for (unsigned int i = 0; i < 10; i++)
-        printf("arr[%d]: %f\n", i, loc(arr, i));
+    printf("------------------------------\n");
 
+    matrix_display(mat);
+
+    printf("------------------------------\n");
+
+    Array *arr;
+    loc_array(arr, mat, 2);
+    for (size_t i = 0; i < arr->len; i++) {
+        printf("%.2f    ", loc(arr, i));
+    }
+
+    printf("\n");
     return 0;
 }
 
