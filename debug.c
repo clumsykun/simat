@@ -1,5 +1,5 @@
-#include "include/dev.h"
-
+#include <stdio.h>
+#include "include/types.h"
 
 int debug() {
 
@@ -7,8 +7,9 @@ int debug() {
     array_set_rand(arr);
 
     for (unsigned int i = 0; i < 10; i++)
-        printf("arr[%d]: %f\n", i, arr->head[i]);
+        printf("arr[%d]: %f\n", i, loc(arr, i));
 
+    printf("------------------------\n");
     array_sort(arr);
     // // Function call
     // quickSort(arr, 0, N - 1);
@@ -17,7 +18,7 @@ int debug() {
     //     printf("%d ", arr[i]);
 
     for (unsigned int i = 0; i < 10; i++)
-        printf("arr[%d]: %f\n", i, arr->head[i]);
+        printf("arr[%d]: %f\n", i, loc(arr, i));
 
     return 0;
 }
