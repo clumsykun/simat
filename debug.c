@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include "include/types.h"
 
-int debug() {
 
+int debug()
+{
     Array *arr = create_array(10);
     array_set_rand(arr);
 
@@ -24,9 +25,8 @@ int debug() {
 }
 
 
-int main() {
-
+int main()
+{
     debug();
     return 0;
-
 }
