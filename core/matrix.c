@@ -33,3 +33,12 @@ void matrix_display(Matrix *mat)
         printf("\n");
     }
 }
+
+/**
+ * @idx: the index of array which you want locate
+ */
+// void loc_array(Vector *vec, Matrix *mat, unsigned int idx)
+// {
+//     vec->len = mat->len;
+//     vec->head = &(mat->head[idx * mat->len]);
+// }

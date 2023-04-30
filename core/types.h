@@ -1,6 +1,6 @@
 #ifndef TYPES_H
 #define TYPES_H
-#define loc(arr, i) arr->head[i]
+#define idx(vec, i) vec->head[i]
 
 /**
  * @head: ptr of the first number of the array

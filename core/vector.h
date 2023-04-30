@@ -1,0 +1,14 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+#include "types.h"
+
+Vector *create_vector(unsigned int len);
+void free_vector(Vector *vec);
+void vector_display(Vector *vec);
+void vector_set_rand(Vector *vec);
+double vector_max(Vector *vec);
+double vector_min(Vector *vec);
+void vector_scale(Vector *vec, double min, double max);
+void vector_sort(Vector *vec);
+
+#endif
