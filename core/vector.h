@@ -11,4 +11,4 @@ double vector_min(Vector *vec);
 void vector_scale(Vector *vec, double min, double max);
 void vector_sort(Vector *vec);
 
-#endif
+#endif /* CORE_VECTOR_H */

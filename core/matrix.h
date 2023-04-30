@@ -10,4 +10,4 @@ double stats_mean(Array *arr);
 double stats_var(Array *arr, unsigned int freedom);
 double stats_std(Array *arr, unsigned int freedom);
 
-#endif
+#endif /* CORE_MATRIX_H */

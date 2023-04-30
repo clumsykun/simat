@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "core/vector.h"
+#include "core/matrix.h"
 
 int test_vector()
 {
