@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "core/types.h"
 #include "core/vector.h"
 #include "core/matrix.h"
 
@@ -35,15 +36,29 @@ int test_vector()
 
 int test_matrix()
 {
-    unsigned int len = 10;
-    unsigned int num = 5;
-    // double (*head)[num] = malloc(len * num * sizeof(double));
+    unsigned int nrow = 5;
+    unsigned int ncol = 4;
+    Matrix *mat = create_matrix(nrow, ncol);
 
-    int idx = 1;
+    Vector *vec = create_vector(ncol);
+    for (size_t i = 0; i < ncol; i ++) {
+        loc_col(vec, mat, i);
+        for (size_t j = 0; j < nrow; j ++) {
+            idx(vec, j) = (double) i * 100 + j+1;
+        }
+        
+        // vector_scale(vec, 0, 100);
+        vector_display(vec);
+    }
+
+    matrix_display(mat);
 
     printf("------------------------------\n");
 
+
     printf("------------------------------\n");
+
+    free_matrix(mat);
     return 0;
 }
 
@@ -55,6 +70,7 @@ int test_stats()
 
 int main()
 {
-    test_vector();
+    // test_vector();
+    test_matrix();
     return 0;
 }
