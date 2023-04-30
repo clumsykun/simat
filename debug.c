@@ -41,6 +41,7 @@ int test_matrix()
     Matrix *mat = create_matrix(nrow, ncol);
 
     Vector *vec = create_vector(ncol);
+
     for (size_t i = 0; i < ncol; i ++) {
         loc_col(vec, mat, i);
         for (size_t j = 0; j < nrow; j ++) {
@@ -55,6 +56,13 @@ int test_matrix()
 
     printf("------------------------------\n");
 
+    Row *row = create_row(nrow);
+    loc_row(row, mat, 3);
+
+    for (size_t i = 0; i < ncol; i ++) {
+        printf("%.2f    ", *row->head[i] );
+    }
+    printf("\n");
 
     printf("------------------------------\n");
 

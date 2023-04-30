@@ -13,12 +13,12 @@ typedef struct _Vector
     char* label;
 } Vector;
 
-typedef struct _pVector
+typedef struct _Row
 {
     double **head;
     unsigned int len;
     char *label;
-} pVector;
+} Row;
 
 /**
  * matrix is basically an ordered collection of same sized vectors
