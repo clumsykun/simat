@@ -1,33 +1,9 @@
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+#include "tools.h"
 #include "types.h"
-
-
-void  _swap_int(int *left, int *right)
-{
-    int tmp = *left;
-    *left = *right;
-    *right = tmp;
-}
-
-
-void _swap_double(double *left, double *right)
-{
-    double tmp = *left;
-    *left = *right;
-    *right = tmp;
-}
-
-
-/* the standrd way to free memory */
-void _std_free(void *ptr)
-{
-    free(ptr);
-    ptr = NULL;
-}
 
 
 Array *create_array(unsigned int len)
@@ -37,17 +13,6 @@ Array *create_array(unsigned int len)
     arr->head = malloc( len * sizeof(double) );
     return arr;
 }
-
-
-Matrix *create_matrix(unsigned int len, unsigned int num)
-{
-    Matrix *mat = malloc(sizeof(Matrix));
-    mat->len = len;
-    mat->num = num;
-    mat->head = malloc(len * num * sizeof(double));
-    return mat;
-}
-
 
 /**
  * @idx: the index of array which you want locate
@@ -65,27 +30,6 @@ void free_array(Array *arr)
     _std_free(arr);
 }
 
-
-void free_matrix(Matrix *mat)
-{
-    _std_free(mat->head);
-    _std_free(mat);
-}
-
-
-void matrix_display(Matrix *mat)
-{
-    double(*head)[mat->len] = (double(*)[mat->len]) mat->head;
-
-    for (size_t i = 0; i < mat->len; i++) {
-        for (size_t j = 0; j < mat->num; j++) {
-            printf("%.2f    ", head[j][i]);
-        }
-        printf("\n");
-    }
-}
-
-
 double array_max(Array *arr)
 {
     double max = *(arr->head);
@@ -99,7 +43,6 @@ double array_max(Array *arr)
     return max;
 }
 
-
 double array_min(Array *arr)
 {
     double min = *(arr->head);
@@ -112,19 +55,6 @@ double array_min(Array *arr)
 
     return min;
 }
-
-
-/* scale the array to make sure that its mean equals 0, its standard variance equals 1. */
-void array_normalize(Array *arr)
-{
-    double mean = stats_mean(arr);
-    double std = stats_std(arr, 0);
-
-    for (unsigned int i=0; i < arr->len; i++) {
-        loc(arr, i) = ( loc(arr, i) - mean ) / std;
-    }
-}
-
 
 /* scale the array to make sure that its max value and min value match param max and min. */
 void array_scale(Array *arr, double min, double max)
