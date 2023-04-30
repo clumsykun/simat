@@ -1,45 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "include/types.h"
-#include "include/matrix.h"
+#include "vector.h"
 
-int debug()
+int test_vector()
+{
+    unsigned int len = 10;
+    Vector *vec = create_vector(len);
+    vec->label = "vec";
+
+    vector_set_rand(vec);
+    vector_display(vec);
+
+    free_vector(vec);
+    return 0;
+}
+
+
+int test_matrix()
 {
     unsigned int len = 10;
     unsigned int num = 5;
     // double (*head)[num] = malloc(len * num * sizeof(double));
-    Matrix *mat = create_matrix(len, num);
-
-    double(*head)[mat->num] = (double(*)[mat->num])mat->head;
 
     int idx = 1;
-    for (size_t i = 0; i < len; i++) {
-        for (size_t j = 0; j < num; j++) {
-            head[i][j] = idx++;
-            printf("%.2f    ", head[i][j]);
-        }
-        printf("\n");
-    }
 
     printf("------------------------------\n");
 
-    matrix_display(mat);
-
     printf("------------------------------\n");
+    return 0;
+}
 
-    Array *arr;
-    loc_array(arr, mat, 2);
-    for (size_t i = 0; i < arr->len; i++) {
-        printf("%.2f    ", loc(arr, i));
-    }
-
-    printf("\n");
+int test_stats()
+{
     return 0;
 }
 
 
 int main()
 {
-    debug();
+    test_vector();
     return 0;
 }

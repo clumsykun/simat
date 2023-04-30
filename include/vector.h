@@ -1,12 +1,14 @@
 #ifndef VECTOR_H
 #define VECTOR_H
+#include "types.h"
 
-Array *create_array(unsigned int len);
-void free_array(Array *arr);
-double array_max(Array *arr);
-double array_min(Array *arr);
-void array_scale(Array *arr, double min, double max);
-void array_sort(Array *arr);
-void array_set_rand(Array *arr);
+Vector *create_vector(unsigned int len);
+void free_vector(Vector *vec);
+void vector_display(Vector *vec);
+void vector_set_rand(Vector *arr);
+// double array_max(Vector *arr);
+// double array_min(Vector *arr);
+// void array_scale(Vector *arr, double min, double max);
+// void array_sort(Vector *arr);
 
 #endif

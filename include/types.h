@@ -6,11 +6,12 @@
  * @head: ptr of the first number of the array
  * @len: length of this array
  */
-typedef struct _Array
+typedef struct _Vector
 {
     double *head;
     unsigned int len;
-} Array;
+    char* label;
+} Vector;
 
 /**
  * matrix is basically an ordered collection of same sized arrays
