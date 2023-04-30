@@ -1,5 +1,5 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef CORE_VECTOR_H
+#define CORE_VECTOR_H
 #include "types.h"
 
 Vector *create_vector(unsigned int len);
