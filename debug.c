@@ -9,7 +9,6 @@ int test_vector()
 {
     unsigned int len = 500;
     Vector *vec = create_vector(len);
-    vec->label = "vec";
 
     for (size_t i = 0; i < 500; i ++) {
         idx(vec, i) = 500-i;
@@ -39,24 +38,24 @@ int test_matrix()
     unsigned int nrow = 10;
     unsigned int ncol = 4;
     Matrix *mat = create_matrix(nrow, ncol);
+    View *row;
+    Col *col = create_col();
 
-    Vector *vec = create_vector(ncol);
-
-    for (size_t i = 0; i < ncol; i ++) {
-        loc_col(vec, mat, i);
+    for (size_t i = 0; i < ncol; i++) {
+        matrix_loc_col(col, mat, i);
         for (size_t j = 0; j < nrow; j ++) {
-            idx(vec, j) = (double) i * 100 + j+1;
+            idx(col->vec, j) = (double) i * 100 + j+1;
         }
-        
+
         // vector_scale(vec, 0, 100);
-        vector_display(vec);
+        vector_display(col->vec);
     }
 
     matrix_display(mat);
 
     printf("------------------------------\n");
 
-    View *row= create_view(ncol);
+    row = create_view(ncol);
     matrix_view_row(row, mat, 3);
 
     for (size_t i = 0; i < ncol; i ++) {
@@ -67,6 +66,8 @@ int test_matrix()
     printf("------------------------------\n");
 
     free_matrix(mat);
+    free_view(row);
+    free_col(col);
     return 0;
 }
 
