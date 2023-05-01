@@ -10,14 +10,12 @@ typedef struct _Vector
 {
     double *head;
     unsigned int len;
-    char* label;
 } Vector;
 
 typedef struct _View
 {
     double **head;
     unsigned int len;
-    char *label;
 } View;
 
 /**
@@ -32,5 +30,12 @@ typedef struct _Matrix
     unsigned int nrow;
     unsigned int ncol;
 } Matrix;
+
+typedef struct _Col
+{
+    unsigned int idx;
+    Matrix *matrix;
+    Vector *vec;
+} Col;
 
 #endif /* CORE_TYPES_H */
