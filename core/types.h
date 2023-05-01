@@ -12,6 +12,9 @@ typedef struct _Vector
     unsigned int len;
 } Vector;
 
+/**
+ * flexible structure contains ptr of element of target vector/matrix.
+ */
 typedef struct _View
 {
     double **head;

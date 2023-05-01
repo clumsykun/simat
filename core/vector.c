@@ -20,11 +20,11 @@ void free_vector(Vector *vec)
     _std_free(vec);
 }
 
-View *create_view(unsigned int len)
+View *create_view()
 {
     View *view = malloc(sizeof(View));
-    view->len = len;
-    view->head = malloc(len * sizeof(double *));
+    view->len = 0;
+    view->head = NULL; /* initialize it to NULL so that realloc() will work properly */
     return view;
 }
 
@@ -37,9 +37,20 @@ void free_view(View *view)
 
 void vector_display(Vector *vec)
 {
-    for (size_t i = 0; i < vec->len; i++) {
-        printf("[%1d] %4.4f\n", i, idx(vec,i));
+    printf("Vector([");
+    for (size_t i = 0; i < vec->len-1; i++) {
+        printf("%.2f, ", idx(vec,i));
     }
+    printf("%.2f])\n", idx(vec, vec->len-1));
+}
+
+void view_display(View *view)
+{
+    printf("View([");
+    for (size_t i = 0; i < view->len - 1; i++) {
+        printf("%.2f, ", *idx(view, i));
+    }
+    printf("%.2f])\n", *idx(view, view->len - 1));
 }
 
 /* set random double value to vector. */

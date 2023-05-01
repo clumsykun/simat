@@ -8,6 +8,7 @@ void free_vector(Vector *vec);
 void free_view(View *view);
 
 void vector_display(Vector *vec);
+void view_display(View *view);
 void vector_set_rand(Vector *vec);
 double vector_max(Vector *vec);
 double vector_min(Vector *vec);
