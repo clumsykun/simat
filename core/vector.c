@@ -57,8 +57,16 @@ void view_display(View *view)
 void vector_set_rand(Vector *vec)
 {
     srand(time(NULL));
-    for (unsigned int i = 0; i < vec->len; i++) {
+    for (size_t i = 0; i < vec->len; i++) {
         idx(vec, i) = rand() + ( (double) rand() / RAND_MAX );
+    }
+}
+
+void view_set_rand(View *view)
+{
+    srand(time(NULL));
+    for (size_t i = 0; i < view->len; i ++) {
+        *idx(view, i) = rand() + ((double)rand() / RAND_MAX);
     }
 }
 
@@ -66,9 +74,21 @@ double vector_min(Vector *vec)
 {
     double min = *(vec->head);
 
-    for (unsigned int i=0; i < vec->len; i++) {
+    for (size_t i = 0; i < vec->len; i++) {
         if (min > idx(vec, i)) {
             min = idx(vec, i);
+        }
+    }
+    return min;
+}
+
+double view_min(View *view)
+{
+    double min = **(view->head);
+
+    for (size_t i = 0; i < view->len; i++) {
+        if (min > *idx(view, i)) {
+            min = *idx(view, i);
         }
     }
     return min;
@@ -78,9 +98,21 @@ double vector_max(Vector *vec)
 {
     double max = *(vec->head);
 
-    for (unsigned int i=0; i < vec->len; i++) {
-        if (idx(vec, i) > max) {
+    for (size_t i =0; i < vec->len; i++) {
+        if (max < idx(vec, i)) {
             max = idx(vec, i);
+        }
+    }
+    return max;
+}
+
+double view_max(View *view)
+{
+    double max = **(view->head);
+
+    for (size_t i = 0; i < view->len; i++) {
+        if (max < *idx(view, i)) {
+            max = *idx(view, i);
         }
     }
     return max;
@@ -93,8 +125,19 @@ void vector_scale(Vector *vec, double min, double max)
     double scale = vector_max(vec) - vec_min;
     double target_scale = max - min;
 
-    for (unsigned int i=0; i < vec->len; i++) {
+    for (size_t i =0; i < vec->len; i++) {
         idx(vec, i) = min + (idx(vec, i) - vec_min) * target_scale / scale;
+    }
+}
+
+void view_scale(View *view, double min, double max)
+{
+    double v_min = view_min(view);
+    double scale = view_max(view) - v_min;
+    double target_scale = max - min;
+
+    for (size_t i = 0; i < view->len; i++) {
+        *idx(view, i) = min + (*idx(view, i) - v_min) * target_scale / scale;
     }
 }
 
