@@ -13,7 +13,7 @@ enum order
  */
 typedef struct _Vector
 {
-    double *head;
+    double *const head;
     const unsigned int len;
 } Vector;
 
@@ -39,7 +39,7 @@ typedef struct _View
  */
 typedef struct _Matrix
 {
-    double *head;
+    double *const head;
     const unsigned int nrow;
     const unsigned int ncol;
 } Matrix;
@@ -48,7 +48,7 @@ typedef struct _Col
 {
     unsigned int idx;
     Matrix *matrix;
-    Vector *vec;
+    Vector *const vec;
 } Col;
 
 #endif /* CORE_TYPES_H */

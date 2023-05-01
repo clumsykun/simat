@@ -38,7 +38,7 @@ View *create_view()
 void free_view(View *view)
 {
     view->len = 0;
-    _std_free(view->head);
+    _std_free(view->head);  /* still need to free this ptr */
     _std_free(view);
 }
 

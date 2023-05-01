@@ -31,9 +31,16 @@ void free_matrix(Matrix *mat)
 Col *create_col()
 {
     Col *col = malloc(sizeof(Col));
-    col->idx = 0;
-    col->matrix = NULL;
-    col->vec = malloc(sizeof(Vector));
+    Col _col = {
+        0,
+        NULL,
+        malloc(sizeof(Vector))
+    };
+    memcpy(
+        col,
+        &_col,
+        sizeof(Col)
+    );
     return col;
 }
 
