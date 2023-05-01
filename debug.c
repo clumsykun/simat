@@ -38,7 +38,7 @@ int test_matrix()
     unsigned int nrow = 10;
     unsigned int ncol = 4;
     Matrix *mat = create_matrix(nrow, ncol);
-    View *row;
+    View *view;
     Col *col = create_col();
 
     for (size_t i = 0; i < ncol; i++) {
@@ -55,18 +55,16 @@ int test_matrix()
 
     printf("------------------------------\n");
 
-    row = create_view(ncol);
-    matrix_view_row(row, mat, 3);
-
-    for (size_t i = 0; i < ncol; i ++) {
-        printf("%.2f    ", *row->head[i] );
-    }
-    printf("\n");
+    view = create_view(ncol);
+    matrix_view_row(view, mat, 3);
+    view_display(view);
+    matrix_view_col(view, mat, 3);
+    view_display(view);
 
     printf("------------------------------\n");
 
     free_matrix(mat);
-    free_view(row);
+    free_view(view);
     free_col(col);
     return 0;
 }
