@@ -4,12 +4,13 @@
 #include <math.h>
 #include <time.h>
 #include "tools.h"
-#include "types.h"
+#include "dtypes.h"
 
 Vector *create_vector(unsigned int len)
 {
     Vector *vec = malloc(sizeof(Vector));
     Vector _vec = {
+        dtype_vector,
         malloc(len * sizeof(double)),
         len,
     };
@@ -30,8 +31,17 @@ void free_vector(Vector *vec)
 View *create_view()
 {
     View *view = malloc(sizeof(View));
-    view->len = 0;
-    view->head = NULL; /* initialize it to NULL so that realloc() will work properly */
+    View _view = {
+        dtype_view,
+        NULL, /* initialize it to NULL so that realloc() will work properly */
+        0
+    };
+    memcpy(
+        view,
+        &_view,
+        sizeof(View)
+    );
+
     return view;
 }
 

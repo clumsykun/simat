@@ -1,6 +1,6 @@
 #include <math.h>
 #include <stdlib.h>
-#include "types.h"
+#include "dtypes.h"
 
 double stats_mean(Vector *vec)
 {

@@ -1,6 +1,6 @@
 #ifndef CORE_STATS_H
 #define CORE_STATS_H
-#include "types.h"
+#include "dtypes.h"
 
 double stats_mean(Vector *vec);
 double stats_var(Vector *vec, unsigned int freedom);

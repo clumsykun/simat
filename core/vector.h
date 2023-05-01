@@ -1,6 +1,6 @@
 #ifndef CORE_VECTOR_H
 #define CORE_VECTOR_H
-#include "types.h"
+#include "dtypes.h"
 
 Vector *create_vector(unsigned int len);
 View   *create_view();

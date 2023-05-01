@@ -1,6 +1,6 @@
 #ifndef CORE_MATRIX_H
 #define CORE_MATRIX_H
-#include "types.h"
+#include "dtypes.h"
 
 Matrix *create_matrix(unsigned int nrow, unsigned int ncol);
 Col    *create_col();
