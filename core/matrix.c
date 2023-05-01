@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "tools.h"
 #include "types.h"
 #include "vector.h"
@@ -8,16 +9,21 @@
 Matrix *create_matrix(unsigned int nrow, unsigned int ncol)
 {
     Matrix *mat = malloc(sizeof(Matrix));
-    mat->nrow = nrow;
-    mat->ncol = ncol;
-    mat->head = malloc(nrow * ncol * sizeof(double));
+    Matrix _mat = {
+        malloc(nrow * ncol * sizeof(double)),
+        nrow,
+        ncol,
+    };
+    memcpy(
+        mat,
+        &_mat,
+        sizeof(Matrix)
+    );
     return mat;
 }
 
 void free_matrix(Matrix *mat)
 {
-    mat->ncol = 0;
-    mat->nrow = 0;
     _std_free(mat->head);
     _std_free(mat);
 }
@@ -25,10 +31,9 @@ void free_matrix(Matrix *mat)
 Col *create_col()
 {
     Col *col = malloc(sizeof(Col));
-    Vector *vec = malloc(sizeof(Vector));
     col->idx = 0;
     col->matrix = NULL;
-    col->vec = vec;
+    col->vec = malloc(sizeof(Vector));
     return col;
 }
 
@@ -36,8 +41,6 @@ void free_col(Col *col)
 {
     col->idx = 0;
     col->matrix = NULL;
-    col->vec->len = 0;
-    col->vec->head = NULL;
     _std_free(col->vec);
     _std_free(col);
 }
@@ -49,8 +52,15 @@ void matrix_loc_col(Col *col, Matrix *mat, unsigned int idx)
 {
     col->idx = idx;
     col->matrix = mat;
-    col->vec->len = mat->nrow;
-    col->vec->head = &(mat->head[idx * mat->nrow]);
+    Vector _vec = {
+        &(mat->head[idx * mat->nrow]),
+        mat->nrow
+    };
+    memcpy(
+        col->vec,
+        &_vec,
+        sizeof(Vector)
+    );
 }
 
 void matrix_view_col(View *view, Matrix *mat, unsigned int idx)

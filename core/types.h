@@ -14,7 +14,7 @@ enum order
 typedef struct _Vector
 {
     double *head;
-    unsigned int len;
+    const unsigned int len;
 } Vector;
 
 /* flexible structure contains ptr of element of target vector/matrix */
@@ -40,8 +40,8 @@ typedef struct _View
 typedef struct _Matrix
 {
     double *head;
-    unsigned int nrow;
-    unsigned int ncol;
+    const unsigned int nrow;
+    const unsigned int ncol;
 } Matrix;
 
 typedef struct _Col

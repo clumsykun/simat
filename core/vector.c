@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 #include <time.h>
 #include "tools.h"
@@ -7,15 +8,21 @@
 
 Vector *create_vector(unsigned int len)
 {
-    Vector *vec = malloc( sizeof(Vector) );
-    vec->len = len;
-    vec->head = malloc( len * sizeof(double) );
+    Vector *vec = malloc(sizeof(Vector));
+    Vector _vec = {
+        malloc(len * sizeof(double)),
+        len,
+    };
+    memcpy(
+        vec,
+        &_vec,
+        sizeof(Vector)
+    );
     return vec;
 }
 
 void free_vector(Vector *vec)
 {
-    vec->len = 0;
     _std_free(vec->head);
     _std_free(vec);
 }
