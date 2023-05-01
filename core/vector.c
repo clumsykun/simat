@@ -141,6 +141,20 @@ void view_scale(View *view, double min, double max)
     }
 }
 
+void vector_reverse(Vector *vec)
+{
+    for (size_t i = 0; i < (vec->len) / 2; i++) {
+        _swap_double(&idx(vec, i), &idx(vec, vec->len-i-1));
+    }
+}
+
+void view_reverse(View *view)
+{
+    for (size_t i = 0; i < (view->len) / 2; i++) {
+        _swap_double(idx(view, i), idx(view, view->len-i-1));
+    }
+}
+
 /** 
  * choosing the last value as pivot
  * @head: address of the first number of the vector
@@ -173,9 +187,12 @@ void _quick_sort_double(double *head, unsigned int len) {
     }
 }
 
-void vector_sort(Vector *vec)
+void vector_sort(Vector *vec, enum order order)
 {
     _quick_sort_double(vec->head, vec->len);
+    if (order == descend) {
+        vector_reverse(vec);
+    }
 }
 
 unsigned int _partition_double_p(double **head, unsigned int len)
@@ -201,13 +218,6 @@ void _quick_sort_double_p(double **head, unsigned int len)
         unsigned int pi = _partition_double_p(head, len);
         _quick_sort_double_p(head, pi);
         _quick_sort_double_p(head + pi + 1, len - pi - 1);
-    }
-}
-
-void view_reverse(View *view)
-{
-    for (size_t i = 0; i < (view->len)/2; i++) {
-        _swap_double(idx(view, i), idx(view, view->len-i-1));
     }
 }
 

@@ -1,6 +1,12 @@
 #ifndef CORE_TYPES_H
 #define CORE_TYPES_H
 
+enum order
+{
+    ascend,
+    descend,
+};
+
 /**
  * @head: ptr of the first number of the vector
  * @len: length of this vector

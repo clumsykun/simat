@@ -21,9 +21,10 @@ double view_min(View *view);
 void vector_scale(Vector *vec, double min, double max);
 void view_scale(View *view, double min, double max);
 
+void vector_reverse(Vector *vec);
 void view_reverse(View *view);
 
-void vector_sort(Vector *vec);
+void vector_sort(Vector *vec, enum order order);
 void view_sort(View *view, enum order order);
 
 #endif /* CORE_VECTOR_H */
