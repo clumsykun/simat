@@ -14,13 +14,13 @@ Vector *create_vector(unsigned int len)
     return vec;
 }
 
-Row *create_row(unsigned int len)
+View *create_view(unsigned int len)
 {
-    Row *row = malloc(sizeof(Row));
-    row->len = len;
-    row->head = malloc(len * sizeof(double *));
-    row->label = NULL;
-    return row;
+    View *view = malloc(sizeof(View));
+    view->len = len;
+    view->head = malloc(len * sizeof(double *));
+    view->label = NULL;
+    return view;
 }
 
 void free_vector(Vector *vec)

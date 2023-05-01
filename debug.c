@@ -36,7 +36,7 @@ int test_vector()
 
 int test_matrix()
 {
-    unsigned int nrow = 5;
+    unsigned int nrow = 10;
     unsigned int ncol = 4;
     Matrix *mat = create_matrix(nrow, ncol);
 
@@ -56,8 +56,8 @@ int test_matrix()
 
     printf("------------------------------\n");
 
-    Row *row = create_row(nrow);
-    loc_row(row, mat, 3);
+    View *row= create_view(ncol);
+    matrix_view_row(row, mat, 3);
 
     for (size_t i = 0; i < ncol; i ++) {
         printf("%.2f    ", *row->head[i] );

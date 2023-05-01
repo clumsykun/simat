@@ -31,12 +31,12 @@ void loc_col(Vector *vec, Matrix *mat, unsigned int idx)
     vec->head = &(mat->head[idx * mat->nrow]);
 }
 
-void loc_row(Row *row, Matrix *mat, unsigned int idx)
+void matrix_view_row(View *view, Matrix *mat, unsigned int idx)
 {
-    row->len = mat->ncol;
+    view->len = mat->ncol;
     double(*head)[mat->nrow] = (double(*)[mat->nrow])mat->head;
-    for (size_t i = 0; i < row->len; i ++) {
-        row->head[i] = &head[i][idx];
+    for (size_t i = 0; i < view->len; i ++) {
+        view->head[i] = &head[i][idx];
     }
 }
 
