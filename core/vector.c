@@ -204,7 +204,17 @@ void _quick_sort_double_p(double **head, unsigned int len)
     }
 }
 
-void view_sort(View *view)
+void view_reverse(View *view)
+{
+    for (size_t i = 0; i < (view->len)/2; i++) {
+        _swap_double(idx(view, i), idx(view, view->len-i-1));
+    }
+}
+
+void view_sort(View *view, enum order order)
 {
     _quick_sort_double_p(view->head, view->len);
+    if (order == descend) {
+        view_reverse(view);
+    }
 }
