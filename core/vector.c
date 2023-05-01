@@ -177,3 +177,34 @@ void vector_sort(Vector *vec)
 {
     _quick_sort_double(vec->head, vec->len);
 }
+
+unsigned int _partition_double_p(double **head, unsigned int len)
+{
+    double pivot = *head[len - 1];
+    int candidate = -1;
+
+    for (int i = 0; i <= len - 1; i++) {
+        if (*head[i] < pivot) {
+
+            candidate++;
+            _swap_double_p(&head[candidate], &head[i]);
+        }
+    }
+    _swap_double_p(&head[candidate + 1], &head[len - 1]);
+    return (unsigned int)(candidate + 1);
+}
+
+void _quick_sort_double_p(double **head, unsigned int len)
+{
+    if (len > 1) {
+        /* [head, head + len] --> [head, head + pi], [head + pi + 1, head + len] */
+        unsigned int pi = _partition_double_p(head, len);
+        _quick_sort_double_p(head, pi);
+        _quick_sort_double_p(head + pi + 1, len - pi - 1);
+    }
+}
+
+void view_sort(View *view)
+{
+    _quick_sort_double_p(view->head, view->len);
+}

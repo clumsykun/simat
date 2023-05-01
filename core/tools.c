@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "tools.h"
 
-/* the standrd way to free memory */
+/* the standard way to free memory */
 void _std_free(void *ptr)
 {
     free(ptr);
@@ -20,4 +20,11 @@ void _swap_double(double *left, double *right)
     double tmp = *left;
     *left = *right;
     *right = tmp;
+}
+
+void _swap_double_p(double **left, double **right)
+{
+    double tmp = **left;
+    **left = **right;
+    **right = tmp;
 }

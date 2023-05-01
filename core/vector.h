@@ -14,13 +14,14 @@ void vector_set_rand(Vector *vec);
 void view_set_rand(View *view);
 
 double vector_max(Vector *vec);
-double view_max(View *view);
 double vector_min(Vector *vec);
+double view_max(View *view);
 double view_min(View *view);
 
 void vector_scale(Vector *vec, double min, double max);
 void view_scale(View *view, double min, double max);
 
 void vector_sort(Vector *vec);
+void view_sort(View *view);
 
 #endif /* CORE_VECTOR_H */
