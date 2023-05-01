@@ -53,9 +53,25 @@ void matrix_loc_col(Col *col, Matrix *mat, unsigned int idx)
     col->vec->head = &(mat->head[idx * mat->nrow]);
 }
 
+void matrix_view_col(View *view, Matrix *mat, unsigned int idx)
+{
+    if (view->len != mat->nrow) {
+        view->len = mat->nrow;
+        view->head = (double **) realloc(view->head, view->len * sizeof(double *));
+    }
+
+    for (size_t i = 0; i < view->len; i++) {
+        view->head[i] = &mat->head[idx*mat->nrow + i];
+    }
+}
+
 void matrix_view_row(View *view, Matrix *mat, unsigned int idx)
 {
-    view->len = mat->ncol;
+    if (view->len != mat->ncol) {
+        view->len = mat->ncol;
+        view->head = (double **) realloc(view->head, view->len * sizeof(double *));
+    }
+
     double(*head)[mat->nrow] = (double(*)[mat->nrow])mat->head;
     for (size_t i = 0; i < view->len; i ++) {
         view->head[i] = &head[i][idx];
@@ -77,7 +93,7 @@ void matrix_display(Matrix *mat)
         printf("[%1d]  ", i);
 
         for (size_t j = 0; j < mat->ncol; j++) {
-            printf("%.2f    ", head[j][i]);
+            printf("%.2f,  ", head[j][i]);
         }
         printf("\n");
     }

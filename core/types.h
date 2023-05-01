@@ -1,6 +1,5 @@
 #ifndef CORE_TYPES_H
 #define CORE_TYPES_H
-#define idx(vec, i) vec->head[i]
 
 /**
  * @head: ptr of the first number of the vector
@@ -12,14 +11,19 @@ typedef struct _Vector
     unsigned int len;
 } Vector;
 
-/**
- * flexible structure contains ptr of element of target vector/matrix.
- */
+/* flexible structure contains ptr of element of target vector/matrix */
 typedef struct _View
 {
     double **head;
     unsigned int len;
 } View;
+
+/**
+ * this works for both Vector and View
+ * Vector vec: idx(vec, i)
+ * View view: *idx(view, i)
+ */
+#define idx(x, i) x->head[i]
 
 /**
  * matrix is basically an ordered collection of same sized vectors
