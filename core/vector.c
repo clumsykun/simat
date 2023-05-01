@@ -10,8 +10,14 @@ Vector *create_vector(unsigned int len)
     Vector *vec = malloc( sizeof(Vector) );
     vec->len = len;
     vec->head = malloc( len * sizeof(double) );
-    vec->label = NULL;
     return vec;
+}
+
+void free_vector(Vector *vec)
+{
+    vec->len = 0;
+    _std_free(vec->head);
+    _std_free(vec);
 }
 
 View *create_view(unsigned int len)
@@ -19,16 +25,14 @@ View *create_view(unsigned int len)
     View *view = malloc(sizeof(View));
     view->len = len;
     view->head = malloc(len * sizeof(double *));
-    view->label = NULL;
     return view;
 }
 
-void free_vector(Vector *vec)
+void free_view(View *view)
 {
-    vec->len = 0;
-    vec->label = NULL;
-    _std_free(vec->head);
-    _std_free(vec);
+    view->len = 0;
+    _std_free(view->head);
+    _std_free(view);
 }
 
 void vector_display(Vector *vec)

@@ -5,6 +5,7 @@
 Vector *create_vector(unsigned int len);
 View *create_view(unsigned int len);
 void free_vector(Vector *vec);
+void free_view(View *view);
 void vector_display(Vector *vec);
 void vector_set_rand(Vector *vec);
 double vector_max(Vector *vec);
