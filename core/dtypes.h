@@ -32,12 +32,6 @@ typedef struct _View
     unsigned int len;
 } View;
 
-/**
- * this works for both Vector and View
- * Vector vec: idx(vec, i)
- * View view: *idx(view, i)
- */
-#define idx(x, i) x->head[i]
 
 /**
  * matrix is basically an ordered collection of same sized vectors
@@ -60,5 +54,22 @@ typedef struct _Col
     Matrix *matrix;
     Vector *const vec;
 } Col;
+
+/**
+ * @x: vector or view.
+ * @m: matrix.
+ */
+#define idx(x, i) x->head[i]
+#define loc(m, i, j) m->head[m->nrow * i + j]
+
+/* @x can be vector/view/column */
+#define get(x, i)                                                          \
+    ((x->dtype == dtype_vector)                                            \
+         ? (x->head == NULL ? NULL : (x->head[i]))                         \
+         : ((x->dtype == dtype_view)                                       \
+                ? (x->head == NULL ? NULL : (*(x->head[i])))               \
+                : ((x->dtype == dtype_column)                              \
+                       ? (x->vec->head == NULL ? NULL : (x->vec->head[i])) \
+                       : NULL)))
 
 #endif /* CORE_DTYPES_H */

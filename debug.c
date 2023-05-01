@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "core/types.h"
+#include "core/dtypes.h"
 #include "core/vector.h"
 #include "core/matrix.h"
 #include "core/stats.h"
@@ -63,6 +63,8 @@ int test_matrix()
 
     printf("------------------------------\n");
 
+    matrix_view_col(view, mat, 2);
+    view_display(view);
     matrix_view_col(view, mat, 3);
     view_display(view);
     matrix_view_row(view, mat, 3);
@@ -119,8 +121,8 @@ int test_stats()
 
 int main()
 {
-    // test_vector();
-    // test_matrix();
+    test_vector();
+    test_matrix();
     test_stats();
     return 0;
 }
