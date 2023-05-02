@@ -95,12 +95,12 @@ void vector_display(Vector *vec)
     switch (vec->dtype) {
 
         case dtype_char: {
-                char *p = (char *) vec->head;
-                for (size_t i = 0; i < vec->len - 1; i++, p++)
-                    printf("%c, ", *p);
+            char *p = (char *) vec->head;
+            for (size_t i = 0; i < vec->len - 1; i++, p++)
+                printf("%c, ", *p);
 
-                printf("%c])\n", idx(vec, vec->len - 1));
-                break;
+            printf("%c])\n", idx(vec, vec->len - 1));
+            break;
         }
 
         case dtype_int: {
