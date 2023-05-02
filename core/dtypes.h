@@ -6,12 +6,12 @@ enum order {
     descend,
 };
 
-enum dtype {
-    dtype_vector,
-    dtype_view,
-    dtype_matrix,
-    dtype_column,
-};
+// enum dtype {
+//     dtype_vector,
+//     dtype_view,
+//     dtype_matrix,
+//     dtype_column,
+// };
 
 /**
  * @head: ptr of the first number of the vector
@@ -19,7 +19,6 @@ enum dtype {
  */
 typedef struct _Vector
 {
-    const enum dtype dtype;
     double *const head;
     const unsigned int len;
 } Vector;
@@ -27,7 +26,6 @@ typedef struct _Vector
 /* flexible structure contains ptr of element of target vector/matrix */
 typedef struct _View
 {
-    const enum dtype dtype;
     double **head;
     unsigned int len;
 } View;
@@ -41,7 +39,6 @@ typedef struct _View
  */
 typedef struct _Matrix
 {
-    const enum dtype dtype;
     double *const head;
     const unsigned int nrow;
     const unsigned int ncol;
@@ -49,7 +46,6 @@ typedef struct _Matrix
 
 typedef struct _Col
 {
-    const enum dtype dtype;
     unsigned int idx;
     Matrix *matrix;
     Vector *const vec;

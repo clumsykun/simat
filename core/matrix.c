@@ -10,7 +10,6 @@ Matrix *create_matrix(unsigned int nrow, unsigned int ncol)
 {
     Matrix *mat = malloc(sizeof(Matrix));
     Matrix _mat = {
-        dtype_matrix,
         malloc(nrow * ncol * sizeof(double)),
         nrow,
         ncol,
@@ -33,7 +32,6 @@ Col *create_col()
 {
     Col *col = malloc(sizeof(Col));
     Col _col = {
-        dtype_column,
         0,
         NULL,
         malloc(sizeof(Vector))
@@ -62,7 +60,6 @@ void matrix_loc_col(Col *col, Matrix *mat, unsigned int idx)
     col->idx = idx;
     col->matrix = mat;
     Vector _vec = {
-        dtype_vector,
         &(mat->head[idx * mat->nrow]),
         mat->nrow
     };

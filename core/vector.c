@@ -10,7 +10,6 @@ Vector *create_vector(unsigned int len)
 {
     Vector *vec = malloc(sizeof(Vector));
     Vector _vec = {
-        dtype_vector,
         malloc(len * sizeof(double)),
         len,
     };
@@ -32,7 +31,6 @@ View *create_view()
 {
     View *view = malloc(sizeof(View));
     View _view = {
-        dtype_view,
         NULL, /* initialize it to NULL so that realloc() will work properly */
         0
     };
