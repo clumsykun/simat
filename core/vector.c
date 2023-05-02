@@ -23,6 +23,16 @@ Vector *create_vector(enum dtype dtype, unsigned int len)
             break;
         }
 
+        case dtype_char: {
+            Vector _vec = {
+                malloc(len * sizeof(char)),
+                dtype_char,
+                len,
+            };
+            memcpy(vec, &_vec, sizeof(Vector));
+            break;
+        }
+
         case dtype_int: {
             Vector _vec = {
                 malloc(len * sizeof(int)),
@@ -82,10 +92,38 @@ void free_view(View *view)
 void vector_display(Vector *vec)
 {
     printf("Vector([");
-    for (size_t i = 0; i < vec->len-1; i++) {
-        printf("%.2f, ", idx(vec,i));
+    switch (vec->dtype) {
+
+        case dtype_char: {
+                char *p = (char *) vec->head;
+                for (size_t i = 0; i < vec->len - 1; i++, p++)
+                    printf("%c, ", *p);
+
+                printf("%c])\n", idx(vec, vec->len - 1));
+                break;
+        }
+
+        case dtype_int: {
+            int *p = (int *) vec->head;
+            for (size_t i = 0; i < vec->len - 1; i++, p++)
+                printf("%d, ", *p);
+
+            printf("%d])\n", idx(vec, vec->len - 1));
+            break;
+        }
+
+        case dtype_double:{
+            double *p = (double *) vec->head;
+            for (size_t i = 0; i < vec->len - 1; i++, p++)
+                printf("%.4f, ", *p);
+
+            printf("%.4f])\n", idx(vec, vec->len - 1));
+            break;
+        }
+
+        default:
+            dtype_error();
     }
-    printf("%.2f])\n", idx(vec, vec->len-1));
 }
 
 void view_display(View *view)
@@ -101,8 +139,26 @@ void view_display(View *view)
 void vector_set_rand(Vector *vec)
 {
     srand(time(NULL));
-    for (size_t i = 0; i < vec->len; i++) {
-        idx(vec, i) = rand() + ( (double) rand() / RAND_MAX );
+    switch (vec->dtype) {
+
+        case dtype_int: {
+            int *p = (int *)vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                    *p = rand();
+
+            break;
+        }
+
+        case dtype_double: {
+            double *p = (double *) vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                *p = rand() + ((double)rand() / RAND_MAX);
+
+            break;
+        }
+        
+        default:
+            dtype_error();
     }
 }
 
