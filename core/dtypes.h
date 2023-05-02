@@ -9,6 +9,7 @@ enum order {
 
 enum dtype {
     dtype_bool,
+    dtype_char,
     dtype_int,
     dtype_double,
 };
