@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "tools.h"
 
 /* the standard way to free memory */
@@ -27,4 +28,10 @@ void _swap_double_p(double **left, double **right)
     double tmp = **left;
     **left = **right;
     **right = tmp;
+}
+
+void dtype_error(void)
+{
+    fprintf(stderr, "Data type error! Exiting...\n");
+    exit(EXIT_FAILURE);
 }
