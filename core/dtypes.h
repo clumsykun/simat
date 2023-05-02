@@ -1,17 +1,17 @@
 #ifndef CORE_DTYPES_H
 #define CORE_DTYPES_H
+#include <stdbool.h>
 
 enum order {
     ascend,
     descend,
 };
 
-// enum dtype {
-//     dtype_vector,
-//     dtype_view,
-//     dtype_matrix,
-//     dtype_column,
-// };
+enum dtype {
+    dtype_bool,
+    dtype_int,
+    dtype_double,
+};
 
 /**
  * @head: ptr of the first number of the vector
@@ -19,7 +19,8 @@ enum order {
  */
 typedef struct _Vector
 {
-    double *const head;
+    char *const head;
+    const enum dtype dtype;
     const unsigned int len;
 } Vector;
 

@@ -6,18 +6,47 @@
 #include "tools.h"
 #include "dtypes.h"
 
-Vector *create_vector(unsigned int len)
+Vector *create_vector(enum dtype dtype, unsigned int len)
 {
+    size_t size;
     Vector *vec = malloc(sizeof(Vector));
-    Vector _vec = {
-        malloc(len * sizeof(double)),
-        len,
-    };
-    memcpy(
-        vec,
-        &_vec,
-        sizeof(Vector)
-    );
+    // Vector _vec;
+    switch (dtype) {
+
+        case dtype_bool: {
+            Vector _vec = {
+                malloc(len * sizeof(bool)),
+                dtype_bool,
+                len,
+            };
+            memcpy(vec, &_vec, sizeof(Vector));
+            break;
+        }
+
+        case dtype_int: {
+            Vector _vec = {
+                malloc(len * sizeof(int)),
+                dtype_int,
+                len,
+            };
+            memcpy(vec, &_vec, sizeof(Vector));
+            break;
+        }
+
+        case dtype_double: {
+            Vector _vec = {
+                malloc(len * sizeof(double)),
+                dtype_double,
+                len,
+            };
+            memcpy(vec, &_vec, sizeof(Vector));
+            break;
+        }
+
+        default:
+            dtype_error();
+    }
+
     return vec;
 }
 
@@ -87,14 +116,38 @@ void view_set_rand(View *view)
 
 double vector_min(Vector *vec)
 {
-    double min = *(vec->head);
+    double min;
+    switch (vec->dtype) {
 
-    for (size_t i = 0; i < vec->len; i++) {
-        if (min > idx(vec, i)) {
-            min = idx(vec, i);
+        case dtype_bool: {
+            bool *p = (bool *) vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                min = (min <= *p ? min : *p);
+
+            break;
         }
+
+        case dtype_int: {
+            int *p = (int *) vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                min = (min <= *p ? min : *p);
+
+            break;
+        }
+
+        case dtype_double: {
+            double *p = (double *) vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                min = (min <= *p ? min : *p);
+
+            break;
+        }
+
+        default:
+            dtype_error();
     }
-    return min;
+
+    return (double) min;
 }
 
 double view_min(View *view)
@@ -111,14 +164,38 @@ double view_min(View *view)
 
 double vector_max(Vector *vec)
 {
-    double max = *(vec->head);
+    double max;
+    switch (vec->dtype) {
 
-    for (size_t i =0; i < vec->len; i++) {
-        if (max < idx(vec, i)) {
-            max = idx(vec, i);
+        case dtype_bool: {
+            bool *p = (bool *) vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                max = (max >= *p ? max : *p);
+
+            break;
         }
+
+        case dtype_int: {
+            int *p = (int *) vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                max = (max >= *p ? max : *p);
+
+            break;
+        }
+
+        case dtype_double: {
+            double *p = (double *) vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                max = (max >= *p ? max : *p);
+
+            break;
+        }
+
+        default:
+            dtype_error();
     }
-    return max;
+
+    return (double) max;
 }
 
 double view_max(View *view)
