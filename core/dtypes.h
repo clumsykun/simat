@@ -54,14 +54,15 @@ typedef struct _Col
     Vector *const vec;
 } Col;
 
+/* access the value of element of vector/matrix, as type of double */
 #define access(p, dtype)                      \
-    (dtype == dtype_bool                         \
+    (dtype == dtype_bool                      \
         ? (double)*((bool *)p)                \
-        : (dtype == dtype_char                   \
+        : (dtype == dtype_char                \
             ? (double)*((char *)p)            \
-            : (dtype == dtype_int                \
+            : (dtype == dtype_int             \
                 ? (double)*((int *)p)         \
-                : (dtype == dtype_double         \
+                : (dtype == dtype_double      \
                     ? *((double *)p)          \
                     : __double_dtype_unknown_error()))))
 
