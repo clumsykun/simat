@@ -1,7 +1,6 @@
 #ifndef CORE_DTYPES_H
 #define CORE_DTYPES_H
 #include <stdbool.h>
-#include "tools.h"
 
 enum order {
     ascend,
@@ -10,7 +9,7 @@ enum order {
 
 enum dtype {
     dtype_bool,
-    dtype_char,
+    dtype_pixel,
     dtype_int,
     dtype_double,
 };
@@ -54,12 +53,14 @@ typedef struct _Col
     Vector *const vec;
 } Col;
 
+#define pixel unsigned char
+
 /* access the value of element of vector/matrix, as type of double */
 #define access(p, dtype)                      \
     (dtype == dtype_bool                      \
         ? (double)*((bool *)p)                \
-        : (dtype == dtype_char                \
-            ? (double)*((char *)p)            \
+        : (dtype == dtype_pixel               \
+            ? (double)*((pixel *)p)   \
             : (dtype == dtype_int             \
                 ? (double)*((int *)p)         \
                 : (dtype == dtype_double      \
@@ -69,8 +70,8 @@ typedef struct _Col
 #define dsizeof(dtype)                        \
     (dtype == dtype_bool                      \
         ? sizeof(bool)                        \
-        : (dtype == dtype_char                \
-            ? sizeof(char)                    \
+        : (dtype == dtype_pixel               \
+            ? sizeof(pixel)           \
             : (dtype == dtype_int             \
                 ? sizeof(int)                 \
                 : (dtype == dtype_double      \
