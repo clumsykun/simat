@@ -34,7 +34,7 @@ int test_vector()
     }
     else {
         assert((int)vector_max(vec) == 100);
-        assert(vector_min(vec) == 0);
+        assert((int)vector_min(vec) == 0);
     }
 
     printf("sort ascend:\n");
