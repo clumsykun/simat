@@ -49,13 +49,13 @@ void free_view(View *view)
 
 void vector_display(Vector *vec)
 {
-    printf("Vector([\n");
     switch (vec->dtype) {
 
         case dtype_bool: {
             bool *p = (bool *)vec->head;
             char c;
 
+            printf("BoolVector([\n");
             for (size_t i = 0; i < vec->len - 1; i++, p++) {
                 c = (*p == false ? '-' : '+');
                 printf("(%c), ", c);
@@ -71,6 +71,7 @@ void vector_display(Vector *vec)
         case dtype_pixel: {
             pixel *p = (pixel *) vec->head;
 
+            printf("PixelVector([\n");
             for (size_t i = 0; i < vec->len - 1; i++, p++) {
                 printf("(%3d), ", *p);
 
@@ -84,6 +85,8 @@ void vector_display(Vector *vec)
 
         case dtype_int: {
             int *p = (int *) vec->head;
+
+            printf("IntVector([\n");
             for (size_t i = 0; i < vec->len - 1; i++, p++) {
                 printf("%10d, ", *p);
 
@@ -97,6 +100,8 @@ void vector_display(Vector *vec)
 
         case dtype_double:{
             double *p = (double *) vec->head;
+
+            printf("DoubleVector([\n");
             for (size_t i = 0; i < vec->len - 1; i++, p++) {
                 printf("%10.2f, ", *p);
 
