@@ -80,20 +80,26 @@ void assign(char *dest, const void *src, size_t len)
         *dest++ = *p++;
 }
 
-void dassign(char *dest, double src)
+void dassign(char *dest, double src, enum dtype dtype)
 {
-    const char *p = (char *)(&src);
-    size_t len = sizeof(double);
+    switch (dtype) {
+        case dtype_bool:
+            *(bool *)dest = (bool)src;
+            break;
 
-    while (len--)
-        *dest++ = *p++;
-}
+        case dtype_pixel:
+            *(pixel *)dest = (pixel)src;
+            break;
 
-void iassign(char *dest, int src)
-{
-    const char *p = (char *)(&src);
-    size_t len = sizeof(double);
+        case dtype_int:
+            *(int *)dest = (int)src;
+            break;
 
-    while (len--)
-        *dest++ = *p++;
+        case dtype_double:
+            *(double *)dest = (double)src;
+            break;
+
+        default:
+            break;
+    }
 }

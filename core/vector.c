@@ -161,14 +161,14 @@ void vector_set_rand(Vector *vec)
 
         case dtype_int: {
             for (char *p = vec->head; p <= vec->bott; p += dsizeof(vec->dtype))
-                iassign(p, __rand_int(-RAND_MAX/2, RAND_MAX/2));
+                dassign(p, __rand_int(-RAND_MAX/2, RAND_MAX/2), vec->dtype);
 
             break;
         }
 
         case dtype_double: {
             for (char *p = vec->head; p <= vec->bott; p+=dsizeof(vec->dtype))
-                dassign(p, __rand_double(-RAND_MAX/2, RAND_MAX/2));
+                dassign(p, __rand_double(-100/2, 100/2), vec->dtype);
 
             break;
         }
@@ -236,12 +236,12 @@ void vector_scale(Vector *vec, double min, double max)
     double vec_min = vector_min(vec);
     double scale = vector_max(vec) - vec_min;
     double target_scale = max - min;
-    char *p = vec->head;
 
-    for (size_t i = 0; i < vec->len; i++, p+=dsizeof(vec->dtype))
+    for (char *p = vec->head; p <= vec->bott; p += dsizeof(vec->dtype))
         dassign(
             p,
-            min + (access(vec->dtype, p) - vec_min) * target_scale / scale
+            min + (access(vec->dtype, p) - vec_min) * target_scale / scale,
+            vec->dtype
         );
 }
 
@@ -302,16 +302,14 @@ static void __quick_sort(enum dtype dtype, char *start, char *end)
          * [p, p + pi*dsizeof], [p + (pi+1)*dsizeof, p+len*dsizeof]
          */
         char* p = __partition(dtype, start, end);
-        __quick_sort(dtype, start, p);
-        __quick_sort(dtype, p+sizeof(dtype), end);
+        __quick_sort(dtype, start, p-dsizeof(dtype));
+        __quick_sort(dtype, p+dsizeof(dtype), end);
     }
 }
 
 void vector_sort(Vector *vec, enum order order)
 {
-    int stride = (vec->len - 1) * dsizeof(vec->dtype);
-    char *end = vec->head + stride;
-    __quick_sort(vec->dtype, vec->head, end);
+    __quick_sort(vec->dtype, vec->head, vec->bott);
     if (order == descend) {
         vector_reverse(vec);
     }

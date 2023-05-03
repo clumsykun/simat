@@ -3,20 +3,23 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
-#include "core/dtypes.h"
+#include "core/tools.h"
 #include "core/vector.h"
 #include "core/matrix.h"
 #include "core/stats.h"
 
 int test_vector()
 {
-    unsigned int len = 50;
-    // enum dtype dtype = dtype_bool;
-    // enum dtype dtype = dtype_pixel;
-    enum dtype dtype = dtype_int;
-    // enum dtype dtype = dtype_double;
+    unsigned int len = 5;
 
-    Vector *vec = create_vector(dtype, len);
+    // Vector *vec = create_bool_vector(len);
+    // Vector *vec = create_pixel_vector(len);
+    // Vector *vec = create_int_vector(len);
+    Vector *vec = create_double_vector(len);
+
+    size_t size = 0;
+    for (char *p = vec->head; p <= vec->bott; p += dsizeof(vec->dtype), size++)
+        dassign(p, (double)size+10, vec->dtype);
 
     printf("set random:\n");
     vector_set_rand(vec);
@@ -25,12 +28,12 @@ int test_vector()
     printf("scale:\n");
     vector_scale(vec, 0, 100);
     vector_display(vec);
-    if (dtype == dtype_bool) {
+    if (vec->dtype == dtype_bool) {
         assert(vector_max(vec) == 1);
         assert(vector_min(vec) == 0);
     }
     else {
-        assert(vector_max(vec) == 100);
+        assert((int)vector_max(vec) == 100);
         assert(vector_min(vec) == 0);
     }
 
@@ -108,7 +111,7 @@ int test_matrix()
 int test_stats()
 {
     unsigned int len = 10;
-    Vector *vec = create_vector(dtype_int, len);
+    Vector *vec = create_int_vector(len);
     for (size_t i = 0; i < len; i++) {
         idx(vec, i) = i+1;
     }

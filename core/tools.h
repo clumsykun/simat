@@ -13,7 +13,6 @@ void __dtype_unknown_error(void);
 int __rand_int(int min, int max);
 double __rand_double(int min, int max);
 void assign(char *dest, const void *src, size_t len);
-void dassign(char *dest, double src);
-void iassign(char *dest, int src);
+void dassign(char *dest, double src, enum dtype dtype);
 
 #endif /* CORE_TOOLS_H */
