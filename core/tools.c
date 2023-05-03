@@ -49,3 +49,9 @@ void __dtype_unknown_error(void)
     fprintf(stderr, "Data type unknown error! Exiting...\n");
     exit(EXIT_FAILURE);
 }
+
+/* min and max are inclusive */
+int __rand_int(int min, int max)
+{
+    return (rand() % (max - min + 1)) + min;
+}
