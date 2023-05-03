@@ -49,33 +49,62 @@ void free_view(View *view)
 
 void vector_display(Vector *vec)
 {
-    printf("Vector([");
+    printf("Vector([\n");
     switch (vec->dtype) {
+
+        case dtype_bool: {
+            bool *p = (bool *)vec->head;
+            char c;
+
+            for (size_t i = 0; i < vec->len - 1; i++, p++) {
+                c = (*p == false ? '-' : '+');
+                printf("(%c), ", c);
+
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
+
+            printf("(%c)])\n", (*p == false ? '-' : '+'));
+            break;
+        }
 
         case dtype_char: {
             char *p = (char *) vec->head;
-            for (size_t i = 0; i < vec->len - 1; i++, p++)
-                printf("%c, ", *p);
 
-            printf("%c])\n", idx(vec, vec->len - 1));
+            for (size_t i = 0; i < vec->len - 1; i++, p++) {
+                printf("(%c), ", *p);
+
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
+
+            printf("(%c)])\n", *p);
             break;
         }
 
         case dtype_int: {
             int *p = (int *) vec->head;
-            for (size_t i = 0; i < vec->len - 1; i++, p++)
-                printf("%d, ", *p);
+            for (size_t i = 0; i < vec->len - 1; i++, p++) {
+                printf("%10d, ", *p);
 
-            printf("%d])\n", idx(vec, vec->len - 1));
+                if ((i + 1) % 5 == 0)
+                    printf("\n");
+            };
+
+            printf("%d])\n", *p);
             break;
         }
 
         case dtype_double:{
             double *p = (double *) vec->head;
-            for (size_t i = 0; i < vec->len - 1; i++, p++)
-                printf("%.4f, ", *p);
+            for (size_t i = 0; i < vec->len - 1; i++, p++) {
+                printf("%10.2f, ", *p);
 
-            printf("%.4f])\n", idx(vec, vec->len - 1));
+                if ((i + 1) % 5 == 0)
+                    printf("\n");
+            }
+
+            printf("%10.2f])\n", idx(vec, vec->len - 1));
             break;
         }
 
@@ -98,6 +127,24 @@ void vector_set_rand(Vector *vec)
 {
     srand(time(NULL));
     switch (vec->dtype) {
+
+        /* only printable char generated */
+        case dtype_bool: {
+            bool *p = (bool *)vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                    *p = (bool)__rand_int(0, 1);
+
+            break;
+        }
+
+        /* only printable char generated */
+        case dtype_char: {
+            char *p = (char *)vec->head;
+            for (size_t i = 0; i < vec->len; i++, p++)
+                    *p = (char) __rand_int(32, 126);
+
+            break;
+        }
 
         case dtype_int: {
             int *p = (int *)vec->head;
