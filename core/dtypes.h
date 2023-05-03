@@ -1,6 +1,7 @@
 #ifndef CORE_DTYPES_H
 #define CORE_DTYPES_H
 #include <stdbool.h>
+#include "tools.h"
 
 enum order {
     ascend,
@@ -20,8 +21,8 @@ enum dtype {
  */
 typedef struct _Vector
 {
-    char *const head;
     const enum dtype dtype;
+    char *const head;
     const unsigned int len;
 } Vector;
 
@@ -52,6 +53,28 @@ typedef struct _Col
     Matrix *matrix;
     Vector *const vec;
 } Col;
+
+#define access(p, dtype)                      \
+    (dtype == dtype_bool                         \
+        ? (double)*((bool *)p)                \
+        : (dtype == dtype_char                   \
+            ? (double)*((char *)p)            \
+            : (dtype == dtype_int                \
+                ? (double)*((int *)p)         \
+                : (dtype == dtype_double         \
+                    ? *((double *)p)          \
+                    : __double_dtype_unknown_error()))))
+
+#define dsizeof(dtype) \
+    (dtype == dtype_bool \
+        ? sizeof(bool) \
+        : (dtype == dtype_char \
+            ? sizeof(char) \
+            : (dtype == dtype_int \
+                ? sizeof(int) \
+                : (dtype == dtype_double \
+                    ? sizeof(double) \
+                    : __size_t_dtype_unknown_error()))))
 
 /**
  * @x: vector or view.

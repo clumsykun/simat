@@ -8,62 +8,20 @@
 
 Vector *create_vector(enum dtype dtype, unsigned int len)
 {
-    size_t size;
     Vector *vec = malloc(sizeof(Vector));
-    // Vector _vec;
-    switch (dtype) {
-
-        case dtype_bool: {
-            Vector _vec = {
-                malloc(len * sizeof(bool)),
-                dtype_bool,
-                len,
-            };
-            memcpy(vec, &_vec, sizeof(Vector));
-            break;
-        }
-
-        case dtype_char: {
-            Vector _vec = {
-                malloc(len * sizeof(char)),
-                dtype_char,
-                len,
-            };
-            memcpy(vec, &_vec, sizeof(Vector));
-            break;
-        }
-
-        case dtype_int: {
-            Vector _vec = {
-                malloc(len * sizeof(int)),
-                dtype_int,
-                len,
-            };
-            memcpy(vec, &_vec, sizeof(Vector));
-            break;
-        }
-
-        case dtype_double: {
-            Vector _vec = {
-                malloc(len * sizeof(double)),
-                dtype_double,
-                len,
-            };
-            memcpy(vec, &_vec, sizeof(Vector));
-            break;
-        }
-
-        default:
-            dtype_error();
-    }
-
+    Vector _vec = {
+        dtype,
+        malloc(len * dsizeof(dtype)),
+        len,
+    };
+    memcpy(vec, &_vec, sizeof(Vector));
     return vec;
 }
 
 void free_vector(Vector *vec)
 {
-    _std_free(vec->head);
-    _std_free(vec);
+    __std_free(vec->head);
+    __std_free(vec);
 }
 
 View *create_view()
@@ -85,8 +43,8 @@ View *create_view()
 void free_view(View *view)
 {
     view->len = 0;
-    _std_free(view->head);  /* still need to free this ptr */
-    _std_free(view);
+    __std_free(view->head);  /* still need to free this ptr */
+    __std_free(view);
 }
 
 void vector_display(Vector *vec)
@@ -122,7 +80,7 @@ void vector_display(Vector *vec)
         }
 
         default:
-            dtype_error();
+            __dtype_unknown_error();
     }
 }
 
@@ -158,7 +116,7 @@ void vector_set_rand(Vector *vec)
         }
         
         default:
-            dtype_error();
+            __dtype_unknown_error();
     }
 }
 
@@ -173,37 +131,11 @@ void view_set_rand(View *view)
 double vector_min(Vector *vec)
 {
     double min;
-    switch (vec->dtype) {
+    char *p = vec->head;
+    for (size_t i = 0; i < vec->len; i++, p += dsizeof(vec->dtype))
+        min = (min <= access(p, vec->dtype) ? min : access(p, vec->dtype));
 
-        case dtype_bool: {
-            bool *p = (bool *) vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
-                min = (min <= *p ? min : *p);
-
-            break;
-        }
-
-        case dtype_int: {
-            int *p = (int *) vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
-                min = (min <= *p ? min : *p);
-
-            break;
-        }
-
-        case dtype_double: {
-            double *p = (double *) vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
-                min = (min <= *p ? min : *p);
-
-            break;
-        }
-
-        default:
-            dtype_error();
-    }
-
-    return (double) min;
+    return min;
 }
 
 double view_min(View *view)
@@ -221,37 +153,11 @@ double view_min(View *view)
 double vector_max(Vector *vec)
 {
     double max;
-    switch (vec->dtype) {
+    char *p = vec->head;
+    for (size_t i = 0; i < vec->len; i++, p+=dsizeof(vec->dtype))
+        max = (max >= access(p, vec->dtype) ? max : access(p, vec->dtype));
 
-        case dtype_bool: {
-            bool *p = (bool *) vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
-                max = (max >= *p ? max : *p);
-
-            break;
-        }
-
-        case dtype_int: {
-            int *p = (int *) vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
-                max = (max >= *p ? max : *p);
-
-            break;
-        }
-
-        case dtype_double: {
-            double *p = (double *) vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
-                max = (max >= *p ? max : *p);
-
-            break;
-        }
-
-        default:
-            dtype_error();
-    }
-
-    return (double) max;
+    return max;
 }
 
 double view_max(View *view)
@@ -292,14 +198,14 @@ void view_scale(View *view, double min, double max)
 void vector_reverse(Vector *vec)
 {
     for (size_t i = 0; i < (vec->len) / 2; i++) {
-        _swap_double(&idx(vec, i), &idx(vec, vec->len-i-1));
+        __swap_double(&idx(vec, i), &idx(vec, vec->len-i-1));
     }
 }
 
 void view_reverse(View *view)
 {
     for (size_t i = 0; i < (view->len) / 2; i++) {
-        _swap_double(idx(view, i), idx(view, view->len-i-1));
+        __swap_double(idx(view, i), idx(view, view->len-i-1));
     }
 }
 
@@ -318,10 +224,10 @@ unsigned int _partition_double(double *head, unsigned int len)
         if (head[i] < pivot) {
 
             candidate++;
-            _swap_double(&head[candidate], &head[i]);
+            __swap_double(&head[candidate], &head[i]);
         }
     }
-    _swap_double(&head[candidate+1], &head[len-1]);
+    __swap_double(&head[candidate+1], &head[len-1]);
     return (unsigned int) (candidate + 1);
 }
 
@@ -352,10 +258,10 @@ unsigned int _partition_double_p(double **head, unsigned int len)
         if (*head[i] < pivot) {
 
             candidate++;
-            _swap_double_p(&head[candidate], &head[i]);
+            __swap_double_p(&head[candidate], &head[i]);
         }
     }
-    _swap_double_p(&head[candidate + 1], &head[len - 1]);
+    __swap_double_p(&head[candidate + 1], &head[len - 1]);
     return (unsigned int)(candidate + 1);
 }
 
