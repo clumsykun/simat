@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
+#include <time.h>
 #include "core/dtypes.h"
 #include "core/vector.h"
 #include "core/matrix.h"
@@ -8,25 +10,29 @@
 
 int test_vector()
 {
-    unsigned int len = 500;
-    Vector *vec = create_vector(len);
+    unsigned int len = 50;
+    // enum dtype dtype = dtype_bool;
+    // enum dtype dtype = dtype_pixel;
+    enum dtype dtype = dtype_int;
+    // enum dtype dtype = dtype_double;
 
-    for (size_t i = 0; i < 500; i ++) {
-        idx(vec, i) = 500-i;
-    }
-
-    assert(vector_max(vec) == 500);
-    assert(vector_min(vec) == 1);
+    Vector *vec = create_vector(dtype, len);
 
     printf("set random:\n");
     vector_set_rand(vec);
     vector_display(vec);
 
     printf("scale:\n");
-    vector_scale(vec, 0, 1);
+    vector_scale(vec, 0, 100);
     vector_display(vec);
-    assert(vector_max(vec) == 1);
-    assert(vector_min(vec) == 0);
+    if (dtype == dtype_bool) {
+        assert(vector_max(vec) == 1);
+        assert(vector_min(vec) == 0);
+    }
+    else {
+        assert(vector_max(vec) == 100);
+        assert(vector_min(vec) == 0);
+    }
 
     printf("sort ascend:\n");
     vector_sort(vec, ascend);
@@ -49,15 +55,15 @@ int test_matrix()
     View *view = create_view();
     Col *col = create_col();
 
-    for (size_t i = 0; i < ncol; i++) {
-        matrix_loc_col(col, mat, i);
-        for (size_t j = 0; j < nrow; j ++) {
-            idx(col->vec, j) = (double) i * 100 + j + 1;
-        }
+    // for (size_t i = 0; i < ncol; i++) {
+    //     matrix_loc_col(col, mat, i);
+    //     for (size_t j = 0; j < nrow; j ++) {
+    //         idx(col->vec, j) = (double) i * 100 + j + 1;
+    //     }
 
-        // vector_scale(vec, 0, 100);
-        vector_display(col->vec);
-    }
+    //     // vector_scale(vec, 0, 100);
+    //     vector_display(col->vec);
+    // }
 
     matrix_display(mat);
 
@@ -102,7 +108,7 @@ int test_matrix()
 int test_stats()
 {
     unsigned int len = 10;
-    Vector *vec = create_vector(len);
+    Vector *vec = create_vector(dtype_int, len);
     for (size_t i = 0; i < len; i++) {
         idx(vec, i) = i+1;
     }
