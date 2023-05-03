@@ -2,7 +2,11 @@
 #define CORE_VECTOR_H
 #include "dtypes.h"
 
-Vector *create_vector(enum dtype dtype, unsigned int len);
+Vector *create_bool_vector(unsigned int len);
+Vector *create_pixel_vector(unsigned int len);
+Vector *create_int_vector(unsigned int len);
+Vector *create_double_vector(unsigned int len);
+
 View *create_view();
 void free_vector(Vector *vec);
 void free_view(View *view);
