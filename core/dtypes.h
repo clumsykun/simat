@@ -22,6 +22,7 @@ typedef struct _Vector
 {
     const enum dtype dtype;
     char *const head;
+    char *const bott;  /* bottom */
     const unsigned int len;
 } Vector;
 
@@ -56,7 +57,7 @@ typedef struct _Col
 #define pixel unsigned char
 
 /* access the value of element of vector/matrix, as type of double */
-#define access(p, dtype)                      \
+#define access(dtype, p)                      \
     (dtype == dtype_bool                      \
         ? (double)*((bool *)p)                \
         : (dtype == dtype_pixel               \

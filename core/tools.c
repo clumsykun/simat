@@ -17,6 +17,16 @@ void __swap_int(int *left, int *right)
     *right = tmp;
 }
 
+void __swap(char *a, char *b, size_t len)
+{
+    char tmp;
+    while (len--) {
+        tmp = *a;
+        *a++ = *b;
+        *b++ = tmp;
+    }
+}
+
 void __swap_double(double *left, double *right)
 {
     double tmp = *left;
@@ -57,32 +67,33 @@ int __rand_int(int min, int max)
     return (rand() % (max - min + 1)) + min;
 }
 
-double __rand_double(double min, double max)
+double __rand_double(int min, int max)
 {
-    return rand() + ((double)rand() / RAND_MAX);
+    return (rand() % (max - min)) + min +((double)rand() / RAND_MAX);
 }
 
-void __double_assign(char *dest, double src, enum dtype dtype)
+void assign(char *dest, const void *src, size_t len)
 {
-    switch (dtype) {
+    const char *p = src;
 
-        case dtype_bool:
-            *((bool *)dest) = (bool) src;
-            break;
+    while (len--)
+        *dest++ = *p++;
+}
 
-        case dtype_pixel:
-            *((pixel *)dest) = (pixel) src;
-            break;
+void dassign(char *dest, double src)
+{
+    const char *p = (char *)(&src);
+    size_t len = sizeof(double);
 
-        case dtype_int:
-            *((int *)dest) = (int) src;
-            break;
+    while (len--)
+        *dest++ = *p++;
+}
 
-        case dtype_double:
-            *((double *)dest) = (double) src;
-            break;
+void iassign(char *dest, int src)
+{
+    const char *p = (char *)(&src);
+    size_t len = sizeof(double);
 
-        default:
-            __dtype_unknown_error();
-    }
+    while (len--)
+        *dest++ = *p++;
 }

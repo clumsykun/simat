@@ -9,9 +9,11 @@
 static Vector *__create_vector(enum dtype dtype, unsigned int len)
 {
     Vector *vec = malloc(sizeof(Vector));
+    char *p = malloc(len * dsizeof(dtype));
     Vector _vec = {
         dtype,
-        malloc(len * dsizeof(dtype)),
+        p,
+        p+(len-1) * dsizeof(dtype),
         len,
     };
     memcpy(vec, &_vec, sizeof(Vector));
@@ -69,67 +71,57 @@ void free_view(View *view)
 
 void vector_display(Vector *vec)
 {
+    size_t i = 0;
     switch (vec->dtype) {
 
         case dtype_bool: {
-            bool *p = (bool *)vec->head;
-            char c;
-
             printf("BoolVector([\n");
-            for (size_t i = 0; i < vec->len - 1; i++, p++) {
-                c = (*p == false ? '-' : '+');
+            char c;
+            for (char *p = vec->head; p < vec->bott; p += dsizeof(vec->dtype), i++) {
+                c = (access(vec->dtype, p) == false ? '-' : '+');
                 printf("(%c), ", c);
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("(%c)])\n", (*p == false ? '-' : '+'));
+            printf("(%c)])\n", (access(vec->dtype, vec->bott) == false ? '-' : '+'));
             break;
         }
 
         case dtype_pixel: {
-            pixel *p = (pixel *) vec->head;
-
             printf("PixelVector([\n");
-            for (size_t i = 0; i < vec->len - 1; i++, p++) {
-                printf("(%3d), ", *p);
+            for (char *p = vec->head; p < vec->bott; p += dsizeof(vec->dtype), i++) {
+                printf("(%3d), ", (int)access(vec->dtype, p));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
-
-            printf("(%3d)])\n", *p);
+            printf("(%3d)])\n", (int)access(vec->dtype, vec->bott));
             break;
         }
 
         case dtype_int: {
-            int *p = (int *) vec->head;
-
             printf("IntVector([\n");
-            for (size_t i = 0; i < vec->len - 1; i++, p++) {
-                printf("%10d, ", *p);
+            for (char *p = vec->head; p < vec->bott; p += dsizeof(vec->dtype), i++) {
+                printf("%10d, ", (int)access(vec->dtype, p));
 
                 if ((i + 1) % 5 == 0)
                     printf("\n");
             };
-
-            printf("%10d])\n", *p);
+            printf("%10d])\n", (int)access(vec->dtype, vec->bott));
             break;
         }
 
-        case dtype_double:{
-            double *p = (double *) vec->head;
-
+        case dtype_double: {
             printf("DoubleVector([\n");
-            for (size_t i = 0; i < vec->len - 1; i++, p++) {
-                printf("%10.2f, ", *p);
+            for (char *p = vec->head; p < vec->bott; p += dsizeof(vec->dtype), i++) {
+                printf("%10.2f, ", access(vec->dtype, p));
 
                 if ((i + 1) % 5 == 0)
                     printf("\n");
             }
-
-            printf("%10.2f])\n", idx(vec, vec->len - 1));
+            printf("%10.2f])\n", access(vec->dtype, vec->bott));
             break;
         }
 
@@ -154,33 +146,29 @@ void vector_set_rand(Vector *vec)
     switch (vec->dtype) {
 
         case dtype_bool: {
-            bool *p = (bool *)vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
+            for (char *p = vec->head; p <= vec->bott; p += dsizeof(vec->dtype))
                 *p = (bool)__rand_int(0, 1);
 
             break;
         }
 
         case dtype_pixel: {
-            pixel *p = (pixel *) vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
+            for (char *p = vec->head; p <= vec->bott; p += dsizeof(vec->dtype))
                 *p = (pixel) __rand_int(0, 255);
 
             break;
         }
 
         case dtype_int: {
-            int *p = (int *)vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
-                    *p = rand();
+            for (char *p = vec->head; p <= vec->bott; p += dsizeof(vec->dtype))
+                iassign(p, __rand_int(-RAND_MAX/2, RAND_MAX/2));
 
             break;
         }
 
         case dtype_double: {
-            double *p = (double *) vec->head;
-            for (size_t i = 0; i < vec->len; i++, p++)
-                *p = __rand_double(-RAND_MAX, RAND_MAX);
+            for (char *p = vec->head; p <= vec->bott; p+=dsizeof(vec->dtype))
+                dassign(p, __rand_double(-RAND_MAX/2, RAND_MAX/2));
 
             break;
         }
@@ -201,9 +189,9 @@ void view_set_rand(View *view)
 double vector_min(Vector *vec)
 {
     char *p = vec->head;
-    double min = access(p, vec->dtype);
+    double min = access(vec->dtype, p);
     for (size_t i = 0; i < vec->len; i++, p += dsizeof(vec->dtype))
-        min = (min <= access(p, vec->dtype) ? min : access(p, vec->dtype));
+        min = (min <= access(vec->dtype, p) ? min : access(vec->dtype, p));
 
     return min;
 }
@@ -223,9 +211,9 @@ double view_min(View *view)
 double vector_max(Vector *vec)
 {
     char *p = vec->head;
-    double max = access(p, vec->dtype);
+    double max = access(vec->dtype, p);
     for (size_t i = 0; i < vec->len; i++, p+=dsizeof(vec->dtype))
-        max = (max >= access(p, vec->dtype) ? max : access(p, vec->dtype));
+        max = (max >= access(vec->dtype, p) ? max : access(vec->dtype, p));
 
     return max;
 }
@@ -251,10 +239,9 @@ void vector_scale(Vector *vec, double min, double max)
     char *p = vec->head;
 
     for (size_t i = 0; i < vec->len; i++, p+=dsizeof(vec->dtype))
-        __double_assign(
+        dassign(
             p,
-            min + (access(p, vec->dtype) - vec_min) * target_scale / scale,
-            vec->dtype
+            min + (access(vec->dtype, p) - vec_min) * target_scale / scale
         );
 }
 
@@ -283,41 +270,48 @@ void view_reverse(View *view)
     }
 }
 
-/** 
+/**
  * choosing the last value as pivot
  * @head: address of the first number of the vector
  * @len: length of the vector
  * @candidate: the candidate position of pivot
  */
-unsigned int _partition_double(double *head, unsigned int len)
+char *__partition(enum dtype dtype, char *start, char *end)
 {
-    double pivot = head[len-1];
-    int candidate = -1;
+    double pivot = access(dtype, end);
+    char *candidate = start - dsizeof(dtype);
 
-    for (int i=0; i<=len-1; i++) {
-        if (head[i] < pivot) {
+    for (char *p = start; p < end; p+=dsizeof(dtype)) {
+        if (access(dtype, p) < pivot) {
 
-            candidate++;
-            __swap_double(&head[candidate], &head[i]);
+            candidate += dsizeof(dtype);
+            __swap(candidate, p, dsizeof(dtype));
         }
     }
-    __swap_double(&head[candidate+1], &head[len-1]);
-    return (unsigned int) (candidate + 1);
+
+    candidate += dsizeof(dtype);
+    __swap(candidate, end, dsizeof(dtype));
+    return candidate;
 }
 
-void _quick_sort_double(double *head, unsigned int len) {
-
-    if (len > 1) {
-        /* [head, head + len] --> [head, head + pi], [head + pi + 1, head + len] */
-        unsigned int pi = _partition_double(head, len);
-        _quick_sort_double(head, pi);
-        _quick_sort_double(head+pi+1, len-pi-1);
+static void __quick_sort(enum dtype dtype, char *start, char *end)
+{
+    if (start < end) {
+        /**
+         * [p, p + len*dsizeof] -->
+         * [p, p + pi*dsizeof], [p + (pi+1)*dsizeof, p+len*dsizeof]
+         */
+        char* p = __partition(dtype, start, end);
+        __quick_sort(dtype, start, p);
+        __quick_sort(dtype, p+sizeof(dtype), end);
     }
 }
 
 void vector_sort(Vector *vec, enum order order)
 {
-    _quick_sort_double(vec->head, vec->len);
+    int stride = (vec->len - 1) * dsizeof(vec->dtype);
+    char *end = vec->head + stride;
+    __quick_sort(vec->dtype, vec->head, end);
     if (order == descend) {
         vector_reverse(vec);
     }
