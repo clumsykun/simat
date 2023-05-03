@@ -8,5 +8,6 @@ void __swap_double_p(double **left, double **right);
 size_t __size_t_dtype_unknown_error(void);
 double __double_dtype_unknown_error(void);
 void __dtype_unknown_error(void);
+int __rand_int(int min, int max);
 
 #endif /* CORE_TOOLS_H */
