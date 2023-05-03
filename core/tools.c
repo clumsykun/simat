@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "tools.h"
 
 /* the standard way to free memory */
@@ -54,4 +55,29 @@ void __dtype_unknown_error(void)
 int __rand_int(int min, int max)
 {
     return (rand() % (max - min + 1)) + min;
+}
+
+void __double_assign(char *dest, double src, enum dtype dtype)
+{
+    switch (dtype) {
+
+        case dtype_bool:
+            *((bool *)dest) = (bool) src;
+            break;
+
+        case dtype_char:
+            *((char *)dest) = (char) src;
+            break;
+
+        case dtype_int:
+            *((int *)dest) = (int) src;
+            break;
+
+        case dtype_double:
+            *((double *)dest) = src;
+            break;
+
+        default:
+            __dtype_unknown_error();
+    }
 }

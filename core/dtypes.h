@@ -66,15 +66,15 @@ typedef struct _Col
                     ? *((double *)p)          \
                     : __double_dtype_unknown_error()))))
 
-#define dsizeof(dtype) \
-    (dtype == dtype_bool \
-        ? sizeof(bool) \
-        : (dtype == dtype_char \
-            ? sizeof(char) \
-            : (dtype == dtype_int \
-                ? sizeof(int) \
-                : (dtype == dtype_double \
-                    ? sizeof(double) \
+#define dsizeof(dtype)                        \
+    (dtype == dtype_bool                      \
+        ? sizeof(bool)                        \
+        : (dtype == dtype_char                \
+            ? sizeof(char)                    \
+            : (dtype == dtype_int             \
+                ? sizeof(int)                 \
+                : (dtype == dtype_double      \
+                    ? sizeof(double)          \
                     : __size_t_dtype_unknown_error()))))
 
 /**

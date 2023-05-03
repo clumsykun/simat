@@ -177,8 +177,8 @@ void view_set_rand(View *view)
 
 double vector_min(Vector *vec)
 {
-    double min;
     char *p = vec->head;
+    double min = access(p, vec->dtype);
     for (size_t i = 0; i < vec->len; i++, p += dsizeof(vec->dtype))
         min = (min <= access(p, vec->dtype) ? min : access(p, vec->dtype));
 
@@ -199,8 +199,8 @@ double view_min(View *view)
 
 double vector_max(Vector *vec)
 {
-    double max;
     char *p = vec->head;
+    double max = access(p, vec->dtype);
     for (size_t i = 0; i < vec->len; i++, p+=dsizeof(vec->dtype))
         max = (max >= access(p, vec->dtype) ? max : access(p, vec->dtype));
 
@@ -225,10 +225,14 @@ void vector_scale(Vector *vec, double min, double max)
     double vec_min = vector_min(vec);
     double scale = vector_max(vec) - vec_min;
     double target_scale = max - min;
+    char *p = vec->head;
 
-    for (size_t i =0; i < vec->len; i++) {
-        idx(vec, i) = min + (idx(vec, i) - vec_min) * target_scale / scale;
-    }
+    for (size_t i = 0; i < vec->len; i++, p+=dsizeof(vec->dtype))
+        __double_assign(
+            p,
+            min + (access(p, vec->dtype) - vec_min) * target_scale / scale,
+            vec->dtype
+        );
 }
 
 void view_scale(View *view, double min, double max)

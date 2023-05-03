@@ -24,8 +24,8 @@ Matrix *create_matrix(unsigned int nrow, unsigned int ncol)
 
 void free_matrix(Matrix *mat)
 {
-    _std_free(mat->head);
-    _std_free(mat);
+    __std_free(mat->head);
+    __std_free(mat);
 }
 
 Col *create_col()
@@ -48,27 +48,27 @@ void free_col(Col *col)
 {
     col->idx = 0;
     col->matrix = NULL;
-    _std_free(col->vec);
-    _std_free(col);
+    __std_free(col->vec);
+    __std_free(col);
 }
 
 /**
  * @idx: the index of array which you want locate
  */
-void matrix_loc_col(Col *col, Matrix *mat, unsigned int idx)
-{
-    col->idx = idx;
-    col->matrix = mat;
-    Vector _vec = {
-        &(mat->head[idx * mat->nrow]),
-        mat->nrow
-    };
-    memcpy(
-        col->vec,
-        &_vec,
-        sizeof(Vector)
-    );
-}
+// void matrix_loc_col(Col *col, Matrix *mat, unsigned int idx)
+// {
+//     col->idx = idx;
+//     col->matrix = mat;
+//     Vector _vec = {
+//         &(mat->head[idx * mat->nrow]),
+//         mat->nrow
+//     };
+//     memcpy(
+//         col->vec,
+//         &_vec,
+//         sizeof(Vector)
+//     );
+// }
 
 void matrix_view_col(View *view, Matrix *mat, unsigned int idx)
 {
