@@ -57,6 +57,11 @@ int __rand_int(int min, int max)
     return (rand() % (max - min + 1)) + min;
 }
 
+double __rand_double(double min, double max)
+{
+    return rand() + ((double)rand() / RAND_MAX);
+}
+
 void __double_assign(char *dest, double src, enum dtype dtype)
 {
     switch (dtype) {
@@ -65,8 +70,8 @@ void __double_assign(char *dest, double src, enum dtype dtype)
             *((bool *)dest) = (bool) src;
             break;
 
-        case dtype_char:
-            *((char *)dest) = (char) src;
+        case dtype_pixel:
+            *((pixel *)dest) = (pixel) src;
             break;
 
         case dtype_int:
@@ -74,7 +79,7 @@ void __double_assign(char *dest, double src, enum dtype dtype)
             break;
 
         case dtype_double:
-            *((double *)dest) = src;
+            *((double *)dest) = (double) src;
             break;
 
         default:

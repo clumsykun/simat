@@ -10,6 +10,7 @@ size_t __size_t_dtype_unknown_error(void);
 double __double_dtype_unknown_error(void);
 void __dtype_unknown_error(void);
 int __rand_int(int min, int max);
+double __rand_double(double min, double max);
 void __double_assign(char *dest, double src, enum dtype dtype);
 
 #endif /* CORE_TOOLS_H */

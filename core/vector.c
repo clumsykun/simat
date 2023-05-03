@@ -68,17 +68,17 @@ void vector_display(Vector *vec)
             break;
         }
 
-        case dtype_char: {
-            char *p = (char *) vec->head;
+        case dtype_pixel: {
+            pixel *p = (pixel *) vec->head;
 
             for (size_t i = 0; i < vec->len - 1; i++, p++) {
-                printf("(%c), ", *p);
+                printf("(%3d), ", *p);
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("(%c)])\n", *p);
+            printf("(%3d)])\n", *p);
             break;
         }
 
@@ -128,20 +128,18 @@ void vector_set_rand(Vector *vec)
     srand(time(NULL));
     switch (vec->dtype) {
 
-        /* only printable char generated */
         case dtype_bool: {
             bool *p = (bool *)vec->head;
             for (size_t i = 0; i < vec->len; i++, p++)
-                    *p = (bool)__rand_int(0, 1);
+                *p = (bool)__rand_int(0, 1);
 
             break;
         }
 
-        /* only printable char generated */
-        case dtype_char: {
-            char *p = (char *)vec->head;
+        case dtype_pixel: {
+            pixel *p = (pixel *) vec->head;
             for (size_t i = 0; i < vec->len; i++, p++)
-                    *p = (char) __rand_int(32, 126);
+                *p = (pixel) __rand_int(0, 255);
 
             break;
         }
@@ -157,7 +155,7 @@ void vector_set_rand(Vector *vec)
         case dtype_double: {
             double *p = (double *) vec->head;
             for (size_t i = 0; i < vec->len; i++, p++)
-                *p = rand() + ((double)rand() / RAND_MAX);
+                *p = __rand_double(-RAND_MAX, RAND_MAX);
 
             break;
         }
