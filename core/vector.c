@@ -94,7 +94,7 @@ void vector_display(Vector *vec)
                     printf("\n");
             };
 
-            printf("%d])\n", *p);
+            printf("%10d])\n", *p);
             break;
         }
 

@@ -65,7 +65,7 @@ typedef struct _Col
                 ? (double)*((int *)p)         \
                 : (dtype == dtype_double      \
                     ? *((double *)p)          \
-                    : __double_dtype_unknown_error()))))
+                    : (double) 0))))
 
 #define dsizeof(dtype)                        \
     (dtype == dtype_bool                      \
@@ -76,7 +76,7 @@ typedef struct _Col
                 ? sizeof(int)                 \
                 : (dtype == dtype_double      \
                     ? sizeof(double)          \
-                    : __size_t_dtype_unknown_error()))))
+                    : 1))))
 
 /**
  * @x: vector or view.
