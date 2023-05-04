@@ -58,7 +58,6 @@ int test_matrix()
     unsigned int ncol = 5;
     Matrix *mat = create_matrix(nrow, ncol);
     View *view = create_view();
-    Col *col = create_col();
 
     // for (size_t i = 0; i < ncol; i++) {
     //     matrix_loc_col(col, mat, i);
@@ -106,7 +105,6 @@ int test_matrix()
 
     free_matrix(mat);
     free_view(view);
-    free_col(col);
     return 0;
 }
 

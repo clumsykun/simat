@@ -50,13 +50,6 @@ typedef struct _Matrix
     const unsigned int ncol;
 } Matrix;
 
-typedef struct _Col
-{
-    unsigned int idx;
-    Matrix *matrix;
-    Vector *const vec;
-} Col;
-
 /* access the value of element of vector/matrix, as type of double */
 #define access(dtype, p)                      \
     (dtype == dtype_bool                      \

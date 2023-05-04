@@ -28,48 +28,6 @@ void free_matrix(Matrix *mat)
     __std_free(mat);
 }
 
-Col *create_col()
-{
-    Col *col = malloc(sizeof(Col));
-    Col _col = {
-        0,
-        NULL,
-        malloc(sizeof(Vector))
-    };
-    memcpy(
-        col,
-        &_col,
-        sizeof(Col)
-    );
-    return col;
-}
-
-void free_col(Col *col)
-{
-    col->idx = 0;
-    col->matrix = NULL;
-    __std_free(col->vec);
-    __std_free(col);
-}
-
-/**
- * @idx: the index of array which you want locate
- */
-// void matrix_loc_col(Col *col, Matrix *mat, unsigned int idx)
-// {
-//     col->idx = idx;
-//     col->matrix = mat;
-//     Vector _vec = {
-//         &(mat->head[idx * mat->nrow]),
-//         mat->nrow
-//     };
-//     memcpy(
-//         col->vec,
-//         &_vec,
-//         sizeof(Vector)
-//     );
-// }
-
 void matrix_display(Matrix *mat)
 {
     double(*head)[mat->nrow] = (double(*)[mat->nrow])mat->head;
