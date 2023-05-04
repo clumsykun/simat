@@ -14,5 +14,6 @@ int __rand_int(int min, int max);
 double __rand_double(int min, int max);
 void assign(char *dest, const void *src, size_t len);
 void dassign(char *dest, double src, enum dtype dtype);
+void __check();
 
 #endif /* CORE_TOOLS_H */
