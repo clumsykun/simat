@@ -9,12 +9,12 @@
 static Vector *__create_vector(enum dtype dtype, unsigned int len)
 {
     Vector *vec = malloc(sizeof(Vector));
-    char *p = malloc(len * dsizeof(dtype));
+    char *p = malloc(len * __sizeof(dtype));
     Vector _vec = {
         dtype,
         p,
-        p+(len-1) * dsizeof(dtype),
-        dsizeof(dtype),
+        p+(len-1) * __sizeof(dtype),
+        __sizeof(dtype),
         len,
     };
     memcpy(vec, &_vec, sizeof(Vector));
@@ -279,20 +279,20 @@ void view_reverse(View *view)
  */
 char *__partition(enum dtype dtype, char *start, char *end)
 {
-    size_t esize = dsizeof(dtype);
+    size_t size = __sizeof(dtype);
     double pivot = access(dtype, end);
-    char *candidate = start - esize;
+    char *candidate = start - size;
 
-    for (char *p = start; p < end; p+=esize) {
+    for (char *p = start; p < end; p+=size) {
         if (access(dtype, p) < pivot) {
 
-            candidate += esize;
-            __swap(candidate, p, esize);
+            candidate += size;
+            __swap(candidate, p, size);
         }
     }
 
-    candidate += esize;
-    __swap(candidate, end, esize);
+    candidate += size;
+    __swap(candidate, end, size);
     return candidate;
 }
 
@@ -304,8 +304,8 @@ static void __quick_sort(enum dtype dtype, char *start, char *end)
          * [p, p + pi*size], [p + (pi+1)*size, p+len*size]
          */
         char* p = __partition(dtype, start, end);
-        __quick_sort(dtype, start, p-dsizeof(dtype));
-        __quick_sort(dtype, p+dsizeof(dtype), end);
+        __quick_sort(dtype, start, p-__sizeof(dtype));
+        __quick_sort(dtype, p+__sizeof(dtype), end);
     }
 }
 

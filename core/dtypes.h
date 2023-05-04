@@ -69,8 +69,8 @@ typedef struct _Col
                     ? *((double *)p)          \
                     : (double) 0))))
 
-/* do not miss this func with sizeof */
-#define dsizeof(dtype)                        \
+/* do not mix this func with sizeof */
+#define __sizeof(dtype)                        \
     (dtype == dtype_bool                      \
         ? sizeof(bool)                        \
         : (dtype == dtype_pixel               \
