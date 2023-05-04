@@ -14,6 +14,8 @@ enum dtype {
     dtype_double,
 };
 
+#define pixel unsigned char
+
 /**
  * @head: ptr of the first number of the vector
  * @len: length of this vector
@@ -54,8 +56,6 @@ typedef struct _Col
     Matrix *matrix;
     Vector *const vec;
 } Col;
-
-#define pixel unsigned char
 
 /* access the value of element of vector/matrix, as type of double */
 #define access(dtype, p)                      \
