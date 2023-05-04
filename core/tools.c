@@ -10,6 +10,16 @@ void __std_free(void *ptr)
     ptr = NULL;
 }
 
+/**
+ * check program is correct or not after any operation
+ * probably need some advanced handling
+ */
+void __check()
+{
+    if (__is_error)
+        abort();
+}
+
 void __swap_int(int *left, int *right)
 {
     int tmp = *left;

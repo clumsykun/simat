@@ -1,6 +1,6 @@
 #ifndef CORE_DTYPES_H
 #define CORE_DTYPES_H
-#include <stdbool.h>
+#include "flags.h"
 
 enum order {
     ascend,
@@ -67,7 +67,7 @@ typedef struct _Col
                 ? (double)*((int *)p)         \
                 : (dtype == dtype_double      \
                     ? *((double *)p)          \
-                    : (double) 0))))
+                    : __double_raise_error()))))
 
 /* do not mix this func with sizeof */
 #define __sizeof(dtype)                        \
@@ -79,7 +79,7 @@ typedef struct _Col
                 ? sizeof(int)                 \
                 : (dtype == dtype_double      \
                     ? sizeof(double)          \
-                    : 1))))
+                    : __size_raise_error()))))
 
 /**
  * @x: vector or view.

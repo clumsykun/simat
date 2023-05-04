@@ -3,8 +3,8 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include "tools.h"
 #include "dtypes.h"
+#include "tools.h"
 
 static Vector *__create_vector(enum dtype dtype, unsigned int len)
 {
@@ -129,6 +129,7 @@ void vector_display(Vector *vec)
         default:
             __dtype_unknown_error();
     }
+    __check();
 }
 
 void view_display(View *view)
@@ -177,6 +178,7 @@ void vector_set_rand(Vector *vec)
         default:
             __dtype_unknown_error();
     }
+    __check();
 }
 
 void view_set_rand(View *view)
@@ -194,6 +196,7 @@ double vector_min(Vector *vec)
     for (size_t i = 0; i < vec->len; i++, p += vec->esize)
         min = (min <= access(vec->dtype, p) ? min : access(vec->dtype, p));
 
+    __check();
     return min;
 }
 
@@ -216,6 +219,7 @@ double vector_max(Vector *vec)
     for (size_t i = 0; i < vec->len; i++, p += vec->esize)
         max = (max >= access(vec->dtype, p) ? max : access(vec->dtype, p));
 
+    __check();
     return max;
 }
 
@@ -244,6 +248,8 @@ void vector_scale(Vector *vec, double min, double max)
             min + (access(vec->dtype, p) - vec_min) * target_scale / scale,
             vec->dtype
         );
+
+    __check();
 }
 
 void view_scale(View *view, double min, double max)
@@ -315,6 +321,7 @@ void vector_sort(Vector *vec, enum order order)
     if (order == descend) {
         vector_reverse(vec);
     }
+    __check();
 }
 
 unsigned int _partition_double_p(double **head, unsigned int len)
