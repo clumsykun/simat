@@ -8,10 +8,10 @@ enum order {
 };
 
 enum simat_dtype {
-    dtype_bool,
-    dtype_pixel,
-    dtype_int,
-    dtype_double,
+    simat_bool,
+    simat_pixel,
+    simat_int,
+    simat_double,
 };
 
 #define pixel unsigned char
@@ -51,24 +51,24 @@ typedef struct _Matrix
 
 /* access the value of element of vector/matrix, as type of double */
 #define simat_access(dtype, p)                \
-    (dtype == dtype_bool                      \
+    (dtype == simat_bool                      \
         ? (double)*((bool *)p)                \
-        : (dtype == dtype_pixel               \
+        : (dtype == simat_pixel               \
             ? (double)*((pixel *)p)           \
-            : (dtype == dtype_int             \
+            : (dtype == simat_int             \
                 ? (double)*((int *)p)         \
-                : (dtype == dtype_double      \
+                : (dtype == simat_double      \
                     ? *((double *)p)          \
                     : __double_raise_error()))))
 
 #define simat_byteof(dtype)                   \
-    (dtype == dtype_bool                      \
+    (dtype == simat_bool                      \
         ? sizeof(bool)                        \
-        : (dtype == dtype_pixel               \
+        : (dtype == simat_pixel               \
             ? sizeof(pixel)                   \
-            : (dtype == dtype_int             \
+            : (dtype == simat_int             \
                 ? sizeof(int)                 \
-                : (dtype == dtype_double      \
+                : (dtype == simat_double      \
                     ? sizeof(double)          \
                     : __size_raise_error()))))
 

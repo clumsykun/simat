@@ -14,10 +14,10 @@ int test_vector()
 {
     unsigned int len = 50;
 
-    Vector *vec = create_bool_vector(len);
+    // Vector *vec = create_bool_vector(len);
     // Vector *vec = create_pixel_vector(len);
     // Vector *vec = create_int_vector(len);
-    // Vector *vec = create_double_vector(len);
+    Vector *vec = create_double_vector(len);
 
     size_t size = 0;
     for (char *p = vec->head; p <= vec->bott; p += vec->byte, size++)
@@ -30,7 +30,7 @@ int test_vector()
     printf("scale:\n");
     vector_scale(vec, 0, 100);
     vector_display(vec);
-    if (vec->dtype == dtype_bool) {
+    if (vec->dtype == simat_bool) {
         assert(vector_max(vec) == 1);
         assert(vector_min(vec) == 0);
     }

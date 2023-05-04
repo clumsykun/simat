@@ -23,22 +23,22 @@ static Vector *__create_vector(enum simat_dtype dtype, unsigned int len)
 
 Vector *create_bool_vector(unsigned int len)
 {
-    return __create_vector(dtype_bool, len);
+    return __create_vector(simat_bool, len);
 }
 
 Vector *create_pixel_vector(unsigned int len)
 {
-    return __create_vector(dtype_pixel, len);
+    return __create_vector(simat_pixel, len);
 }
 
 Vector *create_int_vector(unsigned int len)
 {
-    return __create_vector(dtype_int, len);
+    return __create_vector(simat_int, len);
 }
 
 Vector *create_double_vector(unsigned int len)
 {
-    return __create_vector(dtype_double, len);
+    return __create_vector(simat_double, len);
 }
 
 void free_vector(Vector *vec)
@@ -52,7 +52,7 @@ void vector_display(Vector *vec)
     size_t i = 0;
     switch (vec->dtype) {
 
-        case dtype_bool: {
+        case simat_bool: {
             printf("BoolVector([\n");
             char c;
 
@@ -68,7 +68,7 @@ void vector_display(Vector *vec)
             break;
         }
 
-        case dtype_pixel: {
+        case simat_pixel: {
             printf("PixelVector([\n");
 
             for simat_iter(vec) {
@@ -81,7 +81,7 @@ void vector_display(Vector *vec)
             break;
         }
 
-        case dtype_int: {
+        case simat_int: {
             printf("IntVector([\n");
 
             for simat_iter(vec) {
@@ -94,7 +94,7 @@ void vector_display(Vector *vec)
             break;
         }
 
-        case dtype_double: {
+        case simat_double: {
             printf("DoubleVector([\n");
 
             for simat_iter(vec) {
@@ -119,30 +119,30 @@ void vector_set_rand(Vector *vec)
     srand(time(NULL));
     switch (vec->dtype) {
 
-        case dtype_bool: {
+        case simat_bool: {
             for simat_iter(vec)
                 *p = (bool)__rand_int(0, 1);
 
             break;
         }
 
-        case dtype_pixel: {
+        case simat_pixel: {
             for simat_iter(vec)
                 *p = (pixel) __rand_int(0, 255);
 
             break;
         }
 
-        case dtype_int: {
+        case simat_int: {
             for simat_iter(vec)
                 dassign(p, __rand_int(-RAND_MAX/2, RAND_MAX/2), vec->dtype);
 
             break;
         }
 
-        case dtype_double: {
+        case simat_double: {
             for simat_iter(vec)
-                dassign(p, __rand_double(-100/2, 100/2), vec->dtype);
+                dassign(p, __rand_double(-RAND_MAX/2, RAND_MAX/2), vec->dtype);
 
             break;
         }
