@@ -55,12 +55,13 @@ double __rand_double(int min, int max)
     return (rand() % (max - min)) + min +((double)rand() / RAND_MAX);
 }
 
-void assign(char *dest, const void *src, size_t len)
+void assign(void *__restrict__ dest, const void *__restrict__ src, size_t len)
 {
-    const char *p = src;
+    const char *s = src;
+    char *d = dest;
 
     while (len--)
-        *dest++ = *p++;
+        *d++ = *s++;
 }
 
 void dassign(char *dest, double src, enum dtype dtype)

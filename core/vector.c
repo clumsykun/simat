@@ -47,29 +47,6 @@ void free_vector(Vector *vec)
     __std_free(vec);
 }
 
-View *create_view()
-{
-    View *view = malloc(sizeof(View));
-    View _view = {
-        NULL, /* initialize it to NULL so that realloc() will work properly */
-        0
-    };
-    memcpy(
-        view,
-        &_view,
-        sizeof(View)
-    );
-
-    return view;
-}
-
-void free_view(View *view)
-{
-    view->len = 0;
-    __std_free(view->head);  /* still need to free this ptr */
-    __std_free(view);
-}
-
 void vector_display(Vector *vec)
 {
     size_t i = 0;
@@ -132,15 +109,6 @@ void vector_display(Vector *vec)
     __check();
 }
 
-void view_display(View *view)
-{
-    printf("View([");
-    for (size_t i = 0; i < view->len - 1; i++) {
-        printf("%.2f, ", *idx(view, i));
-    }
-    printf("%.2f])\n", *idx(view, view->len - 1));
-}
-
 /* set random double value to vector. */
 void vector_set_rand(Vector *vec)
 {
@@ -181,14 +149,6 @@ void vector_set_rand(Vector *vec)
     __check();
 }
 
-void view_set_rand(View *view)
-{
-    srand(time(NULL));
-    for (size_t i = 0; i < view->len; i ++) {
-        *idx(view, i) = rand() + ((double)rand() / RAND_MAX);
-    }
-}
-
 double vector_min(Vector *vec)
 {
     char *p = vec->head;
@@ -200,18 +160,6 @@ double vector_min(Vector *vec)
     return min;
 }
 
-double view_min(View *view)
-{
-    double min = **(view->head);
-
-    for (size_t i = 0; i < view->len; i++) {
-        if (min > *idx(view, i)) {
-            min = *idx(view, i);
-        }
-    }
-    return min;
-}
-
 double vector_max(Vector *vec)
 {
     char *p = vec->head;
@@ -220,18 +168,6 @@ double vector_max(Vector *vec)
         max = (max >= access(vec->dtype, p) ? max : access(vec->dtype, p));
 
     __check();
-    return max;
-}
-
-double view_max(View *view)
-{
-    double max = **(view->head);
-
-    for (size_t i = 0; i < view->len; i++) {
-        if (max < *idx(view, i)) {
-            max = *idx(view, i);
-        }
-    }
     return max;
 }
 
@@ -252,30 +188,12 @@ void vector_scale(Vector *vec, double min, double max)
     __check();
 }
 
-void view_scale(View *view, double min, double max)
-{
-    double v_min = view_min(view);
-    double scale = view_max(view) - v_min;
-    double target_scale = max - min;
-
-    for (size_t i = 0; i < view->len; i++) {
-        *idx(view, i) = min + (*idx(view, i) - v_min) * target_scale / scale;
-    }
-}
-
 void vector_reverse(Vector *vec)
 {
     char *mid = vec->head + (vec->len/2)*(vec->esize);
     char *r = vec->bott;
     for (char *l = vec->head; l <= mid; l += vec->esize, r -= vec->esize)
         __swap(l, r, vec->esize);
-}
-
-void view_reverse(View *view)
-{
-    for (size_t i = 0; i < (view->len) / 2; i++) {
-        __swap_double(idx(view, i), idx(view, view->len-i-1));
-    }
 }
 
 /**
@@ -323,38 +241,4 @@ void vector_sort(Vector *vec, enum order order)
         vector_reverse(vec);
     }
     __check();
-}
-
-unsigned int _partition_double_p(double **head, unsigned int len)
-{
-    double pivot = *head[len - 1];
-    int candidate = -1;
-
-    for (int i = 0; i <= len - 1; i++) {
-        if (*head[i] < pivot) {
-
-            candidate++;
-            __swap_double_p(&head[candidate], &head[i]);
-        }
-    }
-    __swap_double_p(&head[candidate + 1], &head[len - 1]);
-    return (unsigned int)(candidate + 1);
-}
-
-void _quick_sort_double_p(double **head, unsigned int len)
-{
-    if (len > 1) {
-        /* [head, head + len] --> [head, head + pi], [head + pi + 1, head + len] */
-        unsigned int pi = _partition_double_p(head, len);
-        _quick_sort_double_p(head, pi);
-        _quick_sort_double_p(head + pi + 1, len - pi - 1);
-    }
-}
-
-void view_sort(View *view, enum order order)
-{
-    _quick_sort_double_p(view->head, view->len);
-    if (order == descend) {
-        view_reverse(view);
-    }
 }
