@@ -50,23 +50,22 @@ typedef struct _Matrix
 } Matrix;
 
 /* access the value of element of vector/matrix, as type of double */
-#define access(dtype, p)                      \
+#define simat_access(dtype, p)                \
     (dtype == dtype_bool                      \
         ? (double)*((bool *)p)                \
         : (dtype == dtype_pixel               \
-            ? (double)*((pixel *)p)   \
+            ? (double)*((pixel *)p)           \
             : (dtype == dtype_int             \
                 ? (double)*((int *)p)         \
                 : (dtype == dtype_double      \
                     ? *((double *)p)          \
                     : __double_raise_error()))))
 
-/* do not mix this func with sizeof */
-#define __sizeof(dtype)                        \
+#define simat_byteof(dtype)                   \
     (dtype == dtype_bool                      \
         ? sizeof(bool)                        \
         : (dtype == dtype_pixel               \
-            ? sizeof(pixel)           \
+            ? sizeof(pixel)                   \
             : (dtype == dtype_int             \
                 ? sizeof(int)                 \
                 : (dtype == dtype_double      \
