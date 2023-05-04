@@ -213,7 +213,7 @@ double vector_max(Vector *vec)
 {
     char *p = vec->head;
     double max = access(vec->dtype, p);
-    for (size_t i = 0; i < vec->len; i++, p+=dsizeof(vec->dtype))
+    for (size_t i = 0; i < vec->len; i++, p += vec->esize)
         max = (max >= access(vec->dtype, p) ? max : access(vec->dtype, p));
 
     return max;
@@ -279,19 +279,20 @@ void view_reverse(View *view)
  */
 char *__partition(enum dtype dtype, char *start, char *end)
 {
+    size_t esize = dsizeof(dtype);
     double pivot = access(dtype, end);
-    char *candidate = start - dsizeof(dtype);
+    char *candidate = start - esize;
 
-    for (char *p = start; p < end; p+=dsizeof(dtype)) {
+    for (char *p = start; p < end; p+=esize) {
         if (access(dtype, p) < pivot) {
 
-            candidate += dsizeof(dtype);
-            __swap(candidate, p, dsizeof(dtype));
+            candidate += esize;
+            __swap(candidate, p, esize);
         }
     }
 
-    candidate += dsizeof(dtype);
-    __swap(candidate, end, dsizeof(dtype));
+    candidate += esize;
+    __swap(candidate, end, esize);
     return candidate;
 }
 
@@ -299,8 +300,8 @@ static void __quick_sort(enum dtype dtype, char *start, char *end)
 {
     if (start < end) {
         /**
-         * [p, p + len*dsizeof] -->
-         * [p, p + pi*dsizeof], [p + (pi+1)*dsizeof, p+len*dsizeof]
+         * [p, p + len*size] -->
+         * [p, p + pi*size], [p + (pi+1)*size, p+len*size]
          */
         char* p = __partition(dtype, start, end);
         __quick_sort(dtype, start, p-dsizeof(dtype));
