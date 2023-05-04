@@ -55,7 +55,7 @@ void vector_display(Vector *vec)
         case dtype_bool: {
             printf("BoolVector([\n");
             char c;
-            for (char *p = vec->head; p < vec->bott; p += vec->esize, i++) {
+            for (char *p = vec->head; p < vec->bott; p += vec->byte, i++) {
                 c = (access(vec->dtype, p) == false ? '-' : '+');
                 printf("(%c), ", c);
 
@@ -69,7 +69,7 @@ void vector_display(Vector *vec)
 
         case dtype_pixel: {
             printf("PixelVector([\n");
-            for (char *p = vec->head; p < vec->bott; p += vec->esize, i++) {
+            for (char *p = vec->head; p < vec->bott; p += vec->byte, i++) {
                 printf("(%3d), ", (int)access(vec->dtype, p));
 
                 if ((i + 1) % 10 == 0)
@@ -81,7 +81,7 @@ void vector_display(Vector *vec)
 
         case dtype_int: {
             printf("IntVector([\n");
-            for (char *p = vec->head; p < vec->bott; p += vec->esize, i++) {
+            for (char *p = vec->head; p < vec->bott; p += vec->byte, i++) {
                 printf("%10d, ", (int)access(vec->dtype, p));
 
                 if ((i + 1) % 5 == 0)
@@ -93,7 +93,7 @@ void vector_display(Vector *vec)
 
         case dtype_double: {
             printf("DoubleVector([\n");
-            for (char *p = vec->head; p < vec->bott; p += vec->esize, i++) {
+            for (char *p = vec->head; p < vec->bott; p += vec->byte, i++) {
                 printf("%10.2f, ", access(vec->dtype, p));
 
                 if ((i + 1) % 5 == 0)
@@ -116,28 +116,28 @@ void vector_set_rand(Vector *vec)
     switch (vec->dtype) {
 
         case dtype_bool: {
-            for (char *p = vec->head; p <= vec->bott; p += vec->esize)
+            for (char *p = vec->head; p <= vec->bott; p += vec->byte)
                 *p = (bool)__rand_int(0, 1);
 
             break;
         }
 
         case dtype_pixel: {
-            for (char *p = vec->head; p <= vec->bott; p += vec->esize)
+            for (char *p = vec->head; p <= vec->bott; p += vec->byte)
                 *p = (pixel) __rand_int(0, 255);
 
             break;
         }
 
         case dtype_int: {
-            for (char *p = vec->head; p <= vec->bott; p += vec->esize)
+            for (char *p = vec->head; p <= vec->bott; p += vec->byte)
                 dassign(p, __rand_int(-RAND_MAX/2, RAND_MAX/2), vec->dtype);
 
             break;
         }
 
         case dtype_double: {
-            for (char *p = vec->head; p <= vec->bott; p += vec->esize)
+            for (char *p = vec->head; p <= vec->bott; p += vec->byte)
                 dassign(p, __rand_double(-100/2, 100/2), vec->dtype);
 
             break;
@@ -153,7 +153,7 @@ double vector_min(Vector *vec)
 {
     char *p = vec->head;
     double min = access(vec->dtype, p);
-    for (size_t i = 0; i < vec->len; i++, p += vec->esize)
+    for (size_t i = 0; i < vec->len; i++, p += vec->byte)
         min = (min <= access(vec->dtype, p) ? min : access(vec->dtype, p));
 
     __check();
@@ -164,7 +164,7 @@ double vector_max(Vector *vec)
 {
     char *p = vec->head;
     double max = access(vec->dtype, p);
-    for (size_t i = 0; i < vec->len; i++, p += vec->esize)
+    for (size_t i = 0; i < vec->len; i++, p += vec->byte)
         max = (max >= access(vec->dtype, p) ? max : access(vec->dtype, p));
 
     __check();
@@ -178,7 +178,7 @@ void vector_scale(Vector *vec, double min, double max)
     double scale = vector_max(vec) - vec_min;
     double target_scale = max - min;
 
-    for (char *p = vec->head; p <= vec->bott; p += vec->esize)
+    for (char *p = vec->head; p <= vec->bott; p += vec->byte)
         dassign(
             p,
             min + (access(vec->dtype, p) - vec_min) * target_scale / scale,
@@ -190,10 +190,10 @@ void vector_scale(Vector *vec, double min, double max)
 
 void vector_reverse(Vector *vec)
 {
-    char *mid = vec->head + (vec->len/2)*(vec->esize);
+    char *mid = vec->head + (vec->len/2)*(vec->byte);
     char *r = vec->bott;
-    for (char *l = vec->head; l <= mid; l += vec->esize, r -= vec->esize)
-        __swap(l, r, vec->esize);
+    for (char *l = vec->head; l <= mid; l += vec->byte, r -= vec->byte)
+        __swap(l, r, vec->byte);
 }
 
 /**

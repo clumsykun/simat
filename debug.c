@@ -16,13 +16,13 @@ int test_vector()
 {
     unsigned int len = 50;
 
-    // Vector *vec = create_bool_vector(len);
+    Vector *vec = create_bool_vector(len);
     // Vector *vec = create_pixel_vector(len);
     // Vector *vec = create_int_vector(len);
-    Vector *vec = create_double_vector(len);
+    // Vector *vec = create_double_vector(len);
 
     size_t size = 0;
-    for (char *p = vec->head; p <= vec->bott; p += vec->esize, size++)
+    for (char *p = vec->head; p <= vec->bott; p += vec->byte, size++)
         dassign(p, (double)size+10, vec->dtype);
 
     printf("set random:\n");
