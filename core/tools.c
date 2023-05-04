@@ -72,7 +72,7 @@ void dassign(char *dest, double src, enum simat_dtype dtype)
             break;
 
         case simat_pixel:
-            *(pixel *)dest = (pixel)src;
+            *(unsigned char *)dest = (unsigned char)src;
             break;
 
         case simat_int:

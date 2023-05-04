@@ -14,8 +14,6 @@ enum simat_dtype {
     simat_double,
 };
 
-#define pixel unsigned char
-
 /**
  * @head: ptr of the first number of the vector
  * @len: length of this vector
@@ -54,7 +52,7 @@ typedef struct _Matrix
     (dtype == simat_bool                      \
         ? (double)*((bool *)p)                \
         : (dtype == simat_pixel               \
-            ? (double)*((pixel *)p)           \
+            ? (double)*((unsigned char *)p)           \
             : (dtype == simat_int             \
                 ? (double)*((int *)p)         \
                 : (dtype == simat_double      \
@@ -65,7 +63,7 @@ typedef struct _Matrix
     (dtype == simat_bool                      \
         ? sizeof(bool)                        \
         : (dtype == simat_pixel               \
-            ? sizeof(pixel)                   \
+            ? sizeof(unsigned char)                   \
             : (dtype == simat_int             \
                 ? sizeof(int)                 \
                 : (dtype == simat_double      \

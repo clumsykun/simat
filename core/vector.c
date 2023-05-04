@@ -128,7 +128,7 @@ void vector_set_rand(Vector *vec)
 
         case simat_pixel: {
             for simat_iter(vec)
-                *p = (pixel) __rand_int(0, 255);
+                *p = (unsigned char) __rand_int(0, 255);
 
             break;
         }
