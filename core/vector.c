@@ -127,7 +127,7 @@ void vector_display(Vector *vec)
         }
 
         default:
-            __dtype_unknown_error();
+            __is_error = true;
     }
     __check();
 }
@@ -176,7 +176,7 @@ void vector_set_rand(Vector *vec)
         }
         
         default:
-            __dtype_unknown_error();
+            __is_error = true;
     }
     __check();
 }

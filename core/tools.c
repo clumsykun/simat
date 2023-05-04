@@ -20,13 +20,6 @@ void __check()
         abort();
 }
 
-void __swap_int(int *left, int *right)
-{
-    int tmp = *left;
-    *left = *right;
-    *right = tmp;
-}
-
 void __swap(char *a, char *b, size_t len)
 {
     char tmp;
@@ -49,26 +42,6 @@ void __swap_double_p(double **left, double **right)
     double tmp = **left;
     **left = **right;
     **right = tmp;
-}
-
-size_t __size_t_dtype_unknown_error(void)
-{
-    fprintf(stderr, "Data type unknown error! Exiting...\n");
-    exit(EXIT_FAILURE);
-    return 0;
-}
-
-double __double_dtype_unknown_error(void)
-{
-    fprintf(stderr, "Data type unknown error! Exiting...\n");
-    exit(EXIT_FAILURE);
-    return 0;
-}
-
-void __dtype_unknown_error(void)
-{
-    fprintf(stderr, "Data type unknown error! Exiting...\n");
-    exit(EXIT_FAILURE);
 }
 
 /* min and max are inclusive */
