@@ -7,6 +7,7 @@
 #include "core/dtypes.h"
 #include "core/tools.h"
 #include "core/vector.h"
+#include "core/view.h"
 #include "core/matrix.h"
 #include "core/stats.h"
 

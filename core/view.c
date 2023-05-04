@@ -27,6 +27,31 @@ void free_view(View *view)
     __std_free(view);
 }
 
+void matrix_view_col(View *view, Matrix *mat, unsigned int idx)
+{
+    if (view->len != mat->nrow) {
+        view->len = mat->nrow;
+        view->head = (double **) realloc(view->head, view->len * sizeof(double *));
+    }
+
+    for (size_t i = 0; i < view->len; i++) {
+        view->head[i] = &mat->head[idx*mat->nrow + i];
+    }
+}
+
+void matrix_view_row(View *view, Matrix *mat, unsigned int idx)
+{
+    if (view->len != mat->ncol) {
+        view->len = mat->ncol;
+        view->head = (double **) realloc(view->head, view->len * sizeof(double *));
+    }
+
+    double(*head)[mat->nrow] = (double(*)[mat->nrow])mat->head;
+    for (size_t i = 0; i < view->len; i ++) {
+        view->head[i] = &head[i][idx];
+    }
+}
+
 void view_display(View *view)
 {
     printf("View([");
