@@ -202,7 +202,7 @@ void vector_reverse(Vector *vec)
  * @len: length of the vector
  * @candidate: the candidate position of pivot
  */
-char *__partition(enum dtype dtype, char *start, char *end)
+static char *__partition(enum dtype dtype, char *start, char *end)
 {
     size_t size = __sizeof(dtype);
     double pivot = access(dtype, end);
