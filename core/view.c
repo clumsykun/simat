@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <time.h>
 #include "view.h"
 #include "tools.h"
 
