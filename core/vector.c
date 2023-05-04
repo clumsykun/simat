@@ -55,11 +55,12 @@ void vector_display(Vector *vec)
         case dtype_bool: {
             printf("BoolVector([\n");
             char c;
-            for (char *p = vec->head; p < vec->bott; p += vec->byte, i++) {
+
+            for simat_iter(vec) {
                 c = (access(vec->dtype, p) == false ? '-' : '+');
                 printf("(%c), ", c);
 
-                if ((i + 1) % 10 == 0)
+                if ((i++ + 1) % 10 == 0)
                     printf("\n");
             }
 
@@ -69,10 +70,11 @@ void vector_display(Vector *vec)
 
         case dtype_pixel: {
             printf("PixelVector([\n");
-            for (char *p = vec->head; p < vec->bott; p += vec->byte, i++) {
+
+            for simat_iter(vec) {
                 printf("(%3d), ", (int)access(vec->dtype, p));
 
-                if ((i + 1) % 10 == 0)
+                if ((i++ + 1) % 10 == 0)
                     printf("\n");
             }
             printf("(%3d)])\n", (int)access(vec->dtype, vec->bott));
@@ -81,10 +83,11 @@ void vector_display(Vector *vec)
 
         case dtype_int: {
             printf("IntVector([\n");
-            for (char *p = vec->head; p < vec->bott; p += vec->byte, i++) {
+
+            for simat_iter(vec) {
                 printf("%10d, ", (int)access(vec->dtype, p));
 
-                if ((i + 1) % 5 == 0)
+                if ((i++ + 1) % 5 == 0)
                     printf("\n");
             };
             printf("%10d])\n", (int)access(vec->dtype, vec->bott));
@@ -93,10 +96,11 @@ void vector_display(Vector *vec)
 
         case dtype_double: {
             printf("DoubleVector([\n");
-            for (char *p = vec->head; p < vec->bott; p += vec->byte, i++) {
+
+            for simat_iter(vec) {
                 printf("%10.2f, ", access(vec->dtype, p));
 
-                if ((i + 1) % 5 == 0)
+                if ((i++ + 1) % 5 == 0)
                     printf("\n");
             }
             printf("%10.2f])\n", access(vec->dtype, vec->bott));
@@ -151,9 +155,8 @@ void vector_set_rand(Vector *vec)
 
 double vector_min(Vector *vec)
 {
-    char *p = vec->head;
-    double min = access(vec->dtype, p);
-    for (size_t i = 0; i < vec->len; i++, p += vec->byte)
+    double min = access(vec->dtype, vec->head);
+    for simat_iter(vec)
         min = (min <= access(vec->dtype, p) ? min : access(vec->dtype, p));
 
     __check();
@@ -162,9 +165,8 @@ double vector_min(Vector *vec)
 
 double vector_max(Vector *vec)
 {
-    char *p = vec->head;
-    double max = access(vec->dtype, p);
-    for (size_t i = 0; i < vec->len; i++, p += vec->byte)
+    double max = access(vec->dtype, vec->head);
+    for simat_iter(vec)
         max = (max >= access(vec->dtype, p) ? max : access(vec->dtype, p));
 
     __check();

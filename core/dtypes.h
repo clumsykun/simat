@@ -98,4 +98,7 @@ typedef struct _Col
                        ? (x->vec->head == NULL ? NULL : (x->vec->head[i])) \
                        : NULL)))
 
+
+#define simat_iter(x) (char *p = x->head; p <= x->bott; p += x->byte)
+
 #endif /* CORE_DTYPES_H */
