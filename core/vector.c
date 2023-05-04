@@ -116,28 +116,28 @@ void vector_set_rand(Vector *vec)
     switch (vec->dtype) {
 
         case dtype_bool: {
-            for (char *p = vec->head; p <= vec->bott; p += vec->byte)
+            for simat_iter(vec)
                 *p = (bool)__rand_int(0, 1);
 
             break;
         }
 
         case dtype_pixel: {
-            for (char *p = vec->head; p <= vec->bott; p += vec->byte)
+            for simat_iter(vec)
                 *p = (pixel) __rand_int(0, 255);
 
             break;
         }
 
         case dtype_int: {
-            for (char *p = vec->head; p <= vec->bott; p += vec->byte)
+            for simat_iter(vec)
                 dassign(p, __rand_int(-RAND_MAX/2, RAND_MAX/2), vec->dtype);
 
             break;
         }
 
         case dtype_double: {
-            for (char *p = vec->head; p <= vec->bott; p += vec->byte)
+            for simat_iter(vec)
                 dassign(p, __rand_double(-100/2, 100/2), vec->dtype);
 
             break;
@@ -178,7 +178,7 @@ void vector_scale(Vector *vec, double min, double max)
     double scale = vector_max(vec) - vec_min;
     double target_scale = max - min;
 
-    for (char *p = vec->head; p <= vec->bott; p += vec->byte)
+    for simat_iter(vec)
         dassign(
             p,
             min + (access(vec->dtype, p) - vec_min) * target_scale / scale,
