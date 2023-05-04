@@ -36,7 +36,6 @@ typedef struct _View
     unsigned int len;
 } View;
 
-
 /**
  * matrix is basically an ordered collection of same sized vectors
  * @head: ptr of the first number of the first vector of this matrix
@@ -92,6 +91,6 @@ typedef struct _Matrix
                        : NULL)))
 
 
-#define simat_iter(x) (char *p = x->head; p <= x->bott; p += x->byte)
+#define simat_iter(target) (char *p = target->head; p <= target->bott; p += target->byte)
 
 #endif /* CORE_DTYPES_H */
