@@ -3,14 +3,17 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+#include "core/flags.h"
+#include "core/dtypes.h"
 #include "core/tools.h"
 #include "core/vector.h"
 #include "core/matrix.h"
 #include "core/stats.h"
 
+
 int test_vector()
 {
-    unsigned int len = 5;
+    unsigned int len = 50;
 
     // Vector *vec = create_bool_vector(len);
     // Vector *vec = create_pixel_vector(len);
@@ -18,7 +21,7 @@ int test_vector()
     Vector *vec = create_double_vector(len);
 
     size_t size = 0;
-    for (char *p = vec->head; p <= vec->bott; p += dsizeof(vec->dtype), size++)
+    for (char *p = vec->head; p <= vec->bott; p += vec->esize, size++)
         dassign(p, (double)size+10, vec->dtype);
 
     printf("set random:\n");
@@ -131,7 +134,7 @@ int test_stats()
 int main()
 {
     test_vector();
-    test_matrix();
-    test_stats();
+    // test_matrix();
+    // test_stats();
     return 0;
 }

@@ -265,9 +265,10 @@ void view_scale(View *view, double min, double max)
 
 void vector_reverse(Vector *vec)
 {
-    for (size_t i = 0; i < (vec->len) / 2; i++) {
-        __swap_double(&idx(vec, i), &idx(vec, vec->len-i-1));
-    }
+    char *mid = vec->head + (vec->len/2)*(vec->esize);
+    char *r = vec->bott;
+    for (char *l = vec->head; l <= mid; l += vec->esize, r -= vec->esize)
+        __swap(l, r, vec->esize);
 }
 
 void view_reverse(View *view)
