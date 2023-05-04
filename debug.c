@@ -4,22 +4,20 @@
 #include <string.h>
 #include <time.h>
 #include "core/flags.h"
-#include "core/dtypes.h"
 #include "core/tools.h"
 #include "core/vector.h"
 #include "core/view.h"
 #include "core/matrix.h"
 #include "core/stats.h"
 
-
 int test_vector()
 {
     unsigned int len = 50;
 
-    Vector *vec = create_bool_vector(len);
+    // Vector *vec = create_bool_vector(len);
     // Vector *vec = create_pixel_vector(len);
     // Vector *vec = create_int_vector(len);
-    // Vector *vec = create_double_vector(len);
+    Vector *vec = create_double_vector(len);
 
     size_t size = 0;
     for (char *p = vec->head; p <= vec->bott; p += vec->byte, size++)
@@ -37,7 +35,7 @@ int test_vector()
         assert(vector_min(vec) == 0);
     }
     else {
-        assert((int)vector_max(vec) == 100);
+        assert((vector_max(vec)-100)<0.000000001);
         assert((int)vector_min(vec) == 0);
     }
 

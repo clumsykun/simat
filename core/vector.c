@@ -6,7 +6,7 @@
 #include "dtypes.h"
 #include "tools.h"
 
-static Vector *__create_vector(enum dtype dtype, unsigned int len)
+static Vector *__create_vector(enum simat_dtype dtype, unsigned int len)
 {
     Vector *vec = malloc(sizeof(Vector));
     char *p = malloc(len * __sizeof(dtype));
@@ -204,7 +204,7 @@ void vector_reverse(Vector *vec)
  * @len: length of the vector
  * @candidate: the candidate position of pivot
  */
-static char *__partition(enum dtype dtype, char *start, char *end)
+static char *__partition(enum simat_dtype dtype, char *start, char *end)
 {
     size_t size = __sizeof(dtype);
     double pivot = access(dtype, end);
@@ -223,7 +223,7 @@ static char *__partition(enum dtype dtype, char *start, char *end)
     return candidate;
 }
 
-static void __quick_sort(enum dtype dtype, char *start, char *end)
+static void __quick_sort(enum simat_dtype dtype, char *start, char *end)
 {
     if (start < end) {
         /**

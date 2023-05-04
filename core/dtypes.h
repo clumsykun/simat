@@ -7,7 +7,7 @@ enum order {
     descend,
 };
 
-enum dtype {
+enum simat_dtype {
     dtype_bool,
     dtype_pixel,
     dtype_int,
@@ -22,7 +22,7 @@ enum dtype {
  */
 typedef struct _Vector
 {
-    const enum dtype dtype;
+    const enum simat_dtype dtype;
     char *const head;
     char *const bott;  /* bottom */
     const unsigned int byte; /* size of single element */
