@@ -23,6 +23,7 @@ typedef struct _Vector
     const enum dtype dtype;
     char *const head;
     char *const bott;  /* bottom */
+    const unsigned int esize; /* size of single element */
     const unsigned int len;
 } Vector;
 
