@@ -22,7 +22,7 @@ typedef struct _Vector
 {
     const enum simat_dtype dtype;
     char *const head;
-    char *const bott;  /* bottom */
+    char *const last;  /* last element */
     const unsigned int byte; /* size of single element */
     const unsigned int len;
 } Vector;
@@ -88,6 +88,6 @@ typedef struct _Matrix
                        : NULL)))
 
 
-#define simat_iter(target) (char *p = target->head; p <= target->bott; p += target->byte)
+#define simat_iter(target) (char *p = target->head; p <= target->last; p += target->byte)
 
 #endif /* CORE_DTYPES_H */

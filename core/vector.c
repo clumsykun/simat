@@ -64,7 +64,7 @@ void vector_display(Vector *vec)
                     printf("\n");
             }
 
-            printf("(%c)])\n", (simat_access(vec->dtype, vec->bott) == false ? '-' : '+'));
+            printf("(%c)])\n", (simat_access(vec->dtype, vec->last) == false ? '-' : '+'));
             break;
         }
 
@@ -77,7 +77,7 @@ void vector_display(Vector *vec)
                 if ((i++ + 1) % 10 == 0)
                     printf("\n");
             }
-            printf("(%3d)])\n", (int)simat_access(vec->dtype, vec->bott));
+            printf("(%3d)])\n", (int)simat_access(vec->dtype, vec->last));
             break;
         }
 
@@ -90,7 +90,7 @@ void vector_display(Vector *vec)
                 if ((i++ + 1) % 5 == 0)
                     printf("\n");
             };
-            printf("%10d])\n", (int)simat_access(vec->dtype, vec->bott));
+            printf("%10d])\n", (int)simat_access(vec->dtype, vec->last));
             break;
         }
 
@@ -103,7 +103,7 @@ void vector_display(Vector *vec)
                 if ((i++ + 1) % 5 == 0)
                     printf("\n");
             }
-            printf("%10.2f])\n", simat_access(vec->dtype, vec->bott));
+            printf("%10.2f])\n", simat_access(vec->dtype, vec->last));
             break;
         }
 
@@ -193,7 +193,7 @@ void vector_scale(Vector *vec, double min, double max)
 void vector_reverse(Vector *vec)
 {
     char *mid = vec->head + (vec->len/2)*(vec->byte);
-    char *r = vec->bott;
+    char *r = vec->last;
     for (char *l = vec->head; l <= mid; l += vec->byte, r -= vec->byte)
         __swap(l, r, vec->byte);
 }
@@ -238,7 +238,7 @@ static void __quick_sort(enum simat_dtype dtype, char *start, char *end)
 
 void vector_sort(Vector *vec, enum order order)
 {
-    __quick_sort(vec->dtype, vec->head, vec->bott);
+    __quick_sort(vec->dtype, vec->head, vec->last);
     if (order == descend) {
         vector_reverse(vec);
     }
