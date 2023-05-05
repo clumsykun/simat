@@ -2,37 +2,44 @@
 #define CORE_DTYPES_H
 #include "flags.h"
 
-enum order {
-    ascend,
-    descend,
+enum st_order {
+    st_ascend,
+    st_descend,
 };
 
-enum simat_dtype {
-    simat_bool,
-    simat_pixel,
-    simat_int,
-    simat_double,
+enum st_dtype {
+    st_bool,
+    st_pixel,
+    st_int,
+    st_double,
 };
 
 /**
  * @head: ptr of the first number of the vector
  * @len: length of this vector
  */
-typedef struct _Vector
+typedef struct __st_data__
 {
-    const enum simat_dtype dtype;
-    char *const head;
-    char *const last;  /* last element */
-    const unsigned int byte; /* size of single element */
-    const unsigned int len;
-} Vector;
+    void *const head;
+    void *const last;        /* last element */
+    const size_t byte; /* size of single element */
+    const size_t size;
+    const enum st_dtype dtype;
+} __st_data;
+
+typedef struct __st_vector
+{
+    char *label;
+    const __st_data data;
+} st_vector;
 
 /* flexible structure contains ptr of element of target vector/matrix */
-typedef struct _View
+typedef struct __st_view
 {
-    double **head;
-    unsigned int len;
-} View;
+    char *label;
+    __st_data data;
+    __st_data source;
+} st_view;
 
 /**
  * matrix is basically an ordered collection of same sized vectors
@@ -40,33 +47,34 @@ typedef struct _View
  * @nrow: number of rows
  * @ncol: number of cols
  */
-typedef struct _Matrix
+typedef struct __st_matrix
 {
-    double *const head;
-    const unsigned int nrow;
-    const unsigned int ncol;
-} Matrix;
+    char *label;
+    const __st_data data;
+    const size_t nrow;
+    const size_t ncol;
+} st_matrix;
 
 /* access the value of element of vector/matrix, as type of double */
-#define simat_access(dtype, p)                \
-    (dtype == simat_bool                      \
+#define st_access(dtype, p)                \
+    (dtype == st_bool                      \
         ? (double)*((bool *)p)                \
-        : (dtype == simat_pixel               \
+        : (dtype == st_pixel               \
             ? (double)*((unsigned char *)p)           \
-            : (dtype == simat_int             \
+            : (dtype == st_int             \
                 ? (double)*((int *)p)         \
-                : (dtype == simat_double      \
+                : (dtype == st_double      \
                     ? *((double *)p)          \
                     : __double_raise_error()))))
 
-#define simat_byteof(dtype)                   \
-    (dtype == simat_bool                      \
+#define st_byteof(dtype)                   \
+    (dtype == st_bool                      \
         ? sizeof(bool)                        \
-        : (dtype == simat_pixel               \
+        : (dtype == st_pixel               \
             ? sizeof(unsigned char)                   \
-            : (dtype == simat_int             \
+            : (dtype == st_int             \
                 ? sizeof(int)                 \
-                : (dtype == simat_double      \
+                : (dtype == st_double      \
                     ? sizeof(double)          \
                     : __size_raise_error()))))
 
@@ -88,6 +96,6 @@ typedef struct _Matrix
                        : NULL)))
 
 
-#define simat_iter(target) (char *p = target->head; p <= target->last; p += target->byte)
+#define st_iter(target) (char *p = target->head; p <= target->last; p += target->byte)
 
 #endif /* CORE_DTYPES_H */

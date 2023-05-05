@@ -6,15 +6,15 @@
 #include "dtypes.h"
 #include "tools.h"
 
-static Vector *__create_vector(enum simat_dtype dtype, unsigned int len)
+static Vector *__create_vector(enum st_dtype dtype, unsigned int len)
 {
     Vector *vec = malloc(sizeof(Vector));
-    char *p = malloc(len * simat_byteof(dtype));
+    char *p = malloc(len * st_byteof(dtype));
     Vector _vec = {
         dtype,
         p,
-        p+(len-1) * simat_byteof(dtype),
-        simat_byteof(dtype),
+        p+(len-1) * st_byteof(dtype),
+        st_byteof(dtype),
         len,
     };
     memcpy(vec, &_vec, sizeof(Vector));
@@ -23,22 +23,22 @@ static Vector *__create_vector(enum simat_dtype dtype, unsigned int len)
 
 Vector *create_bool_vector(unsigned int len)
 {
-    return __create_vector(simat_bool, len);
+    return __create_vector(st_bool, len);
 }
 
 Vector *create_pixel_vector(unsigned int len)
 {
-    return __create_vector(simat_pixel, len);
+    return __create_vector(st_pixel, len);
 }
 
 Vector *create_int_vector(unsigned int len)
 {
-    return __create_vector(simat_int, len);
+    return __create_vector(st_int, len);
 }
 
 Vector *create_double_vector(unsigned int len)
 {
-    return __create_vector(simat_double, len);
+    return __create_vector(st_double, len);
 }
 
 void free_vector(Vector *vec)
@@ -52,58 +52,58 @@ void vector_display(Vector *vec)
     size_t i = 0;
     switch (vec->dtype) {
 
-        case simat_bool: {
+        case st_bool: {
             printf("BoolVector([\n");
             char c;
 
-            for simat_iter(vec) {
-                c = (simat_access(vec->dtype, p) == false ? '-' : '+');
+            for st_iter(vec) {
+                c = (st_access(vec->dtype, p) == false ? '-' : '+');
                 printf("(%c), ", c);
 
                 if ((i++ + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("(%c)])\n", (simat_access(vec->dtype, vec->last) == false ? '-' : '+'));
+            printf("(%c)])\n", (st_access(vec->dtype, vec->last) == false ? '-' : '+'));
             break;
         }
 
-        case simat_pixel: {
+        case st_pixel: {
             printf("PixelVector([\n");
 
-            for simat_iter(vec) {
-                printf("(%3d), ", (int)simat_access(vec->dtype, p));
+            for st_iter(vec) {
+                printf("(%3d), ", (int)st_access(vec->dtype, p));
 
                 if ((i++ + 1) % 10 == 0)
                     printf("\n");
             }
-            printf("(%3d)])\n", (int)simat_access(vec->dtype, vec->last));
+            printf("(%3d)])\n", (int)st_access(vec->dtype, vec->last));
             break;
         }
 
-        case simat_int: {
+        case st_int: {
             printf("IntVector([\n");
 
-            for simat_iter(vec) {
-                printf("%10d, ", (int)simat_access(vec->dtype, p));
+            for st_iter(vec) {
+                printf("%10d, ", (int)st_access(vec->dtype, p));
 
                 if ((i++ + 1) % 5 == 0)
                     printf("\n");
             };
-            printf("%10d])\n", (int)simat_access(vec->dtype, vec->last));
+            printf("%10d])\n", (int)st_access(vec->dtype, vec->last));
             break;
         }
 
-        case simat_double: {
+        case st_double: {
             printf("DoubleVector([\n");
 
-            for simat_iter(vec) {
-                printf("%10.2f, ", simat_access(vec->dtype, p));
+            for st_iter(vec) {
+                printf("%10.2f, ", st_access(vec->dtype, p));
 
                 if ((i++ + 1) % 5 == 0)
                     printf("\n");
             }
-            printf("%10.2f])\n", simat_access(vec->dtype, vec->last));
+            printf("%10.2f])\n", st_access(vec->dtype, vec->last));
             break;
         }
 
@@ -119,29 +119,29 @@ void vector_set_rand(Vector *vec)
     srand(time(NULL));
     switch (vec->dtype) {
 
-        case simat_bool: {
-            for simat_iter(vec)
+        case st_bool: {
+            for st_iter(vec)
                 *p = (bool)__rand_int(0, 1);
 
             break;
         }
 
-        case simat_pixel: {
-            for simat_iter(vec)
+        case st_pixel: {
+            for st_iter(vec)
                 *p = (unsigned char) __rand_int(0, 255);
 
             break;
         }
 
-        case simat_int: {
-            for simat_iter(vec)
+        case st_int: {
+            for st_iter(vec)
                 dassign(p, __rand_int(-RAND_MAX/2, RAND_MAX/2), vec->dtype);
 
             break;
         }
 
-        case simat_double: {
-            for simat_iter(vec)
+        case st_double: {
+            for st_iter(vec)
                 dassign(p, __rand_double(-RAND_MAX/2, RAND_MAX/2), vec->dtype);
 
             break;
@@ -155,9 +155,9 @@ void vector_set_rand(Vector *vec)
 
 double vector_min(Vector *vec)
 {
-    double min = simat_access(vec->dtype, vec->head);
-    for simat_iter(vec)
-        min = (min <= simat_access(vec->dtype, p) ? min : simat_access(vec->dtype, p));
+    double min = st_access(vec->dtype, vec->head);
+    for st_iter(vec)
+        min = (min <= st_access(vec->dtype, p) ? min : st_access(vec->dtype, p));
 
     __check();
     return min;
@@ -165,9 +165,9 @@ double vector_min(Vector *vec)
 
 double vector_max(Vector *vec)
 {
-    double max = simat_access(vec->dtype, vec->head);
-    for simat_iter(vec)
-        max = (max >= simat_access(vec->dtype, p) ? max : simat_access(vec->dtype, p));
+    double max = st_access(vec->dtype, vec->head);
+    for st_iter(vec)
+        max = (max >= st_access(vec->dtype, p) ? max : st_access(vec->dtype, p));
 
     __check();
     return max;
@@ -180,10 +180,10 @@ void vector_scale(Vector *vec, double min, double max)
     double scale = vector_max(vec) - vec_min;
     double target_scale = max - min;
 
-    for simat_iter(vec)
+    for st_iter(vec)
         dassign(
             p,
-            min + (simat_access(vec->dtype, p) - vec_min) * target_scale / scale,
+            min + (st_access(vec->dtype, p) - vec_min) * target_scale / scale,
             vec->dtype
         );
 
@@ -204,14 +204,14 @@ void vector_reverse(Vector *vec)
  * @len: length of the vector
  * @candidate: the candidate position of pivot
  */
-static char *__partition(enum simat_dtype dtype, char *start, char *end)
+static char *__partition(enum st_dtype dtype, char *start, char *end)
 {
-    size_t size = simat_byteof(dtype);
-    double pivot = simat_access(dtype, end);
+    size_t size = st_byteof(dtype);
+    double pivot = st_access(dtype, end);
     char *candidate = start - size;
 
     for (char *p = start; p < end; p+=size) {
-        if (simat_access(dtype, p) < pivot) {
+        if (st_access(dtype, p) < pivot) {
 
             candidate += size;
             __swap(candidate, p, size);
@@ -223,7 +223,7 @@ static char *__partition(enum simat_dtype dtype, char *start, char *end)
     return candidate;
 }
 
-static void __quick_sort(enum simat_dtype dtype, char *start, char *end)
+static void __quick_sort(enum st_dtype dtype, char *start, char *end)
 {
     if (start < end) {
         /**
@@ -231,8 +231,8 @@ static void __quick_sort(enum simat_dtype dtype, char *start, char *end)
          * [p, p + pi*size], [p + (pi+1)*size, p+len*size]
          */
         char* p = __partition(dtype, start, end);
-        __quick_sort(dtype, start, p-simat_byteof(dtype));
-        __quick_sort(dtype, p+simat_byteof(dtype), end);
+        __quick_sort(dtype, start, p-st_byteof(dtype));
+        __quick_sort(dtype, p+st_byteof(dtype), end);
     }
 }
 

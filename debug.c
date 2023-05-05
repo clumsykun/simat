@@ -30,7 +30,7 @@ int test_vector()
     printf("scale:\n");
     vector_scale(vec, 0, 100);
     vector_display(vec);
-    if (vec->dtype == simat_bool) {
+    if (vec->dtype == st_bool) {
         assert(vector_max(vec) == 1);
         assert(vector_min(vec) == 0);
     }

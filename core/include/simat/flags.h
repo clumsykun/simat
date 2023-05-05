@@ -1,7 +1,9 @@
 #ifndef CORE_FLAGS_H
 #define CORE_FLAGS_H
 #include <stdlib.h>
-#include <stdbool.h>
+#include <stddef.h>
+
+# define bool _Bool
 
 extern bool __is_error;
 

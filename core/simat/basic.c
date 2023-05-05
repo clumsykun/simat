@@ -64,22 +64,22 @@ void assign(void *__restrict__ dest, const void *__restrict__ src, size_t len)
         *d++ = *s++;
 }
 
-void dassign(char *dest, double src, enum simat_dtype dtype)
+void dassign(char *dest, double src, enum st_dtype dtype)
 {
     switch (dtype) {
-        case simat_bool:
+        case st_bool:
             *(bool *)dest = (bool)src;
             break;
 
-        case simat_pixel:
+        case st_pixel:
             *(unsigned char *)dest = (unsigned char)src;
             break;
 
-        case simat_int:
+        case st_int:
             *(int *)dest = (int)src;
             break;
 
-        case simat_double:
+        case st_double:
             *(double *)dest = (double)src;
             break;
 
