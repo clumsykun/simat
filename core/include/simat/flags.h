@@ -1,13 +1,12 @@
 #ifndef CORE_FLAGS_H
 #define CORE_FLAGS_H
-#include <stdlib.h>
+#include <stdbool.h>
 #include <stddef.h>
 
-# define bool _Bool
 
-extern bool __is_error;
+extern bool __st_is_error;
 
-double __double_raise_error(void);
-size_t __size_raise_error(void);
+double __st_access_error(void);
+size_t __st_dtype_error(void);
 
 #endif /* CORE_FLAGS_H */

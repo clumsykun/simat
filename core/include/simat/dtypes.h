@@ -65,7 +65,7 @@ typedef struct __st_matrix
                 ? (double)*((int *)p)         \
                 : (dtype == st_double      \
                     ? *((double *)p)          \
-                    : __double_raise_error()))))
+                    : __st_access_error()))))
 
 #define st_byteof(dtype)                   \
     (dtype == st_bool                      \
@@ -76,7 +76,7 @@ typedef struct __st_matrix
                 ? sizeof(int)                 \
                 : (dtype == st_double      \
                     ? sizeof(double)          \
-                    : __size_raise_error()))))
+                    : __st_byte_error()))))
 
 /**
  * @x: vector or view.

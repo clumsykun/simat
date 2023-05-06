@@ -1,17 +1,17 @@
-#include <stdlib.h>
 #include <stdbool.h>
+#include "flags.h"
 
 
-bool __is_error = false;
+bool __st_is_error = false;
 
-double __double_raise_error(void)
+double __st_access_error(void)
 {
-    __is_error = true;
+    __st_is_error = true;
     return 0;
 }
 
-size_t __size_raise_error(void)
+size_t __st_dtype_error(void)
 {
-    __is_error = true;
+    __st_is_error = true;
     return 0;
 }
