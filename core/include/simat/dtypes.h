@@ -62,10 +62,10 @@ typedef struct __st_view
     __st_data *source;
 } st_view;
 
-#define __st_assign_bool(p, v) *(st_bool *)p = v
-#define __st_assign_pixel(p, v) *(st_pixel *)p = v
-#define __st_assign_int(p, v) *(st_int *)p = v
-#define __st_assign_double(p, v) *(st_double *)p = v
+#define __st_assign_bool(p, v) *(st_bool *)(p) = v
+#define __st_assign_pixel(p, v) *(st_pixel *)(p) = v
+#define __st_assign_int(p, v) *(st_int *)(p) = v
+#define __st_assign_double(p, v) *(st_double *)(p) = v
 
 /* access the value of element of vector/matrix, as type of double */
 #define __st_access(dtype, p)                   \
