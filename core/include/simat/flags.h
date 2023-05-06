@@ -9,5 +9,6 @@ extern bool __st_dtype_error;
 
 double __st_raise_access_error(void);
 size_t __st_raise_dtype_error(void);
+void __st_check();
 
 #endif /* SIMAT_FLAGS_H */
