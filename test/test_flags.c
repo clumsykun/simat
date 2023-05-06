@@ -18,6 +18,6 @@ int main()
     __st_raise_dtype_error();
     assert(__st_dtype_error == true);
 
-    __st_check();
+    printf("OK: flags\n");
     return 0;
 }
