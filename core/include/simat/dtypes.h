@@ -62,20 +62,28 @@ typedef struct __st_view
     __st_data *source;
 } st_view;
 
-#define __st_assign_bool(p, v) *(st_bool *)(p) = v
-#define __st_assign_pixel(p, v) *(st_pixel *)(p) = v
-#define __st_assign_int(p, v) *(st_int *)(p) = v
-#define __st_assign_double(p, v) *(st_double *)(p) = v
+#define __st_assign_p(p, value, st_dtype)                    \
+    (st_dtype == __st_double                                 \
+            ? (*(st_double *)(p) = (st_double)value)         \
+            : (st_dtype == __st_int                          \
+                ? (*(st_int *)(p) = (st_int)value)           \
+                : (st_dtype == __st_pixel                    \
+                    ? (*(st_pixel *)(p) = (st_pixel)value)   \
+                    : (st_dtype == __st_bool                 \
+                        ? (*(st_bool *)(p) = (st_bool)value) \
+                        : __st_raise_dtype_error()))))
+
+#define st_vec_assign(vec, idx, value) __st_assign_p(vec->data->head + idx * vec->data->byte, value, vec->data->dtype)
 
 /* access the value of element of vector/matrix, as type of double */
 #define __st_access(dtype, p)                   \
-    (dtype == __st_double                     \
+    (dtype == __st_double                       \
         ? *(double *)(p)                        \
-        : (dtype == __st_int                  \
+        : (dtype == __st_int                    \
             ? (double)*(int *)(p)               \
-            : (dtype == __st_pixel            \
+            : (dtype == __st_pixel              \
                 ? (double)*(unsigned char *)(p) \
-                : (dtype == __st_bool       \
+                : (dtype == __st_bool           \
                     ? (double)*(bool *)(p)      \
                     : __st_raise_access_error()))))
 
@@ -103,7 +111,7 @@ st_vector *st_new_int_vector(size_t len);
 st_vector *st_new_double_vector(size_t len);
 void st_vec_free(st_vector *vec);
 void st_vec_display(st_vector *vec);
-void st_vec_assign(st_vector *vec, double value);
+void st_vec_assign_all(st_vector *vec, double value);
 
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol);

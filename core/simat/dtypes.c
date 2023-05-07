@@ -27,6 +27,21 @@ static st_vector *__st_new_vector(__st_dtype dtype, size_t len)
     return vec;
 }
 
+st_vector *st_new_bool_vector(size_t len)
+{
+    return __st_new_vector(__st_bool, len);
+}
+
+st_vector *st_new_pixel_vector(size_t len)
+{
+    return __st_new_vector(__st_pixel, len);
+}
+
+st_vector *st_new_int_vector(size_t len)
+{
+    return __st_new_vector(__st_int, len);
+}
+
 st_vector *st_new_double_vector(size_t len)
 {
     return __st_new_vector(__st_double, len);
@@ -59,40 +74,13 @@ static double __check_assign_value(double value, __st_dtype dtype)
     return value;
 }
 
-void st_vec_assign(st_vector *vec, double value)
+void st_vec_assign_all(st_vector *vec, double value)
 {
     void *p;
     value = __check_assign_value(value, vec->data->dtype);
 
-    switch (vec->data->dtype) {
-        case __st_bool:
-            for __st_data_iter(p, vec->data)
-                __st_assign_bool(p, value);
-
-            break;
-    
-        case __st_pixel:
-            for __st_data_iter(p, vec->data)
-                __st_assign_pixel(p, value);
-
-            break;
-
-        case __st_int:
-            for __st_data_iter(p, vec->data)
-                __st_assign_int(p, value);
-
-            break;
-
-        case __st_double:
-            for __st_data_iter(p, vec->data)
-                __st_assign_double(p, value);
-
-            break;
-
-    default:
-        __st_raise_dtype_error();
-        break;
-    }
+    for __st_data_iter(p, vec->data)
+        __st_assign_p(p, value, vec->data->dtype);
 
     __st_check();
 }
