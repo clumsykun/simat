@@ -66,16 +66,16 @@ typedef struct __st_view
 #define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)(idx) * vec->data->byte)
 
 /* assign `value` to `p`, as type of `st_dtype` */
-#define __st_assign_p(p, value, st_dtype)                    \
-    (st_dtype == __st_double                                 \
-            ? (*(st_double *)(p) = (st_double)value)         \
-            : (st_dtype == __st_int                          \
-                ? (*(st_int *)(p) = (st_int)value)           \
-                : (st_dtype == __st_pixel                    \
-                    ? (*(st_pixel *)(p) = (st_pixel)value)   \
-                    : (st_dtype == __st_bool                 \
-                        ? (*(st_bool *)(p) = (st_bool)value) \
-                        : __st_raise_dtype_error()))))
+#define __st_assign_p(p, value, st_dtype)                  \
+    (st_dtype == __st_double                               \
+        ? (*(st_double *)(p) = (st_double)(value))         \
+        : (st_dtype == __st_int                            \
+            ? (*(st_int *)(p) = (st_int)(value))           \
+            : (st_dtype == __st_pixel                      \
+                ? (*(st_pixel *)(p) = (st_pixel)(value))   \
+                : (st_dtype == __st_bool                   \
+                    ? (*(st_bool *)(p) = (st_bool)(value)) \
+                    : __st_raise_dtype_error()))))
 
 #define st_vec_assign(vec, idx, value)       \
     __st_assign_p(__st_vec_find_p(vec, idx), \
@@ -96,9 +96,9 @@ typedef struct __st_view
 
 #define st_vec_access(vec, idx)                        \
     (idx < 0                                           \
-        ? __st_raise_out_range_error()                    \
+        ? __st_raise_out_range_error()                 \
         : (idx >= vec->len                             \
-            ? __st_raise_out_range_error()                \
+            ? __st_raise_out_range_error()             \
             : __st_access_p(__st_vec_find_p(vec, idx), \
                             vec->data->dtype)))
 
