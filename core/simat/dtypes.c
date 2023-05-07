@@ -47,7 +47,7 @@ st_vector *st_new_double_vector(size_t len)
     return __st_new_vector(__st_double, len);
 }
 
-static double __check_assign_value(double value, __st_dtype dtype)
+static double __scale_assign_value(double value, __st_dtype dtype)
 {
     switch (dtype) {
 
@@ -77,7 +77,7 @@ static double __check_assign_value(double value, __st_dtype dtype)
 void st_vec_assign_all(st_vector *vec, double value)
 {
     void *p;
-    value = __check_assign_value(value, vec->data->dtype);
+    value = __scale_assign_value(value, vec->data->dtype);
 
     for __st_data_iter(p, vec->data)
         __st_assign_p(p, value, vec->data->dtype);
