@@ -28,5 +28,10 @@ int main()
     __st_assign_p(vec_double->data->head, test_value+2, vec_double->data->dtype);
     assert(st_vec_access(vec_double, 0) == test_value+2);
 
+    st_free_vector(vec_bool);
+    st_free_vector(vec_pixel);
+    st_free_vector(vec_int);
+    st_free_vector(vec_double);
+
     return 0;
 }
