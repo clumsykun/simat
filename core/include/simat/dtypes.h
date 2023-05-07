@@ -62,6 +62,10 @@ typedef struct __st_view
     __st_data *source;
 } st_view;
 
+/* return the ptr of the `vec` of index `idx` */
+#define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)idx * vec->data->byte)
+
+/* assign `value` to `p`, as type of `st_dtype` */
 #define __st_assign_p(p, value, st_dtype)                    \
     (st_dtype == __st_double                                 \
             ? (*(st_double *)(p) = (st_double)value)         \
@@ -73,35 +77,39 @@ typedef struct __st_view
                         ? (*(st_bool *)(p) = (st_bool)value) \
                         : __st_raise_dtype_error()))))
 
-#define st_vec_assign(vec, idx, value) __st_assign_p(vec->data->head + idx * vec->data->byte, value, vec->data->dtype)
+#define st_vec_assign(vec, idx, value)   \
+    __st_assign_p(__st_vec_find_p(vec, idx), \
+                  value,                 \
+                  vec->data->dtype)
 
-/* access the value of element of vector/matrix, as type of double */
-#define __st_access_p(p, dtype)                 \
-    (dtype == __st_double                       \
+/* access the value of `p`, as type of `st_dtype` */
+#define __st_access_p(p, st_dtype)              \
+    (st_dtype == __st_double                    \
         ? *(double *)(p)                        \
-        : (dtype == __st_int                    \
+        : (st_dtype == __st_int                 \
             ? (double)*(int *)(p)               \
-            : (dtype == __st_pixel              \
+            : (st_dtype == __st_pixel           \
                 ? (double)*(unsigned char *)(p) \
-                : (dtype == __st_bool           \
+                : (st_dtype == __st_bool        \
                     ? (double)*(bool *)(p)      \
                     : __st_raise_access_error()))))
 
-#define st_vec_access(vec, idx) \
-    (idx < 0 \
-        ? __st_raise_access_error() \
-        : (idx >= vec->len \
-            ? __st_raise_access_error() \
-            : __st_access_p(vec->data->head+idx*vec->data->byte, vec->data->dtype)))
+#define st_vec_access(vec, idx)                        \
+    (idx < 0                                           \
+        ? __st_raise_access_error()                    \
+        : (idx >= vec->len                             \
+            ? __st_raise_access_error()                \
+            : __st_access_p(__st_vec_find_p(vec, idx), \
+                            vec->data->dtype)))
 
-#define st_byteof(dtype)                     \
-    (dtype == __st_double                    \
+#define st_byteof(st_dtype)                  \
+    (st_dtype == __st_double                 \
         ? sizeof(double)                     \
-        : (dtype == __st_int                 \
+        : (st_dtype == __st_int              \
             ? sizeof(int)                    \
-            : (dtype == __st_pixel           \
+            : (st_dtype == __st_pixel        \
                 ? sizeof(int)                \
-                : (dtype == __st_bool        \
+                : (st_dtype == __st_bool     \
                     ? sizeof(bool)           \
                     : __st_raise_dtype_error()))))
 

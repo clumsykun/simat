@@ -28,6 +28,5 @@ int main()
     __st_assign_p(vec_double->data->head, test_value+2, vec_double->data->dtype);
     assert(st_vec_access(vec_double, 0) == test_value+2);
 
-
     return 0;
 }
