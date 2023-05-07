@@ -28,22 +28,25 @@ double st_vec_max(st_vector *vec)
     return max;
 }
 
-// /* scale the vector to make sure that its max value and min value match param max and min. */
-// void vector_scale(Vector *vec, double min, double max)
-// {
-//     double vec_min = vector_min(vec);
-//     double scale = vector_max(vec) - vec_min;
-//     double target_scale = max - min;
+/* scale the vector to make sure that its max value and min value match `max` and `min`. */
+void st_vec_scale(st_vector *vec, double min, double max)
+{
+    if st_is_bool(vec) /* do noting */
+        return;
 
-//     for st_iter(vec)
-//         dassign(
-//             p,
-//             min + (st_access(vec->dtype, p) - vec_min) * target_scale / scale,
-//             vec->dtype
-//         );
+    double vec_min = st_vec_min(vec);
+    double scale = st_vec_max(vec) - vec_min;
+    double target_scale = max - min;
+    double scaled;
+    void *p;
 
-//     __check();
-// }
+    for st_iter_vector(p, vec) {
+        scaled = min + (__st_access_p(p, vec->data->dtype) - vec_min) * target_scale / scale;
+        __st_assign_p(p, scaled, vec->data->dtype);
+    }
+
+    __st_check();
+}
 
 // void vector_reverse(Vector *vec)
 // {

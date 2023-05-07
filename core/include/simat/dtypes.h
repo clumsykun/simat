@@ -62,6 +62,11 @@ typedef struct __st_view
     __st_data *source;
 } st_view;
 
+#define st_is_bool(x) (x->data->dtype == __st_bool)
+#define st_is_pixel(x) (x->data->dtype == __st_pixel)
+#define st_is_int(x) (x->data->dtype == __st_int)
+#define st_is_double(x) (x->data->dtype == __st_double)
+
 /* return the ptr of the `vec` of index `idx` */
 #define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)(idx) * vec->data->nbyte)
 
