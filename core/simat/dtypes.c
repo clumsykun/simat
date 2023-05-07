@@ -53,20 +53,6 @@ static st_vector *__st_new_vector(__st_dtype st_dtype, size_t len)
     return vec;
 }
 
-/* the standard way to free memory */
-void __std_free(void *ptr)
-{
-    free(ptr);
-    ptr = NULL;
-}
-
-void st_free_vector(st_vector *vec)
-{
-    __std_free(vec->data->head);
-    __std_free(vec->data);
-    __std_free(vec);
-}
-
 st_vector *st_new_bool_vector(size_t len)
 {
     return __st_new_vector(__st_bool, len);
@@ -85,6 +71,20 @@ st_vector *st_new_int_vector(size_t len)
 st_vector *st_new_double_vector(size_t len)
 {
     return __st_new_vector(__st_double, len);
+}
+
+/* the standard way to free memory */
+void __std_free(void *ptr)
+{
+    free(ptr);
+    ptr = NULL;
+}
+
+void st_free_vector(st_vector *vec)
+{
+    __std_free(vec->data->head);
+    __std_free(vec->data);
+    __std_free(vec);
 }
 
 static double __scale_assign_value(double value, __st_dtype dtype)
