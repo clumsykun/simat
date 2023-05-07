@@ -47,11 +47,3 @@ void st_vec_scale(st_vector *vec, double min, double max)
 
     __st_check();
 }
-
-// void vector_reverse(Vector *vec)
-// {
-//     char *mid = vec->head + (vec->len/2)*(vec->nbyte);
-//     char *r = vec->last;
-//     for (char *l = vec->head; l <= mid; l += vec->nbyte, r -= vec->nbyte)
-//         __swap(l, r, vec->nbyte);
-// }

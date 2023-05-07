@@ -49,6 +49,16 @@ int main()
     st_vec_display(vec_int);
     st_vec_display(vec_double);
 
+    st_vec_reverse(vec_bool);
+    st_vec_reverse(vec_pixel);
+    st_vec_reverse(vec_int);
+    st_vec_reverse(vec_double);
+
+    st_vec_display(vec_bool);
+    st_vec_display(vec_pixel);
+    st_vec_display(vec_int);
+    st_vec_display(vec_double);
+
     st_free_vector(vec_bool);
     st_free_vector(vec_pixel);
     st_free_vector(vec_int);

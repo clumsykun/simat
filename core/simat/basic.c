@@ -155,3 +155,14 @@ void st_vec_sort(st_vector *vec)
     );
     __st_check();
 }
+
+void st_vec_reverse(st_vector *vec)
+{
+    void *mid = __st_vec_find_p(vec, vec->len / 2 - 1);
+    void *r = vec->data->last;
+    void *l;
+    size_t nbyte = vec->data->nbyte;
+
+    for (void *l = vec->data->head; l <= mid; l += nbyte, r -= nbyte)
+        __swap(l, r, nbyte);
+}
