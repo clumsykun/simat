@@ -96,9 +96,9 @@ typedef struct __st_view
 
 #define st_vec_access(vec, idx)                        \
     (idx < 0                                           \
-        ? __st_raise_access_error()                    \
+        ? __st_raise_out_range_error()                    \
         : (idx >= vec->len                             \
-            ? __st_raise_access_error()                \
+            ? __st_raise_out_range_error()                \
             : __st_access_p(__st_vec_find_p(vec, idx), \
                             vec->data->dtype)))
 
@@ -121,6 +121,6 @@ st_view *st_new_view();
 void st_view_free(st_view *view);
 void st_view_display(st_view *view);
 
-#define __st_data_iter(p, data) (p = data->head; p <= data->last; p += data->byte)
+#define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->byte)
 
 #endif /* SIMAT_DTYPES_H */

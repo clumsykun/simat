@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "dtypes.h"
@@ -87,6 +88,81 @@ void st_free_vector(st_vector *vec)
     __std_free(vec);
 }
 
+void st_vec_display(st_vector *vec)
+{
+    void *p;
+    char c;
+    switch (vec->data->dtype) {
+
+        case __st_bool: {
+            printf("BoolVector([\n");
+
+                for (size_t i = 0; i <= vec->len-2; i ++) {
+                        c = (st_vec_access(vec, i) == false ? '-' : '+');
+                        printf("(%c), ", c);
+
+                        if ((i + 1) % 10 == 0)
+                            printf("\n");
+                }
+
+                printf("(%c)])\n", (st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
+                break;
+        }
+
+        // case st_pixel:
+        // {
+        //             printf("PixelVector([\n");
+
+        //         for
+        //             st_iter(vec)
+        //             {
+        //                 printf("(%3d), ", (int)st_access(vec->dtype, p));
+
+        //                 if ((i++ + 1) % 10 == 0)
+        //                     printf("\n");
+        //             }
+        //         printf("(%3d)])\n", (int)st_access(vec->dtype, vec->last));
+        //         break;
+        // }
+
+        // case st_int:
+        // {
+        //         printf("IntVector([\n");
+
+        //         for
+        //             st_iter(vec)
+        //             {
+        //                 printf("%10d, ", (int)st_access(vec->dtype, p));
+
+        //                 if ((i++ + 1) % 5 == 0)
+        //                     printf("\n");
+        //             };
+        //         printf("%10d])\n", (int)st_access(vec->dtype, vec->last));
+        //         break;
+        // }
+
+        // case st_double:
+        // {
+        //         printf("DoubleVector([\n");
+
+        //         for
+        //             st_iter(vec)
+        //             {
+        //                 printf("%10.2f, ", st_access(vec->dtype, p));
+
+        //                 if ((i++ + 1) % 5 == 0)
+        //                     printf("\n");
+        //             }
+        //         printf("%10.2f])\n", st_access(vec->dtype, vec->last));
+        //         break;
+        // }
+
+        default:
+            __st_raise_dtype_error();
+    }
+    __st_check();
+}
+
 static double __scale_assign_value(double value, __st_dtype dtype)
 {
     switch (dtype) {
@@ -119,7 +195,7 @@ void st_vec_assign_all(st_vector *vec, double value)
     void *p;
     value = __scale_assign_value(value, vec->data->dtype);
 
-    for __st_data_iter(p, vec->data)
+    for __st_iter_data(p, vec->data)
         __st_assign_p(p, value, vec->data->dtype);
 
     __st_check();
