@@ -5,7 +5,6 @@
 #include "flags.h"
 #include "dtypes.h"
 
-
 int main()
 {
     size_t len = 99;
