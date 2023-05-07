@@ -74,7 +74,7 @@ st_vector *st_new_double_vector(size_t len)
 }
 
 /* the standard way to free memory */
-void __std_free(void *ptr)
+static void __std_free(void *ptr)
 {
     free(ptr);
     ptr = NULL;
