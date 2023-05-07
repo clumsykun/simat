@@ -75,7 +75,7 @@ typedef struct __st_view
             ? (double)*(int *)(p)               \
             : (dtype == __st_pixel            \
                 ? (double)*(unsigned char *)(p) \
-                : (dtype == __st_double       \
+                : (dtype == __st_bool       \
                     ? (double)*(bool *)(p)      \
                     : __st_raise_access_error()))))
 
