@@ -2,29 +2,69 @@
 #include <string.h>
 #include "dtypes.h"
 
-
-static st_vector *__st_new_vector(__st_dtype dtype, size_t len)
+static st_vector *__st_new_vector(__st_dtype st_dtype, size_t len)
 {
-    st_vector *vec = malloc(sizeof(st_vector));
-    __st_data *data = malloc(sizeof(__st_data));
-    void *head = malloc(len * st_byteof(dtype));
+    st_vector *vec;
+    __st_data *data;
+    void *head;
+    size_t byte;
+
+    switch (st_dtype) {
+
+        case __st_bool:
+            byte = sizeof(st_bool);
+            break;
+
+        case __st_pixel:
+            byte = sizeof(st_pixel);
+            break;
+
+        case __st_int:
+            byte = sizeof(st_int);
+            break;
+
+        case __st_double:
+            byte = sizeof(st_double);
+            break;
+
+        default:
+            return NULL;
+    }
+
+    vec = malloc(sizeof(st_vector));
+    data = malloc(sizeof(__st_data));
+    head = malloc(len * byte);
 
     __st_data _data = {
-        head,
-        head+(len-1)*st_byteof(dtype),
-        st_byteof(dtype),
-        len,
-        dtype,
+        head,                    /* head */
+        head + (len - 1) * byte, /* last */
+        byte,                    /* byte */
+        len,                     /* len */
+        st_dtype,                /* dtype */
     };
-    
+
     st_vector _vec = {
-        data,
-        len,
+        data, /* data */
+        len,  /* len */
     };
 
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(vec, &_vec, sizeof(st_vector));
     return vec;
+}
+
+/* the standard way to free memory */
+void __std_free(void *ptr)
+{
+    free(ptr);
+    ptr = NULL;
+}
+
+void st_free_vector(st_vector *vec)
+{
+    __std_free(vec->data->head);
+    __std_free(vec->data);
+    __std_free(vec);
 }
 
 st_vector *st_new_bool_vector(size_t len)

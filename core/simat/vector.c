@@ -6,41 +6,6 @@
 #include "dtypes.h"
 #include "tools.h"
 
-static Vector *__create_vector(enum st_dtype dtype, unsigned int len)
-{
-    Vector *vec = malloc(sizeof(Vector));
-    char *p = malloc(len * st_byteof(dtype));
-    Vector _vec = {
-        dtype,
-        p,
-        p+(len-1) * st_byteof(dtype),
-        st_byteof(dtype),
-        len,
-    };
-    memcpy(vec, &_vec, sizeof(Vector));
-    return vec;
-}
-
-Vector *create_bool_vector(unsigned int len)
-{
-    return __create_vector(st_bool, len);
-}
-
-Vector *create_pixel_vector(unsigned int len)
-{
-    return __create_vector(st_pixel, len);
-}
-
-Vector *create_int_vector(unsigned int len)
-{
-    return __create_vector(st_int, len);
-}
-
-Vector *create_double_vector(unsigned int len)
-{
-    return __create_vector(st_double, len);
-}
-
 void free_vector(Vector *vec)
 {
     __std_free(vec->head);
