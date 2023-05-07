@@ -158,37 +158,9 @@ void st_vec_display(st_vector *vec)
     __st_check();
 }
 
-static double __scale_assign_value(double value, __st_dtype dtype)
-{
-    switch (dtype) {
-
-        case __st_bool:
-            value = (value == 0 ? 0 : 1);
-            break;
-        
-        case __st_pixel:
-            value = (value < 0 ? 0 : (value > 255 ? 255 : (int)value));
-            break;
-
-        case __st_int:
-            value = (int)value;
-            break;
-
-        case __st_double:
-            value = (double)value;
-            break;
-
-        default:
-            __st_raise_dtype_error();
-            break;
-    }
-    return value;
-}
-
 void st_vec_assign_all(st_vector *vec, double value)
 {
     void *p;
-    value = __scale_assign_value(value, vec->data->dtype);
 
     for __st_iter_data(p, vec->data)
         __st_assign_p(p, value, vec->data->dtype);
