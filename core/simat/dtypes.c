@@ -8,24 +8,24 @@ static st_vector *__st_new_vector(__st_dtype st_dtype, size_t len)
     st_vector *vec;
     __st_data *data;
     void *head;
-    size_t byte;
+    size_t nbyte;
 
     switch (st_dtype) {
 
         case __st_bool:
-            byte = sizeof(st_bool);
+            nbyte = sizeof(st_bool);
             break;
 
         case __st_pixel:
-            byte = sizeof(st_pixel);
+            nbyte = sizeof(st_pixel);
             break;
 
         case __st_int:
-            byte = sizeof(st_int);
+            nbyte = sizeof(st_int);
             break;
 
         case __st_double:
-            byte = sizeof(st_double);
+            nbyte = sizeof(st_double);
             break;
 
         default:
@@ -34,14 +34,14 @@ static st_vector *__st_new_vector(__st_dtype st_dtype, size_t len)
 
     vec = malloc(sizeof(st_vector));
     data = malloc(sizeof(__st_data));
-    head = malloc(len * byte);
+    head = malloc(len * nbyte);
 
     __st_data _data = {
-        head,                    /* head */
-        head + (len - 1) * byte, /* last */
-        byte,                    /* byte */
-        len,                     /* len */
-        st_dtype,                /* dtype */
+        head,                     /* head */
+        head + (len - 1) * nbyte, /* last */
+        st_dtype,                 /* dtype */
+        nbyte,                    /* nbyte */
+        len,                      /* size */
     };
 
     st_vector _vec = {

@@ -20,7 +20,7 @@ int test_vector()
     Vector *vec = create_double_vector(len);
 
     size_t size = 0;
-    for (char *p = vec->head; p <= vec->last; p += vec->byte, size++)
+    for (char *p = vec->head; p <= vec->last; p += vec->nbyte, size++)
         dassign(p, (double)size+10, vec->dtype);
 
     printf("set random:\n");

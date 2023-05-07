@@ -114,35 +114,34 @@ void st_vec_rand(st_vector *vec)
  * @len: length of the vector
  * @candidate: the candidate position of pivot
  */
-static void *__partition(void *start, void *end, __st_dtype dtype, size_t byte)
+static void *__partition(void *start, void *end, __st_dtype dtype, size_t nbyte)
 {
-    // size_t size = st_byteof(dtype);
     double pivot = __st_access_p(end, dtype);
-    void *candidate = start - byte;
+    void *candidate = start - nbyte;
 
-   for (void *p = start; p < end; p+=byte) {
+   for (void *p = start; p < end; p+=nbyte) {
         if (__st_access_p(p, dtype) < pivot) {
 
-            candidate += byte;
-            __swap(candidate, p, byte);
+            candidate += nbyte;
+            __swap(candidate, p, nbyte);
         }
     }
 
-    candidate += byte;
-    __swap(candidate, end, byte);
+    candidate += nbyte;
+    __swap(candidate, end, nbyte);
     return candidate;
 }
 
-static void __quick_sort(void *start, void *end, __st_dtype dtype, size_t byte)
+static void __quick_sort(void *start, void *end, __st_dtype dtype, size_t nbyte)
 {
     if (start < end) {
         /**
          * [p, p + len*size] -->
          * [p, p + pi*size], [p + (pi+1)*size, p+len*size]
          */
-        char *p = __partition(start, end, dtype, byte);
-        __quick_sort(start, p - byte, dtype, byte);
-        __quick_sort(p + byte, end, dtype, byte);
+        char *p = __partition(start, end, dtype, nbyte);
+        __quick_sort(start, p - nbyte, dtype, nbyte);
+        __quick_sort(p + nbyte, end, dtype, nbyte);
     }
 }
 
@@ -152,7 +151,7 @@ void st_vec_sort(st_vector *vec)
         vec->data->head,
         vec->data->last,
         vec->data->dtype,
-        vec->data->byte
+        vec->data->nbyte
     );
     __st_check();
 }

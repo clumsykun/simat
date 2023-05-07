@@ -47,8 +47,8 @@ double st_vec_max(st_vector *vec)
 
 // void vector_reverse(Vector *vec)
 // {
-//     char *mid = vec->head + (vec->len/2)*(vec->byte);
+//     char *mid = vec->head + (vec->len/2)*(vec->nbyte);
 //     char *r = vec->last;
-//     for (char *l = vec->head; l <= mid; l += vec->byte, r -= vec->byte)
-//         __swap(l, r, vec->byte);
+//     for (char *l = vec->head; l <= mid; l += vec->nbyte, r -= vec->nbyte)
+//         __swap(l, r, vec->nbyte);
 // }

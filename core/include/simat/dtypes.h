@@ -21,16 +21,16 @@ typedef enum __st_dtype__ {
 /**
  * @head: ptr of first element of the data
  * @last: ptr of last element of the data
- * @byte: how many bytes single element occupied
+ * @nbyte: how many bytes single element occupied
  * @size: how many element is there
  */
 typedef struct __st_data__
 {
     void *const head;
     void *const last;
-    const size_t byte;
-    const size_t size;
     const __st_dtype dtype;
+    const size_t nbyte;
+    const size_t size;
 } __st_data;
 
 typedef struct __st_vector
@@ -63,7 +63,7 @@ typedef struct __st_view
 } st_view;
 
 /* return the ptr of the `vec` of index `idx` */
-#define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)(idx) * vec->data->byte)
+#define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)(idx) * vec->data->nbyte)
 
 /* assign `value` to `p`, as type of `st_dtype` */
 #define __st_assign_p(p, value, st_dtype)                  \
@@ -121,7 +121,7 @@ st_view *st_new_view();
 void st_view_free(st_view *view);
 void st_view_display(st_view *view);
 
-#define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->byte)
+#define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->nbyte)
 #define st_iter_vector(p, vec) __st_iter_data(p, vec->data)
 
 #endif /* SIMAT_DTYPES_H */
