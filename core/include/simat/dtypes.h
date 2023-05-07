@@ -47,7 +47,7 @@ typedef struct __st_vector
  */
 typedef struct __st_matrix
 {
-    const __st_data data;
+    const __st_data *data;
     const size_t nrow;
     const size_t ncol;
 } st_matrix;
@@ -118,7 +118,7 @@ void st_vec_assign_all(st_vector *vec, double value);
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_int_matrix(size_t nrow, size_t ncol);
-st_matrix *st_new_double_matrix(size_t nrow, size_t ncol);
+st_matrix *st_new_matrix(size_t nrow, size_t ncol);
 void st_mat_free(st_matrix *mat);
 void st_mat_display(st_matrix *mat);
 

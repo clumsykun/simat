@@ -6,21 +6,6 @@
 #include "vector.h"
 #include "matrix.h"
 
-Matrix *create_matrix(unsigned int nrow, unsigned int ncol)
-{
-    Matrix *mat = malloc(sizeof(Matrix));
-    Matrix _mat = {
-        malloc(nrow * ncol * sizeof(double)),
-        nrow,
-        ncol,
-    };
-    memcpy(
-        mat,
-        &_mat,
-        sizeof(Matrix)
-    );
-    return mat;
-}
 
 void free_matrix(Matrix *mat)
 {
