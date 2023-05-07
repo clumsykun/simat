@@ -147,7 +147,7 @@ void st_vec_display(st_vector *vec)
                     printf("\n");
             }
 
-            printf("%4.2f])\n", (int)st_vec_access(vec, vec->len-1));
+            printf("%4.2f])\n", (double)st_vec_access(vec, vec->len-1));
             break;
         }
 
