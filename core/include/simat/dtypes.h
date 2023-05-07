@@ -76,7 +76,7 @@ typedef struct __st_view
 #define st_vec_assign(vec, idx, value) __st_assign_p(vec->data->head + idx * vec->data->byte, value, vec->data->dtype)
 
 /* access the value of element of vector/matrix, as type of double */
-#define __st_access(dtype, p)                   \
+#define __st_access_p(p, dtype)                 \
     (dtype == __st_double                       \
         ? *(double *)(p)                        \
         : (dtype == __st_int                    \
@@ -92,7 +92,7 @@ typedef struct __st_view
         ? __st_raise_access_error() \
         : (idx >= vec->len \
             ? __st_raise_access_error() \
-            : __st_access(vec->data->dtype, vec->data->head+idx*vec->data->byte)))
+            : __st_access_p(vec->data->head+idx*vec->data->byte, vec->data->dtype)))
 
 #define st_byteof(dtype)                     \
     (dtype == __st_double                    \
