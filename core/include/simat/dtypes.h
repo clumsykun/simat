@@ -102,22 +102,11 @@ typedef struct __st_view
             : __st_access_p(__st_vec_find_p(vec, idx), \
                             vec->data->dtype)))
 
-#define st_byteof(st_dtype)                  \
-    (st_dtype == __st_double                 \
-        ? sizeof(double)                     \
-        : (st_dtype == __st_int              \
-            ? sizeof(int)                    \
-            : (st_dtype == __st_pixel        \
-                ? sizeof(int)                \
-                : (st_dtype == __st_bool     \
-                    ? sizeof(bool)           \
-                    : __st_raise_dtype_error()))))
-
 st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
 st_vector *st_new_double_vector(size_t len);
-void st_vec_free(st_vector *vec);
+void st_free_vector(st_vector *vec);
 void st_vec_display(st_vector *vec);
 void st_vec_assign_all(st_vector *vec, double value);
 
