@@ -97,68 +97,63 @@ void st_vec_display(st_vector *vec)
         case __st_bool: {
             printf("BoolVector([\n");
 
-                for (size_t i = 0; i <= vec->len-2; i ++) {
-                        c = (st_vec_access(vec, i) == false ? '-' : '+');
-                        printf("(%c), ", c);
+            for (size_t i = 0; i <= vec->len - 2; i++) {
+                c = (st_vec_access(vec, i) == false ? '-' : '+');
+                printf("(%c), ", c);
 
-                        if ((i + 1) % 10 == 0)
-                            printf("\n");
-                }
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
 
-                printf("(%c)])\n", (st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
-                break;
+            printf("(%c)])\n", (st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
+            break;
         }
 
-        // case st_pixel:
-        // {
-        //             printf("PixelVector([\n");
+        case __st_pixel: {
+            printf("PixelVector([\n");
 
-        //         for
-        //             st_iter(vec)
-        //             {
-        //                 printf("(%3d), ", (int)st_access(vec->dtype, p));
+            for (size_t i = 0; i <= vec->len - 2; i++) {
+                printf("(%3d), ", (int)st_vec_access(vec, i));
 
-        //                 if ((i++ + 1) % 10 == 0)
-        //                     printf("\n");
-        //             }
-        //         printf("(%3d)])\n", (int)st_access(vec->dtype, vec->last));
-        //         break;
-        // }
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
 
-        // case st_int:
-        // {
-        //         printf("IntVector([\n");
+            printf("(%3d)])\n", (int)st_vec_access(vec, vec->len-1));
+            break;
+        }
 
-        //         for
-        //             st_iter(vec)
-        //             {
-        //                 printf("%10d, ", (int)st_access(vec->dtype, p));
+        case __st_int: {
+            printf("IntVector([\n");
 
-        //                 if ((i++ + 1) % 5 == 0)
-        //                     printf("\n");
-        //             };
-        //         printf("%10d])\n", (int)st_access(vec->dtype, vec->last));
-        //         break;
-        // }
+            for (size_t i = 0; i <= vec->len - 2; i++) {
+                printf("%5d, ", (int)st_vec_access(vec, i));
 
-        // case st_double:
-        // {
-        //         printf("DoubleVector([\n");
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
 
-        //         for
-        //             st_iter(vec)
-        //             {
-        //                 printf("%10.2f, ", st_access(vec->dtype, p));
+            printf("%5d])\n", (int)st_vec_access(vec, vec->len-1));
+            break;
+        }
 
-        //                 if ((i++ + 1) % 5 == 0)
-        //                     printf("\n");
-        //             }
-        //         printf("%10.2f])\n", st_access(vec->dtype, vec->last));
-        //         break;
-        // }
+        case __st_double: {
+            printf("Vector([\n");
+
+            for (size_t i = 0; i <= vec->len - 2; i++) {
+                printf("%4.2f, ", (double)st_vec_access(vec, i));
+
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
+
+            printf("%4.2f])\n", (int)st_vec_access(vec, vec->len-1));
+            break;
+        }
 
         default:
             __st_raise_dtype_error();
+            break;
     }
     __st_check();
 }

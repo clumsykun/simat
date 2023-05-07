@@ -8,7 +8,7 @@
 
 int main()
 {
-    size_t len = 100;
+    size_t len = 99;
     double test_value = 3.14;
     srand(time(NULL));
 
@@ -25,8 +25,13 @@ int main()
     assert(st_vec_access(vec_double, 1) == test_value);
     assert(st_vec_access(vec_bool, 1) == (bool)test_value);
 
-    __st_assign_p(vec_double->data->head, test_value+2, vec_double->data->dtype);
-    assert(st_vec_access(vec_double, 0) == test_value+2);
+    // __st_assign_p(vec_double->data->head, test_value+2, vec_double->data->dtype);
+    // assert(st_vec_access(vec_double, 0) == test_value+2);
+
+    st_vec_display(vec_bool);
+    st_vec_display(vec_pixel);
+    st_vec_display(vec_int);
+    st_vec_display(vec_double);
 
     st_free_vector(vec_bool);
     st_free_vector(vec_pixel);

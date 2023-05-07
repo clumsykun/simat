@@ -63,7 +63,7 @@ typedef struct __st_view
 } st_view;
 
 /* return the ptr of the `vec` of index `idx` */
-#define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)idx * vec->data->byte)
+#define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)(idx) * vec->data->byte)
 
 /* assign `value` to `p`, as type of `st_dtype` */
 #define __st_assign_p(p, value, st_dtype)                    \
