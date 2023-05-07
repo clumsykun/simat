@@ -122,5 +122,6 @@ void st_view_free(st_view *view);
 void st_view_display(st_view *view);
 
 #define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->byte)
+#define st_iter_vector(p, vec) __st_iter_data(p, vec->data)
 
 #endif /* SIMAT_DTYPES_H */
