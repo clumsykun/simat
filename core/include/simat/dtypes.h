@@ -77,9 +77,9 @@ typedef struct __st_view
                         ? (*(st_bool *)(p) = (st_bool)value) \
                         : __st_raise_dtype_error()))))
 
-#define st_vec_assign(vec, idx, value)   \
+#define st_vec_assign(vec, idx, value)       \
     __st_assign_p(__st_vec_find_p(vec, idx), \
-                  value,                 \
+                  value,                     \
                   vec->data->dtype)
 
 /* access the value of `p`, as type of `st_dtype` */
