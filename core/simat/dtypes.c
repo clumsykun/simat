@@ -97,7 +97,6 @@ void st_free_vector(st_vector *vec)
 
 void st_vec_display(const st_vector *vec)
 {
-    void *p;
     char c;
     switch (vec->data->dtype) {
 
@@ -236,6 +235,21 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     return mat;
 }
 
+st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol)
+{
+    return __st_new_matrix(__st_bool, nrow, ncol);
+}
+
+st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol)
+{
+    return __st_new_matrix(__st_pixel, nrow, ncol);
+}
+
+st_matrix *st_new_int_matrix(size_t nrow, size_t ncol)
+{
+    return __st_new_matrix(__st_int, nrow, ncol);
+}
+
 st_matrix *st_new_matrix(size_t nrow, size_t ncol)
 {
     return __st_new_matrix(__st_double, nrow, ncol);
@@ -243,17 +257,98 @@ st_matrix *st_new_matrix(size_t nrow, size_t ncol)
 
 void st_mat_display(st_matrix *mat)
 {
-    // double(*head)[mat->nrow] = (double(*)[mat->nrow])mat->head;
-    printf("Matrix([\n");
+    char c;
+    switch (mat->data->dtype) {
 
-    for (size_t i = 0; i < mat->nrow; i++) {
-            for (size_t j = 0; j < mat->ncol; j++) {
+        case __st_bool: {
+            printf("BoolMatrix([");
 
-                if (i * j == (mat->nrow-1) * (mat->ncol-1))
-                    printf("%.2f])", st_mat_access(mat, i, j));
+            for (size_t i = 0; i < mat->nrow; i++) {
+                for (size_t j = 0; j < mat->ncol; j++) {
+                    c = (st_mat_access(mat, i, j) == false ? '-': '+');
+
+                    if (i == (mat->nrow-1) && j == (mat->ncol-1))
+                        printf("(%c)])", c);
+                    else
+                        printf("(%c), ", c);
+                }
+
+                if (i == (mat->nrow-1))
+                    printf("\n");
                 else
-                    printf("%.2f,  ", st_mat_access(mat, i, j));
+                    printf("\n            ");
             }
-            printf("\n");
+        }
+        break;
+
+        case __st_pixel: {
+            printf("PixelMatrix([");
+
+            for (size_t i = 0; i < mat->nrow; i++) {
+                for (size_t j = 0; j < mat->ncol; j++) {
+
+                    if (i == (mat->nrow-1) && j == (mat->ncol-1))
+                        printf("(%3d)])", (int)st_mat_access(mat, i, j));
+                    else
+                        printf("(%3d), ", (int)st_mat_access(mat, i, j));
+                }
+
+                if (i == (mat->nrow-1))
+                    printf("\n");
+                else
+                    printf("\n             ");
+            }
+        }
+        break;
+
+        case __st_int: {
+            printf("IntMatrix([");
+
+            for (size_t i = 0; i < mat->nrow; i++) {
+                for (size_t j = 0; j < mat->ncol; j++) {
+
+                    if (i == (mat->nrow-1) && j == (mat->ncol-1))
+                        printf("%3d])", (int)st_mat_access(mat, i, j));
+                    else
+                        printf("%3d, ", (int)st_mat_access(mat, i, j));
+                }
+
+                if (i == (mat->nrow-1))
+                    printf("\n");
+                else
+                    printf("\n           ");
+            }
+        }
+        break;
+
+
+
+
+
+
+        case __st_double: {
+            printf("Matrix([");
+
+            for (size_t i = 0; i < mat->nrow; i++) {
+                for (size_t j = 0; j < mat->ncol; j++) {
+
+                    if (i == (mat->nrow-1) && j == (mat->ncol-1))
+                        printf("%.2f])", st_mat_access(mat, i, j));
+                    else
+                        printf("%.2f,  ", st_mat_access(mat, i, j));
+                }
+
+                if (i == (mat->nrow-1))
+                    printf("\n");
+                else
+                    printf("\n        ");
+            }
+        }
+        break;
+
+        default:
+        __st_raise_dtype_error();
     }
+
+    __st_check();
 }

@@ -70,10 +70,9 @@ static double __scale_value(double value, __st_dtype dtype)
  * set random value to vector, random range is intersection of
  * [-RAND_MAX/2, RAND_MAX/2] and support range of data type
  */
-void st_vec_rand(st_vector *vec)
+void st_vec_rand(const st_vector *vec)
 {
     double value, min, max;
-    srand(time(NULL));
 
     switch (vec->data->dtype) {
 
@@ -165,4 +164,12 @@ void st_vec_reverse(st_vector *vec)
 
     for (void *l = vec->data->head; l <= mid; l += nbyte, r -= nbyte)
         __swap(l, r, nbyte);
+}
+
+void st_mat_rand(const st_matrix *mat)
+{
+    for (size_t i = 0; i < mat->ncol; i++)
+        st_vec_rand(st_mat_access_col(mat, i));
+
+    __st_check();
 }

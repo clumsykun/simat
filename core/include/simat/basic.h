@@ -6,4 +6,6 @@ void st_vec_rand(const st_vector *vec);
 void st_vec_sort(st_vector *vec);
 void st_vec_reverse(st_vector *vec);
 
+void st_mat_rand(const st_matrix *mat);
+
 #endif /* CORE_TOOLS_H */
