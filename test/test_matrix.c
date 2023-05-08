@@ -5,6 +5,7 @@
 #include "basic.h"
 #include "dtypes.h"
 #include "vector.h"
+#include "matrix.h"
 
 int main()
 {
@@ -25,6 +26,20 @@ int main()
     st_mat_display(int_mat);
     st_mat_rand(mat);
     st_mat_display(mat);
+
+
+    st_mat_scale(bool_mat, 0, 100);
+    st_mat_display(bool_mat);
+    printf("min: %.2f, max: %.2f\n", st_mat_min(bool_mat), st_mat_max(bool_mat));
+    st_mat_scale(pixel_mat, 0, 100);
+    st_mat_display(pixel_mat);
+    printf("min: %.2f, max: %.2f\n", st_mat_min(pixel_mat), st_mat_max(pixel_mat));
+    st_mat_scale(int_mat, 0, 100);
+    st_mat_display(int_mat);
+    printf("min: %.2f, max: %.2f\n", st_mat_min(int_mat), st_mat_max(int_mat));
+    st_mat_scale(mat, 0, 100);
+    st_mat_display(mat);
+    printf("min: %.2f, max: %.2f\n", st_mat_min(mat), st_mat_max(mat));
 
     // for (size_t i = 0; i < mat->ncol; i++) {
     //     st_vec_display(st_mat_access_col(mat, i));

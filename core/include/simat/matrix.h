@@ -2,11 +2,8 @@
 #define CORE_MATRIX_H
 #include "dtypes.h"
 
-Matrix *create_matrix(unsigned int nrow, unsigned int ncol);
-void free_matrix(Matrix *mat);
-
-void matrix_view_row(View *view, Matrix *mat, unsigned int idx);
-void matrix_view_col(View *view, Matrix *mat, unsigned int idx);
-void matrix_display(Matrix *mat);
+double st_mat_min(st_matrix *mat);
+double st_mat_max(st_matrix *mat);
+void   st_mat_scale(st_matrix *mat, double min, double max);
 
 #endif /* CORE_MATRIX_H */

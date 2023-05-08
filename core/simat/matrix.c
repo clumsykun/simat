@@ -1,35 +1,46 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "tools.h"
 #include "dtypes.h"
 #include "vector.h"
 #include "matrix.h"
 
-
-void free_matrix(Matrix *mat)
+double st_mat_min(st_matrix *mat)
 {
-    __std_free(mat->head);
-    __std_free(mat);
+    double min = st_mat_access(mat, 0, 0);
+    void *p;
+    for st_iter_matrix(p, mat)
+        min = (min <= __st_access_p(p, mat->data->dtype)
+                   ? min
+                   : __st_access_p(p, mat->data->dtype));
+
+    return min;
 }
 
-void matrix_display(Matrix *mat)
+double st_mat_max(st_matrix *mat)
 {
-    double(*head)[mat->nrow] = (double(*)[mat->nrow])mat->head;
-    printf("    ");
+    double max = st_mat_access(mat, 0, 0);
+    void *p;
+    for st_iter_matrix(p, mat)
+        max = (max >= __st_access_p(p, mat->data->dtype)
+                   ? max
+                   : __st_access_p(p, mat->data->dtype));
 
-    for (size_t j = 0; j < mat->ncol; j++) {
-        printf("[%1d]        ", j);
+    return max;
+}
+
+void st_mat_scale(st_matrix *mat, double min, double max)
+{
+    if st_is_bool(mat) /* do nothing */
+        return;
+
+    double mat_min = st_mat_min(mat);
+    double scale = st_mat_max(mat) - mat_min;
+    double target_scale = max - min;
+    double scaled;
+    void *p;
+
+    for st_iter_matrix(p, mat) {
+        scaled = min + (__st_access_p(p, mat->data->dtype) - mat_min) * target_scale / scale;
+        __st_assign_p(p, scaled, mat->data->dtype);
     }
 
-    printf("\n");
-
-    for (size_t i = 0; i < mat->nrow; i++) {
-        printf("[%1d]  ", i);
-
-        for (size_t j = 0; j < mat->ncol; j++) {
-            printf("%.2f,  ", head[j][i]);
-        }
-        printf("\n");
-    }
+    __st_check();
 }
