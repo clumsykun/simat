@@ -56,11 +56,10 @@ typedef struct __st_matrix
 /* flexible structure contains ptr of element of target vector/matrix */
 typedef struct __st_view
 {
-    void *head;
-    void *last;
-    size_t size;
+    void **head;
+    void **last;
     __st_dtype dtype;
-    __st_data *source;
+    size_t len;
 } st_view;
 
 #define st_is_bool(x) (x->data->dtype == __st_bool)
@@ -114,7 +113,7 @@ typedef struct __st_view
 #define st_vec_assign(vec, idx, value)                  \
     ((idx < 0 || vec->len <= idx)                       \
         ? __st_raise_out_range_error()                  \
-            : (__st_assign_p(__st_vec_find_p(vec, idx), \
+        : (__st_assign_p(__st_vec_find_p(vec, idx),     \
                              value,                     \
                              vec->data->dtype)))
 
@@ -143,7 +142,8 @@ void st_free_matrix(st_matrix *mat);
 void st_mat_display(st_matrix *mat);
 
 st_view *st_new_view();
-void st_view_free(st_view *view);
+void matrix_view_col(st_view *view, st_matrix *mat, size_t icol);
+void st_free_view(st_view *view);
 void st_view_display(st_view *view);
 
 #define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->nbyte)

@@ -364,3 +364,45 @@ void st_mat_display(st_matrix *mat)
 
     __st_check();
 }
+
+st_view *st_new_view()
+{
+    st_view *view = malloc(sizeof(st_view));
+    st_view _view = {
+        NULL,        /* initialize it to NULL so that realloc() will work properly */
+        NULL,
+        __st_double, /* default */
+        0,
+    };
+    memcpy(
+        view,
+        &_view,
+        sizeof(st_view)
+    );
+    return view;
+}
+
+void matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
+{
+    if (view->len != mat->nrow) {
+        view->head = realloc(view->head, view->len * sizeof(void *));
+    }
+
+    view->last = view->head + (view->len-1)*sizeof(void *);
+    view->dtype = mat->data->dtype;
+    view->len = mat->nrow;
+
+    void *p;
+    size_t idx = 0;
+    for st_iter_vector(p, st_mat_access_col(mat, icol)) {
+        view->head[idx] = p;
+        idx++;
+    }
+
+    __st_check();
+}
+
+void st_free_view(st_view *view)
+{
+    __std_free(view);
+}
