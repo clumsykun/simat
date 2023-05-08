@@ -9,7 +9,6 @@ int main()
 {
     size_t len = 99;
     double test_value = 3.14;
-    srand(time(NULL));
 
     st_vector *vec_bool = st_new_bool_vector(len);
     st_vector *vec_pixel = st_new_pixel_vector(len);
