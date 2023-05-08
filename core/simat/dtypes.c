@@ -82,9 +82,9 @@ st_vector *st_new_vector(size_t len)
 }
 
 /* the standard way to free memory */
-static void __std_free(void *ptr)
+static void __std_free(const void *ptr)
 {
-    free(ptr);
+    free((void *)ptr);
     ptr = NULL;
 }
 
@@ -199,13 +199,13 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     st_matrix *mat;
     st_vector *_tmp_vec;
     __st_data *data;
-    void *head, *col;
+    void *head, *first;
     size_t nbyte = __byte_of(dtype);
 
     mat = malloc(sizeof(st_matrix));
     data = malloc(sizeof(__st_data));
     head = malloc(nrow * ncol * nbyte);
-    col = malloc(ncol * sizeof(st_vector));
+    first = malloc(ncol * sizeof(st_vector));
 
     __st_data _data = {
         head,                             /* head */
@@ -217,7 +217,7 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
 
     for (size_t i = 0; i < ncol; i++) {
         __create_col(
-            col+i*sizeof(st_vector),
+            first+i*sizeof(st_vector),
             head+i*nrow*nbyte,
             dtype,
             nrow
@@ -228,7 +228,7 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
         data,
         nrow,
         ncol,
-        col,
+        first,
     };
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(mat, &_mat, sizeof(st_matrix));
@@ -253,6 +253,18 @@ st_matrix *st_new_int_matrix(size_t nrow, size_t ncol)
 st_matrix *st_new_matrix(size_t nrow, size_t ncol)
 {
     return __st_new_matrix(__st_double, nrow, ncol);
+}
+
+void st_free_matrix(st_matrix *mat)
+{
+    for (size_t i = 0; i < mat->ncol; i++) {
+        __std_free(st_mat_access_col(mat, i)->data);
+    }
+
+    __std_free(mat->data->head);
+    __std_free(mat->data);
+    __std_free(mat->first);
+    __std_free(mat);
 }
 
 void st_mat_display(st_matrix *mat)

@@ -30,5 +30,10 @@ int main()
     //     st_vec_display(st_mat_access_col(mat, i));
     // }
 
+    st_free_matrix(bool_mat);
+    st_free_matrix(pixel_mat);
+    st_free_matrix(int_mat);
+    st_free_matrix(mat);
+
     return 0;
 }
