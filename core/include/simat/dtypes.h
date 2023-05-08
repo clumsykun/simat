@@ -114,13 +114,20 @@ typedef struct __st_view
 #define st_mat_access_col(mat, icol) ((const st_vector *)mat->first+(icol))
 
 #define st_vec_assign(vec, idx, value)                  \
-    (idx< 0                                             \
+    ((idx < 0 && vec->len <= idx)                       \
         ? __st_raise_out_range_error()                  \
-        : (idx >= vec->len                              \
-            ? __st_raise_out_range_error()              \
             : (__st_assign_p(__st_vec_find_p(vec, idx), \
-                            value,                      \
-                            vec->data->dtype))))
+               value,                                  \
+               vec->data->dtype)))
+
+#define st_mat_assign(mat, irow, icol, value) \
+    ((irow < 0 && mat->nrow <= irow) \
+        ? __st_raise_out_range_error() \
+        : ((icol < 0 && mat->ncol <= icol) \
+            ? __st_raise_out_range_error() \
+            : __st_assign_p(__st_mat_find_p(mat, irow, icol),\
+                            value,\
+                            mat->data->dtype)))
 
 st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);

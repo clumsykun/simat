@@ -2,7 +2,7 @@
 #define CORE_TOOLS_H
 #include "dtypes.h"
 
-void st_vec_rand(st_vector *vec);
+void st_vec_rand(const st_vector *vec);
 void st_vec_sort(st_vector *vec);
 void st_vec_reverse(st_vector *vec);
 
