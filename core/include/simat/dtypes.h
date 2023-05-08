@@ -122,7 +122,7 @@ typedef struct __st_view
 st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
-st_vector *st_new_double_vector(size_t len);
+st_vector *st_new_vector(size_t len);
 void st_free_vector(st_vector *vec);
 void st_vec_display(st_vector *vec);
 void st_vec_assign_all(st_vector *vec, double value);

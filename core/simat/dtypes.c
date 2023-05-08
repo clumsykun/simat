@@ -76,7 +76,7 @@ st_vector *st_new_int_vector(size_t len)
     return __st_new_vector(__st_int, len);
 }
 
-st_vector *st_new_double_vector(size_t len)
+st_vector *st_new_vector(size_t len)
 {
     return __st_new_vector(__st_double, len);
 }

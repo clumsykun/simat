@@ -15,7 +15,7 @@ int main()
     st_vector *vec_bool = st_new_bool_vector(len);
     st_vector *vec_pixel = st_new_pixel_vector(len);
     st_vector *vec_int = st_new_int_vector(len);
-    st_vector *vec_double = st_new_double_vector(len);
+    st_vector *vec_double = st_new_vector(len);
 
     st_vec_rand(vec_bool);
     st_vec_rand(vec_pixel);
