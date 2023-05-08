@@ -70,22 +70,9 @@ typedef struct __st_view
 /* return the ptr of the `vec` of index `idx` */
 #define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)(idx) * vec->data->nbyte)
 
-/* assign `value` to `p`, as type of `st_dtype` */
-#define __st_assign_p(p, value, st_dtype)                  \
-    (st_dtype == __st_double                               \
-        ? (*(st_double *)(p) = (st_double)(value))         \
-        : (st_dtype == __st_int                            \
-            ? (*(st_int *)(p) = (st_int)(value))           \
-            : (st_dtype == __st_pixel                      \
-                ? (*(st_pixel *)(p) = (st_pixel)(value))   \
-                : (st_dtype == __st_bool                   \
-                    ? (*(st_bool *)(p) = (st_bool)(value)) \
-                    : __st_raise_dtype_error()))))
-
-#define st_vec_assign(vec, idx, value)       \
-    __st_assign_p(__st_vec_find_p(vec, idx), \
-                  value,                     \
-                  vec->data->dtype)
+/* return the ptr of the `mat` of index (`irow`, `icol`) */
+#define __st_mat_find_p(mat, irow, icol) \
+    (mat->data->head + ((size_t)(irow)+(size_t)(icol)*(mat->nrow))*mat->data->nbyte)
 
 /* access the value of `p`, as type of `st_dtype` */
 #define __st_access_p(p, st_dtype)              \
@@ -99,6 +86,18 @@ typedef struct __st_view
                     ? (double)*(bool *)(p)      \
                     : __st_raise_access_error()))))
 
+/* assign `value` to `p`, as type of `st_dtype` */
+#define __st_assign_p(p, value, st_dtype)                  \
+    (st_dtype == __st_double                               \
+        ? (*(st_double *)(p) = (st_double)(value))         \
+        : (st_dtype == __st_int                            \
+            ? (*(st_int *)(p) = (st_int)(value))           \
+            : (st_dtype == __st_pixel                      \
+                ? (*(st_pixel *)(p) = (st_pixel)(value))   \
+                : (st_dtype == __st_bool                   \
+                    ? (*(st_bool *)(p) = (st_bool)(value)) \
+                    : __st_raise_dtype_error()))))
+
 #define st_vec_access(vec, idx)                        \
     (idx < 0                                           \
         ? __st_raise_out_range_error()                 \
@@ -106,6 +105,19 @@ typedef struct __st_view
             ? __st_raise_out_range_error()             \
             : __st_access_p(__st_vec_find_p(vec, idx), \
                             vec->data->dtype)))
+
+/* TODO: check irow/icol are in range */
+#define st_mat_access(mat, irow, icol) \
+    __st_access_p(__st_mat_find_p(mat, irow, icol), mat->data->dtype)
+
+#define st_vec_assign(vec, idx, value)                  \
+    (idx< 0                                             \
+        ? __st_raise_out_range_error()                  \
+        : (idx >= vec->len                              \
+            ? __st_raise_out_range_error()              \
+            : (__st_assign_p(__st_vec_find_p(vec, idx), \
+                            value,                      \
+                            vec->data->dtype))))
 
 st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);

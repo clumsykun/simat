@@ -209,12 +209,6 @@ st_matrix *st_new_matrix(size_t nrow, size_t ncol)
     return __st_new_matrix(__st_double, nrow, ncol);
 }
 
-#define __st_mat_find_p(mat, irow, icol) \
-    (mat->data->head + ((size_t)(irow)+(size_t)(icol)*(mat->nrow))*mat->data->nbyte)
-
-#define st_access_mat(mat, irow, icol) \
-    __st_access_p(__st_mat_find_p(mat, irow, icol), mat->data->dtype)
-
 void st_mat_display(st_matrix *mat)
 {
     // double(*head)[mat->nrow] = (double(*)[mat->nrow])mat->head;
@@ -224,9 +218,9 @@ void st_mat_display(st_matrix *mat)
             for (size_t j = 0; j < mat->ncol; j++) {
 
                 if (i * j == (mat->nrow-1) * (mat->ncol-1))
-                    printf("%.2f])", st_access_mat(mat, i, j));
+                    printf("%.2f])", st_mat_access(mat, i, j));
                 else
-                    printf("%.2f,  ", st_access_mat(mat, i, j));
+                    printf("%.2f,  ", st_mat_access(mat, i, j));
             }
             printf("\n");
     }
