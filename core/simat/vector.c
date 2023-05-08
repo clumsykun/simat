@@ -9,7 +9,6 @@
 double st_vec_min(st_vector *vec)
 {
     double min = st_vec_access(vec, 0);
-    void *p;
     for (size_t i = 0; i < vec->len; i++)
         min = (min <= st_vec_access(vec, i) ? min : st_vec_access(vec, i));
 
@@ -20,7 +19,6 @@ double st_vec_min(st_vector *vec)
 double st_vec_max(st_vector *vec)
 {
     double max = st_vec_access(vec, 0);
-    void *p;
     for (size_t i = 0; i < vec->len; i++)
         max = (max >= st_vec_access(vec, i) ? max : st_vec_access(vec, i));
 
