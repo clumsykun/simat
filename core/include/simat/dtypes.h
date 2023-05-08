@@ -50,6 +50,7 @@ typedef struct __st_matrix
     const __st_data *data;
     const size_t nrow;
     const size_t ncol;
+    const st_vector *const first; /* first col of this matrix as dtype of vector*/
 } st_matrix;
 
 /* flexible structure contains ptr of element of target vector/matrix */
@@ -110,6 +111,8 @@ typedef struct __st_view
 #define st_mat_access(mat, irow, icol) \
     __st_access_p(__st_mat_find_p(mat, irow, icol), mat->data->dtype)
 
+#define st_mat_access_col(mat, icol) ((const st_vector *)mat->first+(icol))
+
 #define st_vec_assign(vec, idx, value)                  \
     (idx< 0                                             \
         ? __st_raise_out_range_error()                  \
@@ -124,7 +127,7 @@ st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
 st_vector *st_new_vector(size_t len);
 void st_free_vector(st_vector *vec);
-void st_vec_display(st_vector *vec);
+void st_vec_display(const st_vector *vec);
 void st_vec_assign_all(st_vector *vec, double value);
 
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);

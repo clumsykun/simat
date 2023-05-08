@@ -95,7 +95,7 @@ void st_free_vector(st_vector *vec)
     __std_free(vec);
 }
 
-void st_vec_display(st_vector *vec)
+void st_vec_display(const st_vector *vec)
 {
     void *p;
     char c;
@@ -175,16 +175,38 @@ void st_vec_assign_all(st_vector *vec, double value)
     __st_check();
 }
 
+static void __create_col(void *col, void *col_data_head, __st_dtype dtype, size_t len)
+{
+    size_t nbyte = __byte_of(dtype);
+    __st_data *data = malloc(sizeof(__st_data));
+    __st_data _data = {
+        col_data_head,
+        col_data_head + nbyte * (len - 1),
+        dtype,
+        nbyte,
+        len,
+    };
+    st_vector _vec = {
+        data,
+        len
+    };
+
+    memcpy(data, &_data, sizeof(__st_data));
+    memcpy(col, &_vec, sizeof(st_vector));
+}
+
 static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
 {
     st_matrix *mat;
+    st_vector *_tmp_vec;
     __st_data *data;
-    void *head;
+    void *head, *col;
     size_t nbyte = __byte_of(dtype);
 
     mat = malloc(sizeof(st_matrix));
     data = malloc(sizeof(__st_data));
     head = malloc(nrow * ncol * nbyte);
+    col = malloc(ncol * sizeof(st_vector));
 
     __st_data _data = {
         head,                             /* head */
@@ -194,10 +216,20 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
         nrow * ncol,                      /* size */
     };
 
+    for (size_t i = 0; i < ncol; i++) {
+        __create_col(
+            col+i*sizeof(st_vector),
+            head+i*nrow*nbyte,
+            dtype,
+            nrow
+        );
+    }
+
     st_matrix _mat = {
         data,
         nrow,
         ncol,
+        col,
     };
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(mat, &_mat, sizeof(st_matrix));

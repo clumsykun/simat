@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <time.h>
 #include "basic.h"
+#include "dtypes.h"
 #include "vector.h"
 
 int main()
@@ -19,5 +20,11 @@ int main()
     }
 
     st_mat_display(mat);
+
+    for (size_t i = 0; i < mat->ncol; i++) {
+        st_vec_display(st_mat_access_col(mat, i));
+    }
+    
+
     return 0;
 }
