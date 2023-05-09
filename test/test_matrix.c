@@ -41,7 +41,7 @@ int main()
     printf("min: %.2f, max: %.2f\n", st_mat_min(mat), st_mat_max(mat));
 
     st_view *view = st_new_view();
-    matrix_view_col(view, mat, 3);
+    st_matrix_view_col(view, mat, 3);
     st_view_display(view);
 
     assert(**(double **)view->head==st_mat_access(mat, 0, 3));

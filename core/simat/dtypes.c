@@ -382,7 +382,7 @@ st_view *st_new_view()
     return view;
 }
 
-void matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
+void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 {
     if (view->len != mat->nrow)
         view->head = realloc(view->head, view->len * sizeof(void *));
