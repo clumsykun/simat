@@ -384,19 +384,39 @@ st_view *st_new_view()
 
 void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 {
-    if (view->len != mat->nrow)
-        view->head = realloc(view->head, view->len * sizeof(void *));
+    void *p;
+    size_t idx = 0;
 
     view->last = view->head + (view->len-1)*sizeof(void *);
     view->dtype = mat->data->dtype;
     view->len = mat->nrow;
 
-    void *p;
-    size_t idx = 0;
+    if (view->len != mat->nrow || view->head == NULL ) 
+        view->head = realloc(view->head, view->len * sizeof(void *));
+
     for st_iter_vector(p, st_mat_access_col(mat, icol)) {
         view->head[idx] = p;
         idx++;
     }
+
+    __st_check();
+}
+
+void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
+{
+
+    void *p;
+    size_t idx = 0;
+
+    view->len = mat->ncol;
+    view->dtype = mat->data->dtype;
+    view->last = view->head + (view->len-1)*sizeof(void *);
+
+    if (view->len != mat->ncol || view->head == NULL )
+        view->head = realloc(view->head, view->len * sizeof(void *));
+
+    for (size_t i = 0; i < view->len; i++)
+        view->head[i] = __st_vec_find_p(st_mat_access_col(mat, i), irow);
 
     __st_check();
 }

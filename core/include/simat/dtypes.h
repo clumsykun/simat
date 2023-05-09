@@ -149,6 +149,7 @@ void st_mat_display(st_matrix *mat);
 
 st_view *st_new_view();
 void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol);
+void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow);
 void st_free_view(st_view *view);
 void st_view_display(const st_view *view);
 

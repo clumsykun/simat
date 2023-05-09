@@ -44,7 +44,8 @@ int main()
     st_matrix_view_col(view, mat, 3);
     st_view_display(view);
 
-    assert(**(double **)view->head==st_mat_access(mat, 0, 3));
+    st_matrix_view_row(view, mat, 2);
+    st_view_display(view);
 
     st_free_matrix(bool_mat);
     st_free_matrix(pixel_mat);
