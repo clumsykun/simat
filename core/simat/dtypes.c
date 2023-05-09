@@ -384,9 +384,8 @@ st_view *st_new_view()
 
 void matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 {
-    if (view->len != mat->nrow) {
+    if (view->len != mat->nrow)
         view->head = realloc(view->head, view->len * sizeof(void *));
-    }
 
     view->last = view->head + (view->len-1)*sizeof(void *);
     view->dtype = mat->data->dtype;
@@ -405,4 +404,75 @@ void matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 void st_free_view(st_view *view)
 {
     __std_free(view);
+}
+
+void st_view_display(const st_view *view)
+{
+    char c;
+    switch (view->dtype) {
+
+        case __st_bool: {
+            printf("BoolVector([\n");
+
+            for (size_t i = 0; i <= view->len - 2; i++) {
+                c = (st_view_access(view, i) == false ? '-' : '+');
+                printf("(%c), ", c);
+
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
+
+            printf("(%c)])\n", (st_view_access(view, view->len-1) == false ? '-' : '+'));
+            break;
+        }
+
+        case __st_pixel: {
+            printf("PixelVector([\n");
+
+            for (size_t i = 0; i <= view->len - 2; i++) {
+                printf("(%3d), ", (int)st_view_access(view, i));
+
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
+
+            printf("(%3d)])\n", (int)st_view_access(view, view->len-1));
+            break;
+        }
+
+        case __st_int: {
+            printf("IntVector([\n");
+
+            for (size_t i = 0; i <= view->len - 2; i++) {
+                printf("%5d, ", (int)st_view_access(view, i));
+
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
+
+            printf("%5d])\n", (int)st_view_access(view, view->len-1));
+            break;
+        }
+
+        case __st_double: {
+            printf("Vector([\n");
+
+            double d;
+            for (size_t i = 0; i <= view->len - 2; i++) {
+                d = (double)st_view_access(view, i);
+                printf("%4.2f, ", (double)st_view_access(view, i));
+
+                if ((i + 1) % 10 == 0)
+                    printf("\n");
+            }
+
+            printf("%4.2f])\n", (double)st_view_access(view, view->len-1));
+            break;
+        }
+
+        default:
+            __st_raise_dtype_error();
+            break;
+    }
+    __st_check();
 }

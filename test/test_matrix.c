@@ -42,6 +42,7 @@ int main()
 
     st_view *view = st_new_view();
     matrix_view_col(view, mat, 3);
+    st_view_display(view);
 
     assert(**(double **)view->head==st_mat_access(mat, 0, 3));
 

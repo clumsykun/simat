@@ -104,6 +104,12 @@ typedef struct __st_view
             : __st_access_p(__st_vec_find_p(vec, idx), \
                             vec->data->dtype))
 
+#define st_view_access(view, idx)                         \
+    ((idx < 0 || view->len <= idx)                        \
+        ? __st_raise_out_range_error()                    \
+            : __st_access_p(*((void **)view->head+idx),   \
+                            view->dtype))
+
 /* TODO: check irow/icol are in range */
 #define st_mat_access(mat, irow, icol) \
     __st_access_p(__st_mat_find_p(mat, irow, icol), mat->data->dtype)
@@ -144,7 +150,7 @@ void st_mat_display(st_matrix *mat);
 st_view *st_new_view();
 void matrix_view_col(st_view *view, st_matrix *mat, size_t icol);
 void st_free_view(st_view *view);
-void st_view_display(st_view *view);
+void st_view_display(const st_view *view);
 
 #define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->nbyte)
 #define st_iter_vector(p, vec) __st_iter_data(p, vec->data)
