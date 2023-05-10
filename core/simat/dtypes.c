@@ -273,7 +273,7 @@ void st_free_matrix(st_matrix *mat)
 void st_mat_display(st_matrix *mat)
 {
     char c;
-    switch (mat->data->dtype) {
+    switch (mat->dtype) {
 
         case __st_bool: {
             printf("BoolMatrix([");
@@ -384,13 +384,13 @@ void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 {
     void *p;
     size_t idx = 0;
+    view->dtype = mat->dtype;
 
-    view->dtype = mat->data->dtype;
-    view->len = mat->nrow;
-    view->last = view->head + view->len-1;
-
-    if (view->len != mat->nrow || view->head == NULL ) 
+    if (view->len != mat->nrow) {
+        view->len = mat->nrow;
         view->head = realloc(view->head, view->len * sizeof(void *));
+        view->last = view->head + view->len-1;
+    }
 
     for st_iter_vector(p, st_mat_access_col(mat, icol)) {
         view->head[idx] = p;
@@ -402,19 +402,37 @@ void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 
 void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
 {
-
-    void *p;
     size_t idx = 0;
+    view->dtype = mat->dtype;
 
-    view->dtype = mat->data->dtype;
-    view->len = mat->ncol;
-    view->last = view->head + view->len-1;
-
-    if (view->len != mat->ncol || view->head == NULL )
+    if (view->len != mat->ncol) {
+        view->len = mat->ncol;
         view->head = realloc(view->head, view->len * sizeof(void *));
+        view->last = view->head + view->len-1;
+    }
 
     for (size_t i = 0; i < view->len; i++)
         view->head[i] = __st_vec_find_p(st_mat_access_col(mat, i), irow);
+
+    __st_check();
+}
+
+void st_vector_view(st_view *view, st_vector *vec)
+{
+    void *p;
+    size_t idx = 0;
+    view->dtype = vec->dtype;
+
+    if (view->len != vec->len) {
+        view->len = vec->len;
+        view->head = realloc(view->head, view->len * sizeof(void *));
+        view->last = view->head + view->len-1;
+    }
+
+    for st_iter_vector(p, vec) {
+        view->head[idx] = p;
+        idx++;
+    }
 
     __st_check();
 }
@@ -430,7 +448,7 @@ void st_view_display(const st_view *view)
     switch (view->dtype) {
 
         case __st_bool: {
-            printf("BoolVector([\n");
+            printf("BoolView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
                 c = (st_view_access(view, i) == false ? '-' : '+');
@@ -445,7 +463,7 @@ void st_view_display(const st_view *view)
         }
 
         case __st_pixel: {
-            printf("PixelVector([\n");
+            printf("PixelView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
                 printf("(%3d), ", (int)st_view_access(view, i));
@@ -459,7 +477,7 @@ void st_view_display(const st_view *view)
         }
 
         case __st_int: {
-            printf("IntVector([\n");
+            printf("IntView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
                 printf("%5d, ", (int)st_view_access(view, i));
@@ -473,7 +491,7 @@ void st_view_display(const st_view *view)
         }
 
         case __st_double: {
-            printf("Vector([\n");
+            printf("View([\n");
 
             double d;
             for (size_t i = 0; i <= view->len - 2; i++) {

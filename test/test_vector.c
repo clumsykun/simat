@@ -59,6 +59,14 @@ int main()
     st_vec_display(vec_int);
     st_vec_display(vec_double);
 
+    st_view *view = st_new_view();
+    st_vector_view(view, vec_double);
+    st_view_display(view);
+
+    st_view_reverse(view);
+    st_view_display(view);
+    st_vec_display(vec_double);
+
     st_free_vector(vec_bool);
     st_free_vector(vec_pixel);
     st_free_vector(vec_int);
