@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "dtypes.h"
 
-double stats_mean(Vector *vec)
+double stats_mean(st_vector *vec)
 {
     double sum = 0;
 
@@ -13,7 +13,7 @@ double stats_mean(Vector *vec)
     return sum / (double)vec->len;
 }
 
-double stats_var(Vector *vec, unsigned int freedom)
+double stats_var(st_vector *vec, unsigned int freedom)
 {
     double mean = stats_mean(vec);
     double sum_sq_diff = 0;
@@ -25,18 +25,18 @@ double stats_var(Vector *vec, unsigned int freedom)
     return sum_sq_diff / (double) (vec->len - freedom);
 }
 
-double stats_std(Vector *vec, unsigned int freedom)
+double stats_std(st_vector *vec, unsigned int freedom)
 {
     return sqrt(stats_var(vec, freedom));
 }
 
-/* scale the vector to make sure that its mean equals 0, its standard variance equals 1. */
-void vector_normalize(Vector *vec)
-{
-    double mean = stats_mean(vec);
-    double std = stats_std(vec, 0);
+// /* scale the vector to make sure that its mean equals 0, its standard variance equals 1. */
+// void vector_normalize(Vector *vec)
+// {
+//     double mean = stats_mean(vec);
+//     double std = stats_std(vec, 0);
 
-    for (size_t i = 0; i < vec->len; i++) {
-        idx(vec, i) = (idx(vec, i) - mean) / std;
-    }
-}
+//     for (size_t i = 0; i < vec->len; i++) {
+//         idx(vec, i) = (idx(vec, i) - mean) / std;
+//     }
+// }
