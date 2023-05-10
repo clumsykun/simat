@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "dtypes.h"
 
 double st_vec_mean(st_vector *vec)
@@ -29,13 +30,20 @@ double st_vec_std(st_vector *vec, size_t freedom)
     return sqrt(st_vec_var(vec, freedom));
 }
 
-// /* scale the vector to make sure that its mean equals 0, its standard variance equals 1. */
-// void vector_normalize(Vector *vec)
-// {
-//     double mean = stats_mean(vec);
-//     double std = stats_std(vec, 0);
+/* scale the vector to make sure that its mean equals 0, its standard variance equals 1. */
+void st_vec_normalize(st_vector *vec)
+{
+    if (vec->dtype != __st_double) {
+        printf("only decimal vector support normalization, so this action will omitted.\n");
+        return;
+    }
 
-//     for (size_t i = 0; i < vec->len; i++) {
-//         idx(vec, i) = (idx(vec, i) - mean) / std;
-//     }
-// }
+    double mean = st_vec_mean(vec);
+    double std = st_vec_std(vec, 0);
+    double scaled;
+
+    for (size_t i = 0; i < vec->len; i++) {
+        scaled = (st_vec_access(vec, i) - mean) / std;
+        st_vec_assign(vec, i, scaled);
+    }
+}

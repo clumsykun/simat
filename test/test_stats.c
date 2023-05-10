@@ -33,6 +33,15 @@ int main()
     printf("mean/var of vec_int: %.2f/%.2f\n", st_vec_mean(vec_int), st_vec_std(vec_int, 0));
     printf("mean/var of vec_double: %.2f/%.2f\n", st_vec_mean(vec_double), st_vec_std(vec_double, 0));
 
+    st_vec_normalize(vec_bool);
+    st_vec_normalize(vec_pixel);
+    st_vec_normalize(vec_int);
+    st_vec_normalize(vec_double);
+
+    printf("mean/var of vec_bool: %.2f/%.2f\n", st_vec_mean(vec_bool), st_vec_std(vec_bool, 0));
+    printf("mean/var of vec_pixel: %.2f/%.2f\n", st_vec_mean(vec_pixel), st_vec_std(vec_pixel, 0));
+    printf("mean/var of vec_int: %.2f/%.2f\n", st_vec_mean(vec_int), st_vec_std(vec_int, 0));
+    printf("mean/var of vec_double: %.2f/%.2f\n", st_vec_mean(vec_double), st_vec_std(vec_double, 0));
 
     st_free_vector(vec_bool);
     st_free_vector(vec_pixel);
