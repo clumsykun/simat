@@ -2,72 +2,7 @@
 #include <string.h>
 #include <time.h>
 #include "view.h"
-#include "tools.h"
 
-View *create_view()
-{
-    View *view = malloc(sizeof(View));
-    View _view = {
-        NULL, /* initialize it to NULL so that realloc() will work properly */
-        0
-    };
-    memcpy(
-        view,
-        &_view,
-        sizeof(View)
-    );
-
-    return view;
-}
-
-void free_view(View *view)
-{
-    view->len = 0;
-    __std_free(view->head);  /* still need to free this ptr */
-    __std_free(view);
-}
-
-void matrix_view_col(View *view, Matrix *mat, unsigned int idx)
-{
-    if (view->len != mat->nrow) {
-        view->len = mat->nrow;
-        view->head = (double **) realloc(view->head, view->len * sizeof(double *));
-    }
-
-    for (size_t i = 0; i < view->len; i++) {
-        view->head[i] = &mat->head[idx*mat->nrow + i];
-    }
-}
-
-void matrix_view_row(View *view, Matrix *mat, unsigned int idx)
-{
-    if (view->len != mat->ncol) {
-        view->len = mat->ncol;
-        view->head = (double **) realloc(view->head, view->len * sizeof(double *));
-    }
-
-    double(*head)[mat->nrow] = (double(*)[mat->nrow])mat->head;
-    for (size_t i = 0; i < view->len; i ++) {
-        view->head[i] = &head[i][idx];
-    }
-}
-
-void view_display(View *view)
-{
-    printf("View([");
-    for (size_t i = 0; i < view->len - 1; i++) {
-        printf("%.2f, ", *idx(view, i));
-    }
-    printf("%.2f])\n", *idx(view, view->len - 1));
-}
-
-void view_set_rand(View *view)
-{
-    srand(time(NULL));
-    for (size_t i = 0; i < view->len; i ++) {
-        *idx(view, i) = rand() + ((double)rand() / RAND_MAX);
-    }
-}
 
 double view_min(View *view)
 {

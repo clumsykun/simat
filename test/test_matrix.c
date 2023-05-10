@@ -47,6 +47,9 @@ int main()
     st_matrix_view_row(view, mat, 2);
     st_view_display(view);
 
+    st_view_rand(view);
+    st_mat_display(mat);
+
     st_free_matrix(bool_mat);
     st_free_matrix(pixel_mat);
     st_free_matrix(int_mat);

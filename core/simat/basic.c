@@ -107,6 +107,43 @@ void st_vec_rand(const st_vector *vec)
     __st_check();
 }
 
+void st_view_rand(st_view *view)
+{
+    double value, min, max;
+
+    switch (view->dtype) {
+
+        case __st_bool:
+            min = 0;
+            max = 2;
+            break;
+
+        case __st_pixel:
+            min = 0;
+            max = 255;
+            break;
+
+        case __st_int:
+            min = -RAND_MAX / 2;
+            max = RAND_MAX / 2;
+            break;
+
+        case __st_double:
+            min = -RAND_MAX / 2;
+            max = RAND_MAX / 2;
+            break;
+
+        default:
+            __st_raise_dtype_error();
+    }
+
+    for (size_t i = 0; i < view->len; i++) {
+        value = __scale_value(__rand(min, max), view->dtype);
+        st_view_assign(view, i, value);
+    }
+    __st_check();
+}
+
 /**
  * choosing the last value as pivot
  * @head: address of the first number of the vector
