@@ -150,12 +150,13 @@ void st_vec_sort(st_vector *vec)
 
 void st_vec_reverse(st_vector *vec)
 {
-    void *mid = __st_vec_find_p(vec, vec->len / 2 - 1);
-    void *r = vec->data->last;
     size_t nbyte = vec->data->nbyte;
+    void *l = vec->data->head-nbyte;
+    void *r = vec->data->last+nbyte;
+    size_t step = vec->len / 2;
 
-    for (void *l = vec->data->head; l <= mid; l += nbyte, r -= nbyte)
-        __swap(l, r, nbyte);
+    while (step--)
+        __swap(l+=nbyte, r-=nbyte, nbyte);
 }
 
 void st_mat_rand(const st_matrix *mat)
