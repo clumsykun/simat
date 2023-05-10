@@ -3,7 +3,7 @@
 #include <string.h>
 #include "dtypes.h"
 
-static size_t __byte_of(__st_dtype dtype)
+size_t __st_byteof(__st_dtype dtype)
 {
     size_t nbyte;
     switch (dtype) {
@@ -37,7 +37,7 @@ static st_vector *__st_new_vector(__st_dtype dtype, size_t len)
     st_vector *vec;
     __st_data *data;
     void *head;
-    size_t nbyte = __byte_of(dtype);
+    size_t nbyte = __st_byteof(dtype);
 
     vec = malloc(sizeof(st_vector));
     data = malloc(sizeof(__st_data));
@@ -177,7 +177,7 @@ void st_vec_assign_all(st_vector *vec, double value)
 
 static void __create_col(void *col, void *col_data_head, __st_dtype dtype, size_t len)
 {
-    size_t nbyte = __byte_of(dtype);
+    size_t nbyte = __st_byteof(dtype);
     __st_data *data = malloc(sizeof(__st_data));
     __st_data _data = {
         col_data_head,
@@ -202,7 +202,7 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     st_vector *_tmp_vec;
     __st_data *data;
     void *head, *first;
-    size_t nbyte = __byte_of(dtype);
+    size_t nbyte = __st_byteof(dtype);
 
     mat = malloc(sizeof(st_matrix));
     data = malloc(sizeof(__st_data));
@@ -385,9 +385,9 @@ void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
     void *p;
     size_t idx = 0;
 
-    view->last = view->head + (view->len-1)*sizeof(void *);
     view->dtype = mat->data->dtype;
     view->len = mat->nrow;
+    view->last = view->head + view->len-1;
 
     if (view->len != mat->nrow || view->head == NULL ) 
         view->head = realloc(view->head, view->len * sizeof(void *));
@@ -406,9 +406,9 @@ void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
     void *p;
     size_t idx = 0;
 
-    view->len = mat->ncol;
     view->dtype = mat->data->dtype;
-    view->last = view->head + (view->len-1)*sizeof(void *);
+    view->len = mat->ncol;
+    view->last = view->head + view->len-1;
 
     if (view->len != mat->ncol || view->head == NULL )
         view->head = realloc(view->head, view->len * sizeof(void *));

@@ -137,6 +137,8 @@ typedef struct __st_view
 /* TODO: check the range */
 #define st_view_assign(view, idx, value) __st_assign_p(view->head[idx], value, view->dtype)
 
+size_t __st_byteof(__st_dtype dtype);
+
 st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
