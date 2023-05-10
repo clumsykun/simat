@@ -6,6 +6,7 @@
 #include "dtypes.h"
 #include "vector.h"
 #include "matrix.h"
+#include "view.h"
 
 int main()
 {
@@ -48,6 +49,9 @@ int main()
     st_view_display(view);
 
     st_view_rand(view);
+    st_mat_display(mat);
+
+    st_view_scale(view, 0, 100);
     st_mat_display(mat);
 
     st_free_matrix(bool_mat);
