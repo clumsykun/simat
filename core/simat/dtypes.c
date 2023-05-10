@@ -336,11 +336,6 @@ void st_mat_display(st_matrix *mat)
         }
         break;
 
-
-
-
-
-
         case __st_double: {
             printf("Matrix([");
 
