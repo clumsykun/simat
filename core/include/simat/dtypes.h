@@ -116,7 +116,7 @@ typedef struct __st_view
 #define st_mat_access(mat, irow, icol) \
     __st_access_p(__st_mat_find_p(mat, irow, icol), mat->data->dtype)
 
-#define st_mat_access_col(mat, icol) ((const st_vector *)mat->first+(icol))
+#define st_mat_access_col(mat, icol) ((st_vector *)mat->first+(icol))
 
 #define st_vec_assign(vec, idx, value)                  \
     ((idx < 0 || vec->len <= idx)                       \

@@ -35,6 +35,20 @@ double st_vec_norm(st_vector *vec)
     return sqrt(sum_square);
 }
 
+/* implement vector subtraction a-b, then assign the result to vector a */
+void st_vec_subtract(st_vector *a, st_vector *b)
+{
+    if (a->len != b->len)
+        return;
+
+    void *p;
+    size_t i=0;
+    for st_iter_vector(p, a) {
+        __st_assign_p(p, st_vec_access(a, i) - st_vec_access(b, i), a->dtype);
+        i++;
+    }
+}
+
 /* scale the vector to make sure that its max value and min value match `max` and `min`. */
 void st_vec_scale(st_vector *vec, double min, double max)
 {

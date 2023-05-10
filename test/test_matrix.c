@@ -60,6 +60,13 @@ int main()
     st_view_reverse(view);
     st_mat_display(mat);
 
+    st_vector *v1 = st_mat_access_col(mat, 1);
+    st_vector *v2 = st_mat_access_col(mat, 2);
+
+    st_vec_subtract(v1, v2);
+    st_vec_display(v1);
+    st_mat_display(mat);
+
     st_free_matrix(bool_mat);
     st_free_matrix(pixel_mat);
     st_free_matrix(int_mat);
