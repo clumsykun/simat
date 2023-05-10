@@ -35,15 +35,15 @@ double st_vec_norm(st_vector *vec)
     return sqrt(sum_square);
 }
 
-/* implement vector subtraction a-b, then assign the result to vector a */
-void st_vec_subtract(st_vector *a, st_vector *b)
+/* implement vector subtraction a-b, then assign the result to vector re */
+void st_vec_subtract(st_vector *re, st_vector *a, st_vector *b)
 {
-    if (a->len != b->len)
+    if ((a->len != re->len) || (b->len != re->len))
         return;
 
     void *p;
     size_t i=0;
-    for st_iter_vector(p, a) {
+    for st_iter_vector(p, re) {
         __st_assign_p(p, st_vec_access(a, i) - st_vec_access(b, i), a->dtype);
         i++;
     }
