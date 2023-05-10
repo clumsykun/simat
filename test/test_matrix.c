@@ -54,6 +54,9 @@ int main()
     st_view_scale(view, 0, 100);
     st_mat_display(mat);
 
+    st_view_sort(view);
+    st_mat_display(mat);
+
     st_free_matrix(bool_mat);
     st_free_matrix(pixel_mat);
     st_free_matrix(int_mat);

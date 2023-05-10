@@ -21,13 +21,6 @@ static void __swap_double(double *left, double *right)
     *right = tmp;
 }
 
-static void __swap_double_p(double **left, double **right)
-{
-    double tmp = **left;
-    **left = **right;
-    **right = tmp;
-}
-
 /**
  * generate random double number (2 decimals) between
  * integer `min` and `max`, both end are inclusive
@@ -208,5 +201,47 @@ void st_mat_rand(const st_matrix *mat)
     for (size_t i = 0; i < mat->ncol; i++)
         st_vec_rand(st_mat_access_col(mat, i));
 
+    __st_check();
+}
+
+static void **__partition_p(void **start, void **end, __st_dtype dtype, size_t nbyte)
+{
+    double pivot = __st_access_p(*end, dtype);
+    void **candidate = start -1;
+
+   for (void **p = start; p < end; p++) {
+        if (__st_access_p(*p, dtype) < pivot) {
+
+            candidate++;
+            __swap(*candidate, *p, nbyte);
+        }
+    }
+
+    candidate ++;
+    __swap(*candidate, *end, nbyte);
+    return candidate;
+}
+
+static void __quick_sort_view(void **start, void **end, __st_dtype dtype, size_t nbyte)
+{
+    if (start < end) {
+        /**
+         * [p, p + len*size] -->
+         * [p, p + pi*size], [p + (pi+1)*size, p+len*size]
+         */
+        void **p = __partition_p(start, end, dtype, nbyte);
+        __quick_sort_view(start, p - 1, dtype, nbyte);
+        __quick_sort_view(p + 1, end, dtype, nbyte);
+    }
+}
+
+void st_view_sort(st_view *view)
+{
+    __quick_sort_view(
+        view->head,
+        view->last,
+        view->dtype,
+        __st_byteof(view->dtype)
+    );
     __st_check();
 }
