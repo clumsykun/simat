@@ -2,32 +2,31 @@
 #include <stdlib.h>
 #include "dtypes.h"
 
-double stats_mean(st_vector *vec)
+double st_vec_mean(st_vector *vec)
 {
     double sum = 0;
 
     for (size_t i = 0; i < vec->len; i++) {
-        sum += idx(vec, i);
+        sum += st_vec_access(vec, i);
     }
 
     return sum / (double)vec->len;
 }
 
-double stats_var(st_vector *vec, unsigned int freedom)
+double st_vec_var(st_vector *vec, size_t freedom)
 {
-    double mean = stats_mean(vec);
+    double mean = st_vec_mean(vec);
     double sum_sq_diff = 0;
 
-    for (size_t i = 0; i < vec->len; i++) {
-        sum_sq_diff += (idx(vec, i) - mean) * (idx(vec, i) - mean);
-    }
+    for (size_t i = 0; i < vec->len; i++)
+        sum_sq_diff += (st_vec_access(vec, i) - mean) * (st_vec_access(vec, i) - mean);
 
     return sum_sq_diff / (double) (vec->len - freedom);
 }
 
-double stats_std(st_vector *vec, unsigned int freedom)
+double st_vec_std(st_vector *vec, size_t freedom)
 {
-    return sqrt(stats_var(vec, freedom));
+    return sqrt(st_vec_var(vec, freedom));
 }
 
 // /* scale the vector to make sure that its mean equals 0, its standard variance equals 1. */

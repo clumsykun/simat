@@ -2,9 +2,8 @@
 #define CORE_STATS_H
 #include "dtypes.h"
 
-double stats_mean(Vector *vec);
-double stats_var(Vector *vec, unsigned int freedom);
-double stats_std(Vector *vec, unsigned int freedom);
-void vector_normalize(Vector *vec);
+double st_vec_mean(st_vector *vec);
+double st_vec_var(st_vector *vec, size_t freedom);
+double st_vec_std(st_vector *vec, size_t freedom);
 
 #endif /* CORE_STATS_H */
