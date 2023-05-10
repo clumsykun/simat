@@ -12,7 +12,7 @@
  * @st_pixel: unsigned char
  */
 typedef enum __st_dtype__ {
-    __st_bool,
+    __st_bool = 1,
     __st_pixel,
     __st_int,
     __st_double,
@@ -35,6 +35,7 @@ typedef struct __st_data__
 
 typedef struct __st_vector
 {
+    const __st_dtype dtype;
     __st_data *const data;
     const size_t len;  /* vec->len = vec->data->size */
 } st_vector;
@@ -47,6 +48,7 @@ typedef struct __st_vector
  */
 typedef struct __st_matrix
 {
+    const __st_dtype dtype;
     const __st_data *data;
     const size_t nrow;
     const size_t ncol;
@@ -56,16 +58,16 @@ typedef struct __st_matrix
 /* flexible structure contains ptr of element of target vector/matrix */
 typedef struct __st_view
 {
+    __st_dtype dtype;
     void **head;
     void **last;
-    __st_dtype dtype;
     size_t len;
 } st_view;
 
-#define st_is_bool(x) (x->data->dtype == __st_bool)
-#define st_is_pixel(x) (x->data->dtype == __st_pixel)
-#define st_is_int(x) (x->data->dtype == __st_int)
-#define st_is_double(x) (x->data->dtype == __st_double)
+#define st_is_bool(x) (x->dtype == __st_bool)
+#define st_is_pixel(x) (x->dtype == __st_pixel)
+#define st_is_int(x) (x->dtype == __st_int)
+#define st_is_double(x) (x->dtype == __st_double)
 
 /* return the ptr of the `vec` of index `idx` */
 #define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)(idx) * vec->data->nbyte)

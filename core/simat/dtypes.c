@@ -52,6 +52,7 @@ static st_vector *__st_new_vector(__st_dtype dtype, size_t len)
     };
 
     st_vector _vec = {
+        dtype,
         data, /* data */
         len,  /* len */
     };
@@ -186,6 +187,7 @@ static void __create_col(void *col, void *col_data_head, __st_dtype dtype, size_
         len,
     };
     st_vector _vec = {
+        dtype,
         data,
         len
     };
@@ -225,6 +227,7 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     }
 
     st_matrix _mat = {
+        dtype,
         data,
         nrow,
         ncol,
@@ -369,9 +372,9 @@ st_view *st_new_view()
 {
     st_view *view = malloc(sizeof(st_view));
     st_view _view = {
-        NULL,        /* initialize it to NULL so that realloc() will work properly */
+        0,    /* default dtype */
+        NULL, /* initialize it to NULL so that realloc() will work properly */
         NULL,
-        __st_double, /* default */
         0,
     };
     memcpy(
