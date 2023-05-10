@@ -67,6 +67,8 @@ int main()
     st_view_display(view);
     st_vec_display(vec_double);
 
+    printf("norm is:%.2f\n", st_vec_norm(vec_double));
+
     st_free_vector(vec_bool);
     st_free_vector(vec_pixel);
     st_free_vector(vec_int);

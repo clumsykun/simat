@@ -26,6 +26,15 @@ double st_vec_max(st_vector *vec)
     return max;
 }
 
+double st_vec_norm(st_vector *vec)
+{
+    double sum_square = 0;
+    for (size_t i = 0; i < vec->len; i++) {
+        sum_square += st_vec_access(vec, i)*st_vec_access(vec, i);
+    }
+    return sqrt(sum_square);
+}
+
 /* scale the vector to make sure that its max value and min value match `max` and `min`. */
 void st_vec_scale(st_vector *vec, double min, double max)
 {
