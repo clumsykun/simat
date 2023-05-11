@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
-#include "basic.h"
-#include "vector.h"
+#include "simat.h"
 #include "stats.h"
 
 int main()

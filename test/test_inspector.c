@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-#include "inspector.h"
+#include "simat.h"
 
 
 int main()

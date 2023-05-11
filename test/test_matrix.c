@@ -2,11 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
-#include "basic.h"
-#include "dtypes.h"
-#include "vector.h"
-#include "matrix.h"
-#include "view.h"
+#include "simat.h"
 
 int main()
 {
