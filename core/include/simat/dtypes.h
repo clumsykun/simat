@@ -1,6 +1,6 @@
 #ifndef SIMAT_DTYPES_H
 #define SIMAT_DTYPES_H
-#include "flags.h"
+#include "inspector.h"
 
 
 #define st_bool bool

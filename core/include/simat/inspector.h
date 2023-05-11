@@ -1,5 +1,5 @@
-#ifndef SIMAT_FLAGS_H
-#define SIMAT_FLAGS_H
+#ifndef SIMAT_INSPECTOR_H
+#define SIMAT_INSPECTOR_H
 #include <stdbool.h>
 #include <stddef.h>
 
@@ -13,4 +13,4 @@ size_t __st_raise_dtype_error(void);
 double __st_raise_out_range_error(void);
 void __st_check();
 
-#endif /* SIMAT_FLAGS_H */
+#endif /* SIMAT_INSPECTOR_H */

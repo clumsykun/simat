@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
-#include "flags.h"
+#include "inspector.h"
 #include "dtypes.h"
 
 int main()

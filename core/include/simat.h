@@ -1,4 +1,4 @@
-#include "flags.h"
+#include "inspector.h"
 #include "dtypes.h"
 #include "vector.h"
 #include "matrix.h"

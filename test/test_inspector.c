@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-#include "flags.h"
+#include "inspector.h"
 
 
 int main()
@@ -18,6 +18,6 @@ int main()
     __st_raise_dtype_error();
     assert(__st_dtype_error == true);
 
-    printf("OK: flags\n");
+    printf("OK: inspector\n");
     return 0;
 }

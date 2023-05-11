@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#include "flags.h"
+#include "inspector.h"
 
 bool __st_is_error = false;
 bool __st_access_error = false;

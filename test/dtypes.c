@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
-#include "core/flags.h"
+#include "core/inspector.h"
 #include "core/tools.h"
 #include "core/vector.h"
 #include "core/view.h"
