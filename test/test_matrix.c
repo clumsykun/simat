@@ -17,7 +17,7 @@ int main()
     st_matrix *pixel_mat = st_new_pixel_matrix(nrow, ncol);
     st_matrix *int_mat = st_new_int_matrix(nrow, ncol);
 
-    srand(time(NULL));
+    // srand(time(NULL));
 
     st_mat_rand(bool_mat);
     st_mat_display(bool_mat);
@@ -66,6 +66,13 @@ int main()
     st_vec_subtract(v1, v1, v2);
     st_vec_display(v1);
     st_mat_display(mat);
+
+    st_vec_assign_all(v1, 2);
+    st_vec_assign_all(v2, 4);
+
+    st_vec_display(v1);
+    st_vec_display(v2);
+    printf("dot of col 1 and col 2: %.2f\n", st_vec_dot(v1, v2));
 
     st_free_matrix(bool_mat);
     st_free_matrix(pixel_mat);

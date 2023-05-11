@@ -35,7 +35,7 @@ double st_vec_norm(st_vector *vec)
     return sqrt(sum_square);
 }
 
-/* implement vector subtraction a-b, then assign the result to vector re */
+/* implement vector subtraction `a`-`b`, save result to vector `re` */
 void st_vec_subtract(st_vector *re, st_vector *a, st_vector *b)
 {
     if ((a->len != re->len) || (b->len != re->len))
@@ -47,6 +47,19 @@ void st_vec_subtract(st_vector *re, st_vector *a, st_vector *b)
         __st_assign_p(p, st_vec_access(a, i) - st_vec_access(b, i), a->dtype);
         i++;
     }
+}
+
+/* implement vector dot production a·b, save result to vector `re` */
+double st_vec_dot(st_vector *a, st_vector *b)
+{
+    if (a->len != b->len)
+        return 0;
+
+    double re = 0;
+    for (size_t i = 0; i < a->len; i++)
+        re += st_vec_access(a, i) * st_vec_access(b, i);
+
+    return re;
 }
 
 /* scale the vector to make sure that its max value and min value match `max` and `min`. */
