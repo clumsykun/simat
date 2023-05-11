@@ -49,7 +49,7 @@ void st_vec_subtract(st_vector *re, st_vector *a, st_vector *b)
     }
 }
 
-/* implement vector dot production a·b, save result to vector `re` */
+/* implement vector dot production a·b, return result */
 double st_vec_dot(st_vector *a, st_vector *b)
 {
     if (a->len != b->len)
