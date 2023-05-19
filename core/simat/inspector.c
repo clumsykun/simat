@@ -9,6 +9,8 @@ bool __st_access_error = false;
 bool __st_dtype_error = false;
 bool __st_out_range_error = false;
 bool __st_length_error = false;
+char *__st_str_error[MAX_ERROR_TRACK];
+
 
 double __st_raise_access_error(void)
 {

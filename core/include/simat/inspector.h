@@ -3,11 +3,14 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#define MAX_ERROR_TRACK 100
+
 extern bool __st_is_error;
 extern bool __st_access_error;
 extern bool __st_dtype_error;
 extern bool __st_out_range_error;
 extern bool __st_length_error;
+extern char *__st_str_error[MAX_ERROR_TRACK];
 
 double __st_raise_access_error(void);
 size_t __st_raise_dtype_error(void);
