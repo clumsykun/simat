@@ -68,6 +68,15 @@ int main()
 
     printf("norm is:%.2f\n", st_vec_norm(vec_double));
 
+    st_vec_sub(vec_double, vec_double, vec_bool);
+    st_vec_display(vec_double);
+
+    st_vec_add(vec_double, vec_double, vec_bool);
+    st_vec_display(vec_double);
+
+    // st_vector *vec_tmp = st_new_bool_vector(len+1);
+    // st_vec_add(vec_double, vec_double, vec_tmp);
+
     st_free_vector(vec_bool);
     st_free_vector(vec_pixel);
     st_free_vector(vec_int);

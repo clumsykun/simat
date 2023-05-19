@@ -5,6 +5,13 @@
 #include <time.h>
 #include "dtypes.h"
 
+static void check_vec_length(st_vector *a, st_vector *b)
+{
+    if (a->len != b->len)
+        __st_raise_length_error();
+
+    __st_check();
+}
 
 double st_vec_min(st_vector *vec)
 {
@@ -35,18 +42,32 @@ double st_vec_norm(st_vector *vec)
     return sqrt(sum_square);
 }
 
-/* implement vector subtraction `a`-`b`, save result to vector `re` */
-void st_vec_subtract(st_vector *re, st_vector *a, st_vector *b)
+/* implement vector subtraction a-b, save result to vector re */
+void st_vec_add(st_vector *re, st_vector *a, st_vector *b)
 {
-    if ((a->len != re->len) || (b->len != re->len)) {
-        __st_raise_length_error();
-        return;
-    }
+    check_vec_length(re, a);
+    check_vec_length(re, b);
 
     void *p;
     size_t i=0;
     for st_iter_vector(p, re) {
-        __st_assign_p(p, st_vec_access(a, i) - st_vec_access(b, i), a->dtype);
+        __st_assign_p(p, st_vec_access(a, i) + st_vec_access(b, i), re->dtype);
+        i++;
+    }
+
+    __st_check();
+}
+
+/* implement vector subtraction a-b, save result to vector re */
+void st_vec_sub(st_vector *re, st_vector *a, st_vector *b)
+{
+    check_vec_length(re, a);
+    check_vec_length(re, b);
+
+    void *p;
+    size_t i=0;
+    for st_iter_vector(p, re) {
+        __st_assign_p(p, st_vec_access(a, i) - st_vec_access(b, i), re->dtype);
         i++;
     }
 
@@ -56,10 +77,7 @@ void st_vec_subtract(st_vector *re, st_vector *a, st_vector *b)
 /* implement vector dot production a·b, return result */
 double st_vec_dot(st_vector *a, st_vector *b)
 {
-    if (a->len != b->len) {
-        __st_raise_length_error();
-        return 0;
-    }
+    check_vec_length(a, b);
 
     double re = 0;
     for (size_t i = 0; i < a->len; i++)
