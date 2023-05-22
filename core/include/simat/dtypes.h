@@ -7,6 +7,7 @@
 #define st_pixel unsigned char
 #define st_int int
 #define st_double double
+#define __st_check() __st_check__(__FILE__, __LINE__)
 
 /**
  * @st_pixel: unsigned char
