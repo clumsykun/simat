@@ -45,4 +45,5 @@ void st_dist_cos_mat_row(st_matrix *re, st_matrix *mat)
             }
         }
     }
+    __st_check();
 }
