@@ -97,6 +97,7 @@ void st_vec_rand(const st_vector *vec)
         value = __scale_value(__rand(min, max), vec->data->dtype);
         st_vec_assign(vec, i, value);
     }
+
     __st_check();
 }
 
@@ -161,8 +162,8 @@ void st_vec_reverse(st_vector *vec)
 
 void st_mat_rand(const st_matrix *mat)
 {
-    for (size_t i = 0; i < mat->ncol; i++)
-        st_vec_rand(st_mat_access_col(mat, i));
+    for (size_t i = 0; i < mat->nrow; i++)
+        st_vec_rand(st_mat_access_row(mat, i));
 
     __st_check();
 }

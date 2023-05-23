@@ -175,13 +175,13 @@ void st_vec_assign_all(st_vector *vec, double value)
     __st_check();
 }
 
-static void __create_col(void *col, void *col_data_head, __st_dtype dtype, size_t len)
+static void __create_row(void *row, void *row_data_head, __st_dtype dtype, size_t len)
 {
     size_t nbyte = __st_byteof(dtype);
     __st_data *data = malloc(sizeof(__st_data));
     __st_data _data = {
-        col_data_head,
-        col_data_head + nbyte * (len - 1),
+        row_data_head,
+        row_data_head + nbyte * (len - 1),
         dtype,
         nbyte,
         len,
@@ -193,7 +193,7 @@ static void __create_col(void *col, void *col_data_head, __st_dtype dtype, size_
     };
 
     memcpy(data, &_data, sizeof(__st_data));
-    memcpy(col, &_vec, sizeof(st_vector));
+    memcpy(row, &_vec, sizeof(st_vector));
 }
 
 static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
@@ -207,7 +207,7 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     mat = malloc(sizeof(st_matrix));
     data = malloc(sizeof(__st_data));
     head = malloc(nrow * ncol * nbyte);
-    first = malloc(ncol * sizeof(st_vector));
+    first = malloc(nrow * sizeof(st_vector));
 
     __st_data _data = {
         head,                             /* head */
@@ -217,12 +217,12 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
         nrow * ncol,                      /* size */
     };
 
-    for (size_t i = 0; i < ncol; i++) {
-        __create_col(
+    for (size_t i = 0; i < nrow; i++) {
+        __create_row(
             first+i*sizeof(st_vector),
-            head+i*nrow*nbyte,
+            head+i*ncol*nbyte,
             dtype,
-            nrow
+            ncol
         );
     }
 
@@ -260,8 +260,8 @@ st_matrix *st_new_matrix(size_t nrow, size_t ncol)
 
 void st_free_matrix(st_matrix *mat)
 {
-    for (size_t i = 0; i < mat->ncol; i++) {
-        __std_free(st_mat_access_col(mat, i)->data);
+    for (size_t i = 0; i < mat->nrow; i++) {
+        __std_free(st_mat_access_row(mat, i)->data);
     }
 
     __std_free(mat->data->head);
@@ -390,29 +390,10 @@ st_view *st_new_view()
     return view;
 }
 
-void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
-{
-    void *p;
-    size_t idx = 0;
-    view->dtype = mat->dtype;
-
-    if (view->len != mat->nrow) {
-        view->len = mat->nrow;
-        view->head = realloc(view->head, view->len * sizeof(void *));
-        view->last = view->head + view->len-1;
-    }
-
-    for st_iter_vector(p, st_mat_access_col(mat, icol)) {
-        view->head[idx] = p;
-        idx++;
-    }
-
-    __st_check();
-}
-
 void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
 {
-    size_t idx = 0;
+    void *p;
+    size_t idx;
     view->dtype = mat->dtype;
 
     if (view->len != mat->ncol) {
@@ -421,8 +402,27 @@ void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
         view->last = view->head + view->len-1;
     }
 
+    idx = 0;
+    for st_iter_vector(p, st_mat_access_row(mat, irow)) {
+        view->head[idx] = p;
+        idx++;
+    }
+
+    __st_check();
+}
+
+void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
+{
+    view->dtype = mat->dtype;
+
+    if (view->len != mat->nrow) {
+        view->len = mat->nrow;
+        view->head = realloc(view->head, view->len * sizeof(void *));
+        view->last = view->head + view->len-1;
+    }
+
     for (size_t i = 0; i < view->len; i++)
-        view->head[i] = __st_vec_find_p(st_mat_access_col(mat, i), irow);
+        view->head[i] = __st_mat_find_p(mat, i, icol);
 
     __st_check();
 }

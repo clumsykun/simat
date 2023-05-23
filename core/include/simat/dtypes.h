@@ -75,7 +75,7 @@ typedef struct __st_view
 
 /* return the ptr of the `mat` of index (`irow`, `icol`) */
 #define __st_mat_find_p(mat, irow, icol) \
-    (mat->data->head + ((size_t)(irow)+(size_t)(icol)*(mat->nrow))*mat->data->nbyte)
+    (mat->data->head + ((size_t)(irow)*(mat->ncol)+(size_t)(icol))*mat->data->nbyte)
 
 /* access the value of `p`, as type of `st_dtype` */
 #define __st_access_p(p, st_dtype)              \
@@ -117,7 +117,7 @@ typedef struct __st_view
 #define st_mat_access(mat, irow, icol) \
     __st_access_p(__st_mat_find_p(mat, irow, icol), mat->data->dtype)
 
-#define st_mat_access_col(mat, icol) ((st_vector *)mat->first+(icol))
+#define st_mat_access_row(mat, irow) ((st_vector *)mat->first+(irow))
 
 #define st_vec_assign(vec, idx, value)                  \
     ((idx < 0 || vec->len <= idx)                       \
