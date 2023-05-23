@@ -1,8 +1,17 @@
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <time.h>
 #include "view.h"
 
+
+static void check_view_length(st_view *a, st_view *b)
+{
+    if (a->len != b->len)
+        __st_raise_length_error();
+
+    __st_check();
+}
 
 double st_view_min(st_view *view)
 {
@@ -24,6 +33,15 @@ double st_view_max(st_view *view)
     return max;
 }
 
+double st_view_norm(st_view *view)
+{
+    double sum_square = 0;
+    for (size_t i = 0; i < view->len; i++) {
+        sum_square += st_view_access(view, i)*st_view_access(view, i);
+    }
+    return sqrt(sum_square);
+}
+
 void st_view_scale(st_view *view, double min, double max)
 {
     double v_min = st_view_min(view);
@@ -35,4 +53,17 @@ void st_view_scale(st_view *view, double min, double max)
         scaled = min + (st_view_access(view, i) - v_min) * target_scale / scale;
         st_view_assign(view, i, scaled);
     }
+}
+
+
+double st_view_dot(st_view *a, st_view *b)
+{
+    check_view_length(a, b);
+
+    double ret = 0;
+    for (size_t i = 0; i < a->len; i++)
+        ret += st_view_access(a, i) * st_view_access(b, i);
+
+    __st_check();
+    return ret;
 }
