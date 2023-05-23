@@ -13,7 +13,11 @@ int main()
     st_matrix *pixel_mat = st_new_pixel_matrix(nrow, ncol);
     st_matrix *int_mat = st_new_int_matrix(nrow, ncol);
 
-    // srand(time(NULL));
+    st_mat_assign_all(mat, 10);
+    st_mat_display(mat);
+
+    st_vector *v = st_mat_access_row(mat, 1);
+    st_vec_display(v);
 
     st_mat_rand(bool_mat);
     st_mat_display(bool_mat);
@@ -61,15 +65,12 @@ int main()
     printf("norm of row [2]: %.2f\n", st_view_norm(view));
     printf("dot of row [2] and row [3]: %.2f\n", st_view_dot(view, view));
 
-    st_vector *v1 = st_mat_access_col(mat, 1);
-    st_vector *v2 = st_mat_access_col(mat, 2);
+    st_vector *v1 = st_mat_access_row(mat, 1);
+    st_vector *v2 = st_mat_access_row(mat, 2);
 
     st_vec_sub(v1, v1, v2);
     st_vec_display(v1);
     st_mat_display(mat);
-
-    st_vec_assign_all(v1, 2);
-    st_vec_assign_all(v2, 4);
 
     st_vec_display(v1);
     st_vec_display(v2);
@@ -77,8 +78,8 @@ int main()
 
     st_matrix *dist_mat = st_new_matrix(mat->nrow, mat->nrow);
     st_mat_assign_all(dist_mat, -1);
-    st_mat_display(dist_mat);
     st_dist_cos_mat_row(dist_mat, mat);
+    st_mat_display(mat);
     st_mat_display(dist_mat);
 
     st_free_matrix(bool_mat);

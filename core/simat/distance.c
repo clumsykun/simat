@@ -26,21 +26,23 @@ double st_dist_cos_ww(st_view *w1, st_view *w2)
 void st_dist_cos_mat_row(st_matrix *re, st_matrix *mat)
 {
     check_mat_shape(re, mat->nrow, mat->nrow);
-    st_view *rows[mat->nrow];
-
-    for (size_t i = 0; i < mat->nrow; i++) {
-        rows[i] = st_new_view();
-        st_matrix_view_row(rows[i], mat, i);
-        st_view_display(rows[i]);
-    }
 
     for (size_t i = 0; i < mat->nrow; i++) {
         for (size_t j = 0; j < mat->nrow; j++) {
 
             if (i > j)
                 st_mat_assign(re, i, j, st_mat_access(re, j, i));
-            else
-                st_mat_assign(re, i, j, st_dist_cos_ww(rows[i], rows[j]));
+            else {
+                st_mat_assign(
+                    re,
+                    i,
+                    j,
+                    st_dist_cos_vv(
+                        st_mat_access_row(mat, i),
+                        st_mat_access_row(mat, j)
+                    )
+                );
+            }
         }
     }
 }
