@@ -145,13 +145,13 @@ void st_vec_display(const st_vector *vec)
         }
 
         case __st_double: {
-            printf("Vector([\n");
+            printf("Vector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++) {
                 printf("%4.2f, ", (double)st_vec_access(vec, i));
 
                 if ((i + 1) % 10 == 0)
-                    printf("\n");
+                    printf("\n        ");
             }
 
             printf("%4.2f])\n", (double)st_vec_access(vec, vec->len-1));
@@ -363,6 +363,16 @@ void st_mat_display(st_matrix *mat)
     __st_check();
 }
 
+void st_mat_assign_all(st_matrix *mat, double value)
+{
+    void *p;
+
+    for __st_iter_data(p, mat->data)
+        __st_assign_p(p, value, mat->data->dtype);
+
+    __st_check();
+}
+
 st_view *st_new_view()
 {
     st_view *view = malloc(sizeof(st_view));
@@ -491,7 +501,7 @@ void st_view_display(const st_view *view)
         }
 
         case __st_double: {
-            printf("View([\n");
+            printf("View([");
 
             double d;
             for (size_t i = 0; i <= view->len - 2; i++) {
@@ -499,7 +509,7 @@ void st_view_display(const st_view *view)
                 printf("%4.2f, ", (double)st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
-                    printf("\n");
+                    printf("\n      ");
             }
 
             printf("%4.2f])\n", (double)st_view_access(view, view->len-1));

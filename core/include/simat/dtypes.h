@@ -154,6 +154,7 @@ st_matrix *st_new_int_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_matrix(size_t nrow, size_t ncol);
 void st_free_matrix(st_matrix *mat);
 void st_mat_display(st_matrix *mat);
+void st_mat_assign_all(st_matrix *mat, double value);
 
 st_view *st_new_view();
 void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol);

@@ -61,8 +61,6 @@ int main()
     printf("norm of row [2]: %.2f\n", st_view_norm(view));
     printf("dot of row [2] and row [3]: %.2f\n", st_view_dot(view, view));
 
-    return 0;
-
     st_vector *v1 = st_mat_access_col(mat, 1);
     st_vector *v2 = st_mat_access_col(mat, 2);
 
@@ -76,6 +74,12 @@ int main()
     st_vec_display(v1);
     st_vec_display(v2);
     printf("dot of col 1 and col 2: %.2f\n", st_vec_dot(v1, v2));
+
+    st_matrix *dist_mat = st_new_matrix(mat->nrow, mat->nrow);
+    st_mat_assign_all(dist_mat, -1);
+    st_mat_display(dist_mat);
+    st_dist_cos_mat_row(dist_mat, mat);
+    st_mat_display(dist_mat);
 
     st_free_matrix(bool_mat);
     st_free_matrix(pixel_mat);
