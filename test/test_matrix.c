@@ -38,10 +38,12 @@ int main()
     printf("min: %.2f, max: %.2f\n", st_mat_min(mat), st_mat_max(mat));
 
     st_view *view = st_new_view();
+    st_view *view2 = st_new_view();
     st_matrix_view_col(view, mat, 3);
     st_view_display(view);
 
     st_matrix_view_row(view, mat, 2);
+    st_matrix_view_row(view2, mat, 3);
     st_view_display(view);
 
     st_view_rand(view);
@@ -56,10 +58,15 @@ int main()
     st_view_reverse(view);
     st_mat_display(mat);
 
+    printf("norm of row [2]: %.2f\n", st_view_norm(view));
+    printf("dot of row [2] and row [3]: %.2f\n", st_view_dot(view, view));
+
+    return 0;
+
     st_vector *v1 = st_mat_access_col(mat, 1);
     st_vector *v2 = st_mat_access_col(mat, 2);
 
-    st_vec_subtract(v1, v1, v2);
+    st_vec_sub(v1, v1, v2);
     st_vec_display(v1);
     st_mat_display(mat);
 
