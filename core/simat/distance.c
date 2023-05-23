@@ -20,7 +20,7 @@ static void check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol)
     __st_check();
 }
 
-double st_dist_vv(st_vector *a, st_vector *b)
+double st_dist_euclid(st_vector *a, st_vector *b)
 {
     check_vec_length(a, b);
     double diff, sum_square;
@@ -35,7 +35,7 @@ double st_dist_vv(st_vector *a, st_vector *b)
 }
 
 /* cosine similarity of vector v1 and v2. */
-double st_dist_cos_vv(st_vector *v1, st_vector *v2)
+double st_dist_cosine(st_vector *v1, st_vector *v2)
 {
     return st_vec_dot(v1,v2)/(st_vec_norm(v1)*st_vec_norm(v2));
 }

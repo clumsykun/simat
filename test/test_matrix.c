@@ -78,11 +78,11 @@ int main()
 
     st_matrix *dist_mat = st_new_matrix(mat->nrow, mat->nrow);
     st_mat_assign_all(dist_mat, -1);
-    st_dist_mat_row(dist_mat, mat, st_dist_cos_vv);
+    st_dist_mat_row(dist_mat, mat, st_dist_cosine);
     st_mat_display(dist_mat);
     st_mat_display(mat);
 
-    st_dist_mat_row(dist_mat, mat, st_dist_vv);
+    st_dist_mat_row(dist_mat, mat, st_dist_euclid);
     st_mat_display(dist_mat);
     st_mat_display(mat);
 

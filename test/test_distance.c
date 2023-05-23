@@ -30,7 +30,7 @@ int main()
     st_vec_display(v1);
     st_vec_display(v2);
 
-    printf("cos similarity of col 1 and col 2: %.4f\n", st_dist_cos_vv(v1, v2));
+    printf("cos similarity of col 1 and col 2: %.4f\n", st_dist_cosine(v1, v2));
 
     st_free_matrix(bool_mat);
     st_free_matrix(pixel_mat);
