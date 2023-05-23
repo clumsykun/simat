@@ -55,7 +55,7 @@ void st_dist_mat_row(st_matrix *re, st_matrix *mat, dist_fp fp)
 
             if (i > j)
                 st_mat_assign(re, i, j, st_mat_access(re, j, i));
-            else {
+            else
                 st_mat_assign(
                     re,
                     i,
@@ -65,7 +65,6 @@ void st_dist_mat_row(st_matrix *re, st_matrix *mat, dist_fp fp)
                         st_mat_access_row(mat, j)
                     )
                 );
-            }
         }
     }
     __st_check();
