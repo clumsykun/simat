@@ -1,4 +1,13 @@
+#include <math.h>
 #include "distance.h"
+
+static void check_vec_length(st_vector *a, st_vector *b)
+{
+    if (a->len != b->len)
+        __st_raise_length_error();
+
+    __st_check();
+}
 
 static void check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol)
 {
@@ -9,6 +18,20 @@ static void check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol)
         __st_raise_length_error();
 
     __st_check();
+}
+
+double st_dist_vv(st_vector *a, st_vector *b)
+{
+    check_vec_length(a, b);
+    double diff, sum_square;
+
+    for (size_t i = 0; i < a->len; i++) {
+
+        diff = st_vec_access(a, i) - st_vec_access(b, i);
+        sum_square += diff*diff;
+    }
+
+    return sqrt(sum_square);
 }
 
 /* cosine similarity of vector v1 and v2. */
@@ -22,8 +45,8 @@ double st_dist_cos_ww(st_view *w1, st_view *w2)
     return st_view_dot(w1,w2)/(st_view_norm(w1)*st_view_norm(w2));
 }
 
-/* cosine similarity of matrix by every row. */
-void st_dist_cos_mat_row(st_matrix *re, st_matrix *mat)
+/* implement distance function of matrix by every row. */
+void st_dist_mat_row(st_matrix *re, st_matrix *mat, dist_fp fp)
 {
     check_mat_shape(re, mat->nrow, mat->nrow);
 
@@ -37,7 +60,7 @@ void st_dist_cos_mat_row(st_matrix *re, st_matrix *mat)
                     re,
                     i,
                     j,
-                    st_dist_cos_vv(
+                    fp(
                         st_mat_access_row(mat, i),
                         st_mat_access_row(mat, j)
                     )
