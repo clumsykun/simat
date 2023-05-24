@@ -7,9 +7,8 @@ double st_vec_mean(st_vector *vec)
 {
     double sum = 0;
 
-    for (size_t i = 0; i < vec->len; i++) {
+    for (size_t i = 0; i < vec->len; i++)
         sum += st_vec_access(vec, i);
-    }
 
     return sum / (double)vec->len;
 }
