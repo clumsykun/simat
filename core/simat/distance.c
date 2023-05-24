@@ -25,6 +25,7 @@ double st_dist_euclid(st_vector *a, st_vector *b)
     check_vec_length(a, b);
     double diff, sum_square;
 
+    sum_square = 0;
     for (size_t i = 0; i < a->len; i++) {
 
         diff = st_vec_access(a, i) - st_vec_access(b, i);
