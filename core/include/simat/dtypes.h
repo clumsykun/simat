@@ -152,7 +152,6 @@ st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_int_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_matrix(size_t nrow, size_t ncol);
-void st_free_matrix(st_matrix *mat);
 void st_mat_display(st_matrix *mat);
 void st_mat_assign_all(st_matrix *mat, double value);
 

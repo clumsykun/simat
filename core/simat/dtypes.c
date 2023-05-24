@@ -32,6 +32,22 @@ size_t __st_byteof(__st_dtype dtype)
     return nbyte;
 }
 
+/* the standard way to free memory */
+static void __std_free(const void *ptr)
+{
+    free((void *)ptr);
+    ptr = NULL;
+}
+
+static void __std_free_data(const __st_data *data)
+{
+    __st_data *p = (__st_data *) data;
+    memset(p->head, 0, p->size*p->nbyte);
+    __std_free(p->head);
+    memset(p, 0, sizeof(__st_data));
+    __std_free(p);
+}
+
 static st_vector *__st_new_vector(__st_dtype dtype, size_t len)
 {
     st_vector *vec;
@@ -80,13 +96,6 @@ st_vector *st_new_int_vector(size_t len)
 st_vector *st_new_vector(size_t len)
 {
     return __st_new_vector(__st_double, len);
-}
-
-/* the standard way to free memory */
-static void __std_free(const void *ptr)
-{
-    free((void *)ptr);
-    ptr = NULL;
 }
 
 void st_free_vector(st_vector *vec)
@@ -175,6 +184,26 @@ void st_vec_assign_all(st_vector *vec, double value)
     __st_check();
 }
 
+static void __free_matrix(void *matrix)
+{
+    st_matrix *mat = matrix;
+    void *p;
+
+    __std_free_data(mat->data);
+
+    for (size_t i = 0; i < mat->nrow; i++) {
+        memset(st_mat_access_row(mat, i)->data, 0, sizeof(__st_data));
+        __std_free(st_mat_access_row(mat, i)->data);
+    }
+
+    p = (void *)mat->first;
+    memset(p, 0, mat->nrow*sizeof(st_vector));
+    __std_free(p);
+
+    memset(mat, 0, sizeof(st_matrix));
+    __std_free(mat);
+}
+
 static void __create_row(void *row, void *row_data_head, __st_dtype dtype, size_t len)
 {
     size_t nbyte = __st_byteof(dtype);
@@ -235,6 +264,8 @@ static st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     };
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(mat, &_mat, sizeof(st_matrix));
+    __st_pool_add(mat, __free_matrix);
+
     return mat;
 }
 
@@ -256,18 +287,6 @@ st_matrix *st_new_int_matrix(size_t nrow, size_t ncol)
 st_matrix *st_new_matrix(size_t nrow, size_t ncol)
 {
     return __st_new_matrix(__st_double, nrow, ncol);
-}
-
-void st_free_matrix(st_matrix *mat)
-{
-    for (size_t i = 0; i < mat->nrow; i++) {
-        __std_free(st_mat_access_row(mat, i)->data);
-    }
-
-    __std_free(mat->data->head);
-    __std_free(mat->data);
-    __std_free(mat->first);
-    __std_free(mat);
 }
 
 void st_mat_display(st_matrix *mat)

@@ -10,7 +10,6 @@ bool __st_dtype_error = false;
 bool __st_out_range_error = false;
 bool __st_length_error = false;
 
-
 double __st_raise_access_error(void)
 {
     __st_is_error = true;
@@ -61,4 +60,50 @@ void __st_check__(const char *file, const size_t line)
         printf("Error: length not match!\n");
 
     assert(!__st_is_error);
+}
+
+struct __node {
+    void *data;
+    free_fp free;
+    struct __node * next;
+};
+
+struct __node __pool = {
+    NULL,
+    NULL,
+    NULL
+};
+
+void *__st_pool_add(void *data, free_fp fp)
+{
+    struct __node *p = &__pool;
+    struct __node *new = (struct __node *)malloc(sizeof(struct __node));
+
+    new->data = data;
+    new->free = fp;
+    new->next = NULL;
+
+    while (1) {
+        if (p->next != NULL) {
+            p = p->next;
+            continue;;
+        }
+
+        p->next = new;
+        break;
+    }
+
+    return &__pool;
+}
+
+void __st_free_all(void)
+{
+    struct __node *p = __pool.next;
+
+    while (p != NULL) {
+
+        printf("free: %p\n", p->data);
+        p->free(p->data);
+        p = p->next;
+    }
 }

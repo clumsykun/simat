@@ -17,4 +17,8 @@ double __st_raise_out_range_error(void);
 void   __st_raise_length_error(void);
 void __st_check__(const char *file, const size_t line);
 
+typedef void (*free_fp)(void *);
+void *__st_pool_add(void *data, free_fp fp);
+void __st_free_all(void);
+
 #endif /* SIMAT_INSPECTOR_H */

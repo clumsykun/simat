@@ -86,10 +86,17 @@ int main()
     st_mat_display(dist_mat);
     st_mat_display(mat);
 
-    st_free_matrix(bool_mat);
-    st_free_matrix(pixel_mat);
-    st_free_matrix(int_mat);
-    st_free_matrix(mat);
+    // __st_pool_add(mat, st_free_matrix);
+    // __st_pool_add(bool_mat, st_free_matrix);
+    // __st_pool_add(pixel_mat, st_free_matrix);
+    // __st_pool_add(int_mat, st_free_matrix);
+
+    __st_free_all();
+
+    // st_free_matrix(bool_mat);
+    // st_free_matrix(pixel_mat);
+    // st_free_matrix(int_mat);
+    // st_free_matrix(mat);
 
     return 0;
 }
