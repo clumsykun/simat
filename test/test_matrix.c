@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include <time.h>
 #include "simat.h"
@@ -92,6 +93,9 @@ int main()
     // __st_pool_add(int_mat, st_free_matrix);
 
     __st_free_all();
+
+    void *p = malloc(10);
+    memset(p, 0, 20);
 
     // st_free_matrix(bool_mat);
     // st_free_matrix(pixel_mat);
