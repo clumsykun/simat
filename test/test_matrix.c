@@ -92,10 +92,18 @@ int main()
     // __st_pool_add(pixel_mat, st_free_matrix);
     // __st_pool_add(int_mat, st_free_matrix);
 
+    dist_mat->temp = false;
+
+    __st_free_all();
     __st_free_all();
 
-    void *p = malloc(10);
-    memset(p, 0, 20);
+    st_mat_display(dist_mat);
+
+    dist_mat->temp = true;
+
+    __st_free_all();
+
+    // st_mat_display(mat);
 
     // st_free_matrix(bool_mat);
     // st_free_matrix(pixel_mat);

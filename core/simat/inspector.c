@@ -63,6 +63,7 @@ void __st_check__(const char *file, const size_t line)
 }
 
 struct __node {
+    bool *temp;
     void *data;
     free_fp free;
     struct __node * next;
@@ -71,20 +72,23 @@ struct __node {
 struct __node __pool = {
     NULL,
     NULL,
+    NULL,
     NULL
 };
 
-void *__st_pool_add(void *data, free_fp fp)
+void *__st_pool_add(void *data, free_fp fp, bool *temp)
 {
     struct __node *p = &__pool;
     struct __node *new = (struct __node *)malloc(sizeof(struct __node));
 
+    new->temp = temp;
     new->data = data;
     new->free = fp;
     new->next = NULL;
 
     while (1) {
         if (p->next != NULL) {
+
             p = p->next;
             continue;;
         }
@@ -98,12 +102,21 @@ void *__st_pool_add(void *data, free_fp fp)
 
 void __st_free_all(void)
 {
-    struct __node *p = __pool.next;
+    struct __node *p = &__pool;
+    struct __node *next;
 
-    while (p != NULL) {
+    while (p->next != NULL) {
 
-        printf("free: %p\n", p->data);
-        p->free(p->data);
+        next = p->next;
+
+        if (*next->temp) {
+            /* clear it */
+            next->free(next->data);
+            p->next = next->next;
+            free(next);
+            continue;
+        }
+
         p = p->next;
     }
 }

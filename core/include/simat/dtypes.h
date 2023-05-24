@@ -36,6 +36,7 @@ typedef struct __st_data__
 
 typedef struct __st_vector
 {
+    bool temp;
     const __st_dtype dtype;
     __st_data *const data;
     const size_t len;  /* vec->len = vec->data->size */
@@ -49,6 +50,7 @@ typedef struct __st_vector
  */
 typedef struct __st_matrix
 {
+    bool temp;
     const __st_dtype dtype;
     const __st_data *data;
     const size_t nrow;
@@ -59,6 +61,7 @@ typedef struct __st_matrix
 /* flexible structure contains ptr of element of target vector/matrix */
 typedef struct __st_view
 {
+    bool temp;
     __st_dtype dtype;
     void **head;
     void **last;

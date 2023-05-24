@@ -86,6 +86,7 @@ static st_vector *__new_vector(__st_dtype dtype, size_t len)
     };
 
     st_vector _vec = {
+        true,
         dtype,
         data, /* data */
         len,  /* len */
@@ -93,7 +94,7 @@ static st_vector *__new_vector(__st_dtype dtype, size_t len)
 
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(vec, &_vec, sizeof(st_vector));
-    __st_pool_add(vec, __free_vector);
+    __st_pool_add(vec, __free_vector, &vec->temp);
     return vec;
 }
 
@@ -216,6 +217,8 @@ static void __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t l
         len,
     };
     st_vector _vec = {
+        false,  /* this options here doesn't work because
+                   this vector is not constructed by __new_vector */
         dtype,
         data,
         len
@@ -256,6 +259,7 @@ static st_matrix *__new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     }
 
     st_matrix _mat = {
+        true,
         dtype,
         data,
         nrow,
@@ -264,7 +268,7 @@ static st_matrix *__new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     };
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(mat, &_mat, sizeof(st_matrix));
-    __st_pool_add(mat, __free_matrix);
+    __st_pool_add(mat, __free_matrix, &mat->temp);
 
     return mat;
 }
@@ -416,6 +420,7 @@ st_view *st_new_view()
 {
     st_view *view = malloc(sizeof(st_view));
     st_view _view = {
+        true,
         0,    /* default dtype */
         NULL, /* initialize it to NULL so that realloc() will work properly */
         NULL,
@@ -426,7 +431,7 @@ st_view *st_new_view()
         &_view,
         sizeof(st_view)
     );
-    __st_pool_add(view, __free_view);
+    __st_pool_add(view, __free_view, &view->temp);
     return view;
 }
 
