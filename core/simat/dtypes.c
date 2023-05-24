@@ -94,7 +94,7 @@ static st_vector *__new_vector(__st_dtype dtype, size_t len)
 
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(vec, &_vec, sizeof(st_vector));
-    __st_pool_add(vec, __free_vector, &vec->temp);
+    __st_ds_add(vec, __free_vector, &vec->temp);
     return vec;
 }
 
@@ -268,7 +268,7 @@ static st_matrix *__new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     };
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(mat, &_mat, sizeof(st_matrix));
-    __st_pool_add(mat, __free_matrix, &mat->temp);
+    __st_ds_add(mat, __free_matrix, &mat->temp);
 
     return mat;
 }
@@ -431,7 +431,7 @@ st_view *st_new_view()
         &_view,
         sizeof(st_view)
     );
-    __st_pool_add(view, __free_view, &view->temp);
+    __st_ds_add(view, __free_view, &view->temp);
     return view;
 }
 

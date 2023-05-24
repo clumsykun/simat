@@ -62,61 +62,79 @@ void __st_check__(const char *file, const size_t line)
     assert(!__st_is_error);
 }
 
-struct __node {
+/**
+ * this code of linked list implements the the data space
+ * all data of simat should be added to the data space as a member
+ * which is an element of this linked list
+ */
+struct __mb {
     bool *temp;
-    void *data;
+    void *target;
     free_fp free;
-    struct __node * next;
+    struct __mb * next;
 };
 
-struct __node __pool = {
+struct __mb __ds_head = {
     NULL,
     NULL,
     NULL,
     NULL
 };
 
-void *__st_pool_add(void *data, free_fp fp, bool *temp)
+void __st_ds_add(void *target, free_fp fp, bool *temp)
 {
-    struct __node *p = &__pool;
-    struct __node *new = (struct __node *)malloc(sizeof(struct __node));
+    struct __mb *p = &__ds_head;
+    struct __mb *new = (struct __mb *)malloc(sizeof(struct __mb));
 
     new->temp = temp;
-    new->data = data;
+    new->target = target;
     new->free = fp;
     new->next = NULL;
 
-    while (1) {
-        if (p->next != NULL) {
+    while (p->next != NULL) 
+        p = p->next;
 
-            p = p->next;
-            continue;;
-        }
-
-        p->next = new;
-        break;
-    }
-
-    return &__pool;
+    p->next = new;
 }
 
-void __st_free_all(void)
+/* clear the data space */
+static void __clear_ds(bool only_temp)
 {
-    struct __node *p = &__pool;
-    struct __node *next;
+    struct __mb *p = &__ds_head;
+    struct __mb *next = p->next;
 
-    while (p->next != NULL) {
+    while (next != NULL) {
+        
+        if (only_temp) {
+            if (!*next->temp) {
 
-        next = p->next;
+                /**
+                 * here implement the case of delete temporary node only
+                 * this node is not temporary, so skip this node
+                 */
 
-        if (*next->temp) {
-            /* clear it */
-            next->free(next->data);
-            p->next = next->next;
-            free(next);
-            continue;
+                p = next;
+                next = p->next;
+                continue;
+            }
         }
 
-        p = p->next;
+        /* clear it */
+        p->next = next->next;
+        next->free(next->target);
+        free(next);
+        next = p->next;
     }
+}
+
+/* clear all member of the data space */
+void st_ds_clear_all(void)
+{
+    __clear_ds(false);
+}
+
+/* clear temporary member of the data space */
+void st_ds_clear_temp(void)
+{
+    __clear_ds(true);
 }

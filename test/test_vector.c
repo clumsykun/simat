@@ -77,7 +77,7 @@ int main()
     // st_vector *vec_tmp = st_new_bool_vector(len+1);
     // st_vec_add(vec_double, vec_double, vec_tmp);
 
-    __st_free_all();
+    st_ds_clear_temp();
 
     return 0;
 }

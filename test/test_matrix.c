@@ -75,7 +75,7 @@ int main()
 
     st_vec_display(v1);
     st_vec_display(v2);
-    printf("dot of col 1 and col 2: %.2f\n", st_vec_dot(v1, v2));
+    printf("dot of row 1 and row 2: %.2f\n", st_vec_dot(v1, v2));
 
     st_matrix *dist_mat = st_new_matrix(mat->nrow, mat->nrow);
     st_mat_assign_all(dist_mat, -1);
@@ -87,21 +87,23 @@ int main()
     st_mat_display(dist_mat);
     st_mat_display(mat);
 
-    // __st_pool_add(mat, st_free_matrix);
-    // __st_pool_add(bool_mat, st_free_matrix);
-    // __st_pool_add(pixel_mat, st_free_matrix);
-    // __st_pool_add(int_mat, st_free_matrix);
+    // __st_ds_add(mat, st_free_matrix);
+    // __st_ds_add(bool_mat, st_free_matrix);
+    // __st_ds_add(pixel_mat, st_free_matrix);
+    // __st_ds_add(int_mat, st_free_matrix);
 
     dist_mat->temp = false;
+    view->temp = false;
 
-    __st_free_all();
-    __st_free_all();
+    st_ds_clear_temp();
+    st_ds_clear_temp();
 
     st_mat_display(dist_mat);
 
     dist_mat->temp = true;
 
-    __st_free_all();
+    st_ds_clear_temp();
+    st_ds_clear_all();
 
     // st_mat_display(mat);
 
