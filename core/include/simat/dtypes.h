@@ -147,7 +147,6 @@ st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
 st_vector *st_new_vector(size_t len);
-void st_free_vector(st_vector *vec);
 void st_vec_display(const st_vector *vec);
 void st_vec_assign_all(st_vector *vec, double value);
 
@@ -162,7 +161,6 @@ st_view *st_new_view();
 void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol);
 void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow);
 void st_vector_view(st_view *view, st_vector *vec);
-void st_free_view(st_view *view);
 void st_view_display(const st_view *view);
 
 #define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->nbyte)
