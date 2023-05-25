@@ -9,63 +9,12 @@ bool __st_access_error = false;
 bool __st_dtype_error = false;
 bool __st_out_range_error = false;
 bool __st_length_error = false;
-
-double __st_raise_access_error(void)
-{
-    __st_is_error = true;
-    __st_access_error = true;
-    return 0;
-}
-
-size_t __st_raise_dtype_error(void)
-{
-    __st_is_error = true;
-    __st_dtype_error = true;
-    return 0;
-}
-
-double __st_raise_out_range_error(void)
-{
-    __st_is_error = true;
-    __st_out_range_error = true;
-    return 0;
-}
-
-void __st_raise_length_error(void)
-{
-    __st_is_error = true;
-    __st_length_error = true;
-}
+bool __st_invalid_error = false;
 
 /**
- * check program is correct or not after any operation
- * probably need some advanced handling
- */
-void __st_check__(const char *file, const size_t line)
-{
-
-    if (__st_is_error)
-    printf("%s:%d: ", file, line);
-
-    if (__st_access_error)
-        printf("Error: Access failed!\n");
-
-    if (__st_dtype_error)
-        printf("Error: Data type not found!\n");
-
-    if (__st_out_range_error)
-        printf("Error: Index out of range!\n");
-
-    if (__st_length_error)
-        printf("Error: length not match!\n");
-
-    assert(!__st_is_error);
-}
-
-/**
- * this code of linked list implements the the data space
- * all data of simat should be added to the data space as a member
- * which is an element of this linked list
+ * this linked list implements the the data space.
+ * all data of simat should be added to the data space as a member,
+ * which is an element of this linked list.
  */
 struct __mb {
     bool *temp;
@@ -137,4 +86,86 @@ void st_ds_clear_all(void)
 void st_ds_clear_temp(void)
 {
     __clear_ds(true);
+}
+
+/* check if the target is a invalid member of data space */
+bool st_is_invalid(void *target)
+{
+    struct __mb *p = &__ds_head;
+    bool is_invalid = true;
+
+    while (p->next != NULL) {
+
+        p = p->next;
+        if (p->target == target)
+            is_invalid = false;
+    }
+
+    return is_invalid;
+}
+
+/**
+ * check and raise error here.
+ */
+
+void __st_check_invalid_error(void *target)
+{
+    __st_invalid_error = st_is_invalid(target);
+    if (__st_invalid_error)
+        __st_is_error = true;
+}
+
+double __st_raise_access_error(void)
+{
+    __st_is_error = true;
+    __st_access_error = true;
+    return 0;
+}
+
+size_t __st_raise_dtype_error(void)
+{
+    __st_is_error = true;
+    __st_dtype_error = true;
+    return 0;
+}
+
+double __st_raise_out_range_error(void)
+{
+    __st_is_error = true;
+    __st_out_range_error = true;
+    return 0;
+}
+
+void __st_raise_length_error(void)
+{
+    __st_is_error = true;
+    __st_length_error = true;
+}
+
+/**
+ * check program is correct or not after any operation
+ * probably need some advanced handling
+ */
+void __st_check__(const char *file, const size_t line)
+{
+
+    if (__st_is_error)
+    printf("%s:%d: ", file, line);
+
+    if (__st_invalid_error)
+        printf("Error: Invalid simat member!\n");
+
+    if (__st_access_error)
+        printf("Error: Access failed!\n");
+
+    if (__st_dtype_error)
+        printf("Error: Data type not found!\n");
+
+    if (__st_out_range_error)
+        printf("Error: Index out of range!\n");
+
+    if (__st_length_error)
+        printf("Error: length not match!\n");
+
+    assert(!__st_is_error);
 }

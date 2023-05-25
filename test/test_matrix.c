@@ -92,6 +92,9 @@ int main()
     // __st_ds_add(pixel_mat, st_free_matrix);
     // __st_ds_add(int_mat, st_free_matrix);
 
+    // printf("is v1 invalid: %d\n", st_is_invalid(v1));
+    // printf("is dist_mat invalid: %d\n", st_is_invalid(dist_mat));
+
     dist_mat->temp = false;
     view->temp = false;
 

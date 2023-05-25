@@ -3,21 +3,24 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+typedef void (*free_fp)(void *);
+void __st_ds_add(void *data, free_fp fp, bool *temp);
+void st_ds_clear_all(void);
+void st_ds_clear_temp(void);
+
 extern bool __st_is_error;
 extern bool __st_access_error;
 extern bool __st_dtype_error;
 extern bool __st_out_range_error;
 extern bool __st_length_error;
+extern bool __st_is_invalid;
 
+bool     st_is_invalid(void *target);
+void   __st_check_invalid_error(void *target);
 double __st_raise_access_error(void);
 size_t __st_raise_dtype_error(void);
 double __st_raise_out_range_error(void);
 void   __st_raise_length_error(void);
-void __st_check__(const char *file, const size_t line);
-
-typedef void (*free_fp)(void *);
-void __st_ds_add(void *data, free_fp fp, bool *temp);
-void st_ds_clear_all(void);
-void st_ds_clear_temp(void);
+void   __st_check__(const char *file, const size_t line);
 
 #endif /* SIMAT_INSPECTOR_H */
