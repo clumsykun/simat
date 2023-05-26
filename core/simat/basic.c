@@ -59,6 +59,12 @@ static double __scale_value(double value, __st_dtype dtype)
     return value;
 }
 
+double st_precise(double x, size_t ndigits)
+{
+    ndigits = (ndigits >= 15 ? 15 : ndigits);  /* max precision of double */
+    return trunc(x*pow(10, ndigits))/pow(10, ndigits);
+}
+
 /**
  * set random value to vector, random range is intersection of
  * [-RAND_MAX/2, RAND_MAX/2] and support range of data type
