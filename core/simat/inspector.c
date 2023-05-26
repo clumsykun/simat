@@ -118,13 +118,20 @@ bool st_is_invalid(const void *target)
 void st_ds_display(void)
 {
     struct __mb *p = &__ds_head;
+
+    if (p->next == NULL) {
+        printf("status of simat data space: empty!\n\n");
+        return;
+    }
+
+    printf("status of simat data space:\n");
     while (p->next != NULL) {
         p = p->next;
 
         if (p->status != NULL)
             p->status(p->target);
     }
-    printf("OK\n");
+    printf("\n");
 }
 
 /**

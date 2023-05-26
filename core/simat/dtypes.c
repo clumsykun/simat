@@ -137,14 +137,11 @@ void st_vec_display(const st_vector *vec)
     switch (vec->data->dtype) {
 
         case __st_bool: {
-            printf("BoolVector([\n");
+            printf("BoolVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++) {
                 c = (st_vec_access(vec, i) == false ? '-' : '+');
                 printf("(%c), ", c);
-
-                if ((i + 1) % 10 == 0)
-                    printf("\n");
             }
 
             printf("(%c)])\n", (st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
@@ -152,44 +149,32 @@ void st_vec_display(const st_vector *vec)
         }
 
         case __st_pixel: {
-            printf("PixelVector([\n");
+            printf("PixelVector([");
 
-            for (size_t i = 0; i <= vec->len - 2; i++) {
-                printf("(%3d), ", (int)st_vec_access(vec, i));
+            for (size_t i = 0; i <= vec->len - 2; i++)
+                printf("(%d), ", (int)st_vec_access(vec, i));
 
-                if ((i + 1) % 10 == 0)
-                    printf("\n");
-            }
-
-            printf("(%3d)])\n", (int)st_vec_access(vec, vec->len-1));
+            printf("(%d)])\n", (int)st_vec_access(vec, vec->len-1));
             break;
         }
 
         case __st_int: {
-            printf("IntVector([\n");
+            printf("IntVector([");
 
-            for (size_t i = 0; i <= vec->len - 2; i++) {
-                printf("%5d, ", (int)st_vec_access(vec, i));
+            for (size_t i = 0; i <= vec->len - 2; i++)
+                printf("%d, ", (int)st_vec_access(vec, i));
 
-                if ((i + 1) % 10 == 0)
-                    printf("\n");
-            }
-
-            printf("%5d])\n", (int)st_vec_access(vec, vec->len-1));
+            printf("%d])\n", (int)st_vec_access(vec, vec->len-1));
             break;
         }
 
         case __st_double: {
             printf("Vector([");
 
-            for (size_t i = 0; i <= vec->len - 2; i++) {
-                printf("%4.2f, ", (double)st_vec_access(vec, i));
+            for (size_t i = 0; i <= vec->len - 2; i++)
+                printf("%f, ", (double)st_vec_access(vec, i));
 
-                if ((i + 1) % 10 == 0)
-                    printf("\n        ");
-            }
-
-            printf("%4.2f])\n", (double)st_vec_access(vec, vec->len-1));
+            printf("%f])\n", (double)st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -197,6 +182,7 @@ void st_vec_display(const st_vector *vec)
             __st_raise_dtype_error();
             break;
     }
+    printf("\n");
     __st_check();
 }
 
@@ -204,7 +190,7 @@ static void __status_vector(void *vector)
 {
     const st_vector *vec = vector;
     printf(
-        "Vector(%s) at (%p), size (%d)\n",
+        "%10s Vector (%p), size (%d)\n",
         __st_dtype_str(vec->dtype),
         vec,
         vec->len
@@ -423,6 +409,7 @@ void st_mat_display(st_matrix *mat)
         __st_raise_dtype_error();
     }
 
+    printf("\n");
     __st_check();
 }
 
@@ -430,7 +417,7 @@ static void __status_matrix(void *matrix)
 {
     const st_matrix *mat = matrix;
     printf(
-        "Matrix(%s) at (%p), size (%d, %d)\n",
+        "%10s Matrix (%p), size (%d, %d)\n",
         __st_dtype_str(mat->dtype),
         mat,
         mat->nrow,
@@ -600,6 +587,7 @@ void st_view_display(const st_view *view)
             __st_raise_dtype_error();
             break;
     }
+    printf("\n");
     __st_check();
 }
 
@@ -607,7 +595,7 @@ static void __status_view(void *view)
 {
     const st_view *v = view;
     printf(
-        "  View(%s) at (%p), size (%d)\n",
+        "%10s View   (%p), size (%d)\n",
         __st_dtype_str(v->dtype),
         v,
         v->len

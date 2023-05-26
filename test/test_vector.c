@@ -6,7 +6,7 @@
 
 int main()
 {
-    size_t len = 10;
+    size_t len = 100;
     double min = -314.15;
     double max = 314.15;
 
@@ -73,6 +73,8 @@ int main()
 
     st_vec_add(vec_double, vec_double, vec_bool);
     st_vec_display(vec_double);
+
+    st_ds_display();
 
     // st_vector *vec_tmp = st_new_bool_vector(len+1);
     // st_vec_add(vec_double, vec_double, vec_tmp);
