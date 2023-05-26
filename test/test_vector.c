@@ -5,18 +5,18 @@
 st_vector *test_vec_1(void) {
 
     st_vector *vec = st_new_vector(5);
-    st_vec_assign(vec, 0, 3.1415926535);
-    st_vec_assign(vec, 1, 2.7182818284);
-    st_vec_assign(vec, 2, 0.5772156649);
-    st_vec_assign(vec, 3, 4.6692016091);
-    st_vec_assign(vec, 4, 2.5029078750);
+    st_vec_assign(vec, 0, 3.141592653589793);
+    st_vec_assign(vec, 1, 2.718281828459045);
+    st_vec_assign(vec, 2, 0.577215664901532);
+    st_vec_assign(vec, 3, 1.414213562373095);
+    st_vec_assign(vec, 4, 299792458);
     return vec;
 }
 
 void test__st_vec_min(void)
 {
     char *name = "st_vec_min";
-    double ret, target = 0.5772156649;
+    double ret, target = 0.577215664901532;
 
     /* test content start */
 
@@ -32,7 +32,7 @@ void test__st_vec_min(void)
 void test__st_vec_max(void)
 {
     char *name = "st_vec_max";
-    double ret, target = 4.6692016091;
+    double ret, target = 299792458;
 
     /* test content start */
 
