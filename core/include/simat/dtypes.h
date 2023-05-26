@@ -142,17 +142,6 @@ typedef struct __st_view
 
 size_t __st_byteof(__st_dtype dtype);
 
-#define __st_dtype_str(dtype)         \
-    ((dtype) == __st_double             \
-        ? "double"                    \
-        : ((dtype) == __st_int          \
-            ? "int"                   \
-            : ((dtype) == __st_pixel    \
-                ? "pixel"             \
-                : ((dtype) == __st_bool \
-                    ? "bool"          \
-                    : "invalid"))))
-
 st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);

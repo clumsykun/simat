@@ -100,6 +100,8 @@ int main()
     dist_mat->temp = false;
     view->temp = false;
 
+    st_ds_display();
+
     st_ds_clear_temp();
     st_ds_clear_temp();
 

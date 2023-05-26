@@ -3,6 +3,21 @@
 #include <string.h>
 #include "dtypes.h"
 
+
+#define __st_temp_str(is_temp) \
+    ((is_temp) == true ? "TEMP" : "    ")
+
+#define __st_dtype_str(dtype)           \
+    ((dtype) == __st_double             \
+        ? "Double"                      \
+        : ((dtype) == __st_int          \
+            ? "Int"                     \
+            : ((dtype) == __st_pixel    \
+                ? "Pixel"               \
+                : ((dtype) == __st_bool \
+                    ? "Bool"            \
+                    : "invalid"))))
+
 static void __free(void *p);
 static void __free_data(const __st_data *data);
 static void __free_vector(void *vector);
@@ -190,9 +205,10 @@ static void __status_vector(void *vector)
 {
     const st_vector *vec = vector;
     printf(
-        "%10s Vector (%p), size (%d)\n",
+        "%10s Vector (%p), %s, size (%d)\n",
         __st_dtype_str(vec->dtype),
         vec,
+        __st_temp_str(vec->temp),
         vec->len
     );
 }
@@ -417,9 +433,10 @@ static void __status_matrix(void *matrix)
 {
     const st_matrix *mat = matrix;
     printf(
-        "%10s Matrix (%p), size (%d, %d)\n",
+        "%10s Matrix (%p), %s, size (%d, %d)\n",
         __st_dtype_str(mat->dtype),
         mat,
+        __st_temp_str(mat->temp),
         mat->nrow,
         mat->ncol
     );
@@ -595,9 +612,10 @@ static void __status_view(void *view)
 {
     const st_view *v = view;
     printf(
-        "%10s View   (%p), size (%d)\n",
+        "%10s View   (%p), %s, size (%d)\n",
         __st_dtype_str(v->dtype),
         v,
+        __st_temp_str(v->temp),
         v->len
     );
 }
