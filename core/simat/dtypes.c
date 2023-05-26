@@ -128,6 +128,7 @@ static void __free_vector(void *vector)
 
 void st_vec_display(const st_vector *vec)
 {
+    __st_check_invalid_error(vec);
     char c;
     switch (vec->data->dtype) {
 
@@ -197,6 +198,7 @@ void st_vec_display(const st_vector *vec)
 
 void st_vec_assign_all(st_vector *vec, double value)
 {
+    __st_check_invalid_error(vec);
     void *p;
 
     for __st_iter_data(p, vec->data)
@@ -226,6 +228,7 @@ static void __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t l
 
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(row, &_vec, sizeof(st_vector));
+    __st_ds_add(row, NULL, &((st_vector *)row)->temp);
 }
 
 static st_matrix *__new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
@@ -315,6 +318,8 @@ st_matrix *st_new_matrix(size_t nrow, size_t ncol)
 
 void st_mat_display(st_matrix *mat)
 {
+    __st_check_invalid_error(mat);
+
     char c;
     switch (mat->dtype) {
 
@@ -408,6 +413,8 @@ void st_mat_display(st_matrix *mat)
 
 void st_mat_assign_all(st_matrix *mat, double value)
 {
+    __st_check_invalid_error(mat);
+
     void *p;
 
     for __st_iter_data(p, mat->data)

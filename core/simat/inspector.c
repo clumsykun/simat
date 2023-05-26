@@ -70,7 +70,15 @@ static void __clear_ds(bool only_temp)
 
         /* clear it */
         p->next = next->next;
-        next->free(next->target);
+
+        /**
+         * every row of matrix is registered as a valid member,
+         * but its free function is NULL, you can not free a row of matrix,
+         * you should free the whole matrix
+         */
+        if (next->free != NULL)
+            next->free(next->target);
+
         free(next);
         next = p->next;
     }
@@ -89,7 +97,7 @@ void st_ds_clear_temp(void)
 }
 
 /* check if the target is a invalid member of data space */
-bool st_is_invalid(void *target)
+bool st_is_invalid(const void *target)
 {
     struct __mb *p = &__ds_head;
     bool is_invalid = true;
@@ -108,11 +116,13 @@ bool st_is_invalid(void *target)
  * check and raise error here.
  */
 
-void __st_check_invalid_error(void *target)
+void __st_check_invalid_error(const void *target)
 {
     __st_invalid_error = st_is_invalid(target);
     if (__st_invalid_error)
         __st_is_error = true;
+
+    __st_check();
 }
 
 double __st_raise_access_error(void)

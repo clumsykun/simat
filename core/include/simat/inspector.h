@@ -15,12 +15,14 @@ extern bool __st_out_range_error;
 extern bool __st_length_error;
 extern bool __st_is_invalid;
 
-bool     st_is_invalid(void *target);
-void   __st_check_invalid_error(void *target);
+bool     st_is_invalid(const void *target);
+void   __st_check_invalid_error(const void *target);
 double __st_raise_access_error(void);
 size_t __st_raise_dtype_error(void);
 double __st_raise_out_range_error(void);
 void   __st_raise_length_error(void);
 void   __st_check__(const char *file, const size_t line);
+
+#define __st_check() __st_check__(__FILE__, __LINE__)
 
 #endif /* SIMAT_INSPECTOR_H */
