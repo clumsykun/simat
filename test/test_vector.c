@@ -1,85 +1,59 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <time.h>
-#include "simat.h"
+#include <math.h>
+#include <simat.h>
+
+st_vector *test_vec_1(void) {
+
+    st_vector *vec = st_new_vector(5);
+    st_vec_assign(vec, 0, 3.1415926535);
+    st_vec_assign(vec, 1, 2.7182818284);
+    st_vec_assign(vec, 2, 0.5772156649);
+    st_vec_assign(vec, 3, 4.6692016091);
+    st_vec_assign(vec, 4, 2.5029078750);
+    return vec;
+}
+
+void test__st_vec_min(void)
+{
+    char *name = "st_vec_min";
+    double ret, target = 0.5772156649;
+
+    /* test content start */
+
+    st_vector *vec = test_vec_1();
+    ret = st_vec_min(vec);
+
+    /* test content end */
+
+    if (ret == target) printf("    OK --> %s\n", name);
+    else printf("FAILED --> %s\n", name);
+}
+
+void test__st_vec_max(void)
+{
+    char *name = "st_vec_max";
+    double ret, target = 4.6692016091;
+
+    /* test content start */
+
+    st_vector *vec = test_vec_1();
+    ret = st_vec_max(vec);
+
+    /* test content end */
+
+    if (ret == target) printf("    OK --> %s\n", name);
+    else printf("FAILED --> %s\n", name);
+
+}
+
 
 int main()
 {
-    size_t len = 100;
-    double min = -314.15;
-    double max = 314.15;
+    printf("unit test start:\n");
 
-    srand(time(NULL));
-    st_vector *vec_bool = st_new_bool_vector(len);
-    st_vector *vec_pixel = st_new_pixel_vector(len);
-    st_vector *vec_int = st_new_int_vector(len);
-    st_vector *vec_double = st_new_vector(len);
+    test__st_vec_min();
+    test__st_vec_max();
 
-    st_vec_rand(vec_bool);
-    st_vec_rand(vec_pixel);
-    st_vec_rand(vec_int);
-    st_vec_rand(vec_double);
-
-    st_vec_display(vec_bool);
-    st_vec_display(vec_pixel);
-    st_vec_display(vec_int);
-    st_vec_display(vec_double);
-
-    st_vec_sort(vec_bool);
-    st_vec_display(vec_bool);
-    st_vec_sort(vec_pixel);
-    st_vec_display(vec_pixel);
-    printf("max is:%d\n", st_vec_max(vec_pixel));;
-    st_vec_sort(vec_int);
-    st_vec_display(vec_int);
-    printf("max is:%d\n", st_vec_max(vec_int));
-    st_vec_sort(vec_double);
-    st_vec_display(vec_double);
-    printf("max is:%f\n", st_vec_max(vec_double));
-
-    st_vec_scale(vec_bool, 0, 100);
-    st_vec_scale(vec_pixel, 0, 100);
-    st_vec_scale(vec_int, 0, 100);
-    st_vec_scale(vec_double, 0, 100);
-
-    st_vec_display(vec_bool);
-    st_vec_display(vec_pixel);
-    st_vec_display(vec_int);
-    st_vec_display(vec_double);
-
-    st_vec_reverse(vec_bool);
-    st_vec_reverse(vec_pixel);
-    st_vec_reverse(vec_int);
-    st_vec_reverse(vec_double);
-
-    st_vec_display(vec_bool);
-    st_vec_display(vec_pixel);
-    st_vec_display(vec_int);
-    st_vec_display(vec_double);
-
-    st_view *view = st_new_view();
-    st_vector_view(view, vec_double);
-    st_view_display(view);
-
-    st_view_reverse(view);
-    st_view_display(view);
-    st_vec_display(vec_double);
-
-    printf("norm is:%.2f\n", st_vec_norm(vec_double));
-
-    st_vec_sub(vec_double, vec_double, vec_bool);
-    st_vec_display(vec_double);
-
-    st_vec_add(vec_double, vec_double, vec_bool);
-    st_vec_display(vec_double);
-
-    st_ds_display();
-
-    // st_vector *vec_tmp = st_new_bool_vector(len+1);
-    // st_vec_add(vec_double, vec_double, vec_tmp);
-
-    st_ds_clear_temp();
-
+    printf("\n");
     return 0;
 }
