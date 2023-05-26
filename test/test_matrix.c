@@ -95,13 +95,15 @@ int main()
     // printf("is v1 invalid: %d\n", st_is_invalid(v1));
     // printf("is dist_mat invalid: %d\n", st_is_invalid(dist_mat));
 
+    st_ds_display();
+
     dist_mat->temp = false;
     view->temp = false;
 
     st_ds_clear_temp();
     st_ds_clear_temp();
 
-    st_mat_display(dist_mat);
+    st_ds_display();
 
     dist_mat->temp = true;
 
@@ -115,5 +117,6 @@ int main()
     // st_free_matrix(int_mat);
     // st_free_matrix(mat);
 
+    st_ds_display();
     return 0;
 }

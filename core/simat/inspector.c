@@ -20,6 +20,7 @@ struct __mb {
     bool *temp;
     void *target;
     free_fp free;
+    status_fp status;
     struct __mb * next;
 };
 
@@ -27,17 +28,19 @@ struct __mb __ds_head = {
     NULL,
     NULL,
     NULL,
+    NULL,
     NULL
 };
 
-void __st_ds_add(void *target, free_fp fp, bool *temp)
+void __st_ds_add(void *target, free_fp ffp, status_fp sfp, bool *temp)
 {
     struct __mb *p = &__ds_head;
     struct __mb *new = (struct __mb *)malloc(sizeof(struct __mb));
 
     new->temp = temp;
     new->target = target;
-    new->free = fp;
+    new->free = ffp;
+    new->status = sfp;
     new->next = NULL;
 
     while (p->next != NULL) 
@@ -110,6 +113,18 @@ bool st_is_invalid(const void *target)
     }
 
     return is_invalid;
+}
+
+void st_ds_display(void)
+{
+    struct __mb *p = &__ds_head;
+    while (p->next != NULL) {
+        p = p->next;
+
+        if (p->status != NULL)
+            p->status(p->target);
+    }
+    printf("OK\n");
 }
 
 /**

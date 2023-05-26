@@ -12,6 +12,10 @@ static void __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t l
 static st_vector *__new_vector(__st_dtype dtype, size_t len);
 static st_matrix *__new_matrix(__st_dtype dtype, size_t nrow, size_t ncol);
 
+static void __status_vector(void *vector);
+static void __status_matrix(void *matrix);
+static void __status_view(void *view);
+
 size_t __st_byteof(__st_dtype dtype)
 {
     size_t nbyte;
@@ -94,7 +98,7 @@ static st_vector *__new_vector(__st_dtype dtype, size_t len)
 
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(vec, &_vec, sizeof(st_vector));
-    __st_ds_add(vec, __free_vector, &vec->temp);
+    __st_ds_add(vec, __free_vector, __status_vector, &vec->temp);
     return vec;
 }
 
@@ -196,6 +200,17 @@ void st_vec_display(const st_vector *vec)
     __st_check();
 }
 
+static void __status_vector(void *vector)
+{
+    const st_vector *vec = vector;
+    printf(
+        "Vector(%s) at (%p), size (%d)\n",
+        __st_dtype_str(vec->dtype),
+        vec,
+        vec->len
+    );
+}
+
 void st_vec_assign_all(st_vector *vec, double value)
 {
     __st_check_invalid_error(vec);
@@ -228,7 +243,7 @@ static void __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t l
 
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(row, &_vec, sizeof(st_vector));
-    __st_ds_add(row, NULL, &((st_vector *)row)->temp);
+    __st_ds_add(row, NULL, NULL, &((st_vector *)row)->temp);
 }
 
 static st_matrix *__new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
@@ -271,7 +286,7 @@ static st_matrix *__new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     };
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(mat, &_mat, sizeof(st_matrix));
-    __st_ds_add(mat, __free_matrix, &mat->temp);
+    __st_ds_add(mat, __free_matrix, __status_matrix, &mat->temp);
 
     return mat;
 }
@@ -411,6 +426,18 @@ void st_mat_display(st_matrix *mat)
     __st_check();
 }
 
+static void __status_matrix(void *matrix)
+{
+    const st_matrix *mat = matrix;
+    printf(
+        "Matrix(%s) at (%p), size (%d, %d)\n",
+        __st_dtype_str(mat->dtype),
+        mat,
+        mat->nrow,
+        mat->ncol
+    );
+}
+
 void st_mat_assign_all(st_matrix *mat, double value)
 {
     __st_check_invalid_error(mat);
@@ -438,7 +465,7 @@ st_view *st_new_view()
         &_view,
         sizeof(st_view)
     );
-    __st_ds_add(view, __free_view, &view->temp);
+    __st_ds_add(view, __free_view, __status_view, &view->temp);
     return view;
 }
 
@@ -574,4 +601,15 @@ void st_view_display(const st_view *view)
             break;
     }
     __st_check();
+}
+
+static void __status_view(void *view)
+{
+    const st_view *v = view;
+    printf(
+        "  View(%s) at (%p), size (%d)\n",
+        __st_dtype_str(v->dtype),
+        v,
+        v->len
+    );
 }

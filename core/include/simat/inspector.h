@@ -4,9 +4,12 @@
 #include <stddef.h>
 
 typedef void (*free_fp)(void *);
-void __st_ds_add(void *data, free_fp fp, bool *temp);
+typedef void (*status_fp)(void *);
+
+void __st_ds_add(void *target, free_fp ffp, status_fp sfp, bool *temp);
 void st_ds_clear_all(void);
 void st_ds_clear_temp(void);
+void st_ds_display(void);
 
 extern bool __st_is_error;
 extern bool __st_access_error;
