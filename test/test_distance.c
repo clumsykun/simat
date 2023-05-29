@@ -51,12 +51,31 @@ void test__st_dist_euclid(void)
     else printf("FAILED --> %s\n", name);
 }
 
+void test__st_dist_cosine(void)
+{
+    char *name = "st_dist_cosine";
+    double ret, target = 0.8902623;
+
+    /* test content start */
+
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec2 = test_vec_2();
+    ret = st_dist_cosine(vec1, vec2);
+    ret = st_precise(ret, 7);
+
+    /* test content end */
+
+    if (ret == target) printf("    OK --> %s\n", name);
+    else printf("FAILED --> %s\n", name);
+}
+
 
 int main()
 {
     printf("unit test of distance start:\n");
 
     test__st_dist_euclid();
+    test__st_dist_cosine();
 
     printf("\n");
     st_ds_display();

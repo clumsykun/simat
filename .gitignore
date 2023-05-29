@@ -1,3 +1,4 @@
 .vscode/*
+core/Lib/*
 core/lib/*.o
 core/lib/*.a
