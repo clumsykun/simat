@@ -1,3 +1,6 @@
-make test_flags.o
-./core/Lib/test_flags.o
+# ----- test vector ----- #
+make test_vector.o
+echo ""
+./core/lib/test_vector.o
+
 make clean

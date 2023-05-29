@@ -55,5 +55,9 @@ int main()
     test__st_vec_max();
 
     printf("\n");
+    st_ds_display();
+
+
+    printf("\n");
     return 0;
 }
