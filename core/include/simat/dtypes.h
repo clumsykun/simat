@@ -2,7 +2,6 @@
 #define SIMAT_DTYPES_H
 #include "watcher.h"
 
-
 #define st_bool bool
 #define st_pixel unsigned char
 #define st_int int
@@ -147,7 +146,6 @@ st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
 st_vector *st_new_vector(size_t len);
 void st_vec_display(const st_vector *vec);
-void st_vec_status(const void *vector);
 void st_vec_assign_all(st_vector *vec, double value);
 
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);
