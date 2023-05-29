@@ -10,5 +10,6 @@ void   st_vec_scale(st_vector *vec, double min, double max);
 void   st_vec_add(st_vector *re, st_vector *a, st_vector *b);
 void   st_vec_sub(st_vector *re, st_vector *a, st_vector *b);
 double st_vec_dot(st_vector *a, st_vector *b);
+bool   st_vec_equal(st_vector *a, st_vector *b);
 
 #endif /* CORE_VECTOR_H */

@@ -101,6 +101,34 @@ void test__st_vec_scale(void)
     else printf("FAILED --> %s\n", name);
 }
 
+void test__st_vec_equal(void)
+{
+    char *name = "st_vec_equal";
+    double ret, target = 0;
+
+    /* test content start */
+
+    ret = 0;
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec2 = test_vec_2();
+    st_vector *vec3 = test_vec_1();
+
+    if (!st_vec_equal(vec1, vec1))
+        ret = 1;
+
+    if (st_vec_equal(vec1, vec2))
+        ret = 1;
+
+    if (!st_vec_equal(vec1, vec3))
+        ret = 1;
+
+    /* test content end */
+
+    if (ret == target) printf("    OK --> %s\n", name);
+    else printf("FAILED --> %s\n", name);
+}
+
+
 int main()
 {
     printf("unit test of vector start:\n");
@@ -109,6 +137,7 @@ int main()
     test__st_vec_max();
     test__st_vec_norm();
     test__st_vec_scale();
+    test__st_vec_equal();
 
     printf("\n");
     st_ds_display();
