@@ -36,9 +36,21 @@ double st_dist_euclid(st_vector *a, st_vector *b)
 }
 
 /* cosine similarity of vector v1 and v2. */
-double st_dist_cosine(st_vector *v1, st_vector *v2)
+double st_dist_cosine(st_vector *a, st_vector *b)
 {
-    return st_vec_dot(v1,v2)/(st_vec_norm(v1)*st_vec_norm(v2));
+    check_vec_length(a, b);
+    return st_vec_dot(a,b)/(st_vec_norm(a)*st_vec_norm(b));
+}
+
+/* manhattan distance of vector v1 and v2. */
+double st_dist_manhattan(st_vector *a, st_vector *b)
+{
+    check_vec_length(a, b);
+    double dist;
+    for (size_t i = 0; i < a->len; i++)
+        dist += fabs(st_vec_access(a, i)-st_vec_access(b, i));
+
+    return dist;
 }
 
 double st_dist_cos_ww(st_view *w1, st_view *w2)
