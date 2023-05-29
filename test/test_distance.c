@@ -114,9 +114,6 @@ int test__distance(void)
     call_test(test__st_dist_cosine);
 
     printf("\n");
-    st_ds_display();
-
-    printf("\n");
     return 0;
     return 0;
 }

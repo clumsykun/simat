@@ -153,8 +153,5 @@ int test__vector()
     test__st_vec_equal();
 
     printf("\n");
-    st_ds_display();
-
-    printf("\n");
     return 0;
 }

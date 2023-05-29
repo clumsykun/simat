@@ -1,8 +1,6 @@
 # ----- test vector ----- #
-make test_vector.o
-make test_distance.o
+make test_simat.o
 echo ""
-./core/lib/test_vector.o
-./core/lib/test_distance.o
+./core/lib/test_simat.o
 
 make clean
