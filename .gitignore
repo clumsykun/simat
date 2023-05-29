@@ -1,2 +1,2 @@
 .vscode/*
-core/Lib/test_*.o
+core/lib/*.o
