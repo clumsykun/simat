@@ -38,13 +38,20 @@ libbasic.a:
 								$(lib)/view.o \
 								$(lib)/basic.o
 
-test_vector.o: libbasic.a
-	$(cc) $(test)/test_vector.c -I$(i) -I$(i)/simat -L$(lib) -lbasic -lm -o $(lib)/test_vector.o
-	rm $(lib)/libbasic.a
+test_simat.o: simat.a
+	$(cc) -I$(i) -I$(i)/simat -I$(test) \
+	$(test)/test_vector.c \
+	$(test)/test_distance.c \
+	$(test)/test_simat.c \
+	-L$(lib) -lsimat -lm \
+	-o $(lib)/test_simat.o
 
-test_distance.o: simat.a
-	$(cc) $(test)/test_distance.c -I$(i) -I$(i)/simat -L$(lib) -lsimat -lm -o $(lib)/test_distance.o
-	# rm $(lib)/libsimat.a
+test_basic.o: libbasic.a
+	$(cc) -I$(i) -I$(i)/simat -I$(test) \
+	$(test)/test_vector.c \
+	$(test)/test_basic.c \
+	-L$(lib) -lsimat -lm \
+	-o $(lib)/test_basic.o
 
 .PHONY: clean
 
