@@ -55,23 +55,6 @@ result * test__st_dist_chebyshev(result *rp)
     return rp;
 }
 
-
-void test__st_dist_minkowski(void)
-{
-    char *name = "st_dist_minkowski";
-    double ret, target = 10.24452932;
-
-    /* test content start */
-
-    st_vector *vec1 = test_vec_1();
-    st_vector *vec2 = test_vec_2();
-
-    /* test content end */
-
-    if (ret == target) printf("    OK --> %s\n", name);
-    else printf("FAILED --> %s\n", name);
-}
-
 int test__distance(void)
 {
     printf("unit test of distance start:\n");
