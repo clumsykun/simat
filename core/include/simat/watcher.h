@@ -1,15 +1,11 @@
 #ifndef SIMAT_INSPECTOR_H
 #define SIMAT_INSPECTOR_H
+
 #include <stdbool.h>
-#include <stddef.h>
-
-typedef void (*free_fp)(void *);
-typedef void (*status_fp)(void *);
-
-void __st_ds_add(void *target, free_fp ffp, status_fp sfp, bool *temp);
-void st_ds_clear_all(void);
-void st_ds_clear_temp(void);
-void st_ds_display(void);
+#include <stdlib.h>
+#include <assert.h>
+#include <stdio.h>
+#include "ds.h"
 
 extern bool __st_is_error;
 extern bool __st_access_error;
@@ -18,7 +14,6 @@ extern bool __st_out_range_error;
 extern bool __st_length_error;
 extern bool __st_is_invalid;
 
-bool     st_is_invalid(const void *target);
 void   __st_check_invalid_error(const void *target);
 double __st_raise_access_error(void);
 size_t __st_raise_dtype_error(void);
