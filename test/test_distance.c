@@ -42,21 +42,17 @@ result *test__st_dist_manhattan(result *rp)
     return rp;
 }
 
-
-void test__st_dist_chebyshev(void)
+result * test__st_dist_chebyshev(result *rp)
 {
-    char *name = "st_dist_chebyshev";
-    double ret, target = 6.39110032;
-
-    /* test content start */
+    rp->name = "st_dist_chebyshev";
+    double target = 6.39110032154095;
 
     st_vector *vec1 = test_vec_1();
     st_vector *vec2 = test_vec_2();
+    double dist = st_dist_chebyshev(vec1, vec2);
+    rp->value = !equal(st_precise(dist, 14), target);
 
-    /* test content end */
-
-    if (ret == target) printf("    OK --> %s\n", name);
-    else printf("FAILED --> %s\n", name);
+    return rp;
 }
 
 
@@ -83,6 +79,7 @@ int test__distance(void)
     call_test(test__st_dist_euclid);
     call_test(test__st_dist_cosine);
     call_test(test__st_dist_manhattan);
+    call_test(test__st_dist_chebyshev);
 
     printf("\n");
     return 0;

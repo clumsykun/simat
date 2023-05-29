@@ -107,7 +107,7 @@ double st_vec_dot(st_vector *a, st_vector *b)
     return re;
 }
 
-bool   st_vec_equal(st_vector *a, st_vector *b)
+bool st_vec_equal(st_vector *a, st_vector *b)
 {
     if (&a == &b)
         return true;

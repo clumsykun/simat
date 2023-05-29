@@ -53,6 +53,19 @@ double st_dist_manhattan(st_vector *a, st_vector *b)
     return dist;
 }
 
+double st_dist_chebyshev(st_vector *a, st_vector *b)
+{
+    check_vec_length(a, b);
+    double dist = 0;
+
+    for (size_t i = 0; i < a->len; i++)
+        dist = (fabs(st_vec_access(a, i) - st_vec_access(b, i)) > dist
+                ? fabs(st_vec_access(a, i) - st_vec_access(b, i))
+                : dist);
+
+    return dist;
+}
+
 double st_dist_cos_ww(st_view *w1, st_view *w2)
 {
     return st_view_dot(w1,w2)/(st_view_norm(w1)*st_view_norm(w2));
