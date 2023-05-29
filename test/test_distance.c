@@ -4,38 +4,64 @@
 #include <time.h>
 #include "simat.h"
 
+
+/**
+ * [3.141592653589793, 2.718281828459045, 0.577215664901532, 1.414213562373095, 1.618033988749894]
+ */
+st_vector *test_vec_1(void) {
+
+    st_vector *vec = st_new_vector(5);
+    st_vec_assign(vec, 0, 3.141592653589793);
+    st_vec_assign(vec, 1, 2.718281828459045);
+    st_vec_assign(vec, 2, 0.577215664901532);
+    st_vec_assign(vec, 3, 1.414213562373095);
+    st_vec_assign(vec, 4, 1.618033988749894);
+    return vec;
+}
+
+/**
+ * [6.67428, 9.10938215, 6.62606896, 5.2917720859, 1.602176487]
+ */
+st_vector *test_vec_2(void) {
+
+    st_vector *vec = st_new_vector(5);
+    st_vec_assign(vec, 0, 6.67428);
+    st_vec_assign(vec, 1, 9.10938215);
+    st_vec_assign(vec, 2, 6.62606896);
+    st_vec_assign(vec, 3, 5.2917720859);
+    st_vec_assign(vec, 4, 1.602176487);
+    return vec;
+}
+
+void test__st_dist_euclid(void)
+{
+    char *name = "st_dist_euclid";
+    double ret, target = 10.2445293;
+
+    /* test content start */
+
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec2 = test_vec_2();
+    ret = st_dist_euclid(vec1, vec2);
+    ret = st_precise(ret, 7);
+
+    /* test content end */
+
+    if (ret == target) printf("    OK --> %s\n", name);
+    else printf("FAILED --> %s\n", name);
+}
+
+
 int main()
 {
-    size_t nrow = 10;
-    size_t ncol = 5;
-    st_matrix *mat = st_new_matrix(nrow, ncol);
-    st_matrix *bool_mat = st_new_bool_matrix(nrow, ncol);
-    st_matrix *pixel_mat = st_new_pixel_matrix(nrow, ncol);
-    st_matrix *int_mat = st_new_int_matrix(nrow, ncol);
+    printf("unit test of distance start:\n");
 
-    // srand(time(NULL));
+    test__st_dist_euclid();
 
-    st_mat_rand(bool_mat);
-    st_mat_display(bool_mat);
-    st_mat_rand(pixel_mat);
-    st_mat_display(pixel_mat);
-    st_mat_rand(int_mat);
-    st_mat_display(int_mat);
-    st_mat_rand(mat);
-    st_mat_display(mat);
+    printf("\n");
+    st_ds_display();
 
-    st_vector *v1 = st_mat_access_col(mat, 1);
-    st_vector *v2 = st_mat_access_col(mat, 2);
-
-    st_vec_display(v1);
-    st_vec_display(v2);
-
-    printf("cos similarity of col 1 and col 2: %.4f\n", st_dist_cosine(v1, v2));
-
-    st_free_matrix(bool_mat);
-    st_free_matrix(pixel_mat);
-    st_free_matrix(int_mat);
-    st_free_matrix(mat);
-
+    printf("\n");
+    return 0;
     return 0;
 }

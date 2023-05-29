@@ -12,7 +12,7 @@ simat.a: libbasic.a
 	$(cc) $(flag) -I$(i)/simat -c $(st)/distance.c -o $(lib)/distance.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/stats.c -o $(lib)/stats.o
 	cd $(lib); $(ar) -x libbasic.a
-	$(ar) rcs $(lib)/libbasic.a $(lib)/ds.o \
+	$(ar) rcs $(lib)/libsimat.a $(lib)/ds.o \
 								$(lib)/watcher.o \
 								$(lib)/dtypes.o \
 								$(lib)/matrix.o \
@@ -21,8 +21,6 @@ simat.a: libbasic.a
 								$(lib)/basic.o \
 								$(lib)/distance.o \
 								$(lib)/stats.o
-	rm $(lib)/*.o
-	rm $(lib)/libbasic.a
 
 libbasic.a:
 	$(cc) $(flag) -I$(i)/simat -c $(st)/ds.c -o $(lib)/ds.o
@@ -39,11 +37,14 @@ libbasic.a:
 								$(lib)/vector.o \
 								$(lib)/view.o \
 								$(lib)/basic.o
-	rm $(lib)/*.o
 
 test_vector.o: libbasic.a
 	$(cc) $(test)/test_vector.c -I$(i) -I$(i)/simat -L$(lib) -lbasic -lm -o $(lib)/test_vector.o
 	rm $(lib)/libbasic.a
+
+test_distance.o: simat.a
+	$(cc) $(test)/test_distance.c -I$(i) -I$(i)/simat -L$(lib) -lsimat -lm -o $(lib)/test_distance.o
+	# rm $(lib)/libsimat.a
 
 .PHONY: clean
 
