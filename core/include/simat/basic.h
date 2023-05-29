@@ -2,7 +2,9 @@
 #define CORE_TOOLS_H
 
 #include <math.h>
-#include "dtypes.h"
+#include "vector.h"
+#include "matrix.h"
+#include "view.h"
 
 double st_precise(double x, size_t ndigits);
 

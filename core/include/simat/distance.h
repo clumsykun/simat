@@ -1,6 +1,4 @@
-#include "dtypes.h"
-#include "vector.h"
-#include "view.h"
+#include "basic.h"
 
 typedef double (*dist_fp)(st_vector *,  st_vector *);
 
