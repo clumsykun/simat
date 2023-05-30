@@ -38,7 +38,7 @@ double st_vec_norm(st_vector *vec)
     double sum_square = 0;
     void *p;
     for st_iter_vector(p, vec)
-        sum_square += __st_access_p(p, vec->dtype)*__st_access_p(p, vec->dtype);
+        sum_square += st_access_p(p, vec->dtype)*st_access_p(p, vec->dtype);
 
     return sqrt(sum_square);
 }
@@ -56,7 +56,7 @@ void st_vec_scale(st_vector *vec, double min, double max)
     void *p;
 
     for st_iter_vector(p, vec) {
-        scaled = min + (__st_access_p(p, vec->data->dtype) - vec_min) * target_scale / scale;
+        scaled = min + (st_access_p(p, vec->data->dtype) - vec_min) * target_scale / scale;
         __st_assign_p(p, scaled, vec->data->dtype);
     }
 

@@ -115,11 +115,11 @@ void st_vec_rand(const st_vector *vec)
  */
 static void *__partition(void *start, void *end, __st_dtype dtype, size_t nbyte)
 {
-    double pivot = __st_access_p(end, dtype);
+    double pivot = st_access_p(end, dtype);
     void *candidate = start - nbyte;
 
    for (void *p = start; p < end; p+=nbyte) {
-        if (__st_access_p(p, dtype) < pivot) {
+        if (st_access_p(p, dtype) < pivot) {
 
             candidate += nbyte;
             __swap(candidate, p, nbyte);
@@ -213,11 +213,11 @@ void st_view_rand(st_view *view)
 
 static void **__partition_p(void **start, void **end, __st_dtype dtype, size_t nbyte)
 {
-    double pivot = __st_access_p(*end, dtype);
+    double pivot = st_access_p(*end, dtype);
     void **candidate = start -1;
 
    for (void **p = start; p < end; p++) {
-        if (__st_access_p(*p, dtype) < pivot) {
+        if (st_access_p(*p, dtype) < pivot) {
 
             candidate++;
             __swap(*candidate, *p, nbyte);

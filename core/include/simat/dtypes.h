@@ -79,7 +79,7 @@ typedef struct __st_view
     (mat->data->head + ((size_t)(irow)*(mat->ncol)+(size_t)(icol))*mat->data->nbyte)
 
 /* access the value of `p`, as type of `dtype` */
-#define __st_access_p(p, dtype)                 \
+#define st_access_p(p, dtype)                 \
     (dtype == __st_double                       \
         ? *(double *)(p)                        \
         : (dtype == __st_int                    \
@@ -105,18 +105,18 @@ typedef struct __st_view
 #define st_vec_access(vec, idx)                        \
     ((idx < 0 || vec->len <= idx)                      \
         ? __st_raise_out_range_error()                 \
-            : __st_access_p(__st_vec_find_p(vec, idx), \
+            : st_access_p(__st_vec_find_p(vec, idx), \
                             vec->data->dtype))
 
 #define st_view_access(view, idx)                         \
     ((idx < 0 || view->len <= idx)                        \
         ? __st_raise_out_range_error()                    \
-            : __st_access_p(*((void **)view->head+idx),   \
+            : st_access_p(*((void **)view->head+idx),   \
                             view->dtype))
 
 /* TODO: check irow/icol are in range */
 #define st_mat_access(mat, irow, icol) \
-    __st_access_p(__st_mat_find_p(mat, irow, icol), mat->data->dtype)
+    st_access_p(__st_mat_find_p(mat, irow, icol), mat->data->dtype)
 
 #define st_mat_access_row(mat, irow) ((st_vector *)mat->first+(irow))
 
