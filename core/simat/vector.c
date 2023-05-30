@@ -62,6 +62,12 @@ void st_vec_scale(st_vector *vec, double min, double max)
     __st_check();
 }
 
+void st_vec_sub_value(st_vector *vec, double value)
+{
+    for (size_t i = 0; i < vec->len; i++)
+        st_vec_assign(vec, i, st_vec_access(vec, i)-value);
+}
+
 /* implement vector subtraction a-b, save result to vector re */
 void st_vec_add(st_vector *re, st_vector *a, st_vector *b)
 {
