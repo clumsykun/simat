@@ -4,6 +4,7 @@
 #include "vector.h"
 #include "matrix.h"
 #include "view.h"
+#include "dataset.h"
 #include "basic.h"
 
 #include "distance.h"

@@ -1,5 +1,5 @@
-#ifndef SIMAT_INSPECTOR_H
-#define SIMAT_INSPECTOR_H
+#ifndef CORE_WATCHER_H
+#define CORE_WATCHER_H
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -23,4 +23,4 @@ void   __st_check__(const char *file, const size_t line);
 
 #define __st_check() __st_check__(__FILE__, __LINE__)
 
-#endif /* SIMAT_INSPECTOR_H */
+#endif /* CORE_WATCHER_H */

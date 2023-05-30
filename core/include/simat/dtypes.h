@@ -1,5 +1,5 @@
-#ifndef SIMAT_DTYPES_H
-#define SIMAT_DTYPES_H
+#ifndef CORE_DTYPES_H
+#define CORE_DTYPES_H
 #include "watcher.h"
 
 #define st_bool bool
@@ -165,4 +165,4 @@ void st_view_display(const st_view *view);
 #define st_iter_vector(p, vec) __st_iter_data(p, vec->data)
 #define st_iter_matrix(p, mat) __st_iter_data(p, mat->data)
 
-#endif /* SIMAT_DTYPES_H */
+#endif /* CORE_DTYPES_H */
