@@ -17,7 +17,7 @@ typedef struct __result
 
 typedef result *(*fp)(result *ret);
 
-#define equal(v1, v2) (v1 == v2 ? true : false)
+#define equal(v1, v2) ((v1) == (v2) ? true : false)
 
 void call_test(fp fp);
 st_vector *test_vec_1(void);
