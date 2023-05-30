@@ -12,8 +12,6 @@ void __st_check_invalid_error(const void *target)
     __st_invalid_error = st_is_invalid(target);
     if (__st_invalid_error)
         __st_is_error = true;
-
-    __st_check();
 }
 
 double __st_raise_access_error(void)
