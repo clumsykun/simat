@@ -51,6 +51,24 @@ result * test__st_vec_cov(result *rp)
     return rp;
 }
 
+result * test__st_vec_corr(result *rp)
+{
+    rp->name = "st_vec_corr";
+
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec2 = test_vec_2();
+    double corr = st_stats_corr(vec1, vec2);
+    rp->value = !equal(st_precise(corr, 14), 0.36334535469179);
+
+    corr = st_stats_corr(vec2, vec1);
+    rp->value = !equal(st_precise(corr, 14), 0.36334535469179);
+
+    corr = st_stats_corr(vec1, vec1);
+    rp->value = !equal(corr, 1);
+
+    return rp;
+}
+
 int test__stats()
 {
     printf("unit test of stats start:\n");
@@ -59,6 +77,7 @@ int test__stats()
     call_test(test__st_vec_var);
     call_test(test__st_vec_std);
     call_test(test__st_vec_cov);
+    call_test(test__st_vec_corr);
 
     printf("\n");
     return 0;
