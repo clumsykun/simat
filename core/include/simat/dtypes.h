@@ -79,15 +79,15 @@ typedef struct __st_view
     (mat->data->head + ((size_t)(irow)*(mat->ncol)+(size_t)(icol))*mat->data->nbyte)
 
 /* access the value of `p`, as type of `dtype` */
-#define st_access_p(p, dtype)                 \
-    (dtype == __st_double                       \
-        ? *(double *)(p)                        \
-        : (dtype == __st_int                    \
-            ? (double)*(int *)(p)               \
-            : (dtype == __st_pixel              \
-                ? (double)*(unsigned char *)(p) \
-                : (dtype == __st_bool           \
-                    ? (double)*(bool *)(p)      \
+#define st_access_p(p, dtype)                      \
+    (dtype == __st_double                          \
+        ? *(st_double *)(p)                        \
+        : (dtype == __st_int                       \
+            ? (double)*(st_int *)(p)               \
+            : (dtype == __st_pixel                 \
+                ? (double)*(st_pixel *)(p)         \
+                : (dtype == __st_bool              \
+                    ? (double)*(st_bool *)(p)      \
                     : __st_raise_access_error()))))
 
 /* assign `value` to `p`, as type of `dtype` */
@@ -106,7 +106,7 @@ typedef struct __st_view
     ((idx < 0 || vec->len <= idx)                      \
         ? __st_raise_out_range_error()                 \
             : st_access_p(__st_vec_find_p(vec, idx), \
-                            vec->data->dtype))
+                            vec->dtype))
 
 #define st_view_access(view, idx)                         \
     ((idx < 0 || view->len <= idx)                        \
@@ -125,7 +125,7 @@ typedef struct __st_view
         ? __st_raise_out_range_error()                  \
         : (__st_assign_p(__st_vec_find_p(vec, idx),     \
                              value,                     \
-                             vec->data->dtype)))
+                             vec->dtype)))
 
 #define st_mat_assign(mat, irow, icol, value) \
     ((irow < 0 || mat->nrow <= irow) \

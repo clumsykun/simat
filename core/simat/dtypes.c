@@ -149,7 +149,7 @@ void st_vec_display(const st_vector *vec)
 {
     __st_check_invalid_error(vec);
     char c;
-    switch (vec->data->dtype) {
+    switch (vec->dtype) {
 
         case __st_bool: {
             printf("BoolVector([");
@@ -219,7 +219,7 @@ void st_vec_assign_all(st_vector *vec, double value)
     void *p;
 
     for __st_iter_data(p, vec->data)
-        __st_assign_p(p, value, vec->data->dtype);
+        __st_assign_p(p, value, vec->dtype);
 
     __st_check();
 }

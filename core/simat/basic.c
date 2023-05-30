@@ -73,7 +73,7 @@ void st_vec_rand(const st_vector *vec)
 {
     double value, min, max;
 
-    switch (vec->data->dtype) {
+    switch (vec->dtype) {
 
         case __st_bool:
             min = 0;
@@ -100,7 +100,7 @@ void st_vec_rand(const st_vector *vec)
     }
 
     for (size_t i = 0; i < vec->len; i++) {
-        value = __scale_value(__rand(min, max), vec->data->dtype);
+        value = __scale_value(__rand(min, max), vec->dtype);
         st_vec_assign(vec, i, value);
     }
 
@@ -149,7 +149,7 @@ void st_vec_sort(st_vector *vec)
     __quick_sort(
         vec->data->head,
         vec->data->last,
-        vec->data->dtype,
+        vec->dtype,
         vec->data->nbyte
     );
     __st_check();

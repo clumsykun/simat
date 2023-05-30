@@ -15,9 +15,13 @@ static void check_vec_length(st_vector *a, st_vector *b)
 
 double st_vec_min(st_vector *vec)
 {
-    double min = st_vec_access(vec, 0);
-    for (size_t i = 0; i < vec->len; i++)
-        min = (min <= st_vec_access(vec, i) ? min : st_vec_access(vec, i));
+    double min = st_access_p(vec->data->head, vec->dtype);
+    void *p;
+
+    for st_iter_vector(p, vec)
+        min = (min <= st_access_p(p, vec->dtype)
+               ? min
+               : st_access_p(p, vec->dtype));
 
     __st_check();
     return min;
@@ -25,9 +29,13 @@ double st_vec_min(st_vector *vec)
 
 double st_vec_max(st_vector *vec)
 {
-    double max = st_vec_access(vec, 0);
-    for (size_t i = 0; i < vec->len; i++)
-        max = (max >= st_vec_access(vec, i) ? max : st_vec_access(vec, i));
+    double max = st_access_p(vec->data->head, vec->dtype);
+    void *p;
+
+    for st_iter_vector(p, vec)
+        max = (max >= st_access_p(p, vec->dtype)
+               ? max
+               : st_access_p(p, vec->dtype));
 
     __st_check();
     return max;
@@ -56,8 +64,8 @@ void st_vec_scale(st_vector *vec, double min, double max)
     void *p;
 
     for st_iter_vector(p, vec) {
-        scaled = min + (st_access_p(p, vec->data->dtype) - vec_min) * target_scale / scale;
-        __st_assign_p(p, scaled, vec->data->dtype);
+        scaled = min + (st_access_p(p, vec->dtype) - vec_min) * target_scale / scale;
+        __st_assign_p(p, scaled, vec->dtype);
     }
 
     __st_check();
