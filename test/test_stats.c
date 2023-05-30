@@ -1,51 +1,65 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <time.h>
-#include "simat.h"
-#include "stats.h"
+#include "test.h"
 
-int main()
+result * test__st_vec_mean(result *rp)
 {
-    size_t len = 10;
-    double min = -314.15;
-    double max = 314.15;
+    rp->name = "st_vec_mean";
+    double target = 1.89386753961467;
 
-    srand(time(NULL));
-    st_vector *vec_bool = st_new_bool_vector(len);
-    st_vector *vec_pixel = st_new_pixel_vector(len);
-    st_vector *vec_int = st_new_int_vector(len);
-    st_vector *vec_double = st_new_vector(len);
+    st_vector *vec = test_vec_1();
+    double mean = st_vec_mean(vec);
+    rp->value = !equal(st_precise(mean, 14), target);
 
-    st_vec_rand(vec_bool);
-    st_vec_rand(vec_pixel);
-    st_vec_rand(vec_int);
-    st_vec_rand(vec_double);
+    return rp;
+}
 
-    st_vec_display(vec_bool);
-    st_vec_display(vec_pixel);
-    st_vec_display(vec_int);
-    st_vec_display(vec_double);
+result * test__st_vec_var(result *rp)
+{
+    rp->name = "st_vec_var";
 
-    printf("mean/var of vec_bool: %.2f/%.2f\n", st_vec_mean(vec_bool), st_vec_std(vec_bool, 0));
-    printf("mean/var of vec_pixel: %.2f/%.2f\n", st_vec_mean(vec_pixel), st_vec_std(vec_pixel, 0));
-    printf("mean/var of vec_int: %.2f/%.2f\n", st_vec_mean(vec_int), st_vec_std(vec_int, 0));
-    printf("mean/var of vec_double: %.2f/%.2f\n", st_vec_mean(vec_double), st_vec_std(vec_double, 0));
+    st_vector *vec = test_vec_1();
+    double var = st_vec_var(vec, 0);
+    rp->value = !equal(st_precise(var, 14), 0.85524022490939);
 
-    st_vec_normalize(vec_bool);
-    st_vec_normalize(vec_pixel);
-    st_vec_normalize(vec_int);
-    st_vec_normalize(vec_double);
+    var = st_vec_var(vec, 1);
+    rp->value = !equal(st_precise(var, 14), 1.06905028113674);
 
-    printf("mean/var of vec_bool: %.2f/%.2f\n", st_vec_mean(vec_bool), st_vec_std(vec_bool, 0));
-    printf("mean/var of vec_pixel: %.2f/%.2f\n", st_vec_mean(vec_pixel), st_vec_std(vec_pixel, 0));
-    printf("mean/var of vec_int: %.2f/%.2f\n", st_vec_mean(vec_int), st_vec_std(vec_int, 0));
-    printf("mean/var of vec_double: %.2f/%.2f\n", st_vec_mean(vec_double), st_vec_std(vec_double, 0));
+    return rp;
+}
 
-    st_free_vector(vec_bool);
-    st_free_vector(vec_pixel);
-    st_free_vector(vec_int);
-    st_free_vector(vec_double);
+result * test__st_vec_std(result *rp)
+{
+    rp->name = "st_vec_std";
+    double target = 0.92479199007635;
 
+    st_vector *vec = test_vec_1();
+    double std = st_vec_std(vec, 0);
+    rp->value = !equal(st_precise(std, 14), target);
+
+    return rp;
+}
+
+result * test__st_vec_cov(result *rp)
+{
+    rp->name = "st_vec_cov";
+
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec2 = test_vec_2();
+    double cov = st_stats_cov(vec1, vec2, 1);
+    rp->value = !equal(st_precise(cov, 14), 1.03329797634101);
+    rp->value = !equal(st_stats_cov(vec1, vec1, 1), st_vec_var(vec1, 1));
+
+    return rp;
+}
+
+int test__stats()
+{
+    printf("unit test of stats start:\n");
+
+    call_test(test__st_vec_mean);
+    call_test(test__st_vec_var);
+    call_test(test__st_vec_std);
+    call_test(test__st_vec_cov);
+
+    printf("\n");
     return 0;
 }

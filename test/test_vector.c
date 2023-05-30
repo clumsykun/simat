@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <math.h>
-#include <simat.h>
 #include "test.h"
 
 /**
