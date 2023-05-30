@@ -3,122 +3,26 @@
 #include <string.h>
 #include <assert.h>
 #include <time.h>
-#include "simat.h"
+#include "test.h"
 
-int main()
+result *test__st_mat_min(result *rp)
 {
-    size_t nrow = 10;
-    size_t ncol = 5;
-    st_matrix *mat = st_new_matrix(nrow, ncol);
-    st_matrix *bool_mat = st_new_bool_matrix(nrow, ncol);
-    st_matrix *pixel_mat = st_new_pixel_matrix(nrow, ncol);
-    st_matrix *int_mat = st_new_int_matrix(nrow, ncol);
+    rp->name = "st_mat_min";
+    double target = 0.1;
 
-    st_mat_assign_all(mat, 10);
-    st_mat_display(mat);
+    st_dataset *iris = st_load_iris();
+    rp->value = !equal(st_mat_min(iris->X), target);
 
-    st_vector *v = st_mat_access_row(mat, 1);
-    st_vec_display(v);
+    return rp;
+}
 
-    st_mat_rand(bool_mat);
-    st_mat_display(bool_mat);
-    st_mat_rand(pixel_mat);
-    st_mat_display(pixel_mat);
-    st_mat_rand(int_mat);
-    st_mat_display(int_mat);
-    st_mat_rand(mat);
-    st_mat_display(mat);
 
-    st_mat_scale(bool_mat, 0, 100);
-    st_mat_display(bool_mat);
-    printf("min: %.2f, max: %.2f\n", st_mat_min(bool_mat), st_mat_max(bool_mat));
-    st_mat_scale(pixel_mat, 0, 100);
-    st_mat_display(pixel_mat);
-    printf("min: %.2f, max: %.2f\n", st_mat_min(pixel_mat), st_mat_max(pixel_mat));
-    st_mat_scale(int_mat, 0, 100);
-    st_mat_display(int_mat);
-    printf("min: %.2f, max: %.2f\n", st_mat_min(int_mat), st_mat_max(int_mat));
-    st_mat_scale(mat, 0, 100);
-    st_mat_display(mat);
-    printf("min: %.2f, max: %.2f\n", st_mat_min(mat), st_mat_max(mat));
+int test__matrix(void)
+{
+    printf("unit test of matrix start:\n");
 
-    st_view *view = st_new_view();
-    st_view *view2 = st_new_view();
-    st_matrix_view_col(view, mat, 3);
-    st_view_display(view);
+    call_test(test__st_mat_min);
 
-    st_matrix_view_row(view, mat, 2);
-    st_matrix_view_row(view2, mat, 3);
-    st_view_display(view);
-
-    st_view_rand(view);
-    st_mat_display(mat);
-
-    st_view_scale(view, 0, 100);
-    st_mat_display(mat);
-
-    st_view_sort(view);
-    st_mat_display(mat);
-
-    st_view_reverse(view);
-    st_mat_display(mat);
-
-    printf("norm of row [2]: %.2f\n", st_view_norm(view));
-    printf("dot of row [2] and row [3]: %.2f\n", st_view_dot(view, view));
-
-    st_vector *v1 = st_mat_access_row(mat, 1);
-    st_vector *v2 = st_mat_access_row(mat, 2);
-
-    st_vec_sub(v1, v1, v2);
-    st_vec_display(v1);
-    st_mat_display(mat);
-
-    st_vec_display(v1);
-    st_vec_display(v2);
-    printf("dot of row 1 and row 2: %.2f\n", st_vec_dot(v1, v2));
-
-    st_matrix *dist_mat = st_new_matrix(mat->nrow, mat->nrow);
-    st_mat_assign_all(dist_mat, -1);
-    st_dist_mat_row(dist_mat, mat, st_dist_cosine);
-    st_mat_display(dist_mat);
-    st_mat_display(mat);
-
-    st_dist_mat_row(dist_mat, mat, st_dist_euclid);
-    st_mat_display(dist_mat);
-    st_mat_display(mat);
-
-    // __st_ds_add(mat, st_free_matrix);
-    // __st_ds_add(bool_mat, st_free_matrix);
-    // __st_ds_add(pixel_mat, st_free_matrix);
-    // __st_ds_add(int_mat, st_free_matrix);
-
-    // printf("is v1 invalid: %d\n", st_is_invalid(v1));
-    // printf("is dist_mat invalid: %d\n", st_is_invalid(dist_mat));
-
-    st_ds_display();
-
-    dist_mat->temp = false;
-    view->temp = false;
-
-    st_ds_display();
-
-    st_ds_clear_temp();
-    st_ds_clear_temp();
-
-    st_ds_display();
-
-    dist_mat->temp = true;
-
-    st_ds_clear_temp();
-    st_ds_clear_all();
-
-    // st_mat_display(mat);
-
-    // st_free_matrix(bool_mat);
-    // st_free_matrix(pixel_mat);
-    // st_free_matrix(int_mat);
-    // st_free_matrix(mat);
-
-    st_ds_display();
+    printf("\n");
     return 0;
 }

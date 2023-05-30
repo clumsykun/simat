@@ -44,6 +44,7 @@ libbasic.a:
 test_simat.o: simat.a
 	$(cc) -I$(i) -I$(i)/simat -I$(test) \
 								$(test)/test_vector.c \
+								$(test)/test_matrix.c \
 								$(test)/test_stats.c \
 								$(test)/test_distance.c \
 								$(test)/test_simat.c -L$(lib) -lsimat -lm -o $(lib)/test_simat.o
@@ -51,6 +52,7 @@ test_simat.o: simat.a
 test_basic.o: libbasic.a
 	$(cc) -I$(i) -I$(i)/simat -I$(test) \
 							    $(test)/test_vector.c \
+								$(test)/test_matrix.c \
 							    $(test)/test_basic.c \
 								-L$(lib) -lsimat -lm -o $(lib)/test_basic.o
 

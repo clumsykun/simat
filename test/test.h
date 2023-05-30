@@ -26,5 +26,6 @@ st_vector *test_vec_2(void);
 int test__vector(void);
 int test__stats(void);
 int test__distance(void);
+int test__matrix(void);
 
 #endif /* TEST_H */
