@@ -78,27 +78,27 @@ typedef struct __st_view
 #define __st_mat_find_p(mat, irow, icol) \
     (mat->data->head + ((size_t)(irow)*(mat->ncol)+(size_t)(icol))*mat->data->nbyte)
 
-/* access the value of `p`, as type of `st_dtype` */
-#define __st_access_p(p, st_dtype)              \
-    (st_dtype == __st_double                    \
+/* access the value of `p`, as type of `dtype` */
+#define __st_access_p(p, dtype)                 \
+    (dtype == __st_double                       \
         ? *(double *)(p)                        \
-        : (st_dtype == __st_int                 \
+        : (dtype == __st_int                    \
             ? (double)*(int *)(p)               \
-            : (st_dtype == __st_pixel           \
+            : (dtype == __st_pixel              \
                 ? (double)*(unsigned char *)(p) \
-                : (st_dtype == __st_bool        \
+                : (dtype == __st_bool           \
                     ? (double)*(bool *)(p)      \
                     : __st_raise_access_error()))))
 
-/* assign `value` to `p`, as type of `st_dtype` */
-#define __st_assign_p(p, value, st_dtype)                  \
-    (st_dtype == __st_double                               \
+/* assign `value` to `p`, as type of `dtype` */
+#define __st_assign_p(p, value, dtype)                     \
+    (dtype == __st_double                                  \
         ? (*(st_double *)(p) = (st_double)(value))         \
-        : (st_dtype == __st_int                            \
+        : (dtype == __st_int                               \
             ? (*(st_int *)(p) = (st_int)(value))           \
-            : (st_dtype == __st_pixel                      \
+            : (dtype == __st_pixel                         \
                 ? (*(st_pixel *)(p) = (st_pixel)(value))   \
-                : (st_dtype == __st_bool                   \
+                : (dtype == __st_bool                      \
                     ? (*(st_bool *)(p) = (st_bool)(value)) \
                     : __st_raise_dtype_error()))))
 
