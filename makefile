@@ -18,6 +18,7 @@ simat.a: libbasic.a
 								$(lib)/matrix.o \
 								$(lib)/vector.o \
 								$(lib)/view.o \
+								$(lib)/dataset.o \
 								$(lib)/basic.o \
 								$(lib)/distance.o \
 								$(lib)/stats.o
@@ -29,6 +30,7 @@ libbasic.a:
 	$(cc) $(flag) -I$(i)/simat -c $(st)/matrix.c -o $(lib)/matrix.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/vector.c -o $(lib)/vector.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/view.c -o $(lib)/view.o
+	$(cc) $(flag) -I$(i)/simat -c $(st)/dataset.c -o $(lib)/dataset.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/basic.c -o $(lib)/basic.o
 	$(ar) rcs $(lib)/libbasic.a $(lib)/ds.o \
 								$(lib)/watcher.o \
@@ -36,6 +38,7 @@ libbasic.a:
 								$(lib)/matrix.o \
 								$(lib)/vector.o \
 								$(lib)/view.o \
+								$(lib)/dataset.o \
 								$(lib)/basic.o
 
 test_simat.o: simat.a
