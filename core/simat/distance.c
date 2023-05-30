@@ -23,9 +23,8 @@ static void check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol)
 double st_dist_euclid(st_vector *a, st_vector *b)
 {
     check_vec_length(a, b);
-    double diff, sum_square;
+    double diff, sum_square = 0;
 
-    sum_square = 0;
     for (size_t i = 0; i < a->len; i++) {
 
         diff = st_vec_access(a, i) - st_vec_access(b, i);
@@ -46,7 +45,7 @@ double st_dist_cosine(st_vector *a, st_vector *b)
 double st_dist_manhattan(st_vector *a, st_vector *b)
 {
     check_vec_length(a, b);
-    double dist;
+    double dist = 0;
     for (size_t i = 0; i < a->len; i++)
         dist += fabs(st_vec_access(a, i)-st_vec_access(b, i));
 
