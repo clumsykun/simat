@@ -238,6 +238,48 @@ result *test__st_vec_dot(result *rp)
     return rp;
 }
 
+result *test__st_vec_mul_value(result *rp)
+{
+    rp->name = "st_vec_mul_value";
+
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec2 = test_vec_1();
+    st_vec_mul_value(vec1, -1);
+
+    for (size_t i = 0; i < vec1->len; i++) {
+        rp->value = !equal(
+            st_vec_access(vec1, i),
+            -1*st_vec_access(vec2, i)
+        );
+    }
+
+    return rp;
+}
+
+
+result *test__st_vec_abs(result *rp)
+{
+    rp->name = "st_vec_abs";
+
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec2 = test_vec_1();
+
+    st_vec_abs(vec1);
+    st_vec_abs(vec2);
+
+    st_vec_mul_value(vec1, -1);
+    
+    for (size_t i = 0; i < vec1->len; i++) {
+        rp->value = !equal(
+            st_vec_access(vec1, i),
+            -1*st_vec_access(vec2, i)
+        );
+    }
+
+    return rp;
+}
+
+
 int test__vector()
 {
     printf("unit test of vector start:\n");
@@ -253,6 +295,8 @@ int test__vector()
     call_test(test__st_vec_mul);
     call_test(test__st_vec_div);
     call_test(test__st_vec_dot);
+    call_test(test__st_vec_mul_value);
+    call_test(test__st_vec_abs);
 
     printf("\n");
     return 0;

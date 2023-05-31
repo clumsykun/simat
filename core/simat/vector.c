@@ -76,8 +76,28 @@ void st_vec_scale(st_vector *vec, double min, double max)
 
 void st_vec_sub_value(st_vector *vec, double value)
 {
-    for (size_t i = 0; i < vec->len; i++)
-        st_vec_assign(vec, i, st_vec_access(vec, i)-value);
+    void *p;
+    for __st_iter_data(p, vec->data)
+        __st_assign_p(p, st_access_p(p, vec->dtype)-value, vec->dtype);
+}
+
+void st_vec_mul_value(st_vector *vec, double value)
+{
+    void *p;
+    for __st_iter_data(p, vec->data)
+        __st_assign_p(p, st_access_p(p, vec->dtype)*value, vec->dtype);
+}
+
+void __call_single_fp(st_vector *vec, fp_single fp)
+{
+    void *p;
+    for __st_iter_data(p, vec->data)
+        __st_assign_p(p, fp(st_access_p(p, vec->dtype)), vec->dtype);
+}
+
+void st_vec_abs(st_vector *vec)
+{
+    __call_single_fp(vec, fabs);
 }
 
 static st_vector *__call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
