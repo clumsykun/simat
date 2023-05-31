@@ -95,13 +95,28 @@ bool st_is_invalid(const void *target)
     bool is_invalid = true;
 
     while (p->next != NULL) {
+        if (p->next->target == target)
+            is_invalid = false;
 
         p = p->next;
-        if (p->target == target)
-            is_invalid = false;
     }
 
     return is_invalid;
+}
+
+int st_free(const void *target)
+{
+    struct __mb *p = &__ds_head;
+    while (p->next != NULL) {
+
+        if (p->next->target == target) {
+            p->next->free(p->next->target);
+            p->next = p->next->next;
+            return 0;
+        }
+        p = p->next;
+    }
+    return 1;
 }
 
 void st_ds_display(void)

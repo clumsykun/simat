@@ -13,6 +13,7 @@ void st_ds_clear_all(void);
 void st_ds_clear_temp(void);
 void st_ds_display(void);
 bool st_is_invalid(const void *target);
+int  st_free(const void *target);
 
 
 #endif /* CORE_DS_H */
