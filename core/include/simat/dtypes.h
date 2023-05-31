@@ -165,6 +165,26 @@ void st_view_display(const st_view *view);
 #define __st_iter_vector(i, p, vec) \
     (p = vec->data->head, i = 0; p <= vec->data->last; p += vec->data->nbyte, (size_t)i++)
 
+#define __st_iter_vector2(i, p1, p2, vec1, vec2) \
+    ( \
+        p1 = vec1->data->head, p2 = vec2->data->head, i = 0; \
+        p1 <= vec1->data->last; \
+        p1 += vec1->data->nbyte, p2 += vec2->data->nbyte, (size_t)i++ \
+    )
+
+#define __st_iter_vector3(i, p1, p2, p3, vec1, vec2, vec3) \
+    ( \
+        p1 = vec1->data->head, \
+            p2 = vec2->data->head, \
+            p3 = vec3->data->head, \
+            i = 0; \
+        p1 <= vec1->data->last; \
+        p1 += vec1->data->nbyte, \
+            p2 += vec2->data->nbyte, \
+            p3 += vec3->data->nbyte, \
+            (size_t)i++ \
+    )
+
 #define __st_iter_matrix(irow, icol, p, mat)       \
     (                                            \
         p = mat->data->head, irow = 0, icol = 0; \

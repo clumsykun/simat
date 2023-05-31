@@ -5,6 +5,9 @@
 #include <time.h>
 #include "dtypes.h"
 
+typedef double (*fp_single)(double);
+typedef double (*fp_pair)(double, double);
+
 static void check_vec_length(st_vector *a, st_vector *b)
 {
     if (a->len != b->len)
@@ -77,32 +80,66 @@ void st_vec_sub_value(st_vector *vec, double value)
         st_vec_assign(vec, i, st_vec_access(vec, i)-value);
 }
 
-/* implement vector subtraction a-b, save result to vector re */
-void st_vec_add(st_vector *re, st_vector *a, st_vector *b)
+static void __call_pair_fp(st_vector *re, st_vector *a, st_vector *b, fp_pair fp)
 {
     check_vec_length(re, a);
     check_vec_length(re, b);
-
-    void *p;
+    
+    double va, vb;
+    void *pa, *pb, *pr;
     size_t i;
-    for __st_iter_vector(i, p, re)
-        __st_assign_p(p, st_vec_access(a, i) + st_vec_access(b, i), re->dtype);
+
+    for __st_iter_vector3(i, pa, pb, pr, a, b, re) {
+        va = st_access_p(pa, a->dtype);
+        vb = st_access_p(pb, b->dtype);
+        __st_assign_p(pr, fp(va, vb), re->dtype);
+    }
 
     __st_check();
+}
+
+static double __add(double a, double b)
+{
+    return a+b;
+}
+
+/* implement vector subtraction a-b, save result to vector re */
+void st_vec_add(st_vector *re, st_vector *a, st_vector *b)
+{
+    __call_pair_fp(re, a, b, __add);
+}
+
+static double __sub(double a, double b)
+{
+    return a-b;
 }
 
 /* implement vector subtraction a-b, save result to vector re */
 void st_vec_sub(st_vector *re, st_vector *a, st_vector *b)
 {
-    check_vec_length(re, a);
-    check_vec_length(re, b);
+    __call_pair_fp(re, a, b, __sub);
+}
 
-    void *p;
-    size_t i;
-    for __st_iter_vector(i, p, re)
-        __st_assign_p(p, st_vec_access(a, i) - st_vec_access(b, i), re->dtype);
+static double __mul(double a, double b)
+{
+    return a*b;
+}
 
-    __st_check();
+/* implement vector elemental multiply of a and b, save result to vector re */
+void st_vec_mul(st_vector *re, st_vector *a, st_vector *b)
+{
+    __call_pair_fp(re, a, b, __mul);
+}
+
+static double __div(double a, double b)
+{
+    return a/b;
+}
+
+/* implement vector elemental division of a and b, save result to vector re */
+void st_vec_div(st_vector *re, st_vector *a, st_vector *b)
+{
+    __call_pair_fp(re, a, b, __div);
 }
 
 /* implement vector dot production a·b, return result */
