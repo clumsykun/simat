@@ -85,7 +85,7 @@ void st_vec_add(st_vector *re, st_vector *a, st_vector *b)
 
     void *p;
     size_t i;
-    for __st_iter_vector(p, i, re)
+    for __st_iter_vector(i, p, re)
         __st_assign_p(p, st_vec_access(a, i) + st_vec_access(b, i), re->dtype);
 
     __st_check();
@@ -99,7 +99,7 @@ void st_vec_sub(st_vector *re, st_vector *a, st_vector *b)
 
     void *p;
     size_t i;
-    for __st_iter_vector(p, i, re)
+    for __st_iter_vector(i, p, re)
         __st_assign_p(p, st_vec_access(a, i) - st_vec_access(b, i), re->dtype);
 
     __st_check();

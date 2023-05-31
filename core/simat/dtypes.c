@@ -491,7 +491,7 @@ void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
         view->last = view->head + view->len-1;
     }
 
-    for __st_iter_vector(p, i, st_mat_access_row(mat, irow))
+    for __st_iter_vector(i, p, st_mat_access_row(mat, irow))
         view->head[i] = p;
 
     __st_check();
@@ -525,7 +525,7 @@ void st_vector_view(st_view *view, st_vector *vec)
         view->last = view->head + view->len-1;
     }
 
-    for __st_iter_vector(p, i, vec)
+    for __st_iter_vector(i, p, vec)
         view->head[i] = p;
 
     __st_check();
