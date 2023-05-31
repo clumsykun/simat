@@ -134,7 +134,7 @@ typedef struct __st_view
             ? __st_raise_out_range_error() \
             : __st_assign_p(__st_mat_find_p(mat, irow, icol),\
                             value,\
-                            mat->data->dtype)))
+                            mat->dtype)))
 
 /* TODO: check the range */
 #define st_view_assign(view, idx, value) __st_assign_p(view->head[idx], value, view->dtype)
@@ -163,6 +163,13 @@ void st_view_display(const st_view *view);
 
 #define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->nbyte)
 #define st_iter_vector(p, vec) __st_iter_data(p, vec->data)
-#define st_iter_matrix(p, mat) __st_iter_data(p, mat->data)
+#define st_iter_matrix(p, irow, icol, mat)       \
+    (                                            \
+        p = mat->data->head, irow = 0, icol = 0; \
+        p <= mat->data->last;                    \
+        p += mat->data->nbyte,                   \
+            irow = ((size_t)icol + 1 == mat->ncol ? (size_t)irow + 1 : (size_t)irow), \
+            icol = ((size_t)icol + 1 == mat->ncol ? 0 : (size_t)icol + 1)             \
+    )
 
 #endif /* CORE_DTYPES_H */

@@ -1,12 +1,12 @@
-#include "dtypes.h"
 #include <string.h>
+#include "dtypes.h"
 #include "matrix.h"
 
 double st_mat_min(st_matrix *mat)
 {
     double min = st_mat_access(mat, 0, 0);
     void *p;
-    for st_iter_matrix(p, mat)
+    for __st_iter_data(p, mat->data)
         min = (min <= st_access_p(p, mat->data->dtype)
                    ? min
                    : st_access_p(p, mat->data->dtype));
@@ -18,7 +18,7 @@ double st_mat_max(st_matrix *mat)
 {
     double max = st_mat_access(mat, 0, 0);
     void *p;
-    for st_iter_matrix(p, mat)
+    for __st_iter_data(p, mat->data)
         max = (max >= st_access_p(p, mat->data->dtype)
                    ? max
                    : st_access_p(p, mat->data->dtype));
@@ -37,7 +37,7 @@ void st_mat_scale(st_matrix *mat, double min, double max)
     double scaled;
     void *p;
 
-    for st_iter_matrix(p, mat) {
+    for __st_iter_data(p, mat->data) {
         scaled = min + (st_access_p(p, mat->data->dtype) - mat_min) * target_scale / scale;
         __st_assign_p(p, scaled, mat->data->dtype);
     }
@@ -47,19 +47,37 @@ void st_mat_scale(st_matrix *mat, double min, double max)
 
 st_matrix *st_mat_t(st_matrix *mat)
 {
-    // TODO: specify dtype.
-    st_matrix *t = st_new_matrix(mat->ncol, mat->nrow);
+    st_matrix *t;
+    switch (mat->dtype) {
 
-    for (size_t i = 0; i < mat->nrow; i++) {
-        for (size_t j = 0; j < mat->ncol; j++) {
-            st_mat_assign(
-                t,
-                j,
-                i,
-                st_mat_access(mat, i, j)
-            );
-        }
+        case __st_bool:
+            t = st_new_bool_matrix(mat->ncol, mat->nrow);
+            break;
+
+        case __st_pixel:
+            t = st_new_pixel_matrix(mat->ncol, mat->nrow);
+            break;
+
+        case __st_int:
+            t = st_new_int_matrix(mat->ncol, mat->nrow);
+            break;
+
+        case __st_double:
+            t = st_new_matrix(mat->ncol, mat->nrow);
+            break;
+
+        default:
+            __st_raise_dtype_error();
     }
+
+    __st_check();
+
+    void *p;
+    size_t irow, icol;
+    for st_iter_matrix(p, irow, icol, mat) {
+        memcpy(__st_mat_find_p(t, icol, irow), p, mat->data->nbyte);
+    }
+
     return t;
 }
 
