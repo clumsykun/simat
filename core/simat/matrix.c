@@ -110,7 +110,7 @@ st_matrix *st_mat_copy_t(st_matrix *mat)
 
     void *p;
     size_t irow, icol;
-    for st_iter_matrix(p, irow, icol, mat) {
+    for __st_iter_matrix(p, irow, icol, mat) {
         memcpy(__st_mat_find_p(t, icol, irow), p, mat->data->nbyte);
     }
 
