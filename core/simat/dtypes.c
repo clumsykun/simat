@@ -482,7 +482,7 @@ static void __free_view(void *view)
 void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
 {
     void *p;
-    size_t idx;
+    size_t i;
     view->dtype = mat->dtype;
 
     if (view->len != mat->ncol) {
@@ -491,11 +491,8 @@ void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
         view->last = view->head + view->len-1;
     }
 
-    idx = 0;
-    for __st_iter_vector(p, st_mat_access_row(mat, irow)) {
-        view->head[idx] = p;
-        idx++;
-    }
+    for __st_iter_vector(p, i, st_mat_access_row(mat, irow))
+        view->head[i] = p;
 
     __st_check();
 }
@@ -519,7 +516,7 @@ void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 void st_vector_view(st_view *view, st_vector *vec)
 {
     void *p;
-    size_t idx = 0;
+    size_t i;
     view->dtype = vec->dtype;
 
     if (view->len != vec->len) {
@@ -528,10 +525,8 @@ void st_vector_view(st_view *view, st_vector *vec)
         view->last = view->head + view->len-1;
     }
 
-    for __st_iter_vector(p, vec) {
-        view->head[idx] = p;
-        idx++;
-    }
+    for __st_iter_vector(p, i, vec)
+        view->head[i] = p;
 
     __st_check();
 }

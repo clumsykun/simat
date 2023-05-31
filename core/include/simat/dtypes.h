@@ -162,7 +162,9 @@ void st_vector_view(st_view *view, st_vector *vec);
 void st_view_display(const st_view *view);
 
 #define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->nbyte)
-#define __st_iter_vector(p, vec) __st_iter_data(p, vec->data)
+#define __st_iter_vector(p, i, vec) \
+    (p = vec->data->head, i = 0; p <= vec->data->last; p += vec->data->nbyte, (size_t)i++)
+
 #define __st_iter_matrix(p, irow, icol, mat)       \
     (                                            \
         p = mat->data->head, irow = 0, icol = 0; \
