@@ -39,12 +39,12 @@ result *test__st_mat_scale(result *rp)
     return rp;
 }
 
-result *test__st_mat_t(result *rp)
+result *test__st_mat_copy_t(result *rp)
 {
-    rp->name = "st_mat_t";
+    rp->name = "st_mat_copy_t";
 
     st_dataset *iris = st_load_iris();
-    st_matrix *iris_t = st_mat_t(iris->X);
+    st_matrix *iris_t = st_mat_copy_t(iris->X);
 
     for (size_t i = 0; i < iris->X->nrow; i++) {
         for (size_t j = 0; j < iris->X->ncol; j++) {
@@ -64,7 +64,7 @@ int test__matrix(void)
     call_test(test__st_mat_min);
     call_test(test__st_mat_max);
     call_test(test__st_mat_scale);
-    call_test(test__st_mat_t);
+    call_test(test__st_mat_copy_t);
 
     printf("\n");
     return 0;

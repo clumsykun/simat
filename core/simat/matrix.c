@@ -45,42 +45,6 @@ void st_mat_scale(st_matrix *mat, double min, double max)
     __st_check();
 }
 
-st_matrix *st_mat_t(st_matrix *mat)
-{
-    st_matrix *t;
-    switch (mat->dtype) {
-
-        case __st_bool:
-            t = st_new_bool_matrix(mat->ncol, mat->nrow);
-            break;
-
-        case __st_pixel:
-            t = st_new_pixel_matrix(mat->ncol, mat->nrow);
-            break;
-
-        case __st_int:
-            t = st_new_int_matrix(mat->ncol, mat->nrow);
-            break;
-
-        case __st_double:
-            t = st_new_matrix(mat->ncol, mat->nrow);
-            break;
-
-        default:
-            __st_raise_dtype_error();
-    }
-
-    __st_check();
-
-    void *p;
-    size_t irow, icol;
-    for st_iter_matrix(p, irow, icol, mat) {
-        memcpy(__st_mat_find_p(t, icol, irow), p, mat->data->nbyte);
-    }
-
-    return t;
-}
-
 st_matrix * st_mat_copy(st_matrix *mat)
 {
     st_matrix *copy;
@@ -114,4 +78,42 @@ st_matrix * st_mat_copy(st_matrix *mat)
            mat->data->nbyte*mat->data->size);
 
     return copy;
+}
+
+/* copy the input matrix in transpose form */
+st_matrix *st_mat_copy_t(st_matrix *mat)
+{
+    st_matrix *t;
+    switch (mat->dtype) {
+
+        case __st_bool:
+            t = st_new_bool_matrix(mat->ncol, mat->nrow);
+            break;
+
+        case __st_pixel:
+            t = st_new_pixel_matrix(mat->ncol, mat->nrow);
+            break;
+
+        case __st_int:
+            t = st_new_int_matrix(mat->ncol, mat->nrow);
+            break;
+
+        case __st_double:
+            t = st_new_matrix(mat->ncol, mat->nrow);
+            break;
+
+        default:
+            __st_raise_dtype_error();
+    }
+
+    __st_check();
+
+    void *p;
+    size_t irow, icol;
+    for st_iter_matrix(p, irow, icol, mat) {
+        memcpy(__st_mat_find_p(t, icol, irow), p, mat->data->nbyte);
+    }
+
+    __st_check();
+    return t;
 }
