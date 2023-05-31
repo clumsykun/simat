@@ -225,6 +225,19 @@ result *test__st_vec_div(result *rp)
     return rp;
 }
 
+result *test__st_vec_dot(result *rp)
+{
+    rp->name = "st_vec_dot";
+
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec2 = test_vec_2();
+    double re = st_vec_dot(vec1, vec2);
+
+    rp->value = !equal(st_precise(st_vec_dot(vec1, vec2), 13), 59.6304796480743);
+
+    return rp;
+}
+
 int test__vector()
 {
     printf("unit test of vector start:\n");
@@ -239,6 +252,7 @@ int test__vector()
     call_test(test__st_vec_sub);
     call_test(test__st_vec_mul);
     call_test(test__st_vec_div);
+    call_test(test__st_vec_dot);
 
     printf("\n");
     return 0;

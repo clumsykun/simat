@@ -173,8 +173,10 @@ double st_vec_dot(st_vector *a, st_vector *b)
     check_vec_length(a, b);
 
     double re = 0;
-    for (size_t i = 0; i < a->len; i++)
-        re += st_vec_access(a, i) * st_vec_access(b, i);
+    void *pa, *pb;
+    size_t i;
+    for __st_iter_vector2(i, pa, pb, a, b)
+        re += st_access_p(pa, a->dtype) * st_access_p(pb, b->dtype);
 
     __st_check();
     return re;
