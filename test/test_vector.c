@@ -151,7 +151,7 @@ result *test__st_vec_add(result *rp)
 
     st_vector *vec1 = test_vec_1();
     st_vector *vec2 = test_vec_2();
-    st_vector *vec3 = st_new_vector(vec1->len);
+    st_vector *vec3 = st_vec_add(vec1, vec2);;
     st_vector *ret = st_new_vector(vec1->len);
 
     st_vec_assign(ret, 0, 9.815872653589793);
@@ -160,7 +160,6 @@ result *test__st_vec_add(result *rp)
     st_vec_assign(ret, 3, 6.705985648273095);
     st_vec_assign(ret, 4, 3.220210475749894);
 
-    st_vec_add(vec3, vec1, vec2);
     rp->value = !st_vec_equal(vec3, ret);
 
     return rp;
@@ -172,7 +171,7 @@ result *test__st_vec_sub(result *rp)
 
     st_vector *vec1 = test_vec_1();
     st_vector *vec2 = test_vec_2();
-    st_vector *vec3 = st_new_vector(vec1->len);
+    st_vector *vec3 = st_vec_sub(vec1, vec2);
     st_vector *ret = st_new_vector(vec1->len);
 
     st_vec_assign(ret, 0, -3.5326873464102073);
@@ -181,7 +180,6 @@ result *test__st_vec_sub(result *rp)
     st_vec_assign(ret, 3, -3.877558523526905);
     st_vec_assign(ret, 4, 0.015857501749894087);
 
-    st_vec_sub(vec3, vec1, vec2);
     rp->value = !st_vec_equal(vec3, ret);
 
     return rp;
@@ -193,7 +191,7 @@ result *test__st_vec_mul(result *rp)
 
     st_vector *vec1 = test_vec_1();
     st_vector *vec2 = test_vec_2();
-    st_vector *vec3 = st_new_vector(vec1->len);
+    st_vector *vec3 = st_vec_mul(vec1, vec2);
     st_vector *ret = st_new_vector(vec1->len);
 
     st_vec_assign(ret, 0, 20.967869016001284);
@@ -202,7 +200,6 @@ result *test__st_vec_mul(result *rp)
     st_vec_assign(ret, 3, 7.483695852867142);
     st_vec_assign(ret, 4, 2.592376011941903);
 
-    st_vec_mul(vec3, vec1, vec2);
     rp->value = !st_vec_equal(vec3, ret);
 
     return rp;
@@ -214,7 +211,7 @@ result *test__st_vec_div(result *rp)
 
     st_vector *vec1 = test_vec_1();
     st_vector *vec2 = test_vec_2();
-    st_vector *vec3 = st_new_vector(vec1->len);
+    st_vector *vec3 = st_vec_div(vec1, vec2);
     st_vector *ret = st_new_vector(vec1->len);
 
     st_vec_assign(ret, 0, 0.47070135708867367);
@@ -223,7 +220,6 @@ result *test__st_vec_div(result *rp)
     st_vec_assign(ret, 3, 0.2672476326297738);
     st_vec_assign(ret, 4, 1.0098974750151193);
 
-    st_vec_div(vec3, vec1, vec2);
     rp->value = !st_vec_equal(vec3, ret);
 
     return rp;

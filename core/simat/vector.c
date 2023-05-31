@@ -80,14 +80,38 @@ void st_vec_sub_value(st_vector *vec, double value)
         st_vec_assign(vec, i, st_vec_access(vec, i)-value);
 }
 
-static void __call_pair_fp(st_vector *re, st_vector *a, st_vector *b, fp_pair fp)
+static st_vector *__call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
 {
-    check_vec_length(re, a);
-    check_vec_length(re, b);
-    
+    check_vec_length(a, b);
+
     double va, vb;
     void *pa, *pb, *pr;
     size_t i;
+    __st_dtype dtype = (a->dtype > b->dtype ? a->dtype : b->dtype);
+    st_vector *re;
+
+    switch (dtype) {
+        case __st_bool:
+            re = st_new_bool_vector(a->len);
+            break;
+
+        case __st_pixel:
+            re = st_new_pixel_vector(a->len);
+            break;
+
+        case __st_int:
+            re = st_new_int_vector(a->len);
+            break;
+
+        case __st_double:
+            re = st_new_vector(a->len);
+            break;
+
+        default:
+            __st_raise_dtype_error();
+    }
+
+    __st_check();
 
     for __st_iter_vector3(i, pa, pb, pr, a, b, re) {
         va = st_access_p(pa, a->dtype);
@@ -96,6 +120,7 @@ static void __call_pair_fp(st_vector *re, st_vector *a, st_vector *b, fp_pair fp
     }
 
     __st_check();
+    return re;
 }
 
 static double __add(double a, double b)
@@ -104,9 +129,9 @@ static double __add(double a, double b)
 }
 
 /* implement vector subtraction a-b, save result to vector re */
-void st_vec_add(st_vector *re, st_vector *a, st_vector *b)
+st_vector *st_vec_add(st_vector *a, st_vector *b)
 {
-    __call_pair_fp(re, a, b, __add);
+    return __call_pair_fp(a, b, __add);
 }
 
 static double __sub(double a, double b)
@@ -115,9 +140,9 @@ static double __sub(double a, double b)
 }
 
 /* implement vector subtraction a-b, save result to vector re */
-void st_vec_sub(st_vector *re, st_vector *a, st_vector *b)
+st_vector *st_vec_sub(st_vector *a, st_vector *b)
 {
-    __call_pair_fp(re, a, b, __sub);
+    return __call_pair_fp(a, b, __sub);
 }
 
 static double __mul(double a, double b)
@@ -126,9 +151,9 @@ static double __mul(double a, double b)
 }
 
 /* implement vector elemental multiply of a and b, save result to vector re */
-void st_vec_mul(st_vector *re, st_vector *a, st_vector *b)
+st_vector *st_vec_mul(st_vector *a, st_vector *b)
 {
-    __call_pair_fp(re, a, b, __mul);
+    return __call_pair_fp(a, b, __mul);
 }
 
 static double __div(double a, double b)
@@ -137,9 +162,9 @@ static double __div(double a, double b)
 }
 
 /* implement vector elemental division of a and b, save result to vector re */
-void st_vec_div(st_vector *re, st_vector *a, st_vector *b)
+st_vector *st_vec_div(st_vector *a, st_vector *b)
 {
-    __call_pair_fp(re, a, b, __div);
+    return __call_pair_fp(a, b, __div);
 }
 
 /* implement vector dot production a·b, return result */
