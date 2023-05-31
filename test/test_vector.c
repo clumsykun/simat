@@ -238,13 +238,13 @@ result *test__st_vec_dot(result *rp)
     return rp;
 }
 
-result *test__st_vec_mul_value(result *rp)
+result *test__st_vec_mul_scalar(result *rp)
 {
-    rp->name = "st_vec_mul_value";
+    rp->name = "st_vec_mul_scalar";
 
     st_vector *vec1 = test_vec_1();
     st_vector *vec2 = test_vec_1();
-    st_vec_mul_value(vec1, -1);
+    st_vec_mul_scalar(vec1, -1);
 
     for (size_t i = 0; i < vec1->len; i++) {
         rp->value = !equal(
@@ -267,7 +267,7 @@ result *test__st_vec_abs(result *rp)
     st_vec_abs(vec1);
     st_vec_abs(vec2);
 
-    st_vec_mul_value(vec1, -1);
+    st_vec_mul_scalar(vec1, -1);
     
     for (size_t i = 0; i < vec1->len; i++) {
         rp->value = !equal(
@@ -295,7 +295,7 @@ int test__vector()
     call_test(test__st_vec_mul);
     call_test(test__st_vec_div);
     call_test(test__st_vec_dot);
-    call_test(test__st_vec_mul_value);
+    call_test(test__st_vec_mul_scalar);
     call_test(test__st_vec_abs);
 
     printf("\n");

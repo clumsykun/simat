@@ -74,14 +74,14 @@ void st_vec_scale(st_vector *vec, double min, double max)
     __st_check();
 }
 
-void st_vec_sub_value(st_vector *vec, double value)
+void st_vec_sub_scalar(st_vector *vec, double value)
 {
     void *p;
     for __st_iter_data(p, vec->data)
         __st_assign_p(p, st_access_p(p, vec->dtype)-value, vec->dtype);
 }
 
-void st_vec_mul_value(st_vector *vec, double value)
+void st_vec_mul_scalar(st_vector *vec, double value)
 {
     void *p;
     for __st_iter_data(p, vec->data)
