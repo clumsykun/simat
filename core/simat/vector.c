@@ -8,15 +8,6 @@
 typedef double (*fp_single)(double);
 typedef double (*fp_pair)(double, double);
 
-static void
-check_vec_length(st_vector *a, st_vector *b)
-{
-    if (a->len != b->len)
-        __st_raise_length_error();
-
-    __st_check();
-}
-
 double
 st_vec_min(st_vector *vec)
 {
@@ -118,7 +109,7 @@ st_vec_abs(st_vector *vec)
 static st_vector *
 __call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
 {
-    check_vec_length(a, b);
+    st_check_vec_len(a, b->len);
 
     double va, vb;
     void *pa, *pb, *pr;
@@ -215,7 +206,7 @@ st_vec_div(st_vector *a, st_vector *b)
 double
 st_vec_dot(st_vector *a, st_vector *b)
 {
-    check_vec_length(a, b);
+    st_check_vec_len(a, b->len);
 
     double re = 0;
     void *pa, *pb;

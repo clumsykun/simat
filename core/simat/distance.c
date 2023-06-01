@@ -1,31 +1,10 @@
 #include <math.h>
 #include "distance.h"
 
-static void
-check_vec_length(st_vector *a, st_vector *b)
-{
-    if (a->len != b->len)
-        __st_raise_length_error();
-
-    __st_check();
-}
-
-static void
-check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol)
-{
-    if (mat->nrow != nrow)
-        __st_raise_length_error();
-
-    if (mat->ncol != ncol)
-        __st_raise_length_error();
-
-    __st_check();
-}
-
 double
 st_dist_euclid(st_vector *a, st_vector *b)
 {
-    check_vec_length(a, b);
+    st_check_vec_len(a, b->len);
     double diff, sum_square = 0;
 
     for (size_t i = 0; i < a->len; i++) {
@@ -41,7 +20,7 @@ st_dist_euclid(st_vector *a, st_vector *b)
 double
 st_dist_cosine(st_vector *a, st_vector *b)
 {
-    check_vec_length(a, b);
+    st_check_vec_len(a, b->len);
     return st_vec_dot(a,b)/(st_vec_norm(a)*st_vec_norm(b));
 }
 
@@ -49,7 +28,7 @@ st_dist_cosine(st_vector *a, st_vector *b)
 double
 st_dist_manhattan(st_vector *a, st_vector *b)
 {
-    check_vec_length(a, b);
+    st_check_vec_len(a, b->len);
     double diff, dist = 0;
     for (size_t i = 0; i < a->len; i++) {
         diff = __st_vec_access(a, i)-__st_vec_access(b, i);
@@ -62,7 +41,7 @@ st_dist_manhattan(st_vector *a, st_vector *b)
 double
 st_dist_chebyshev(st_vector *a, st_vector *b)
 {
-    check_vec_length(a, b);
+    st_check_vec_len(a, b->len);
     double diff, dist = 0;
 
     for (size_t i = 0; i < a->len; i++) {
@@ -83,7 +62,7 @@ st_dist_cos_ww(st_view *w1, st_view *w2)
 void
 st_dist_mat_row(st_matrix *re, st_matrix *mat, dist_fp fp)
 {
-    check_mat_shape(re, mat->nrow, mat->nrow);
+    st_check_mat_shape(re, mat->nrow, mat->nrow);
     double v;
 
     for (size_t i = 0; i < mat->nrow; i++) {

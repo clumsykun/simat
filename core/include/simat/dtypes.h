@@ -189,6 +189,13 @@ void st_vector_view(st_view *view, st_vector *vec);
 void st_view_display(const st_view *view);
 
 /* =================================================================================================
+ * check.
+ */
+
+void st_check_vec_len(st_vector *vec, size_t len);
+void st_check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol);
+
+/* =================================================================================================
  * iterator.
  */
 

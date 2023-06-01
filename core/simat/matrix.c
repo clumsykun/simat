@@ -2,18 +2,6 @@
 #include "dtypes.h"
 #include "matrix.h"
 
-static void
-check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol)
-{
-    if (mat->nrow != nrow)
-        __st_raise_length_error();
-
-    if (mat->ncol != ncol)
-        __st_raise_length_error();
-
-    __st_check();
-}
-
 static st_matrix *
 __mat_dot_double(st_matrix *a, st_matrix *b)
 {

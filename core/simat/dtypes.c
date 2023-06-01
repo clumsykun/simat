@@ -642,3 +642,28 @@ st_view_display(const st_view *view)
     printf("\n");
     __st_check();
 }
+
+/* =================================================================================================
+ * check
+ */
+
+void
+st_check_vec_len(st_vector *vec, size_t len)
+{
+    if (vec->len != len)
+        __st_raise_length_error();
+
+    __st_check();
+}
+
+void
+st_check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol)
+{
+    if (mat->nrow != nrow)
+        __st_raise_length_error();
+
+    if (mat->ncol != ncol)
+        __st_raise_length_error();
+
+    __st_check();
+}
