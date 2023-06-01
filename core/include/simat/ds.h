@@ -7,6 +7,8 @@
 #define st_sha_matrix "6e00cd562cc2d88e238dfb81d9439de7ec843ee9d0c9879d549cb1436786f975"
 #define st_sha_view   "d60736f872c6b6d0cdeddd69b30c6df0d492c0756f07b13b47b4fb2c23b751b3"
 
+#define st_abs(x) ((x) >= 0 ? (x) : -(x))
+
 typedef void (*free_fp)(void *);
 typedef void (*status_fp)(void *);
 

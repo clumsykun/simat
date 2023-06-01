@@ -103,10 +103,16 @@ __call_single_fp(st_vector *vec, fp_single fp)
         __st_assign_p(p, fp(__st_access_p(p, vec->dtype)), vec->dtype);
 }
 
+double
+__abs(double x)
+{
+    return st_abs(x);
+}
+
 void
 st_vec_abs(st_vector *vec)
 {
-    __call_single_fp(vec, fabs);
+    __call_single_fp(vec, __abs);
 }
 
 static st_vector *

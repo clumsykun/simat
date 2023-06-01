@@ -50,9 +50,11 @@ double
 st_dist_manhattan(st_vector *a, st_vector *b)
 {
     check_vec_length(a, b);
-    double dist = 0;
-    for (size_t i = 0; i < a->len; i++)
-        dist += fabs(__st_vec_access(a, i)-__st_vec_access(b, i));
+    double diff, dist = 0;
+    for (size_t i = 0; i < a->len; i++) {
+        diff = __st_vec_access(a, i)-__st_vec_access(b, i);
+        dist += st_abs(diff);
+    }
 
     return dist;
 }
@@ -61,12 +63,12 @@ double
 st_dist_chebyshev(st_vector *a, st_vector *b)
 {
     check_vec_length(a, b);
-    double dist = 0;
+    double diff, dist = 0;
 
-    for (size_t i = 0; i < a->len; i++)
-        dist = (fabs(__st_vec_access(a, i) - __st_vec_access(b, i)) > dist
-                ? fabs(__st_vec_access(a, i) - __st_vec_access(b, i))
-                : dist);
+    for (size_t i = 0; i < a->len; i++) {
+        diff = __st_vec_access(a, i) - __st_vec_access(b, i);
+        dist = (st_abs(diff) > dist ? st_abs(diff) : dist);
+    }
 
     return dist;
 }
