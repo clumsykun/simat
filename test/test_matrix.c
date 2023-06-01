@@ -63,6 +63,7 @@ result *test__st_mat_dot(result *rp)
 
     st_dataset *iris = st_load_iris();
     st_matrix *iris_t = st_mat_copy_t(iris->X);
+
     st_matrix *ret = st_mat_dot(iris_t, iris->X);
 
     rp->value = !equal(st_precise(st_mat_access(ret, 0, 0), 2), 5223.84);

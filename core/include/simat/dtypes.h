@@ -148,6 +148,7 @@ st_vector *st_new_vector(size_t len);
 void st_vec_display(const st_vector *vec);
 void st_vec_assign_all(st_vector *vec, double value);
 
+st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol);
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_int_matrix(size_t nrow, size_t ncol);

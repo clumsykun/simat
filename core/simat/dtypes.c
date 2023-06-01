@@ -25,7 +25,6 @@ static void __free_matrix(void *matrix);
 static void __free_view(void *view);
 static void __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t len);
 static st_vector *__new_vector(__st_dtype dtype, size_t len);
-static st_matrix *__new_matrix(__st_dtype dtype, size_t nrow, size_t ncol);
 
 static void __status_vector(void *vector);
 static void __status_matrix(void *matrix);
@@ -248,7 +247,8 @@ static void __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t l
     __st_ds_add(row, NULL, NULL, &((st_vector *)row)->temp);
 }
 
-static st_matrix *__new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
+st_matrix *
+__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
 {
     st_matrix *mat;
     st_vector *_tmp_vec;
@@ -315,22 +315,22 @@ static void __free_matrix(void *matrix)
 
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol)
 {
-    return __new_matrix(__st_bool, nrow, ncol);
+    return __st_new_matrix(__st_bool, nrow, ncol);
 }
 
 st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol)
 {
-    return __new_matrix(__st_pixel, nrow, ncol);
+    return __st_new_matrix(__st_pixel, nrow, ncol);
 }
 
 st_matrix *st_new_int_matrix(size_t nrow, size_t ncol)
 {
-    return __new_matrix(__st_int, nrow, ncol);
+    return __st_new_matrix(__st_int, nrow, ncol);
 }
 
 st_matrix *st_new_matrix(size_t nrow, size_t ncol)
 {
-    return __new_matrix(__st_double, nrow, ncol);
+    return __st_new_matrix(__st_double, nrow, ncol);
 }
 
 void st_mat_display(st_matrix *mat)
