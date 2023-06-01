@@ -74,22 +74,22 @@ double st_dist_cos_ww(st_view *w1, st_view *w2)
 void st_dist_mat_row(st_matrix *re, st_matrix *mat, dist_fp fp)
 {
     check_mat_shape(re, mat->nrow, mat->nrow);
+    double v;
 
     for (size_t i = 0; i < mat->nrow; i++) {
         for (size_t j = 0; j < mat->nrow; j++) {
 
-            if (i > j)
-                st_mat_assign(re, i, j, st_mat_access(re, j, i));
-            else
-                st_mat_assign(
-                    re,
-                    i,
-                    j,
-                    fp(
-                        st_mat_access_row(mat, i),
-                        st_mat_access_row(mat, j)
-                    )
-                );
+            if (i > j) {
+                v = st_mat_access(re, j, i);
+                st_mat_assign(re, i, j, v);
+            }
+            else {
+                v = fp(
+                    st_mat_access_row(mat, i),
+                    st_mat_access_row(mat, j));
+
+                st_mat_assign(re, i, j, v);
+            }
         }
     }
     __st_check();
