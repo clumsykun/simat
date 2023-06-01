@@ -57,6 +57,22 @@ result *test__st_mat_copy_t(result *rp)
     return rp;
 }
 
+result *test__st_mat_dot(result *rp)
+{
+    rp->name = "st_mat_dot";
+
+    st_dataset *iris = st_load_iris();
+    st_matrix *iris_t = st_mat_copy_t(iris->X);
+    st_matrix *ret = st_mat_dot(iris_t, iris->X);
+
+    rp->value = !equal(st_precise(st_mat_access(ret, 0, 0), 2), 5223.84);
+    rp->value = !equal(st_precise(st_mat_access(ret, 1, 1), 2), 1430.39);
+    rp->value = !equal(st_precise(st_mat_access(ret, 2, 2), 2), 2582.71);
+    rp->value = !equal(st_precise(st_mat_access(ret, 3, 3), 2), 302.33);
+
+    return rp;
+}
+
 int test__matrix(void)
 {
     printf("unit test of matrix start:\n");
@@ -65,6 +81,7 @@ int test__matrix(void)
     call_test(test__st_mat_max);
     call_test(test__st_mat_scale);
     call_test(test__st_mat_copy_t);
+    call_test(test__st_mat_dot);
 
     printf("\n");
     return 0;
