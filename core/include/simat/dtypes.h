@@ -1,5 +1,7 @@
 #ifndef CORE_DTYPES_H
 #define CORE_DTYPES_H
+
+#include <string.h>
 #include "watcher.h"
 
 /**
@@ -29,6 +31,7 @@ typedef struct __st_data__
 
 typedef struct __st_vector
 {
+    char sha[64];
     bool temp;
     const __st_dtype dtype;
     __st_data *const data;
@@ -43,6 +46,7 @@ typedef struct __st_vector
  */
 typedef struct __st_matrix
 {
+    char sha[64];
     bool temp;
     const __st_dtype dtype;
     const __st_data *data;
@@ -54,6 +58,7 @@ typedef struct __st_matrix
 /* flexible structure contains ptr of element of target vector/matrix */
 typedef struct __st_view
 {
+    char sha[64];
     bool temp;
     __st_dtype dtype;
     void **head;
@@ -66,10 +71,14 @@ typedef struct __st_view
 #define st_int int
 #define st_double double
 
-#define st_is_bool(x) (x->dtype == __st_bool)
-#define st_is_pixel(x) (x->dtype == __st_pixel)
-#define st_is_int(x) (x->dtype == __st_int)
-#define st_is_double(x) (x->dtype == __st_double)
+#define st_is_bool(x) ((x)->dtype == __st_bool)
+#define st_is_pixel(x) ((x)->dtype == __st_pixel)
+#define st_is_int(x) ((x)->dtype == __st_int)
+#define st_is_double(x) ((x)->dtype == __st_double)
+
+#define st_is_vector(vec) !memcmp((vec), st_sha_vector, 64)
+#define st_is_matrix(mat) !memcmp((mat), st_sha_matrix, 64)
+#define st_is_view(view)  !memcmp((view), st_sha_view, 64)
 
 /** ------------------------------------------------------------------------------------------------
  * access/assign of vector/matrix/view
@@ -86,7 +95,7 @@ typedef struct __st_view
     )
 
 /* access the value of `p`, as type of `dtype` */
-#define st_access_p(p, dtype)                      \
+#define __st_access_p(p, dtype)                      \
     ((dtype) == __st_double                        \
         ? *(st_double *)(p)                        \
         : ((dtype) == __st_int                     \
@@ -109,33 +118,36 @@ typedef struct __st_view
                     ? (*(st_bool *)(p) = (st_bool)(value)) \
                     : __st_raise_dtype_error()))))
 
-#define st_vec_access(vec, idx)                          \
-    (((idx) < 0 || (vec)->len <= (idx))                  \
-        ? __st_raise_out_range_error()                   \
-            : st_access_p(__st_vec_find_p((vec), (idx)), \
-                            (vec)->dtype))
+#define __st_vec_access(vec, idx)                          \
+    (memcmp((vec), st_sha_vector, 64)                      \
+        ? __st_raise_invalid_error()                       \
+        : ((idx) < 0 || (vec)->len <= (idx)                \
+            ? __st_raise_out_range_error()                 \
+            : __st_access_p(__st_vec_find_p((vec), (idx)), \
+                          (vec)->dtype)))
 
-#define st_view_access(view, idx)                         \
+/* TODO: check if valid */
+#define __st_view_access(view, idx)                         \
     (((idx) < 0 || (view)->len <= (idx))                  \
         ? __st_raise_out_range_error()                    \
-            : st_access_p(*((void **)(view)->head+(idx)), \
+            : __st_access_p(*((void **)(view)->head+(idx)), \
                             (view)->dtype))
 
-/* TODO: check irow/icol are in range */
-#define st_mat_access(mat, irow, icol) \
-    st_access_p(__st_mat_find_p((mat), (irow), (icol)), (mat)->data->dtype)
+/* TODO: check irow/icol are in range and if valid */
+#define __st_mat_access(mat, irow, icol) \
+    __st_access_p(__st_mat_find_p((mat), (irow), (icol)), (mat)->data->dtype)
 
-#define st_mat_access_row(mat, irow) \
+#define __st_mat_access_row(mat, irow) \
     ((st_vector *)(mat)->first+(irow))
 
-#define st_vec_assign(vec, idx, value)                    \
+#define __st_vec_assign(vec, idx, value)                    \
     (((idx) < 0 || (vec)->len <= (idx))                   \
         ? __st_raise_out_range_error()                    \
         : (__st_assign_p(__st_vec_find_p((vec), (idx)),   \
                              (value),                     \
                              (vec)->dtype)))
 
-#define st_mat_assign(mat, irow, icol, value)    \
+#define __st_mat_assign(mat, irow, icol, value)    \
     (((irow) < 0 || (mat)->nrow <= (irow))       \
         ? __st_raise_out_range_error()           \
         : (((icol) < 0 || (mat)->ncol <= (icol)) \
@@ -145,7 +157,7 @@ typedef struct __st_view
                             (mat)->dtype)))
 
 /* TODO: check the range */
-#define st_view_assign(view, idx, value) \
+#define __st_view_assign(view, idx, value) \
     __st_assign_p(view->head[idx], value, view->dtype)
 
 /** ------------------------------------------------------------------------------------------------

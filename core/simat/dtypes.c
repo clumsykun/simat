@@ -53,8 +53,8 @@ __free_matrix(void *matrix)
     __free_data(mat->data);
 
     for (size_t i = 0; i < mat->nrow; i++) {
-        memset(st_mat_access_row(mat, i)->data, 0, sizeof(__st_data));
-        __free(st_mat_access_row(mat, i)->data);
+        memset(__st_mat_access_row(mat, i)->data, 0, sizeof(__st_data));
+        __free(__st_mat_access_row(mat, i)->data);
     }
 
     p = (void *)mat->first;
@@ -173,6 +173,7 @@ __st_new_vector(__st_dtype dtype, size_t len)
     };
 
     st_vector _vec = {
+        st_sha_vector,
         true,
         dtype,
         data, /* data */
@@ -220,11 +221,11 @@ st_vec_display(const st_vector *vec)
             printf("BoolVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++) {
-                c = (st_vec_access(vec, i) == false ? '-' : '+');
+                c = (__st_vec_access(vec, i) == false ? '-' : '+');
                 printf("(%c), ", c);
             }
 
-            printf("(%c)])\n", (st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
+            printf("(%c)])\n", (__st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
             break;
         }
 
@@ -232,9 +233,9 @@ st_vec_display(const st_vector *vec)
             printf("PixelVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("(%d), ", (int)st_vec_access(vec, i));
+                printf("(%d), ", (int)__st_vec_access(vec, i));
 
-            printf("(%d)])\n", (int)st_vec_access(vec, vec->len-1));
+            printf("(%d)])\n", (int)__st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -242,9 +243,9 @@ st_vec_display(const st_vector *vec)
             printf("IntVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("%d, ", (int)st_vec_access(vec, i));
+                printf("%d, ", (int)__st_vec_access(vec, i));
 
-            printf("%d])\n", (int)st_vec_access(vec, vec->len-1));
+            printf("%d])\n", (int)__st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -252,9 +253,9 @@ st_vec_display(const st_vector *vec)
             printf("Vector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("%f, ", (double)st_vec_access(vec, i));
+                printf("%f, ", (double)__st_vec_access(vec, i));
 
-            printf("%f])\n", (double)st_vec_access(vec, vec->len-1));
+            printf("%f])\n", (double)__st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -295,6 +296,7 @@ __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t len)
         len,
     };
     st_vector _vec = {
+        st_sha_vector,
         false,  /* this options here doesn't work because
                    this vector is not constructed by __st_new_vector */
         dtype,
@@ -339,6 +341,7 @@ __st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     }
 
     st_matrix _mat = {
+        st_sha_matrix,
         true,
         dtype,
         data,
@@ -390,7 +393,7 @@ st_mat_display(st_matrix *mat)
 
             for (size_t i = 0; i < mat->nrow; i++) {
                 for (size_t j = 0; j < mat->ncol; j++) {
-                    c = (st_mat_access(mat, i, j) == false ? '-': '+');
+                    c = (__st_mat_access(mat, i, j) == false ? '-': '+');
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
                         printf("(%c)])", c);
@@ -413,9 +416,9 @@ st_mat_display(st_matrix *mat)
                 for (size_t j = 0; j < mat->ncol; j++) {
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
-                        printf("(%3d)])", (int)st_mat_access(mat, i, j));
+                        printf("(%3d)])", (int)__st_mat_access(mat, i, j));
                     else
-                        printf("(%3d), ", (int)st_mat_access(mat, i, j));
+                        printf("(%3d), ", (int)__st_mat_access(mat, i, j));
                 }
 
                 if (i == (mat->nrow-1))
@@ -433,9 +436,9 @@ st_mat_display(st_matrix *mat)
                 for (size_t j = 0; j < mat->ncol; j++) {
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
-                        printf("%3d])", (int)st_mat_access(mat, i, j));
+                        printf("%3d])", (int)__st_mat_access(mat, i, j));
                     else
-                        printf("%3d, ", (int)st_mat_access(mat, i, j));
+                        printf("%3d, ", (int)__st_mat_access(mat, i, j));
                 }
 
                 if (i == (mat->nrow-1))
@@ -453,9 +456,9 @@ st_mat_display(st_matrix *mat)
                 for (size_t j = 0; j < mat->ncol; j++) {
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
-                        printf("%.2f])", st_mat_access(mat, i, j));
+                        printf("%.2f])", __st_mat_access(mat, i, j));
                     else
-                        printf("%.2f,  ", st_mat_access(mat, i, j));
+                        printf("%.2f,  ", __st_mat_access(mat, i, j));
                 }
 
                 if (i == (mat->nrow-1))
@@ -496,6 +499,7 @@ st_new_view()
 {
     st_view *view = malloc(sizeof(st_view));
     st_view _view = {
+        st_sha_view,
         true,
         0,    /* default dtype */
         NULL, /* initialize it to NULL so that realloc() will work properly */
@@ -524,7 +528,7 @@ st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
         view->last = view->head + view->len-1;
     }
 
-    for __st_iter_vector(i, p, st_mat_access_row(mat, irow))
+    for __st_iter_vector(i, p, __st_mat_access_row(mat, irow))
         view->head[i] = p;
 
     __st_check();
@@ -576,14 +580,14 @@ st_view_display(const st_view *view)
             printf("BoolView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
-                c = (st_view_access(view, i) == false ? '-' : '+');
+                c = (__st_view_access(view, i) == false ? '-' : '+');
                 printf("(%c), ", c);
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("(%c)])\n", (st_view_access(view, view->len-1) == false ? '-' : '+'));
+            printf("(%c)])\n", (__st_view_access(view, view->len-1) == false ? '-' : '+'));
             break;
         }
 
@@ -591,13 +595,13 @@ st_view_display(const st_view *view)
             printf("PixelView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
-                printf("(%3d), ", (int)st_view_access(view, i));
+                printf("(%3d), ", (int)__st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("(%3d)])\n", (int)st_view_access(view, view->len-1));
+            printf("(%3d)])\n", (int)__st_view_access(view, view->len-1));
             break;
         }
 
@@ -605,13 +609,13 @@ st_view_display(const st_view *view)
             printf("IntView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
-                printf("%5d, ", (int)st_view_access(view, i));
+                printf("%5d, ", (int)__st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("%5d])\n", (int)st_view_access(view, view->len-1));
+            printf("%5d])\n", (int)__st_view_access(view, view->len-1));
             break;
         }
 
@@ -620,14 +624,14 @@ st_view_display(const st_view *view)
 
             double d;
             for (size_t i = 0; i <= view->len - 2; i++) {
-                d = (double)st_view_access(view, i);
-                printf("%4.2f, ", (double)st_view_access(view, i));
+                d = (double)__st_view_access(view, i);
+                printf("%4.2f, ", (double)__st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n      ");
             }
 
-            printf("%4.2f])\n", (double)st_view_access(view, view->len-1));
+            printf("%4.2f])\n", (double)__st_view_access(view, view->len-1));
             break;
         }
 

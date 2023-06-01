@@ -45,12 +45,12 @@ __mat_dot_double(st_matrix *a, st_matrix *b)
 double
 st_mat_min(st_matrix *mat)
 {
-    double min = st_mat_access(mat, 0, 0);
+    double min = __st_mat_access(mat, 0, 0);
     void *p;
     for __st_iter_data(p, mat->data)
-        min = (min <= st_access_p(p, mat->data->dtype)
+        min = (min <= __st_access_p(p, mat->data->dtype)
                    ? min
-                   : st_access_p(p, mat->data->dtype));
+                   : __st_access_p(p, mat->data->dtype));
 
     return min;
 }
@@ -58,12 +58,12 @@ st_mat_min(st_matrix *mat)
 double
 st_mat_max(st_matrix *mat)
 {
-    double max = st_mat_access(mat, 0, 0);
+    double max = __st_mat_access(mat, 0, 0);
     void *p;
     for __st_iter_data(p, mat->data)
-        max = (max >= st_access_p(p, mat->data->dtype)
+        max = (max >= __st_access_p(p, mat->data->dtype)
                    ? max
-                   : st_access_p(p, mat->data->dtype));
+                   : __st_access_p(p, mat->data->dtype));
 
     return max;
 }
@@ -81,7 +81,7 @@ st_mat_scale(st_matrix *mat, double min, double max)
     void *p;
 
     for __st_iter_data(p, mat->data) {
-        scaled = min + (st_access_p(p, mat->data->dtype) - mat_min) * target_scale / scale;
+        scaled = min + (__st_access_p(p, mat->data->dtype) - mat_min) * target_scale / scale;
         __st_assign_p(p, scaled, mat->data->dtype);
     }
 

@@ -16,7 +16,7 @@ double st_vec_mean(st_vector *vec)
     double sum = 0;
 
     for (size_t i = 0; i < vec->len; i++)
-        sum += st_vec_access(vec, i);
+        sum += __st_vec_access(vec, i);
 
     return sum / (double)vec->len;
 }
@@ -27,7 +27,7 @@ double st_vec_var(st_vector *vec, size_t freedom)
     double sum_sq_diff = 0;
 
     for (size_t i = 0; i < vec->len; i++)
-        sum_sq_diff += (st_vec_access(vec, i) - mean) * (st_vec_access(vec, i) - mean);
+        sum_sq_diff += (__st_vec_access(vec, i) - mean) * (__st_vec_access(vec, i) - mean);
 
     return sum_sq_diff / (double) (vec->len - freedom);
 }
@@ -50,8 +50,8 @@ void st_vec_normalize(st_vector *vec)
     double scaled;
 
     for (size_t i = 0; i < vec->len; i++) {
-        scaled = (st_vec_access(vec, i) - mean) / std;
-        st_vec_assign(vec, i, scaled);
+        scaled = (__st_vec_access(vec, i) - mean) / std;
+        __st_vec_assign(vec, i, scaled);
     }
 }
 
@@ -67,7 +67,7 @@ double st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
     double diff = 0;
 
     for (size_t i = 0; i < a->len; i++)
-        diff += (st_vec_access(a, i) - mean_a)*(st_vec_access(b, i) - mean_b);
+        diff += (__st_vec_access(a, i) - mean_a)*(__st_vec_access(b, i) - mean_b);
 
     return diff / (a->len-freedom);
 }

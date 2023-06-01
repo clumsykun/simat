@@ -101,7 +101,7 @@ void st_vec_rand(const st_vector *vec)
 
     for (size_t i = 0; i < vec->len; i++) {
         value = __scale_value(__rand(min, max), vec->dtype);
-        st_vec_assign(vec, i, value);
+        __st_vec_assign(vec, i, value);
     }
 
     __st_check();
@@ -115,11 +115,11 @@ void st_vec_rand(const st_vector *vec)
  */
 static void *__partition(void *start, void *end, __st_dtype dtype, size_t nbyte)
 {
-    double pivot = st_access_p(end, dtype);
+    double pivot = __st_access_p(end, dtype);
     void *candidate = start - nbyte;
 
    for (void *p = start; p < end; p+=nbyte) {
-        if (st_access_p(p, dtype) < pivot) {
+        if (__st_access_p(p, dtype) < pivot) {
 
             candidate += nbyte;
             __swap(candidate, p, nbyte);
@@ -169,7 +169,7 @@ void st_vec_reverse(st_vector *vec)
 void st_mat_rand(const st_matrix *mat)
 {
     for (size_t i = 0; i < mat->nrow; i++)
-        st_vec_rand(st_mat_access_row(mat, i));
+        st_vec_rand(__st_mat_access_row(mat, i));
 
     __st_check();
 }
@@ -206,18 +206,18 @@ void st_view_rand(st_view *view)
 
     for (size_t i = 0; i < view->len; i++) {
         value = __scale_value(__rand(min, max), view->dtype);
-        st_view_assign(view, i, value);
+        __st_view_assign(view, i, value);
     }
     __st_check();
 }
 
 static void **__partition_p(void **start, void **end, __st_dtype dtype, size_t nbyte)
 {
-    double pivot = st_access_p(*end, dtype);
+    double pivot = __st_access_p(*end, dtype);
     void **candidate = start -1;
 
    for (void **p = start; p < end; p++) {
-        if (st_access_p(*p, dtype) < pivot) {
+        if (__st_access_p(*p, dtype) < pivot) {
 
             candidate++;
             __swap(*candidate, *p, nbyte);

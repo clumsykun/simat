@@ -27,7 +27,7 @@ double st_dist_euclid(st_vector *a, st_vector *b)
 
     for (size_t i = 0; i < a->len; i++) {
 
-        diff = st_vec_access(a, i) - st_vec_access(b, i);
+        diff = __st_vec_access(a, i) - __st_vec_access(b, i);
         sum_square += diff*diff;
     }
 
@@ -47,7 +47,7 @@ double st_dist_manhattan(st_vector *a, st_vector *b)
     check_vec_length(a, b);
     double dist = 0;
     for (size_t i = 0; i < a->len; i++)
-        dist += fabs(st_vec_access(a, i)-st_vec_access(b, i));
+        dist += fabs(__st_vec_access(a, i)-__st_vec_access(b, i));
 
     return dist;
 }
@@ -58,8 +58,8 @@ double st_dist_chebyshev(st_vector *a, st_vector *b)
     double dist = 0;
 
     for (size_t i = 0; i < a->len; i++)
-        dist = (fabs(st_vec_access(a, i) - st_vec_access(b, i)) > dist
-                ? fabs(st_vec_access(a, i) - st_vec_access(b, i))
+        dist = (fabs(__st_vec_access(a, i) - __st_vec_access(b, i)) > dist
+                ? fabs(__st_vec_access(a, i) - __st_vec_access(b, i))
                 : dist);
 
     return dist;
@@ -80,15 +80,15 @@ void st_dist_mat_row(st_matrix *re, st_matrix *mat, dist_fp fp)
         for (size_t j = 0; j < mat->nrow; j++) {
 
             if (i > j) {
-                v = st_mat_access(re, j, i);
-                st_mat_assign(re, i, j, v);
+                v = __st_mat_access(re, j, i);
+                __st_mat_assign(re, i, j, v);
             }
             else {
                 v = fp(
-                    st_mat_access_row(mat, i),
-                    st_mat_access_row(mat, j));
+                    __st_mat_access_row(mat, i),
+                    __st_mat_access_row(mat, j));
 
-                st_mat_assign(re, i, j, v);
+                __st_mat_assign(re, i, j, v);
             }
         }
     }

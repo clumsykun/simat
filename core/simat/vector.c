@@ -18,13 +18,13 @@ static void check_vec_length(st_vector *a, st_vector *b)
 
 double st_vec_min(st_vector *vec)
 {
-    double min = st_access_p(vec->data->head, vec->dtype);
+    double min = __st_access_p(vec->data->head, vec->dtype);
     void *p;
 
     for __st_iter_data(p, vec->data)
-        min = (min <= st_access_p(p, vec->dtype)
+        min = (min <= __st_access_p(p, vec->dtype)
                ? min
-               : st_access_p(p, vec->dtype));
+               : __st_access_p(p, vec->dtype));
 
     __st_check();
     return min;
@@ -32,13 +32,13 @@ double st_vec_min(st_vector *vec)
 
 double st_vec_max(st_vector *vec)
 {
-    double max = st_access_p(vec->data->head, vec->dtype);
+    double max = __st_access_p(vec->data->head, vec->dtype);
     void *p;
 
     for __st_iter_data(p, vec->data)
-        max = (max >= st_access_p(p, vec->dtype)
+        max = (max >= __st_access_p(p, vec->dtype)
                ? max
-               : st_access_p(p, vec->dtype));
+               : __st_access_p(p, vec->dtype));
 
     __st_check();
     return max;
@@ -49,7 +49,7 @@ double st_vec_norm(st_vector *vec)
     double sum_square = 0;
     void *p;
     for __st_iter_data(p, vec->data)
-        sum_square += st_access_p(p, vec->dtype)*st_access_p(p, vec->dtype);
+        sum_square += __st_access_p(p, vec->dtype)*__st_access_p(p, vec->dtype);
 
     return sqrt(sum_square);
 }
@@ -67,7 +67,7 @@ void st_vec_scale(st_vector *vec, double min, double max)
     void *p;
 
     for __st_iter_data(p, vec->data) {
-        scaled = min + (st_access_p(p, vec->dtype) - vec_min) * target_scale / scale;
+        scaled = min + (__st_access_p(p, vec->dtype) - vec_min) * target_scale / scale;
         __st_assign_p(p, scaled, vec->dtype);
     }
 
@@ -78,21 +78,21 @@ void st_vec_sub_scalar(st_vector *vec, double value)
 {
     void *p;
     for __st_iter_data(p, vec->data)
-        __st_assign_p(p, st_access_p(p, vec->dtype)-value, vec->dtype);
+        __st_assign_p(p, __st_access_p(p, vec->dtype)-value, vec->dtype);
 }
 
 void st_vec_mul_scalar(st_vector *vec, double value)
 {
     void *p;
     for __st_iter_data(p, vec->data)
-        __st_assign_p(p, st_access_p(p, vec->dtype)*value, vec->dtype);
+        __st_assign_p(p, __st_access_p(p, vec->dtype)*value, vec->dtype);
 }
 
 void __call_single_fp(st_vector *vec, fp_single fp)
 {
     void *p;
     for __st_iter_data(p, vec->data)
-        __st_assign_p(p, fp(st_access_p(p, vec->dtype)), vec->dtype);
+        __st_assign_p(p, fp(__st_access_p(p, vec->dtype)), vec->dtype);
 }
 
 void st_vec_abs(st_vector *vec)
@@ -134,8 +134,8 @@ static st_vector *__call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
     __st_check();
 
     for __st_iter_vector3(i, pa, pb, pr, a, b, re) {
-        va = st_access_p(pa, a->dtype);
-        vb = st_access_p(pb, b->dtype);
+        va = __st_access_p(pa, a->dtype);
+        vb = __st_access_p(pb, b->dtype);
         __st_assign_p(pr, fp(va, vb), re->dtype);
     }
 
@@ -196,7 +196,7 @@ double st_vec_dot(st_vector *a, st_vector *b)
     void *pa, *pb;
     size_t i;
     for __st_iter_vector2(i, pa, pb, a, b)
-        re += st_access_p(pa, a->dtype) * st_access_p(pb, b->dtype);
+        re += __st_access_p(pa, a->dtype) * __st_access_p(pb, b->dtype);
 
     __st_check();
     return re;
@@ -213,7 +213,7 @@ bool st_vec_equal(st_vector *a, st_vector *b)
     bool is_equal = true;
 
     for (size_t i = 0; i < a->len; i++)
-        if (st_vec_access(a, i) != st_vec_access(b, i))
+        if (__st_vec_access(a, i) != __st_vec_access(b, i))
             is_equal = false;
     
     return is_equal;

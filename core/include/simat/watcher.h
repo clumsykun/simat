@@ -15,6 +15,8 @@ extern bool __st_length_error;
 extern bool __st_is_invalid;
 
 void   __st_check_invalid_error(const void *target);
+
+double __st_raise_invalid_error(void);
 double __st_raise_access_error(void);
 size_t __st_raise_dtype_error(void);
 double __st_raise_out_range_error(void);
