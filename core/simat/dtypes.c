@@ -3,7 +3,6 @@
 #include <string.h>
 #include "dtypes.h"
 
-
 #define __st_temp_str(is_temp) \
     ((is_temp) == true ? "TEMP" : "    ")
 
@@ -18,19 +17,103 @@
                     ? "Bool"            \
                     : "invalid"))))
 
-static void __free(void *p);
-static void __free_data(const __st_data *data);
-static void __free_vector(void *vector);
-static void __free_matrix(void *matrix);
-static void __free_view(void *view);
-static void __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t len);
-static st_vector *__new_vector(__st_dtype dtype, size_t len);
+/* the standard way to free memory */
+static void
+__free(void *p)
+{
+    free((void *)p);
+    p = NULL;
+}
 
-static void __status_vector(void *vector);
-static void __status_matrix(void *matrix);
-static void __status_view(void *view);
+static void
+__free_data(const __st_data *data)
+{
+    __st_data *p = (__st_data *) data;
+    memset(p->head, 0, p->size*p->nbyte);
+    __free(p->head);
+    memset(p, 0, sizeof(__st_data));
+    __free(p);
+}
 
-size_t __st_byteof(__st_dtype dtype)
+static void
+__free_vector(void *vector)
+{
+    st_vector *vec = vector;
+    __free_data(vec->data);
+    memset(vec, 0, sizeof(st_vector));
+    __free(vec);
+}
+
+static void
+__free_matrix(void *matrix)
+{
+    st_matrix *mat = matrix;
+    void *p;
+
+    __free_data(mat->data);
+
+    for (size_t i = 0; i < mat->nrow; i++) {
+        memset(st_mat_access_row(mat, i)->data, 0, sizeof(__st_data));
+        __free(st_mat_access_row(mat, i)->data);
+    }
+
+    p = (void *)mat->first;
+    memset(p, 0, mat->nrow*sizeof(st_vector));
+    __free(p);
+
+    memset(mat, 0, sizeof(st_matrix));
+    __free(mat);
+}
+
+static void
+__free_view(void *view)
+{
+    memset(view, 0, sizeof(st_view));
+    __free(view);
+}
+
+static void
+__status_vector(void *vector)
+{
+    const st_vector *vec = vector;
+    printf(
+        "%10s Vector (%p), %s, size (%d)\n",
+        __st_dtype_str(vec->dtype),
+        vec,
+        __st_temp_str(vec->temp),
+        vec->len
+    );
+}
+
+static void
+__status_matrix(void *matrix)
+{
+    const st_matrix *mat = matrix;
+    printf(
+        "%10s Matrix (%p), %s, size (%d, %d)\n",
+        __st_dtype_str(mat->dtype),
+        mat,
+        __st_temp_str(mat->temp),
+        mat->nrow,
+        mat->ncol
+    );
+}
+
+static void
+__status_view(void *view)
+{
+    const st_view *v = view;
+    printf(
+        "%10s View   (%p), %s, size (%d)\n",
+        __st_dtype_str(v->dtype),
+        v,
+        __st_temp_str(v->temp),
+        v->len
+    );
+}
+
+size_t
+__st_byteof(__st_dtype dtype)
 {
     size_t nbyte;
     switch (dtype) {
@@ -59,32 +142,18 @@ size_t __st_byteof(__st_dtype dtype)
     return nbyte;
 }
 
-/* the standard way to free memory */
-static void __free(void *p)
-{
-    free((void *)p);
-    p = NULL;
-}
 
-static void __free_data(const __st_data *data)
-{
-    __st_data *p = (__st_data *) data;
-    memset(p->head, 0, p->size*p->nbyte);
-    __free(p->head);
-    memset(p, 0, sizeof(__st_data));
-    __free(p);
-}
-
-/**
+/* =================================================================================================
  * functions here defined to support vector computation. 
- * @__new_vector: construct function of vector.
+ * @__st_new_vector: construct function of vector.
  * @st_new_bool_vector: construct new bool vector.
  * @st_new_pixel_vector: construct new st_pixel vector.
  * @st_new_int_vector: construct new int vector.
  * @st_new_vector: construct new double vector.
  */
 
-static st_vector *__new_vector(__st_dtype dtype, size_t len)
+st_vector *
+__st_new_vector(__st_dtype dtype, size_t len)
 {
     st_vector *vec;
     __st_data *data;
@@ -116,35 +185,32 @@ static st_vector *__new_vector(__st_dtype dtype, size_t len)
     return vec;
 }
 
-st_vector *st_new_bool_vector(size_t len)
+st_vector *
+st_new_bool_vector(size_t len)
 {
-    return __new_vector(__st_bool, len);
+    return __st_new_vector(__st_bool, len);
 }
 
-st_vector *st_new_pixel_vector(size_t len)
+st_vector *
+st_new_pixel_vector(size_t len)
 {
-    return __new_vector(__st_pixel, len);
+    return __st_new_vector(__st_pixel, len);
 }
 
-st_vector *st_new_int_vector(size_t len)
+st_vector *
+st_new_int_vector(size_t len)
 {
-    return __new_vector(__st_int, len);
+    return __st_new_vector(__st_int, len);
 }
 
-st_vector *st_new_vector(size_t len)
+st_vector *
+st_new_vector(size_t len)
 {
-    return __new_vector(__st_double, len);
+    return __st_new_vector(__st_double, len);
 }
 
-static void __free_vector(void *vector)
-{
-    st_vector *vec = vector;
-    __free_data(vec->data);
-    memset(vec, 0, sizeof(st_vector));
-    __free(vec);
-}
-
-void st_vec_display(const st_vector *vec)
+void
+st_vec_display(const st_vector *vec)
 {
     __st_check_invalid_error(vec);
     char c;
@@ -200,19 +266,8 @@ void st_vec_display(const st_vector *vec)
     __st_check();
 }
 
-static void __status_vector(void *vector)
-{
-    const st_vector *vec = vector;
-    printf(
-        "%10s Vector (%p), %s, size (%d)\n",
-        __st_dtype_str(vec->dtype),
-        vec,
-        __st_temp_str(vec->temp),
-        vec->len
-    );
-}
-
-void st_vec_assign_all(st_vector *vec, double value)
+void
+st_vec_assign_all(st_vector *vec, double value)
 {
     __st_check_invalid_error(vec);
     void *p;
@@ -223,7 +278,12 @@ void st_vec_assign_all(st_vector *vec, double value)
     __st_check();
 }
 
-static void __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t len)
+/* =================================================================================================
+ * functions here defined to support matrix computation. 
+ */
+
+static void
+__new_row(void *row, void *row_data_head, __st_dtype dtype, size_t len)
 {
     size_t nbyte = __st_byteof(dtype);
     __st_data *data = malloc(sizeof(__st_data));
@@ -236,7 +296,7 @@ static void __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t l
     };
     st_vector _vec = {
         false,  /* this options here doesn't work because
-                   this vector is not constructed by __new_vector */
+                   this vector is not constructed by __st_new_vector */
         dtype,
         data,
         len
@@ -293,47 +353,32 @@ __st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
     return mat;
 }
 
-static void __free_matrix(void *matrix)
-{
-    st_matrix *mat = matrix;
-    void *p;
-
-    __free_data(mat->data);
-
-    for (size_t i = 0; i < mat->nrow; i++) {
-        memset(st_mat_access_row(mat, i)->data, 0, sizeof(__st_data));
-        __free(st_mat_access_row(mat, i)->data);
-    }
-
-    p = (void *)mat->first;
-    memset(p, 0, mat->nrow*sizeof(st_vector));
-    __free(p);
-
-    memset(mat, 0, sizeof(st_matrix));
-    __free(mat);
-}
-
-st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol)
+st_matrix *
+st_new_bool_matrix(size_t nrow, size_t ncol)
 {
     return __st_new_matrix(__st_bool, nrow, ncol);
 }
 
-st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol)
+st_matrix *
+st_new_pixel_matrix(size_t nrow, size_t ncol)
 {
     return __st_new_matrix(__st_pixel, nrow, ncol);
 }
 
-st_matrix *st_new_int_matrix(size_t nrow, size_t ncol)
+st_matrix *
+st_new_int_matrix(size_t nrow, size_t ncol)
 {
     return __st_new_matrix(__st_int, nrow, ncol);
 }
 
-st_matrix *st_new_matrix(size_t nrow, size_t ncol)
+st_matrix *
+st_new_matrix(size_t nrow, size_t ncol)
 {
     return __st_new_matrix(__st_double, nrow, ncol);
 }
 
-void st_mat_display(st_matrix *mat)
+void
+st_mat_display(st_matrix *mat)
 {
     __st_check_invalid_error(mat);
 
@@ -429,20 +474,8 @@ void st_mat_display(st_matrix *mat)
     __st_check();
 }
 
-static void __status_matrix(void *matrix)
-{
-    const st_matrix *mat = matrix;
-    printf(
-        "%10s Matrix (%p), %s, size (%d, %d)\n",
-        __st_dtype_str(mat->dtype),
-        mat,
-        __st_temp_str(mat->temp),
-        mat->nrow,
-        mat->ncol
-    );
-}
-
-void st_mat_assign_all(st_matrix *mat, double value)
+void
+st_mat_assign_all(st_matrix *mat, double value)
 {
     __st_check_invalid_error(mat);
 
@@ -454,7 +487,12 @@ void st_mat_assign_all(st_matrix *mat, double value)
     __st_check();
 }
 
-st_view *st_new_view()
+/* =================================================================================================
+ * functions here defined to support view computation. 
+ */
+
+st_view *
+st_new_view()
 {
     st_view *view = malloc(sizeof(st_view));
     st_view _view = {
@@ -473,13 +511,8 @@ st_view *st_new_view()
     return view;
 }
 
-static void __free_view(void *view)
-{
-    memset(view, 0, sizeof(st_view));
-    __free(view);
-}
-
-void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
+void
+st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
 {
     void *p;
     size_t i;
@@ -497,7 +530,8 @@ void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
     __st_check();
 }
 
-void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
+void
+st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 {
     view->dtype = mat->dtype;
 
@@ -513,7 +547,8 @@ void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
     __st_check();
 }
 
-void st_vector_view(st_view *view, st_vector *vec)
+void
+st_vector_view(st_view *view, st_vector *vec)
 {
     void *p;
     size_t i;
@@ -531,7 +566,8 @@ void st_vector_view(st_view *view, st_vector *vec)
     __st_check();
 }
 
-void st_view_display(const st_view *view)
+void
+st_view_display(const st_view *view)
 {
     char c;
     switch (view->dtype) {
@@ -601,16 +637,4 @@ void st_view_display(const st_view *view)
     }
     printf("\n");
     __st_check();
-}
-
-static void __status_view(void *view)
-{
-    const st_view *v = view;
-    printf(
-        "%10s View   (%p), %s, size (%d)\n",
-        __st_dtype_str(v->dtype),
-        v,
-        __st_temp_str(v->temp),
-        v->len
-    );
 }

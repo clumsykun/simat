@@ -2,11 +2,6 @@
 #define CORE_DTYPES_H
 #include "watcher.h"
 
-#define st_bool bool
-#define st_pixel unsigned char
-#define st_int int
-#define st_double double
-
 /**
  * @st_pixel: unsigned char
  */
@@ -66,81 +61,100 @@ typedef struct __st_view
     size_t len;
 } st_view;
 
+#define st_bool bool
+#define st_pixel unsigned char
+#define st_int int
+#define st_double double
+
 #define st_is_bool(x) (x->dtype == __st_bool)
 #define st_is_pixel(x) (x->dtype == __st_pixel)
 #define st_is_int(x) (x->dtype == __st_int)
 #define st_is_double(x) (x->dtype == __st_double)
 
+/** ------------------------------------------------------------------------------------------------
+ * access/assign of vector/matrix/view
+ */
+
 /* return the ptr of the `vec` of index `idx` */
-#define __st_vec_find_p(vec, idx) (vec->data->head + (size_t)(idx) * vec->data->nbyte)
+#define __st_vec_find_p(vec, idx) \
+    ((vec)->data->head + (size_t)(idx) * (vec)->data->nbyte)
 
 /* return the ptr of the `mat` of index (`irow`, `icol`) */
 #define __st_mat_find_p(mat, irow, icol) \
-    (mat->data->head + ((size_t)(irow)*(mat->ncol)+(size_t)(icol))*mat->data->nbyte)
+    ((mat)->data->head +                   \
+     (mat)->data->nbyte * ((size_t)(irow)*((mat)->ncol)+(size_t)(icol)) \
+    )
 
 /* access the value of `p`, as type of `dtype` */
 #define st_access_p(p, dtype)                      \
-    (dtype == __st_double                          \
+    ((dtype) == __st_double                        \
         ? *(st_double *)(p)                        \
-        : (dtype == __st_int                       \
+        : ((dtype) == __st_int                     \
             ? (double)*(st_int *)(p)               \
-            : (dtype == __st_pixel                 \
+            : ((dtype) == __st_pixel               \
                 ? (double)*(st_pixel *)(p)         \
-                : (dtype == __st_bool              \
+                : ((dtype) == __st_bool            \
                     ? (double)*(st_bool *)(p)      \
                     : __st_raise_access_error()))))
 
 /* assign `value` to `p`, as type of `dtype` */
 #define __st_assign_p(p, value, dtype)                     \
-    (dtype == __st_double                                  \
+    ((dtype) == __st_double                                \
         ? (*(st_double *)(p) = (st_double)(value))         \
-        : (dtype == __st_int                               \
+        : ((dtype) == __st_int                             \
             ? (*(st_int *)(p) = (st_int)(value))           \
-            : (dtype == __st_pixel                         \
+            : ((dtype) == __st_pixel                       \
                 ? (*(st_pixel *)(p) = (st_pixel)(value))   \
-                : (dtype == __st_bool                      \
+                : ((dtype) == __st_bool                    \
                     ? (*(st_bool *)(p) = (st_bool)(value)) \
                     : __st_raise_dtype_error()))))
 
-#define st_vec_access(vec, idx)                        \
-    ((idx < 0 || vec->len <= idx)                      \
-        ? __st_raise_out_range_error()                 \
-            : st_access_p(__st_vec_find_p(vec, idx), \
-                            vec->dtype))
+#define st_vec_access(vec, idx)                          \
+    (((idx) < 0 || (vec)->len <= (idx))                  \
+        ? __st_raise_out_range_error()                   \
+            : st_access_p(__st_vec_find_p((vec), (idx)), \
+                            (vec)->dtype))
 
 #define st_view_access(view, idx)                         \
-    ((idx < 0 || view->len <= idx)                        \
+    (((idx) < 0 || (view)->len <= (idx))                  \
         ? __st_raise_out_range_error()                    \
-            : st_access_p(*((void **)view->head+idx),   \
-                            view->dtype))
+            : st_access_p(*((void **)(view)->head+(idx)), \
+                            (view)->dtype))
 
 /* TODO: check irow/icol are in range */
 #define st_mat_access(mat, irow, icol) \
-    st_access_p(__st_mat_find_p(mat, irow, icol), mat->data->dtype)
+    st_access_p(__st_mat_find_p((mat), (irow), (icol)), (mat)->data->dtype)
 
-#define st_mat_access_row(mat, irow) ((st_vector *)mat->first+(irow))
+#define st_mat_access_row(mat, irow) \
+    ((st_vector *)(mat)->first+(irow))
 
-#define st_vec_assign(vec, idx, value)                  \
-    ((idx < 0 || vec->len <= idx)                       \
-        ? __st_raise_out_range_error()                  \
-        : (__st_assign_p(__st_vec_find_p(vec, idx),     \
-                             value,                     \
-                             vec->dtype)))
+#define st_vec_assign(vec, idx, value)                    \
+    (((idx) < 0 || (vec)->len <= (idx))                   \
+        ? __st_raise_out_range_error()                    \
+        : (__st_assign_p(__st_vec_find_p((vec), (idx)),   \
+                             (value),                     \
+                             (vec)->dtype)))
 
-#define st_mat_assign(mat, irow, icol, value) \
-    ((irow < 0 || mat->nrow <= irow) \
-        ? __st_raise_out_range_error() \
-        : ((icol < 0 || mat->ncol <= icol) \
-            ? __st_raise_out_range_error() \
-            : __st_assign_p(__st_mat_find_p(mat, irow, icol),\
-                            value,\
-                            mat->dtype)))
+#define st_mat_assign(mat, irow, icol, value)    \
+    (((irow) < 0 || (mat)->nrow <= (irow))       \
+        ? __st_raise_out_range_error()           \
+        : (((icol) < 0 || (mat)->ncol <= (icol)) \
+            ? __st_raise_out_range_error()       \
+            : __st_assign_p(__st_mat_find_p((mat), (irow), (icol)),\
+                            (value),                               \
+                            (mat)->dtype)))
 
 /* TODO: check the range */
-#define st_view_assign(view, idx, value) __st_assign_p(view->head[idx], value, view->dtype)
+#define st_view_assign(view, idx, value) \
+    __st_assign_p(view->head[idx], value, view->dtype)
+
+/** ------------------------------------------------------------------------------------------------
+ * function define.
+ */
 
 size_t __st_byteof(__st_dtype dtype);
 
+st_vector *__st_new_vector(__st_dtype dtype, size_t len);
 st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
@@ -162,35 +176,49 @@ void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow);
 void st_vector_view(st_view *view, st_vector *vec);
 void st_view_display(const st_view *view);
 
-#define __st_iter_data(p, data) (p = data->head; p <= data->last; p += data->nbyte)
+/** ------------------------------------------------------------------------------------------------
+ * iterator.
+ */
+
+#define __st_iter_data(p, data) \
+    ( \
+        p = data->head;  \
+        p <= data->last; \
+        p += data->nbyte \
+    )
+
 #define __st_iter_vector(i, p, vec) \
-    (p = vec->data->head, i = 0; p <= vec->data->last; p += vec->data->nbyte, (size_t)i++)
+    ( \
+        p = vec->data->head, i = 0;        \
+        p <= vec->data->last;              \
+        p += vec->data->nbyte, (size_t)i++ \
+    )
 
 #define __st_iter_vector2(i, p1, p2, vec1, vec2) \
     ( \
-        p1 = vec1->data->head, p2 = vec2->data->head, i = 0; \
-        p1 <= vec1->data->last; \
+        p1 = vec1->data->head, p2 = vec2->data->head, i = 0;          \
+        p1 <= vec1->data->last;                                       \
         p1 += vec1->data->nbyte, p2 += vec2->data->nbyte, (size_t)i++ \
     )
 
 #define __st_iter_vector3(i, p1, p2, p3, vec1, vec2, vec3) \
     ( \
-        p1 = vec1->data->head, \
-            p2 = vec2->data->head, \
-            p3 = vec3->data->head, \
-            i = 0; \
-        p1 <= vec1->data->last; \
-        p1 += vec1->data->nbyte, \
+        p1 = vec1->data->head,       \
+            p2 = vec2->data->head,   \
+            p3 = vec3->data->head,   \
+            i = 0;                   \
+        p1 <= vec1->data->last;      \
+        p1 += vec1->data->nbyte,     \
             p2 += vec2->data->nbyte, \
             p3 += vec3->data->nbyte, \
-            (size_t)i++ \
+            (size_t)i++              \
     )
 
-#define __st_iter_matrix(irow, icol, p, mat)       \
-    (                                            \
-        p = mat->data->head, irow = 0, icol = 0; \
-        p <= mat->data->last;                    \
-        p += mat->data->nbyte,                   \
+#define __st_iter_matrix(irow, icol, p, mat) \
+    ( \
+        p = mat->data->head, irow = 0, icol = 0;                                      \
+        p <= mat->data->last;                                                         \
+        p += mat->data->nbyte,                                                        \
             irow = ((size_t)icol + 1 == mat->ncol ? (size_t)irow + 1 : (size_t)irow), \
             icol = ((size_t)icol + 1 == mat->ncol ? 0 : (size_t)icol + 1)             \
     )
