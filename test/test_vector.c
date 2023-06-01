@@ -3,7 +3,8 @@
 /**
  * [3.141592653589793, 2.718281828459045, 0.577215664901532, 1.414213562373095, 1.618033988749894]
  */
-st_vector *test_vec_1(void)
+st_vector *
+test_vec_1(void)
 {
     st_vector *vec = st_new_vector(5);
     double arr[5] = {
@@ -21,7 +22,8 @@ st_vector *test_vec_1(void)
 /**
  * [6.67428, 9.10938215, 6.62606896, 5.2917720859, 1.602176487]
  */
-st_vector *test_vec_2(void)
+st_vector *
+test_vec_2(void)
 {
     st_vector *vec = st_new_vector(5);
     double arr[5] = {
@@ -36,7 +38,8 @@ st_vector *test_vec_2(void)
     return vec;
 }
 
-void call_test(fp fp)
+void
+call_test(fp fp)
 {
     result ret = {NULL, 0};
     result *rp = &ret;
@@ -47,7 +50,8 @@ void call_test(fp fp)
         printf("    OK --> %s\n", rp->name);
 }
 
-void test__st_vec_min(void)
+void
+test__st_vec_min(void)
 {
     char *name = "st_vec_min";
     double ret, target = 0.577215664901532;
@@ -63,7 +67,8 @@ void test__st_vec_min(void)
     else printf("FAILED --> %s\n", name);
 }
 
-void test__st_vec_max(void)
+void
+test__st_vec_max(void)
 {
     char *name = "st_vec_max";
     double ret, target = 3.141592653589793;
@@ -79,7 +84,8 @@ void test__st_vec_max(void)
     else printf("FAILED --> %s\n", name);
 }
 
-void test__st_vec_norm(void)
+void
+test__st_vec_norm(void)
 {
     char *name = "st_vec_norm";
     double ret, target = 4.712735130747071;
@@ -95,7 +101,8 @@ void test__st_vec_norm(void)
     else printf("FAILED --> %s\n", name);
 }
 
-void test__st_vec_scale(void)
+void
+test__st_vec_scale(void)
 {
     char *name = "st_vec_scale";
     double ret, target = 0;
@@ -118,7 +125,8 @@ void test__st_vec_scale(void)
     else printf("FAILED --> %s\n", name);
 }
 
-void test__st_vec_equal(void)
+void
+test__st_vec_equal(void)
 {
     char *name = "st_vec_equal";
     double ret, target = 0;
@@ -145,7 +153,8 @@ void test__st_vec_equal(void)
     else printf("FAILED --> %s\n", name);
 }
 
-result *test__st_vec_add(result *rp)
+result *
+test__st_vec_add(result *rp)
 {
     rp->name = "st_vec_add";
 
@@ -165,7 +174,8 @@ result *test__st_vec_add(result *rp)
     return rp;
 }
 
-result *test__st_vec_sub(result *rp)
+result *
+test__st_vec_sub(result *rp)
 {
     rp->name = "st_vec_sub";
 
@@ -185,7 +195,8 @@ result *test__st_vec_sub(result *rp)
     return rp;
 }
 
-result *test__st_vec_mul(result *rp)
+result *
+test__st_vec_mul(result *rp)
 {
     rp->name = "st_vec_mul";
 
@@ -205,7 +216,8 @@ result *test__st_vec_mul(result *rp)
     return rp;
 }
 
-result *test__st_vec_div(result *rp)
+result *
+test__st_vec_div(result *rp)
 {
     rp->name = "st_vec_div";
 
@@ -225,7 +237,8 @@ result *test__st_vec_div(result *rp)
     return rp;
 }
 
-result *test__st_vec_dot(result *rp)
+result *
+test__st_vec_dot(result *rp)
 {
     rp->name = "st_vec_dot";
 
@@ -238,7 +251,8 @@ result *test__st_vec_dot(result *rp)
     return rp;
 }
 
-result *test__st_vec_mul_scalar(result *rp)
+result *
+test__st_vec_mul_scalar(result *rp)
 {
     rp->name = "st_vec_mul_scalar";
 
@@ -256,8 +270,8 @@ result *test__st_vec_mul_scalar(result *rp)
     return rp;
 }
 
-
-result *test__st_vec_abs(result *rp)
+result *
+test__st_vec_abs(result *rp)
 {
     rp->name = "st_vec_abs";
 
@@ -279,8 +293,8 @@ result *test__st_vec_abs(result *rp)
     return rp;
 }
 
-
-int test__vector()
+int
+test__vector()
 {
     printf("unit test of vector start:\n");
 

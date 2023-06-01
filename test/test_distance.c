@@ -1,6 +1,7 @@
 #include "test.h"
 
-result *test__st_dist_euclid(result *rp)
+result *
+test__st_dist_euclid(result *rp)
 {
     rp->name = "st_dist_euclid";
     rp->value = false;
@@ -13,7 +14,8 @@ result *test__st_dist_euclid(result *rp)
     return rp;
 }
 
-result *test__st_dist_cosine(result *rp)
+result *
+test__st_dist_cosine(result *rp)
 {
     rp->name = "st_dist_cosine";
     rp->value = false;
@@ -27,7 +29,8 @@ result *test__st_dist_cosine(result *rp)
     return rp;
 }
 
-result *test__st_dist_manhattan(result *rp)
+result *
+test__st_dist_manhattan(result *rp)
 {
     rp->name = "st_dist_manhattan";
     double target = 19.8660569;
@@ -42,7 +45,8 @@ result *test__st_dist_manhattan(result *rp)
     return rp;
 }
 
-result * test__st_dist_chebyshev(result *rp)
+result *
+test__st_dist_chebyshev(result *rp)
 {
     rp->name = "st_dist_chebyshev";
     double target = 6.39110032154095;
@@ -55,7 +59,8 @@ result * test__st_dist_chebyshev(result *rp)
     return rp;
 }
 
-int test__distance(void)
+int
+test__distance(void)
 {
     printf("unit test of distance start:\n");
 

@@ -8,7 +8,8 @@
 typedef double (*fp_single)(double);
 typedef double (*fp_pair)(double, double);
 
-static void check_vec_length(st_vector *a, st_vector *b)
+static void
+check_vec_length(st_vector *a, st_vector *b)
 {
     if (a->len != b->len)
         __st_raise_length_error();
@@ -16,7 +17,8 @@ static void check_vec_length(st_vector *a, st_vector *b)
     __st_check();
 }
 
-double st_vec_min(st_vector *vec)
+double
+st_vec_min(st_vector *vec)
 {
     double min = __st_access_p(vec->data->head, vec->dtype);
     void *p;
@@ -30,7 +32,8 @@ double st_vec_min(st_vector *vec)
     return min;
 }
 
-double st_vec_max(st_vector *vec)
+double
+st_vec_max(st_vector *vec)
 {
     double max = __st_access_p(vec->data->head, vec->dtype);
     void *p;
@@ -44,7 +47,8 @@ double st_vec_max(st_vector *vec)
     return max;
 }
 
-double st_vec_norm(st_vector *vec)
+double
+st_vec_norm(st_vector *vec)
 {
     double sum_square = 0;
     void *p;
@@ -55,7 +59,8 @@ double st_vec_norm(st_vector *vec)
 }
 
 /* scale the vector to make sure that its max value and min value match `max` and `min`. */
-void st_vec_scale(st_vector *vec, double min, double max)
+void
+st_vec_scale(st_vector *vec, double min, double max)
 {
     if st_is_bool(vec) /* do noting */
         return;
@@ -74,33 +79,38 @@ void st_vec_scale(st_vector *vec, double min, double max)
     __st_check();
 }
 
-void st_vec_sub_scalar(st_vector *vec, double value)
+void
+st_vec_sub_scalar(st_vector *vec, double value)
 {
     void *p;
     for __st_iter_data(p, vec->data)
         __st_assign_p(p, __st_access_p(p, vec->dtype)-value, vec->dtype);
 }
 
-void st_vec_mul_scalar(st_vector *vec, double value)
+void
+st_vec_mul_scalar(st_vector *vec, double value)
 {
     void *p;
     for __st_iter_data(p, vec->data)
         __st_assign_p(p, __st_access_p(p, vec->dtype)*value, vec->dtype);
 }
 
-void __call_single_fp(st_vector *vec, fp_single fp)
+void
+__call_single_fp(st_vector *vec, fp_single fp)
 {
     void *p;
     for __st_iter_data(p, vec->data)
         __st_assign_p(p, fp(__st_access_p(p, vec->dtype)), vec->dtype);
 }
 
-void st_vec_abs(st_vector *vec)
+void
+st_vec_abs(st_vector *vec)
 {
     __call_single_fp(vec, fabs);
 }
 
-static st_vector *__call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
+static st_vector *
+__call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
 {
     check_vec_length(a, b);
 
@@ -143,52 +153,61 @@ static st_vector *__call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
     return re;
 }
 
-static double __add(double a, double b)
+static double
+__add(double a, double b)
 {
     return a+b;
 }
 
 /* implement vector subtraction a-b, save result to vector re */
-st_vector *st_vec_add(st_vector *a, st_vector *b)
+st_vector *
+st_vec_add(st_vector *a, st_vector *b)
 {
     return __call_pair_fp(a, b, __add);
 }
 
-static double __sub(double a, double b)
+static double
+__sub(double a, double b)
 {
     return a-b;
 }
 
 /* implement vector subtraction a-b, save result to vector re */
-st_vector *st_vec_sub(st_vector *a, st_vector *b)
+st_vector *
+st_vec_sub(st_vector *a, st_vector *b)
 {
     return __call_pair_fp(a, b, __sub);
 }
 
-static double __mul(double a, double b)
+static double
+__mul(double a, double b)
 {
     return a*b;
 }
 
 /* implement vector elemental multiply of a and b, save result to vector re */
-st_vector *st_vec_mul(st_vector *a, st_vector *b)
+st_vector *
+st_vec_mul(st_vector *a, st_vector *b)
 {
     return __call_pair_fp(a, b, __mul);
 }
 
-static double __div(double a, double b)
+static double
+__div(double a, double b)
 {
     return a/b;
 }
 
 /* implement vector elemental division of a and b, save result to vector re */
-st_vector *st_vec_div(st_vector *a, st_vector *b)
+st_vector *
+st_vec_div(st_vector *a, st_vector *b)
 {
     return __call_pair_fp(a, b, __div);
 }
 
 /* implement vector dot production a·b, return result */
-double st_vec_dot(st_vector *a, st_vector *b)
+double
+st_vec_dot(st_vector *a, st_vector *b)
 {
     check_vec_length(a, b);
 
@@ -202,7 +221,8 @@ double st_vec_dot(st_vector *a, st_vector *b)
     return re;
 }
 
-bool st_vec_equal(st_vector *a, st_vector *b)
+bool
+st_vec_equal(st_vector *a, st_vector *b)
 {
     if (&a == &b)
         return true;

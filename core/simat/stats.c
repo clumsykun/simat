@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include "stats.h"
 
-static void check_vec_length(st_vector *a, st_vector *b)
+static void
+check_vec_length(st_vector *a, st_vector *b)
 {
     if (a->len != b->len)
         __st_raise_length_error();
@@ -11,7 +12,8 @@ static void check_vec_length(st_vector *a, st_vector *b)
     __st_check();
 }
 
-double st_vec_mean(st_vector *vec)
+double
+st_vec_mean(st_vector *vec)
 {
     double sum = 0;
 
@@ -21,7 +23,8 @@ double st_vec_mean(st_vector *vec)
     return sum / (double)vec->len;
 }
 
-double st_vec_var(st_vector *vec, size_t freedom)
+double
+st_vec_var(st_vector *vec, size_t freedom)
 {
     double mean = st_vec_mean(vec);
     double sum_sq_diff = 0;
@@ -32,13 +35,15 @@ double st_vec_var(st_vector *vec, size_t freedom)
     return sum_sq_diff / (double) (vec->len - freedom);
 }
 
-double st_vec_std(st_vector *vec, size_t freedom)
+double
+st_vec_std(st_vector *vec, size_t freedom)
 {
     return sqrt(st_vec_var(vec, freedom));
 }
 
 /* scale the vector to make sure that its mean equals 0, its standard variance equals 1. */
-void st_vec_normalize(st_vector *vec)
+void
+st_vec_normalize(st_vector *vec)
 {
     if (vec->dtype != __st_double) {
         printf("only decimal vector support normalization, so this action was omitted.\n");
@@ -55,7 +60,8 @@ void st_vec_normalize(st_vector *vec)
     }
 }
 
-double st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
+double
+st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
 {
     if (st_vec_equal(a, b))
         return st_vec_var(a, freedom);
@@ -73,7 +79,8 @@ double st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
 }
 
 /* pearson product-moment correlation coefficient */
-double st_stats_corr(st_vector *a, st_vector *b)
+double
+st_stats_corr(st_vector *a, st_vector *b)
 {
     if (st_vec_equal(a, b))
         return 1;

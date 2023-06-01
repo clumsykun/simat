@@ -1,6 +1,7 @@
 #include "test.h"
 
-result * test__st_vec_mean(result *rp)
+result *
+test__st_vec_mean(result *rp)
 {
     rp->name = "st_vec_mean";
     double target = 1.89386753961467;
@@ -12,7 +13,8 @@ result * test__st_vec_mean(result *rp)
     return rp;
 }
 
-result * test__st_vec_var(result *rp)
+result *
+test__st_vec_var(result *rp)
 {
     rp->name = "st_vec_var";
 
@@ -26,7 +28,8 @@ result * test__st_vec_var(result *rp)
     return rp;
 }
 
-result * test__st_vec_std(result *rp)
+result *
+test__st_vec_std(result *rp)
 {
     rp->name = "st_vec_std";
     double target = 0.92479199007635;
@@ -38,7 +41,8 @@ result * test__st_vec_std(result *rp)
     return rp;
 }
 
-result * test__st_vec_cov(result *rp)
+result *
+test__st_vec_cov(result *rp)
 {
     rp->name = "st_vec_cov";
 
@@ -51,7 +55,8 @@ result * test__st_vec_cov(result *rp)
     return rp;
 }
 
-result * test__st_vec_corr(result *rp)
+result *
+test__st_vec_corr(result *rp)
 {
     rp->name = "st_vec_corr";
 
@@ -69,7 +74,8 @@ result * test__st_vec_corr(result *rp)
     return rp;
 }
 
-int test__stats()
+int
+test__stats()
 {
     printf("unit test of stats start:\n");
 

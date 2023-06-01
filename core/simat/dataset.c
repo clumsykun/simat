@@ -1,7 +1,8 @@
 #include <string.h>
 #include "dataset.h"
 
-st_dataset *st_load_iris(void)
+st_dataset *
+st_load_iris(void)
 {
     size_t n_features = 4;
     size_t n_samples = 150;

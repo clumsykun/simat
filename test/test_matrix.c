@@ -5,7 +5,8 @@
 #include <time.h>
 #include "test.h"
 
-result *test__st_mat_min(result *rp)
+result *
+test__st_mat_min(result *rp)
 {
     rp->name = "st_mat_min";
     double target = 0.1;
@@ -16,7 +17,8 @@ result *test__st_mat_min(result *rp)
     return rp;
 }
 
-result *test__st_mat_max(result *rp)
+result *
+test__st_mat_max(result *rp)
 {
     rp->name = "st_mat_max";
     double target = 7.9;
@@ -27,7 +29,8 @@ result *test__st_mat_max(result *rp)
     return rp;
 }
 
-result *test__st_mat_scale(result *rp)
+result *
+test__st_mat_scale(result *rp)
 {
     rp->name = "st_mat_scale";
 
@@ -39,7 +42,8 @@ result *test__st_mat_scale(result *rp)
     return rp;
 }
 
-result *test__st_mat_copy_t(result *rp)
+result *
+test__st_mat_copy_t(result *rp)
 {
     rp->name = "st_mat_copy_t";
 
@@ -57,7 +61,8 @@ result *test__st_mat_copy_t(result *rp)
     return rp;
 }
 
-result *test__st_mat_dot(result *rp)
+result *
+test__st_mat_dot(result *rp)
 {
     rp->name = "st_mat_dot";
 
@@ -74,7 +79,8 @@ result *test__st_mat_dot(result *rp)
     return rp;
 }
 
-int test__matrix(void)
+int
+test__matrix(void)
 {
     printf("unit test of matrix start:\n");
 

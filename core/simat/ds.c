@@ -23,7 +23,8 @@ struct __mb __ds_head = {
     NULL
 };
 
-void __st_ds_add(void *target, free_fp ffp, status_fp sfp, bool *temp)
+void
+__st_ds_add(void *target, free_fp ffp, status_fp sfp, bool *temp)
 {
     struct __mb *p = &__ds_head;
     struct __mb *new = (struct __mb *)malloc(sizeof(struct __mb));
@@ -41,7 +42,8 @@ void __st_ds_add(void *target, free_fp ffp, status_fp sfp, bool *temp)
 }
 
 /* clear the data space */
-static void __clear_ds(bool only_temp)
+static void
+__clear_ds(bool only_temp)
 {
     struct __mb *p = &__ds_head;
     struct __mb *next = p->next;
@@ -79,19 +81,22 @@ static void __clear_ds(bool only_temp)
 }
 
 /* clear all member of the data space */
-void st_ds_clear_all(void)
+void
+st_ds_clear_all(void)
 {
     __clear_ds(false);
 }
 
 /* clear temporary member of the data space */
-void st_ds_clear_temp(void)
+void
+st_ds_clear_temp(void)
 {
     __clear_ds(true);
 }
 
 /* check if the target is a invalid member of data space */
-bool st_is_invalid(const void *target)
+bool
+st_is_invalid(const void *target)
 {
     struct __mb *p = &__ds_head;
     bool is_invalid = true;
@@ -106,7 +111,8 @@ bool st_is_invalid(const void *target)
     return is_invalid;
 }
 
-int st_free(const void *target)
+int
+st_free(const void *target)
 {
     struct __mb *p = &__ds_head;
     while (p->next != NULL) {
@@ -121,7 +127,8 @@ int st_free(const void *target)
     return 1;
 }
 
-void st_ds_display(void)
+void
+st_ds_display(void)
 {
     struct __mb *p = &__ds_head;
 

@@ -5,7 +5,8 @@
 #include "view.h"
 
 
-static void check_view_length(st_view *a, st_view *b)
+static void
+check_view_length(st_view *a, st_view *b)
 {
     if (a->len != b->len)
         __st_raise_length_error();
@@ -13,7 +14,8 @@ static void check_view_length(st_view *a, st_view *b)
     __st_check();
 }
 
-double st_view_min(st_view *view)
+double
+st_view_min(st_view *view)
 {
     double min = __st_view_access(view, 0);
 
@@ -23,7 +25,8 @@ double st_view_min(st_view *view)
     return min;
 }
 
-double st_view_max(st_view *view)
+double
+st_view_max(st_view *view)
 {
     double max = __st_view_access(view, 0);
 
@@ -33,7 +36,8 @@ double st_view_max(st_view *view)
     return max;
 }
 
-double st_view_norm(st_view *view)
+double
+st_view_norm(st_view *view)
 {
     double sum_square = 0;
     for (size_t i = 0; i < view->len; i++) {
@@ -42,7 +46,8 @@ double st_view_norm(st_view *view)
     return sqrt(sum_square);
 }
 
-void st_view_scale(st_view *view, double min, double max)
+void
+st_view_scale(st_view *view, double min, double max)
 {
     double v_min = st_view_min(view);
     double scale = st_view_max(view) - v_min;
@@ -55,8 +60,8 @@ void st_view_scale(st_view *view, double min, double max)
     }
 }
 
-
-double st_view_dot(st_view *a, st_view *b)
+double
+st_view_dot(st_view *a, st_view *b)
 {
     check_view_length(a, b);
 

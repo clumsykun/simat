@@ -4,7 +4,8 @@
 #include <time.h>
 #include "basic.h"
 
-static void __swap(char *a, char *b, size_t len)
+static void
+__swap(char *a, char *b, size_t len)
 {
     char tmp;
     while (len--) {
@@ -14,7 +15,8 @@ static void __swap(char *a, char *b, size_t len)
     }
 }
 
-static void __swap_double(double *left, double *right)
+static void
+__swap_double(double *left, double *right)
 {
     double tmp = *left;
     *left = *right;
@@ -25,14 +27,16 @@ static void __swap_double(double *left, double *right)
  * generate random double number (2 decimals) between
  * integer `min` and `max`, both end are inclusive
  */
-static double __rand(int min, int max)
+static double
+__rand(int min, int max)
 {
     double integer = rand() % (max - min);
     double decimal = (100 *( (double)rand() / RAND_MAX) ) / 100;
     return integer + decimal;
 }
 
-static double __scale_value(double value, __st_dtype dtype)
+static double
+__scale_value(double value, __st_dtype dtype)
 {
     switch (dtype) {
 
@@ -59,7 +63,8 @@ static double __scale_value(double value, __st_dtype dtype)
     return value;
 }
 
-double st_precise(double x, size_t ndigits)
+double
+st_precise(double x, size_t ndigits)
 {
     ndigits = (ndigits >= 15 ? 15 : ndigits);  /* max precision of double */
     return trunc(x*pow(10, ndigits))/pow(10, ndigits);
@@ -69,7 +74,8 @@ double st_precise(double x, size_t ndigits)
  * set random value to vector, random range is intersection of
  * [-RAND_MAX/2, RAND_MAX/2] and support range of data type
  */
-void st_vec_rand(const st_vector *vec)
+void
+st_vec_rand(const st_vector *vec)
 {
     double value, min, max;
 
@@ -113,7 +119,8 @@ void st_vec_rand(const st_vector *vec)
  * @len: length of the vector
  * @candidate: the candidate position of pivot
  */
-static void *__partition(void *start, void *end, __st_dtype dtype, size_t nbyte)
+static void *
+__partition(void *start, void *end, __st_dtype dtype, size_t nbyte)
 {
     double pivot = __st_access_p(end, dtype);
     void *candidate = start - nbyte;
@@ -131,7 +138,8 @@ static void *__partition(void *start, void *end, __st_dtype dtype, size_t nbyte)
     return candidate;
 }
 
-static void __quick_sort(void *start, void *end, __st_dtype dtype, size_t nbyte)
+static void
+__quick_sort(void *start, void *end, __st_dtype dtype, size_t nbyte)
 {
     if (start < end) {
         /**
@@ -144,7 +152,8 @@ static void __quick_sort(void *start, void *end, __st_dtype dtype, size_t nbyte)
     }
 }
 
-void st_vec_sort(st_vector *vec)
+void
+st_vec_sort(st_vector *vec)
 {
     __quick_sort(
         vec->data->head,
@@ -155,7 +164,8 @@ void st_vec_sort(st_vector *vec)
     __st_check();
 }
 
-void st_vec_reverse(st_vector *vec)
+void
+st_vec_reverse(st_vector *vec)
 {
     size_t nbyte = vec->data->nbyte;
     void *l = vec->data->head-nbyte;
@@ -166,7 +176,8 @@ void st_vec_reverse(st_vector *vec)
         __swap(l+=nbyte, r-=nbyte, nbyte);
 }
 
-void st_mat_rand(const st_matrix *mat)
+void
+st_mat_rand(const st_matrix *mat)
 {
     for (size_t i = 0; i < mat->nrow; i++)
         st_vec_rand(__st_mat_access_row(mat, i));
@@ -174,7 +185,8 @@ void st_mat_rand(const st_matrix *mat)
     __st_check();
 }
 
-void st_view_rand(st_view *view)
+void
+st_view_rand(st_view *view)
 {
     double value, min, max;
 
@@ -211,7 +223,8 @@ void st_view_rand(st_view *view)
     __st_check();
 }
 
-static void **__partition_p(void **start, void **end, __st_dtype dtype, size_t nbyte)
+static void **
+__partition_p(void **start, void **end, __st_dtype dtype, size_t nbyte)
 {
     double pivot = __st_access_p(*end, dtype);
     void **candidate = start -1;
@@ -229,7 +242,8 @@ static void **__partition_p(void **start, void **end, __st_dtype dtype, size_t n
     return candidate;
 }
 
-static void __quick_sort_view(void **start, void **end, __st_dtype dtype, size_t nbyte)
+static void
+__quick_sort_view(void **start, void **end, __st_dtype dtype, size_t nbyte)
 {
     if (start < end) {
         /**
@@ -242,7 +256,8 @@ static void __quick_sort_view(void **start, void **end, __st_dtype dtype, size_t
     }
 }
 
-void st_view_sort(st_view *view)
+void
+st_view_sort(st_view *view)
 {
     __quick_sort_view(
         view->head,
@@ -253,7 +268,8 @@ void st_view_sort(st_view *view)
     __st_check();
 }
 
-void st_view_reverse(st_view *view)
+void
+st_view_reverse(st_view *view)
 {
     void **l = view->head-1;
     void **r = view->last+1;
