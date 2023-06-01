@@ -86,15 +86,7 @@ st_vec_mul_scalar(st_vector *vec, double value)
         __st_assign_p(p, __st_access_p(p, vec->dtype)*value, vec->dtype);
 }
 
-void
-__call_single_fp(st_vector *vec, fp_single fp)
-{
-    void *p;
-    for __st_iter_data(p, vec->data)
-        __st_assign_p(p, fp(__st_access_p(p, vec->dtype)), vec->dtype);
-}
-
-double
+static double
 __abs(double x)
 {
     return st_abs(x);
@@ -103,7 +95,7 @@ __abs(double x)
 void
 st_vec_abs(st_vector *vec)
 {
-    __call_single_fp(vec, __abs);
+    st_vec_elemental(vec, __abs);
 }
 
 static st_vector *

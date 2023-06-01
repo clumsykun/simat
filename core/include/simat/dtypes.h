@@ -196,6 +196,14 @@ void st_check_vec_len(st_vector *vec, size_t len);
 void st_check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol);
 
 /* =================================================================================================
+ * elemental function
+ */
+typedef double (*fp_elem)(double);
+void st_vec_elemental(st_vector *vec, fp_elem fp);
+void st_mat_elemental(st_vector *mat, fp_elem fp);
+void st_view_elemental(st_view *view, fp_elem fp);
+
+/* =================================================================================================
  * iterator.
  */
 
@@ -211,6 +219,13 @@ void st_check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol);
         p = vec->data->head, i = 0;        \
         p <= vec->data->last;              \
         p += vec->data->nbyte, (size_t)i++ \
+    )
+
+#define __st_iter_view(i, p, view) \
+    ( \
+        p = view->head, i = 0;        \
+        p <= view->last;              \
+        p++, (size_t)i++ \
     )
 
 #define __st_iter_vector2(i, p1, p2, vec1, vec2) \
