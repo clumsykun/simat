@@ -80,7 +80,7 @@ typedef struct __st_view
 #define st_is_matrix(mat) !memcmp((mat), st_sha_matrix, 64)
 #define st_is_view(view)  !memcmp((view), st_sha_view, 64)
 
-/** ------------------------------------------------------------------------------------------------
+/* =================================================================================================
  * access/assign of vector/matrix/view
  */
 
@@ -160,7 +160,7 @@ typedef struct __st_view
 #define __st_view_assign(view, idx, value) \
     __st_assign_p(view->head[idx], value, view->dtype)
 
-/** ------------------------------------------------------------------------------------------------
+/* =================================================================================================
  * function define.
  */
 
@@ -188,7 +188,7 @@ void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow);
 void st_vector_view(st_view *view, st_vector *vec);
 void st_view_display(const st_view *view);
 
-/** ------------------------------------------------------------------------------------------------
+/* =================================================================================================
  * iterator.
  */
 
