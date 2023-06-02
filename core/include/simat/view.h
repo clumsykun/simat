@@ -1,6 +1,6 @@
 #ifndef CORE_VIEW_H
 #define CORE_VIEW_H
-#include "dtypes.h"
+#include "elemental.h"
 
 double st_view_max(st_view *view);
 double st_view_min(st_view *view);

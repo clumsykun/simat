@@ -270,28 +270,28 @@ test__st_vec_mul_scalar(result *rp)
     return rp;
 }
 
-result *
-test__st_vec_abs(result *rp)
-{
-    rp->name = "st_vec_abs";
+// result *
+// test__st_vec_abs(result *rp)
+// {
+//     rp->name = "st_vec_abs";
 
-    st_vector *vec1 = test_vec_1();
-    st_vector *vec2 = test_vec_1();
+//     st_vector *vec1 = test_vec_1();
+//     st_vector *vec2 = test_vec_1();
 
-    st_vec_abs(vec1);
-    st_vec_abs(vec2);
+//     st_vec_abs(vec1);
+//     st_vec_abs(vec2);
 
-    st_vec_mul_scalar(vec1, -1);
+//     st_vec_mul_scalar(vec1, -1);
     
-    for (size_t i = 0; i < vec1->len; i++) {
-        rp->value = !equal(
-            __st_vec_access(vec1, i),
-            -1*__st_vec_access(vec2, i)
-        );
-    }
+//     for (size_t i = 0; i < vec1->len; i++) {
+//         rp->value = !equal(
+//             __st_vec_access(vec1, i),
+//             -1*__st_vec_access(vec2, i)
+//         );
+//     }
 
-    return rp;
-}
+//     return rp;
+// }
 
 int
 test__vector()
@@ -299,9 +299,6 @@ test__vector()
     printf("unit test of vector start:\n");
 
     st_vector *vec = test_vec_1();
-
-    // if (st_is_vector(vec))
-    //     printf("Yes!\n");
 
     test__st_vec_min();
     test__st_vec_max();
@@ -315,7 +312,7 @@ test__vector()
     call_test(test__st_vec_div);
     call_test(test__st_vec_dot);
     call_test(test__st_vec_mul_scalar);
-    call_test(test__st_vec_abs);
+    // call_test(test__st_vec_abs);
 
     printf("\n");
     return 0;

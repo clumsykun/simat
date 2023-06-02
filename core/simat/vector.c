@@ -86,18 +86,6 @@ st_vec_mul_scalar(st_vector *vec, double value)
         __st_assign_p(p, __st_access_p(p, vec->dtype)*value, vec->dtype);
 }
 
-static double
-__abs(double x)
-{
-    return st_abs(x);
-}
-
-void
-st_vec_abs(st_vector *vec)
-{
-    st_vec_elemental(vec, __abs);
-}
-
 static st_vector *
 __call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
 {

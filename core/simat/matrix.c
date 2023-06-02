@@ -1,5 +1,4 @@
 #include <string.h>
-#include "dtypes.h"
 #include "matrix.h"
 
 static st_matrix *
@@ -111,17 +110,6 @@ st_mat_copy_t(st_matrix *mat)
 
     __st_check();
     return t;
-}
-
-static double
-__abs(double x)
-{
-    return st_abs(x);
-}
-
-void st_mat_abs(st_matrix *mat)
-{
-    st_mat_elemental(mat, __abs);
 }
 
 st_matrix *
