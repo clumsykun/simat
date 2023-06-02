@@ -1,8 +1,10 @@
 workspace := /home/dev/simat
 lib       := $(workspace)/core/lib
 i         := $(workspace)/core/include
+ib        := $(workspace)/core/include/open_blas
 st        := $(workspace)/core/simat
 test      := $(workspace)/test
+blas      := /opt/OpenBLAS/lib/libopenblas.a
 
 cc	      := gcc
 ar        := ar
@@ -30,7 +32,7 @@ libbasic.a:
 	$(cc) $(flag) -I$(i)/simat -c $(st)/dtypes.c -o $(lib)/dtypes.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/elemental.c -o $(lib)/elemental.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/matrix.c -o $(lib)/matrix.o
-	$(cc) $(flag) -I$(i)/simat -c $(st)/vector.c -o $(lib)/vector.o
+	$(cc) $(flag) -I$(i)/simat -I$(ib) -c $(st)/vector.c -o $(lib)/vector.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/view.c -o $(lib)/view.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/dataset.c -o $(lib)/dataset.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/basic.c -o $(lib)/basic.o
@@ -50,7 +52,7 @@ test_simat.o: simat.a
 								$(test)/test_matrix.c \
 								$(test)/test_stats.c \
 								$(test)/test_distance.c \
-								$(test)/test_simat.c -L$(lib) -lsimat -lm $(flag) -o $(lib)/test_simat.o
+								$(test)/test_simat.c -L$(lib) -lsimat -lm $(blas) $(flag) -o $(lib)/test_simat.o
 
 test_basic.o: libbasic.a
 	$(cc) -I$(i) -I$(i)/simat -I$(test) \

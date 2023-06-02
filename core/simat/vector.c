@@ -4,6 +4,7 @@
 #include <math.h>
 #include <time.h>
 #include "dtypes.h"
+#include "cblas.h"
 
 typedef double (*fp_single)(double);
 typedef double (*fp_pair)(double, double);
@@ -11,16 +12,18 @@ typedef double (*fp_pair)(double, double);
 double
 st_vec_min(st_vector *vec)
 {
-    double min = __st_access_p(vec->data->head, vec->dtype);
-    void *p;
+    // double min = __st_access_p(vec->data->head, vec->dtype);
+    // void *p;
 
-    for __st_iter_data(p, vec->data)
-        min = (min <= __st_access_p(p, vec->dtype)
-               ? min
-               : __st_access_p(p, vec->dtype));
+    // for __st_iter_data(p, vec->data)
+    //     min = (min <= __st_access_p(p, vec->dtype)
+    //            ? min
+    //            : __st_access_p(p, vec->dtype));
 
-    __st_check();
-    return min;
+    // __st_check();
+    // return min;
+    size_t idx = cblas_idmin(vec->len, vec->data->head, 1);
+    return __st_vec_access(vec, idx);
 }
 
 double
