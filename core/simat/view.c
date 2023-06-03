@@ -10,8 +10,6 @@ check_view_length(st_view *a, st_view *b)
 {
     if (a->len != b->len)
         __st_raise_length_error();
-
-    __st_check();
 }
 
 double
@@ -69,6 +67,5 @@ st_view_dot(st_view *a, st_view *b)
     for (size_t i = 0; i < a->len; i++)
         ret += __st_view_access(a, i) * __st_view_access(b, i);
 
-    __st_check();
     return ret;
 }

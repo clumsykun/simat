@@ -4,10 +4,8 @@
 static st_matrix *
 __mat_dot_double(st_matrix *a, st_matrix *b)
 {
-    if (a->ncol != b->nrow) {
+    if (a->ncol != b->nrow)
         __st_raise_length_error();
-        __st_check();
-    }
 
     st_matrix *r = st_new_matrix(a->nrow, b->ncol);
     double (*pa)[a->nrow][a->ncol] = a->data->head;
@@ -71,8 +69,6 @@ st_mat_scale(st_matrix *mat, double min, double max)
         scaled = min + (__st_access_p(p, mat->data->dtype) - mat_min) * target_scale / scale;
         __st_assign_p(p, scaled, mat->data->dtype);
     }
-
-    __st_check();
 }
 
 st_matrix *
@@ -108,7 +104,6 @@ st_mat_copy_t(st_matrix *mat)
             p,
             mat->data->nbyte);
 
-    __st_check();
     return t;
 }
 
@@ -136,5 +131,4 @@ st_mat_dot(st_matrix *a, st_matrix *b)
         default:
             __st_raise_dtype_error();
     }
-    __st_check();
 }

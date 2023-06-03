@@ -104,7 +104,7 @@ typedef struct __st_view
                 ? (double)*(st_pixel *)(p)         \
                 : ((dtype) == __st_bool            \
                     ? (double)*(st_bool *)(p)      \
-                    : __st_raise_access_error()))))
+                    : __st_raise_dtype_error()))))
 
 /* assign `value` to `p`, as type of `dtype` */
 #define __st_assign_p(p, value, dtype)                     \
@@ -171,8 +171,9 @@ st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
 st_vector *st_new_vector(size_t len);
-void st_vec_display(const st_vector *vec);
-void st_vec_assign_all(st_vector *vec, double value);
+void       st_vec_display(const st_vector *vec);
+void       st_vec_assign_all(st_vector *vec, double value);
+double     st_vec_access(st_vector *vec, size_t idx);
 
 st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol);
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);

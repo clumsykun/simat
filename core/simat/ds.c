@@ -94,7 +94,7 @@ st_ds_clear_temp(void)
     __clear_ds(true);
 }
 
-/* check if the target is a invalid member of data space */
+/* if `target` is a valid member of data space, return false. */
 bool
 st_is_invalid(const void *target)
 {

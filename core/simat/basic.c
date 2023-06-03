@@ -109,8 +109,6 @@ st_vec_rand(const st_vector *vec)
         value = __scale_value(__rand(min, max), vec->dtype);
         __st_vec_assign(vec, i, value);
     }
-
-    __st_check();
 }
 
 /**
@@ -161,7 +159,6 @@ st_vec_sort(st_vector *vec)
         vec->dtype,
         vec->data->nbyte
     );
-    __st_check();
 }
 
 void
@@ -181,8 +178,6 @@ st_mat_rand(const st_matrix *mat)
 {
     for (size_t i = 0; i < mat->nrow; i++)
         st_vec_rand(__st_mat_access_row(mat, i));
-
-    __st_check();
 }
 
 void
@@ -220,7 +215,6 @@ st_view_rand(st_view *view)
         value = __scale_value(__rand(min, max), view->dtype);
         __st_view_assign(view, i, value);
     }
-    __st_check();
 }
 
 static void **
@@ -265,7 +259,6 @@ st_view_sort(st_view *view)
         view->dtype,
         __st_byteof(view->dtype)
     );
-    __st_check();
 }
 
 void

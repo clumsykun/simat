@@ -81,5 +81,4 @@ st_dist_mat_row(st_matrix *re, st_matrix *mat, dist_fp fp)
             }
         }
     }
-    __st_check();
 }

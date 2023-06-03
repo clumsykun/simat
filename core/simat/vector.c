@@ -9,12 +9,6 @@
 typedef double (*fp_single)(double);
 typedef double (*fp_pair)(double, double);
 
-double
-st_vec_access(st_vector *vec, size_t idx)
-{
-    return 0;
-}
-
 static void
 __min(void *p, __st_dtype dtype, void *argv[])
 {
@@ -53,7 +47,6 @@ st_vec_max(st_vector *vec)
                ? max
                : __st_access_p(p, vec->dtype));
 
-    __st_check();
     return max;
 }
 
@@ -80,8 +73,6 @@ st_vec_scale(st_vector *vec, double min, double max)
         scaled = min + (__st_access_p(p, vec->dtype) - vec_min) * target_scale / scale;
         __st_assign_p(p, scaled, vec->dtype);
     }
-
-    __st_check();
 }
 
 void
@@ -132,15 +123,12 @@ __call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
             __st_raise_dtype_error();
     }
 
-    __st_check();
-
     for __st_iter_vector3(i, pa, pb, pr, a, b, re) {
         va = __st_access_p(pa, a->dtype);
         vb = __st_access_p(pb, b->dtype);
         __st_assign_p(pr, fp(va, vb), re->dtype);
     }
 
-    __st_check();
     return re;
 }
 
@@ -208,7 +196,6 @@ st_vec_dot(st_vector *a, st_vector *b)
     for __st_iter_vector2(i, pa, pb, a, b)
         re += __st_access_p(pa, a->dtype) * __st_access_p(pb, b->dtype);
 
-    __st_check();
     return re;
 }
 

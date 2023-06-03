@@ -8,8 +8,6 @@ check_vec_length(st_vector *a, st_vector *b)
 {
     if (a->len != b->len)
         __st_raise_length_error();
-
-    __st_check();
 }
 
 double

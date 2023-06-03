@@ -213,7 +213,7 @@ st_new_vector(size_t len)
 void
 st_vec_display(const st_vector *vec)
 {
-    __st_check_invalid_error(vec);
+    __st_check_valid(vec);
     char c;
     switch (vec->dtype) {
 
@@ -264,19 +264,44 @@ st_vec_display(const st_vector *vec)
             break;
     }
     printf("\n");
-    __st_check();
 }
 
 void
 st_vec_assign_all(st_vector *vec, double value)
 {
-    __st_check_invalid_error(vec);
+    __st_check_valid(vec);
     void *p;
 
     for __st_iter_data(p, vec->data)
         __st_assign_p(p, value, vec->dtype);
+}
 
-    __st_check();
+double
+st_vec_access(st_vector *vec, size_t idx)
+{
+    __st_check_valid(vec);
+
+    if (idx < 0 || (vec)->len <= idx)
+        __st_raise_out_range_error();
+
+    void *p = __st_vec_find_p(vec, idx);
+
+    switch (vec->dtype) {
+        case __st_bool:
+            return (double)*(st_bool *)(p);
+
+        case __st_int:
+            return (double)*(st_int *)(p);
+
+        case __st_pixel:
+            return (double)*(st_pixel *)(p);
+
+        case __st_double:
+            return (double)*(st_double *)(p);
+
+        default:
+            __st_raise_dtype_error();
+    }
 }
 
 /* =================================================================================================
@@ -383,7 +408,7 @@ st_new_matrix(size_t nrow, size_t ncol)
 void
 st_mat_display(st_matrix *mat)
 {
-    __st_check_invalid_error(mat);
+    __st_check_valid(mat);
 
     char c;
     switch (mat->dtype) {
@@ -474,20 +499,17 @@ st_mat_display(st_matrix *mat)
     }
 
     printf("\n");
-    __st_check();
 }
 
 void
 st_mat_assign_all(st_matrix *mat, double value)
 {
-    __st_check_invalid_error(mat);
+    __st_check_valid(mat);
 
     void *p;
 
     for __st_iter_data(p, mat->data)
         __st_assign_p(p, value, mat->data->dtype);
-
-    __st_check();
 }
 
 /* =================================================================================================
@@ -530,8 +552,6 @@ st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
 
     for __st_iter_vector(i, p, __st_mat_access_row(mat, irow))
         view->head[i] = p;
-
-    __st_check();
 }
 
 void
@@ -547,8 +567,6 @@ st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 
     for (size_t i = 0; i < view->len; i++)
         view->head[i] = __st_mat_find_p(mat, i, icol);
-
-    __st_check();
 }
 
 void
@@ -566,8 +584,6 @@ st_vector_view(st_view *view, st_vector *vec)
 
     for __st_iter_vector(i, p, vec)
         view->head[i] = p;
-
-    __st_check();
 }
 
 void
@@ -640,7 +656,6 @@ st_view_display(const st_view *view)
             break;
     }
     printf("\n");
-    __st_check();
 }
 
 /* =================================================================================================
@@ -652,8 +667,6 @@ st_check_vec_len(st_vector *vec, size_t len)
 {
     if (vec->len != len)
         __st_raise_length_error();
-
-    __st_check();
 }
 
 void
@@ -664,6 +677,4 @@ st_check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol)
 
     if (mat->ncol != ncol)
         __st_raise_length_error();
-
-    __st_check();
 }
