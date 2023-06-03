@@ -2,9 +2,7 @@
 
 int main()
 {
-
-    double x = -4;
-    __st_pixel c = __st_cast_pixel(x);
+    __st_is_debug = true;
     test__vector();
     test__matrix();
     return 0;

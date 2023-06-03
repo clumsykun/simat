@@ -73,7 +73,7 @@ test__st_vec_max(result *rp)
     rp->name = "st_vec_max";
 
     st_vector *vec1 = test_vec_1();
-    st_vector *vec3 = st_vec_copy_cast(vec1, st_pixel);
+    st_vector *vec3 = st_vec_copy_cast(vec1, st_int);
 
     rp->value = !equal(st_vec_max(vec1), 3.141592653589793);
     rp->value = !equal(st_vec_max(vec3), 3);
@@ -172,27 +172,6 @@ test__st_vec_add(result *rp)
 }
 
 result *
-test__st_vec_sub(result *rp)
-{
-    rp->name = "st_vec_sub";
-
-    st_vector *vec1 = test_vec_1();
-    st_vector *vec2 = test_vec_2();
-    st_vector *vec3 = st_vec_sub(vec1, vec2);
-    st_vector *ret = st_new_vector(vec1->len);
-
-    __st_vec_assign(ret, 0, -3.5326873464102073);
-    __st_vec_assign(ret, 1, -6.391100321540955);
-    __st_vec_assign(ret, 2, -6.048853295098468);
-    __st_vec_assign(ret, 3, -3.877558523526905);
-    __st_vec_assign(ret, 4, 0.015857501749894087);
-
-    rp->value = !st_vec_equal(vec3, ret);
-
-    return rp;
-}
-
-result *
 test__st_vec_mul(result *rp)
 {
     rp->name = "st_vec_mul";
@@ -207,27 +186,6 @@ test__st_vec_mul(result *rp)
     __st_vec_assign(ret, 2, 3.8246708004298022);
     __st_vec_assign(ret, 3, 7.483695852867142);
     __st_vec_assign(ret, 4, 2.592376011941903);
-
-    rp->value = !st_vec_equal(vec3, ret);
-
-    return rp;
-}
-
-result *
-test__st_vec_div(result *rp)
-{
-    rp->name = "st_vec_div";
-
-    st_vector *vec1 = test_vec_1();
-    st_vector *vec2 = test_vec_2();
-    st_vector *vec3 = st_vec_div(vec1, vec2);
-    st_vector *ret = st_new_vector(vec1->len);
-
-    __st_vec_assign(ret, 0, 0.47070135708867367);
-    __st_vec_assign(ret, 1, 0.2984046320264481);
-    __st_vec_assign(ret, 2, 0.08711283694541144);
-    __st_vec_assign(ret, 3, 0.2672476326297738);
-    __st_vec_assign(ret, 4, 1.0098974750151193);
 
     rp->value = !st_vec_equal(vec3, ret);
 
@@ -306,9 +264,7 @@ test__vector()
 
     call_test(test__st_vec_max);
     call_test(test__st_vec_add);
-    call_test(test__st_vec_sub);
     call_test(test__st_vec_mul);
-    call_test(test__st_vec_div);
     call_test(test__st_vec_dot);
     call_test(test__st_vec_mul_scalar);
     call_test(test__st_vec_abs);

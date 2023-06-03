@@ -12,7 +12,8 @@ typedef double (*fp_pair)(double, double);
 st_vector *
 st_vec_copy_cast(st_vector *vec, __st_dtype dtype)
 {
-    if (vec->dtype > dtype) {
+    if (!__st_is_debug && vec->dtype > dtype) {
+
         if (dtype == st_pixel)
             printf("Warning: conversion may lose significant digits, "
                    "value will be trimmed to pixel of range [0,255].\n");
@@ -122,19 +123,6 @@ st_vec_add(st_vector *a, st_vector *b)
 }
 
 static double
-__sub(double a, double b)
-{
-    return a-b;
-}
-
-/* implement vector subtraction a-b, save result to vector re */
-st_vector *
-st_vec_sub(st_vector *a, st_vector *b)
-{
-    return __call_pair_fp(a, b, __sub);
-}
-
-static double
 __mul(double a, double b)
 {
     return a*b;
@@ -145,19 +133,6 @@ st_vector *
 st_vec_mul(st_vector *a, st_vector *b)
 {
     return __call_pair_fp(a, b, __mul);
-}
-
-static double
-__div(double a, double b)
-{
-    return a/b;
-}
-
-/* implement vector elemental division of a and b, save result to vector re */
-st_vector *
-st_vec_div(st_vector *a, st_vector *b)
-{
-    return __call_pair_fp(a, b, __div);
 }
 
 /* implement vector dot production a·b, return result */

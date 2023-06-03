@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "ds.h"
 
+extern bool __st_is_debug;
 extern bool __st_is_error;
 extern bool __st_access_error;
 extern bool __st_dtype_error;

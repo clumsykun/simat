@@ -1,5 +1,6 @@
 #include "watcher.h"
 
+bool __st_is_debug = false;
 bool __st_is_error = false;
 bool __st_dtype_error = false;
 bool __st_out_range_error = false;
