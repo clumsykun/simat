@@ -118,14 +118,6 @@ typedef struct __st_view
                     ? (*(st_bool *)(p) = (st_bool)(value)) \
                     : __st_raise_dtype_error()))))
 
-#define __st_vec_access(vec, idx)                          \
-    (memcmp((vec), st_sha_vector, 64)                      \
-        ? __st_raise_invalid_error()                       \
-        : ((idx) < 0 || (vec)->len <= (idx)                \
-            ? __st_raise_out_range_error()                 \
-            : __st_access_p(__st_vec_find_p((vec), (idx)), \
-                          (vec)->dtype)))
-
 /* TODO: check if valid */
 #define __st_view_access(view, idx)                         \
     (((idx) < 0 || (view)->len <= (idx))                  \
@@ -173,7 +165,7 @@ st_vector *st_new_int_vector(size_t len);
 st_vector *st_new_vector(size_t len);
 void       st_vec_display(const st_vector *vec);
 void       st_vec_assign_all(st_vector *vec, double value);
-double     st_vec_access(st_vector *vec, size_t idx);
+double     st_vec_access(const st_vector *vec, size_t idx);
 
 st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol);
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);

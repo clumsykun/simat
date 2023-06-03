@@ -6,11 +6,11 @@ st_dist_euclid(st_vector *a, st_vector *b)
 {
     st_check_vec_len(a, b->len);
     double diff, sum_square = 0;
-
-    for (size_t i = 0; i < a->len; i++) {
-
-        diff = __st_vec_access(a, i) - __st_vec_access(b, i);
-        sum_square += diff*diff;
+    size_t i;
+    void *pa, *pb;
+    for __st_iter_vector2(i, pa, pb, a, b) {
+            diff = __st_access_p(pa, a->dtype) - __st_access_p(pb, b->dtype);
+            sum_square += diff * diff;
     }
 
     return sqrt(sum_square);
@@ -30,8 +30,11 @@ st_dist_manhattan(st_vector *a, st_vector *b)
 {
     st_check_vec_len(a, b->len);
     double diff, dist = 0;
-    for (size_t i = 0; i < a->len; i++) {
-        diff = __st_vec_access(a, i)-__st_vec_access(b, i);
+    size_t i;
+    void *pa, *pb;
+
+    for __st_iter_vector2(i, pa, pb, a, b) {
+        diff = __st_access_p(pa, a->dtype) - __st_access_p(pb, b->dtype);
         dist += st_abs(diff);
     }
 
@@ -43,9 +46,11 @@ st_dist_chebyshev(st_vector *a, st_vector *b)
 {
     st_check_vec_len(a, b->len);
     double diff, dist = 0;
+    size_t i;
+    void *pa, *pb;
 
-    for (size_t i = 0; i < a->len; i++) {
-        diff = __st_vec_access(a, i) - __st_vec_access(b, i);
+    for __st_iter_vector2(i, pa, pb, a, b) {
+        diff = __st_access_p(pa, a->dtype) - __st_access_p(pb, b->dtype);
         dist = (st_abs(diff) > dist ? st_abs(diff) : dist);
     }
 

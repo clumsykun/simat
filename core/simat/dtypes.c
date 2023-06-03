@@ -221,11 +221,11 @@ st_vec_display(const st_vector *vec)
             printf("BoolVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++) {
-                c = (__st_vec_access(vec, i) == false ? '-' : '+');
+                c = (st_vec_access(vec, i) == false ? '-' : '+');
                 printf("(%c), ", c);
             }
 
-            printf("(%c)])\n", (__st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
+            printf("(%c)])\n", (st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
             break;
         }
 
@@ -233,9 +233,9 @@ st_vec_display(const st_vector *vec)
             printf("PixelVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("(%d), ", (int)__st_vec_access(vec, i));
+                printf("(%d), ", (int)st_vec_access(vec, i));
 
-            printf("(%d)])\n", (int)__st_vec_access(vec, vec->len-1));
+            printf("(%d)])\n", (int)st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -243,9 +243,9 @@ st_vec_display(const st_vector *vec)
             printf("IntVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("%d, ", (int)__st_vec_access(vec, i));
+                printf("%d, ", (int)st_vec_access(vec, i));
 
-            printf("%d])\n", (int)__st_vec_access(vec, vec->len-1));
+            printf("%d])\n", (int)st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -253,9 +253,9 @@ st_vec_display(const st_vector *vec)
             printf("Vector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("%f, ", (double)__st_vec_access(vec, i));
+                printf("%f, ", (double)st_vec_access(vec, i));
 
-            printf("%f])\n", (double)__st_vec_access(vec, vec->len-1));
+            printf("%f])\n", (double)st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -277,7 +277,7 @@ st_vec_assign_all(st_vector *vec, double value)
 }
 
 double
-st_vec_access(st_vector *vec, size_t idx)
+st_vec_access(const st_vector *vec, size_t idx)
 {
     __st_check_valid(vec);
 

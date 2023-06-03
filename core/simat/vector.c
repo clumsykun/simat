@@ -24,11 +24,11 @@ st_vec_min(st_vector *vec)
 
         case __st_double: {
             size_t idx = cblas_idmin(vec->len, vec->data->head, 1);
-            return __st_vec_access(vec, idx);
+            return st_vec_access(vec, idx);
         }
 
         default: {
-            double min = __st_vec_access(vec, 0);
+            double min = st_vec_access(vec, 0);
             void *p = &min;
             st_vec_elemental(vec, __min, &p);
             return min;
@@ -211,7 +211,7 @@ st_vec_equal(st_vector *a, st_vector *b)
     bool is_equal = true;
 
     for (size_t i = 0; i < a->len; i++)
-        if (__st_vec_access(a, i) != __st_vec_access(b, i))
+        if (st_vec_access(a, i) != st_vec_access(b, i))
             is_equal = false;
     
     return is_equal;

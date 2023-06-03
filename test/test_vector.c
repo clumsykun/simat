@@ -262,8 +262,8 @@ test__st_vec_mul_scalar(result *rp)
 
     for (size_t i = 0; i < vec1->len; i++) {
         rp->value = !equal(
-            __st_vec_access(vec1, i),
-            -1*__st_vec_access(vec2, i)
+            st_vec_access(vec1, i),
+            -1*st_vec_access(vec2, i)
         );
     }
 
@@ -287,8 +287,8 @@ test__st_vec_abs(result *rp)
     
     for (size_t i = 0; i < vec1->len; i++) {
         rp->value = !equal(
-            __st_vec_access(vec1, i),
-            -1*__st_vec_access(vec2, i)
+            st_vec_access(vec1, i),
+            -1*st_vec_access(vec2, i)
         );
     }
 
