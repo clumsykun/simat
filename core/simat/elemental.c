@@ -6,28 +6,28 @@
  */
 
 static void
-__abs(void *p, __st_dtype dtype, void *argv[])
+__abs(void *elem, __st_dtype dtype, void *argv[])
 {
-    double value = __st_access_p(p, dtype);
+    double value = __st_access_p(elem, dtype);
     value = st_abs(st_abs(value));
-    __st_assign_p(p, value, dtype);
+    __st_assign_p(elem, value, dtype);
 }
 
 /* assign smaller value of `p` and `argv[0]` to `argv[0]` */
 static void
-__min(void *p, __st_dtype dtype, void *argv[])
+__min(void *elem, __st_dtype dtype, void *argv[])
 {
     double *min = (double *)argv[0];
-    double value = __st_access_p(p, dtype);
+    double value = __st_access_p(elem, dtype);
     *min = (*(min) < value ? *(min) : value);
 }
 
 /* assign sum value of `p` and `argv[0]` to `argv[0]` */
 static void
-__sum(void *p, __st_dtype dtype, void *argv[])
+__sum(void *elem, __st_dtype dtype, void *argv[])
 {
     double *sum = (double *)argv[0];
-    double value = __st_access_p(p, dtype);
+    double value = __st_access_p(elem, dtype);
     *sum = (*sum) + value;
 }
 
@@ -38,9 +38,9 @@ __sum(void *p, __st_dtype dtype, void *argv[])
 double
 __call_fp_elem(__st_data *data, fp_elem fp, void *argv[])
 {
-    void *p;
-    for __st_iter_data(p, data)
-        fp(p, data->dtype, argv);
+    void *elem;
+    for __st_iter_data(elem, data)
+        fp(elem, data->dtype, argv);
 }
 
 double
@@ -58,11 +58,11 @@ st_mat_elemental(st_vector *mat, fp_elem fp, void *argv[])
 double
 st_view_elemental(st_view *view, fp_elem fp, void *argv[])
 {
-    void **p;
+    void **elem;
     size_t i;
     double value;
-    for __st_iter_view(i, p, view)
-        fp(*p, view->dtype, argv);
+    for __st_iter_view(i, elem, view)
+        fp(*elem, view->dtype, argv);
 }
 
 /* =================================================================================================
@@ -82,10 +82,10 @@ st_vec_min(st_vector *vec)
         return st_vec_access(vec, cblas_idmin(vec->len, vec->data->head, 1));
 
     double min = st_vec_access(vec, 0);
-    void *p = &min;
-    st_vec_elemental(vec, __min, &p);
-    return min;
+    void *argv[] = {&min};
 
+    st_vec_elemental(vec, __min, argv);
+    return min;
 }
 
 double
@@ -95,9 +95,9 @@ st_vec_sum(st_vector *vec)
         return cblas_dsum(vec->len, vec->data->head, 1);
 
     double sum = 0;
-    void *p = &sum;
+    void *argv[] = {&sum};
 
-    st_vec_elemental(vec, __sum, &p);
+    st_vec_elemental(vec, __sum, argv);
     return sum;
 }
 

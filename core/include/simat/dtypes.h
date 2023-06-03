@@ -192,52 +192,52 @@ void st_check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol);
  * iterator.
  */
 
-#define __st_iter_data(p, data) \
+#define __st_iter_data(elem, data) \
     ( \
-        p = data->head;  \
-        p <= data->last; \
-        p += data->nbyte \
+        elem = data->head;  \
+        elem <= data->last; \
+        elem += data->nbyte \
     )
 
-#define __st_iter_vector(i, p, vec) \
+#define __st_iter_vector(i, elem, vec) \
     ( \
-        p = vec->data->head, i = 0;        \
-        p <= vec->data->last;              \
-        p += vec->data->nbyte, (size_t)i++ \
+        elem = vec->data->head, i = 0;        \
+        elem <= vec->data->last;              \
+        elem += vec->data->nbyte, (size_t)i++ \
     )
 
-#define __st_iter_view(i, p, view) \
+#define __st_iter_view(i, elem, view) \
     ( \
-        p = view->head, i = 0;        \
-        p <= view->last;              \
-        p++, (size_t)i++ \
+        elem = view->head, i = 0;        \
+        elem <= view->last;              \
+        elem++, (size_t)i++ \
     )
 
-#define __st_iter_vector2(i, p1, p2, vec1, vec2) \
+#define __st_iter_vector2(i, e1, e2, vec1, vec2) \
     ( \
-        p1 = vec1->data->head, p2 = vec2->data->head, i = 0;          \
-        p1 <= vec1->data->last;                                       \
-        p1 += vec1->data->nbyte, p2 += vec2->data->nbyte, (size_t)i++ \
+        e1 = vec1->data->head, e2 = vec2->data->head, i = 0;          \
+        e1 <= vec1->data->last;                                       \
+        e1 += vec1->data->nbyte, e2 += vec2->data->nbyte, (size_t)i++ \
     )
 
-#define __st_iter_vector3(i, p1, p2, p3, vec1, vec2, vec3) \
+#define __st_iter_vector3(i, e1, e2, e3, vec1, vec2, vec3) \
     ( \
-        p1 = vec1->data->head,       \
-            p2 = vec2->data->head,   \
-            p3 = vec3->data->head,   \
+        e1 = vec1->data->head,       \
+            e2 = vec2->data->head,   \
+            e3 = vec3->data->head,   \
             i = 0;                   \
-        p1 <= vec1->data->last;      \
-        p1 += vec1->data->nbyte,     \
-            p2 += vec2->data->nbyte, \
-            p3 += vec3->data->nbyte, \
+        e1 <= vec1->data->last;      \
+        e1 += vec1->data->nbyte,     \
+            e2 += vec2->data->nbyte, \
+            e3 += vec3->data->nbyte, \
             (size_t)i++              \
     )
 
-#define __st_iter_matrix(irow, icol, p, mat) \
+#define __st_iter_matrix(irow, icol, elem, mat) \
     ( \
-        p = mat->data->head, irow = 0, icol = 0;                                      \
-        p <= mat->data->last;                                                         \
-        p += mat->data->nbyte,                                                        \
+        elem = mat->data->head, irow = 0, icol = 0;                                   \
+        elem <= mat->data->last;                                                      \
+        elem += mat->data->nbyte,                                                     \
             irow = ((size_t)icol + 1 == mat->ncol ? (size_t)irow + 1 : (size_t)irow), \
             icol = ((size_t)icol + 1 == mat->ncol ? 0 : (size_t)icol + 1)             \
     )
