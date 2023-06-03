@@ -84,15 +84,18 @@ typedef struct __st_view
  * access/assign of vector/matrix/view
  */
 
+/* return the ptr of the `data` of index `idx` */
+#define __st_data_find_p(data, idx) \
+    ((data)->head + (size_t)(idx) * (data)->nbyte)
+
 /* return the ptr of the `vec` of index `idx` */
 #define __st_vec_find_p(vec, idx) \
-    ((vec)->data->head + (size_t)(idx) * (vec)->data->nbyte)
+    __st_data_find_p((vec)->data, idx)
 
 /* return the ptr of the `mat` of index (`irow`, `icol`) */
 #define __st_mat_find_p(mat, irow, icol) \
-    ((mat)->data->head +                   \
-     (mat)->data->nbyte * ((size_t)(irow)*((mat)->ncol)+(size_t)(icol)) \
-    )
+    ((mat)->data->head +                 \
+        (mat)->data->nbyte * ((size_t)(irow)*((mat)->ncol)+(size_t)(icol)))
 
 /* access the value of `p`, as type of `dtype` */
 #define __st_access_p(p, dtype)                      \

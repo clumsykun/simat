@@ -27,31 +27,31 @@ __mat_dot_double(st_matrix *a, st_matrix *b)
     return r;
 }
 
-double
-st_mat_min(st_matrix *mat)
-{
-    double min = __st_mat_access(mat, 0, 0);
-    void *p;
-    for __st_iter_data(p, mat->data)
-        min = (min <= __st_access_p(p, mat->data->dtype)
-                   ? min
-                   : __st_access_p(p, mat->data->dtype));
+// double
+// st_mat_min(st_matrix *mat)
+// {
+//     double min = __st_mat_access(mat, 0, 0);
+//     void *p;
+//     for __st_iter_data(p, mat->data)
+//         min = (min <= __st_access_p(p, mat->data->dtype)
+//                    ? min
+//                    : __st_access_p(p, mat->data->dtype));
 
-    return min;
-}
+//     return min;
+// }
 
-double
-st_mat_max(st_matrix *mat)
-{
-    double max = __st_mat_access(mat, 0, 0);
-    void *p;
-    for __st_iter_data(p, mat->data)
-        max = (max >= __st_access_p(p, mat->data->dtype)
-                   ? max
-                   : __st_access_p(p, mat->data->dtype));
+// double
+// st_mat_max(st_matrix *mat)
+// {
+//     double max = __st_mat_access(mat, 0, 0);
+//     void *p;
+//     for __st_iter_data(p, mat->data)
+//         max = (max >= __st_access_p(p, mat->data->dtype)
+//                    ? max
+//                    : __st_access_p(p, mat->data->dtype));
 
-    return max;
-}
+//     return max;
+// }
 
 void
 st_mat_scale(st_matrix *mat, double min, double max)

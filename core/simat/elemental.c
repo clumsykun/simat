@@ -45,7 +45,7 @@ __sum(void *elem, __st_dtype dtype, void *argv[])
  */
 
 double
-__call_fp_elem(__st_data *data, fp_elem fp, void *argv[])
+__call_fp_elem(const __st_data *data, fp_elem fp, void *argv[])
 {
     void *elem;
     for __st_iter_data(elem, data)
@@ -59,7 +59,7 @@ st_vec_elemental(st_vector *vec, fp_elem fp, void *argv[])
 }
 
 double
-st_mat_elemental(st_vector *mat, fp_elem fp, void *argv[])
+st_mat_elemental(st_matrix *mat, fp_elem fp, void *argv[])
 {
     return __call_fp_elem(mat->data, fp, argv);
 }
@@ -133,9 +133,55 @@ st_vec_norm(st_vector *vec)
  * matrix elemental function
  */
 
-void st_mat_abs(st_vector *mat)
+void
+st_mat_abs(st_matrix *mat)
 {
     st_mat_elemental(mat, __abs, NULL);
+}
+
+double
+st_mat_min(st_matrix *mat)
+{
+    if st_is_double(mat) {
+        size_t idx = cblas_idmin(mat->nrow*mat->ncol, mat->data->head, 1);
+        void *p = __st_data_find_p(mat->data, idx);
+        return __st_access_p(p, mat->dtype);
+    }
+
+    double min = __st_mat_access(mat, 0, 0);
+    void *argv[] = {&min};
+
+    st_mat_elemental(mat, __min, argv);
+    return min;
+}
+
+double
+st_mat_max(st_matrix *mat)
+{
+    if st_is_double(mat) {
+        size_t idx = cblas_idmax(mat->nrow * mat->ncol, mat->data->head, 1);
+        void *p = __st_data_find_p(mat->data, idx);
+        return __st_access_p(p, mat->dtype);
+    }
+
+    double max = __st_mat_access(mat, 0, 0);
+    void *argv[] = {&max};
+
+    st_mat_elemental(mat, __max, argv);
+    return max;
+}
+
+double
+st_mat_sum(st_matrix *mat)
+{
+    if st_is_double(mat)
+        return cblas_dsum(mat->nrow * mat->ncol, mat->data->head, 1);
+
+    double sum = 0;
+    void *argv[] = {&sum};
+
+    st_mat_elemental(mat, __sum, argv);
+    return sum;
 }
 
 /* =================================================================================================
