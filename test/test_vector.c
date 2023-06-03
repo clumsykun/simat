@@ -73,7 +73,7 @@ test__st_vec_max(result *rp)
     rp->name = "st_vec_max";
 
     st_vector *vec1 = test_vec_1();
-    st_vector *vec3 = st_vec_copy_cast(vec1, __st_pixel);
+    st_vector *vec3 = st_vec_copy_cast(vec1, st_pixel);
 
     rp->value = !equal(st_vec_max(vec1), 3.141592653589793);
     rp->value = !equal(st_vec_max(vec3), 3);

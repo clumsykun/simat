@@ -13,7 +13,7 @@ st_vector *
 st_vec_copy_cast(st_vector *vec, __st_dtype dtype)
 {
     if (vec->dtype > dtype) {
-        if (dtype == __st_pixel)
+        if (dtype == st_pixel)
             printf("Warning: conversion may lose significant digits, "
                    "value will be trimmed to pixel of range [0,255].\n");
         else
@@ -79,19 +79,19 @@ __call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
     st_vector *re;
 
     switch (dtype) {
-        case __st_bool:
+        case st_bool:
             re = st_new_bool_vector(a->len);
             break;
 
-        case __st_pixel:
+        case st_pixel:
             re = st_new_pixel_vector(a->len);
             break;
 
-        case __st_int:
+        case st_int:
             re = st_new_int_vector(a->len);
             break;
 
-        case __st_double:
+        case st_double:
             re = st_new_vector(a->len);
             break;
 

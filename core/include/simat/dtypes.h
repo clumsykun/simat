@@ -5,13 +5,13 @@
 #include "watcher.h"
 
 /**
- * @st_pixel: unsigned char
+ * @__st_pixel: unsigned char
  */
 typedef enum __st_dtype__ {
-    __st_bool = 1,
-    __st_pixel,
-    __st_int,
-    __st_double,
+    st_bool = 1,
+    st_pixel,
+    st_int,
+    st_double,
 } __st_dtype;
 
 /**
@@ -66,15 +66,15 @@ typedef struct __st_view
     size_t len;
 } st_view;
 
-#define st_bool bool
-#define st_pixel unsigned char
-#define st_int int
-#define st_double double
+#define __st_bool bool
+#define __st_pixel unsigned char
+#define __st_int int
+#define __st_double double
 
-#define st_is_bool(x) ((x)->dtype == __st_bool)
-#define st_is_pixel(x) ((x)->dtype == __st_pixel)
-#define st_is_int(x) ((x)->dtype == __st_int)
-#define st_is_double(x) ((x)->dtype == __st_double)
+#define st_is_bool(x) ((x)->dtype == st_bool)
+#define st_is_pixel(x) ((x)->dtype == st_pixel)
+#define st_is_int(x) ((x)->dtype == st_int)
+#define st_is_double(x) ((x)->dtype == st_double)
 
 #define st_is_vector(vec) !memcmp((vec), st_sha_vector, 64)
 #define st_is_matrix(mat) !memcmp((mat), st_sha_matrix, 64)
@@ -96,28 +96,28 @@ typedef struct __st_view
 
 /* access the value of `p`, as type of `dtype` */
 #define __st_access_p(p, dtype)                      \
-    ((dtype) == __st_double                        \
-        ? *(st_double *)(p)                        \
-        : ((dtype) == __st_int                     \
-            ? (double)*(st_int *)(p)               \
-            : ((dtype) == __st_pixel               \
-                ? (double)*(st_pixel *)(p)         \
-                : ((dtype) == __st_bool            \
-                    ? (double)*(st_bool *)(p)      \
+    ((dtype) == st_double                        \
+        ? *(__st_double *)(p)                        \
+        : ((dtype) == st_int                     \
+            ? (double)*(__st_int *)(p)               \
+            : ((dtype) == st_pixel               \
+                ? (double)*(__st_pixel *)(p)         \
+                : ((dtype) == st_bool            \
+                    ? (double)*(__st_bool *)(p)      \
                     : __st_raise_dtype_error()))))
 
-#define __st_cast_pixel(x) (st_pixel)((x) > 255 ? 255 : ((x) < 0 ? 0 : (x)))
+#define __st_cast_pixel(x) (__st_pixel)((x) > 255 ? 255 : ((x) < 0 ? 0 : (x)))
 
 /* assign double `value` to `p`, as type of `dtype` */
 #define __st_assign_p(p, value, dtype)                               \
-    ((dtype) == __st_double                                          \
-         ? (*(st_double *)(p) = (st_double)(value))                  \
-         : ((dtype) == __st_int                                      \
-                ? (*(st_int *)(p) = (st_int)(value))                 \
-                : ((dtype) == __st_pixel                             \
-                       ? (*(st_pixel *)(p) = __st_cast_pixel(value)) \
-                       : ((dtype) == __st_bool                       \
-                              ? (*(st_bool *)(p) = (st_bool)(value)) \
+    ((dtype) == st_double                                          \
+         ? (*(__st_double *)(p) = (__st_double)(value))                  \
+         : ((dtype) == st_int                                      \
+                ? (*(__st_int *)(p) = (__st_int)(value))                 \
+                : ((dtype) == st_pixel                             \
+                       ? (*(__st_pixel *)(p) = __st_cast_pixel(value)) \
+                       : ((dtype) == st_bool                       \
+                              ? (*(__st_bool *)(p) = (__st_bool)(value)) \
                               : __st_raise_dtype_error()))))
 
 /* TODO: check if valid */
