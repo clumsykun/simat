@@ -9,33 +9,6 @@
 typedef double (*fp_single)(double);
 typedef double (*fp_pair)(double, double);
 
-static void
-__min(void *p, __st_dtype dtype, void *argv[])
-{
-    double *min = (double *)argv[0];
-    double value = __st_access_p(p, dtype);
-    *min = (*(min) < value ? *(min) : value);
-}
-
-double
-st_vec_min(st_vector *vec)
-{
-    switch (vec->dtype) {
-
-        case __st_double: {
-            size_t idx = cblas_idmin(vec->len, vec->data->head, 1);
-            return st_vec_access(vec, idx);
-        }
-
-        default: {
-            double min = st_vec_access(vec, 0);
-            void *p = &min;
-            st_vec_elemental(vec, __min, &p);
-            return min;
-        }
-    }
-}
-
 double
 st_vec_max(st_vector *vec)
 {

@@ -30,7 +30,7 @@ libbasic.a:
 	$(cc) $(flag) -I$(i)/simat -c $(st)/ds.c -o $(lib)/ds.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/watcher.c -o $(lib)/watcher.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/dtypes.c -o $(lib)/dtypes.o
-	$(cc) $(flag) -I$(i)/simat -c $(st)/elemental.c -o $(lib)/elemental.o
+	$(cc) $(flag) -I$(i)/simat -I$(ib) -c $(st)/elemental.c -o $(lib)/elemental.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/matrix.c -o $(lib)/matrix.o
 	$(cc) $(flag) -I$(i)/simat -I$(ib) -c $(st)/vector.c -o $(lib)/vector.o
 	$(cc) $(flag) -I$(i)/simat -c $(st)/view.c -o $(lib)/view.o
