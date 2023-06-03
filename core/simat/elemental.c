@@ -5,37 +5,36 @@
  * elemental function
  */
 
-static double
-__abs(double x, void *argv[])
+static void
+__abs(void *p, __st_dtype dtype, void *argv[])
 {
-    return st_abs(x);
+    double value = __st_access_p(p, dtype);
+    value = st_abs(st_abs(value));
+    __st_assign_p(p, value, dtype);
 }
 
 /* =================================================================================================
  * call elemental function
  */
 
-static void
+double
 __call_fp_elem(__st_data *data, fp_elem fp, void *argv[])
 {
     void *p;
-    double value;
-    for __st_iter_data(p, data) {
-        value = fp(__st_access_p(p, data->dtype), argv);
-        __st_assign_p(p, value, data->dtype);
-    }
+    for __st_iter_data(p, data)
+        fp(p, data->dtype, argv);
 }
 
 double
 st_vec_elemental(st_vector *vec, fp_elem fp, void *argv[])
 {
-    __call_fp_elem(vec->data, fp, argv);
+    return __call_fp_elem(vec->data, fp, argv);
 }
 
 double
 st_mat_elemental(st_vector *mat, fp_elem fp, void *argv[])
 {
-    __call_fp_elem(mat->data, fp, argv);
+    return __call_fp_elem(mat->data, fp, argv);
 }
 
 double
@@ -44,10 +43,8 @@ st_view_elemental(st_view *view, fp_elem fp, void *argv[])
     void **p;
     size_t i;
     double value;
-    for __st_iter_view(i, p, view) {
-        value = fp(__st_access_p(*p, view->dtype), argv);
-        __st_assign_p(*p, value, view->dtype);
-    }
+    for __st_iter_view(i, p, view)
+        fp(*p, view->dtype, argv);
 }
 
 void

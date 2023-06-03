@@ -8,7 +8,7 @@ blas      := /opt/OpenBLAS/lib/libopenblas.a
 
 cc	      := gcc
 ar        := ar
-flag      := -std=c99
+flag      := -std=c99 -lpthread
 
 simat.a: libbasic.a
 	$(cc) $(flag) -I$(i)/simat -c $(st)/distance.c -o $(lib)/distance.o

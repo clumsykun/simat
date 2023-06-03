@@ -3,27 +3,43 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include "dtypes.h"
+#include "vector.h"
 #include "cblas.h"
 
 typedef double (*fp_single)(double);
 typedef double (*fp_pair)(double, double);
 
 double
+st_vec_access(st_vector *vec, size_t idx)
+{
+    return 0;
+}
+
+static void
+__min(void *p, __st_dtype dtype, void *argv[])
+{
+    double *min = (double *)argv[0];
+    double value = __st_access_p(p, dtype);
+    *min = (*(min) < value ? *(min) : value);
+}
+
+double
 st_vec_min(st_vector *vec)
 {
-    // double min = __st_access_p(vec->data->head, vec->dtype);
-    // void *p;
+    switch (vec->dtype) {
 
-    // for __st_iter_data(p, vec->data)
-    //     min = (min <= __st_access_p(p, vec->dtype)
-    //            ? min
-    //            : __st_access_p(p, vec->dtype));
+        case __st_double: {
+            size_t idx = cblas_idmin(vec->len, vec->data->head, 1);
+            return __st_vec_access(vec, idx);
+        }
 
-    // __st_check();
-    // return min;
-    size_t idx = cblas_idmin(vec->len, vec->data->head, 1);
-    return __st_vec_access(vec, idx);
+        default: {
+            double min = __st_vec_access(vec, 0);
+            void *p = &min;
+            st_vec_elemental(vec, __min, &p);
+            return min;
+        }
+    }
 }
 
 double
@@ -44,12 +60,7 @@ st_vec_max(st_vector *vec)
 double
 st_vec_norm(st_vector *vec)
 {
-    double sum_square = 0;
-    void *p;
-    for __st_iter_data(p, vec->data)
-        sum_square += __st_access_p(p, vec->dtype)*__st_access_p(p, vec->dtype);
-
-    return sqrt(sum_square);
+    return cblas_dnrm2(vec->len, vec->data->head, 1);
 }
 
 /* scale the vector to make sure that its max value and min value match `max` and `min`. */

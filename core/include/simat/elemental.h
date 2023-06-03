@@ -6,7 +6,8 @@
 /* =================================================================================================
  * elemental function
  */
-typedef double (*fp_elem)(double, void **);
+
+typedef void (*fp_elem)(void *, __st_dtype, void **);
 
 double st_vec_elemental(st_vector *vec, fp_elem fp, void *argv[]);
 double st_mat_elemental(st_vector *mat, fp_elem fp, void *argv[]);
