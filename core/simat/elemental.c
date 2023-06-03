@@ -22,6 +22,15 @@ __min(void *elem, __st_dtype dtype, void *argv[])
     *min = (*(min) < value ? *(min) : value);
 }
 
+/* assign bigger value of `p` and `argv[0]` to `argv[0]` */
+static void
+__max(void *elem, __st_dtype dtype, void *argv[])
+{
+    double *max = (double *)argv[0];
+    double value = __st_access_p(elem, dtype);
+    *max = (*(max) > value ? *(max) : value);
+}
+
 /* assign sum value of `p` and `argv[0]` to `argv[0]` */
 static void
 __sum(void *elem, __st_dtype dtype, void *argv[])
@@ -89,6 +98,19 @@ st_vec_min(st_vector *vec)
 }
 
 double
+st_vec_max(st_vector *vec)
+{
+    if st_is_double (vec)
+        return st_vec_access(vec, cblas_idmax(vec->len, vec->data->head, 1));
+
+    double max = st_vec_access(vec, 0);
+    void *argv[] = {&max};
+
+    st_vec_elemental(vec, __max, argv);
+    return max;
+}
+
+double
 st_vec_sum(st_vector *vec)
 {
     if st_is_double (vec)
@@ -99,6 +121,12 @@ st_vec_sum(st_vector *vec)
 
     st_vec_elemental(vec, __sum, argv);
     return sum;
+}
+
+double
+st_vec_norm(st_vector *vec)
+{
+    return cblas_dnrm2(vec->len, vec->data->head, 1);
 }
 
 /* =================================================================================================

@@ -106,17 +106,19 @@ typedef struct __st_view
                     ? (double)*(st_bool *)(p)      \
                     : __st_raise_dtype_error()))))
 
-/* assign `value` to `p`, as type of `dtype` */
-#define __st_assign_p(p, value, dtype)                     \
-    ((dtype) == __st_double                                \
-        ? (*(st_double *)(p) = (st_double)(value))         \
-        : ((dtype) == __st_int                             \
-            ? (*(st_int *)(p) = (st_int)(value))           \
-            : ((dtype) == __st_pixel                       \
-                ? (*(st_pixel *)(p) = (st_pixel)(value))   \
-                : ((dtype) == __st_bool                    \
-                    ? (*(st_bool *)(p) = (st_bool)(value)) \
-                    : __st_raise_dtype_error()))))
+#define __st_cast_pixel(x) (st_pixel)((x) > 255 ? 255 : ((x) < 0 ? 0 : (x)))
+
+/* assign double `value` to `p`, as type of `dtype` */
+#define __st_assign_p(p, value, dtype)                               \
+    ((dtype) == __st_double                                          \
+         ? (*(st_double *)(p) = (st_double)(value))                  \
+         : ((dtype) == __st_int                                      \
+                ? (*(st_int *)(p) = (st_int)(value))                 \
+                : ((dtype) == __st_pixel                             \
+                       ? (*(st_pixel *)(p) = __st_cast_pixel(value)) \
+                       : ((dtype) == __st_bool                       \
+                              ? (*(st_bool *)(p) = (st_bool)(value)) \
+                              : __st_raise_dtype_error()))))
 
 /* TODO: check if valid */
 #define __st_view_access(view, idx)                         \
@@ -213,11 +215,11 @@ void st_check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol);
         elem++, (size_t)i++ \
     )
 
-#define __st_iter_vector2(i, e1, e2, vec1, vec2) \
+#define __st_iter_vector2(i, e1, e2, v1, v2) \
     ( \
-        e1 = vec1->data->head, e2 = vec2->data->head, i = 0;          \
-        e1 <= vec1->data->last;                                       \
-        e1 += vec1->data->nbyte, e2 += vec2->data->nbyte, (size_t)i++ \
+        e1 = (v1)->data->head, e2 = (v2)->data->head, (i) = 0;          \
+        (i) < (v1)->len;                                                \
+        e1 += (v1)->data->nbyte, e2 += (v2)->data->nbyte, (size_t)(i)++ \
     )
 
 #define __st_iter_vector3(i, e1, e2, e3, vec1, vec2, vec3) \

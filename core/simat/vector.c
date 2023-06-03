@@ -9,24 +9,27 @@
 typedef double (*fp_single)(double);
 typedef double (*fp_pair)(double, double);
 
-double
-st_vec_max(st_vector *vec)
+st_vector *
+st_vec_copy_cast(st_vector *vec, __st_dtype dtype)
 {
-    double max = __st_access_p(vec->data->head, vec->dtype);
-    void *p;
+    if (vec->dtype > dtype) {
+        if (dtype == __st_pixel)
+            printf("Warning: conversion may lose significant digits, "
+                   "value will be trimmed to pixel of range [0,255].\n");
+        else
+            printf("Warning: conversion may lose significant digits.\n");
+    }
 
-    for __st_iter_data(p, vec->data)
-        max = (max >= __st_access_p(p, vec->dtype)
-               ? max
-               : __st_access_p(p, vec->dtype));
+    st_vector *copy = __st_new_vector(dtype, vec->len);
+    size_t i;
+    void *e_vec, *e_cp;
+    double value;
 
-    return max;
-}
-
-double
-st_vec_norm(st_vector *vec)
-{
-    return cblas_dnrm2(vec->len, vec->data->head, 1);
+    for __st_iter_vector2(i, e_vec, e_cp, vec, copy) {
+        value = __st_access_p(e_vec, vec->dtype);
+        __st_assign_p(e_cp, value, copy->dtype);
+    }
+    return copy;
 }
 
 /* scale the vector to make sure that its max value and min value match `max` and `min`. */

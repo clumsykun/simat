@@ -67,21 +67,18 @@ test__st_vec_min(void)
     else printf("FAILED --> %s\n", name);
 }
 
-void
-test__st_vec_max(void)
+result *
+test__st_vec_max(result *rp)
 {
-    char *name = "st_vec_max";
-    double ret, target = 3.141592653589793;
+    rp->name = "st_vec_max";
 
-    /* test content start */
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec3 = st_vec_copy_cast(vec1, __st_pixel);
 
-    st_vector *vec = test_vec_1();
-    ret = st_vec_max(vec);
+    rp->value = !equal(st_vec_max(vec1), 3.141592653589793);
+    rp->value = !equal(st_vec_max(vec3), 3);
 
-    /* test content end */
-
-    if (ret == target) printf("    OK --> %s\n", name);
-    else printf("FAILED --> %s\n", name);
+    return rp;
 }
 
 void
@@ -303,11 +300,11 @@ test__vector()
     st_vector *vec = test_vec_1();
 
     test__st_vec_min();
-    test__st_vec_max();
     test__st_vec_norm();
     test__st_vec_scale();
     test__st_vec_equal();
 
+    call_test(test__st_vec_max);
     call_test(test__st_vec_add);
     call_test(test__st_vec_sub);
     call_test(test__st_vec_mul);

@@ -15,6 +15,10 @@ double st_view_elemental(st_view *view, fp_elem fp, void *argv[]);
 
 void   st_vec_abs(st_vector *vec);
 double st_vec_min(st_vector *vec);
+double st_vec_max(st_vector *vec);
 double st_vec_sum(st_vector *vec);
+double st_vec_norm(st_vector *vec);
+
+
 
 #endif /* CORE_ELEMENTAL_H */
