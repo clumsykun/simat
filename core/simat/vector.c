@@ -6,9 +6,6 @@
 #include "vector.h"
 #include "cblas.h"
 
-typedef double (*fp_single)(double);
-typedef double (*fp_pair)(double, double);
-
 st_vector *
 st_vec_copy_cast(st_vector *vec, __st_dtype dtype)
 {
@@ -66,73 +63,6 @@ st_vec_mul_scalar(st_vector *vec, double value)
     void *p;
     for __st_iter_data(p, vec->data)
         __st_assign_p(p, __st_access_p(p, vec->dtype)*value, vec->dtype);
-}
-
-static st_vector *
-__call_pair_fp(st_vector *a, st_vector *b, fp_pair fp)
-{
-    st_check_vec_len(a, b->len);
-
-    double va, vb;
-    void *pa, *pb, *pr;
-    size_t i;
-    __st_dtype dtype = (a->dtype > b->dtype ? a->dtype : b->dtype);
-    st_vector *re;
-
-    switch (dtype) {
-        case st_bool:
-            re = st_new_bool_vector(a->len);
-            break;
-
-        case st_pixel:
-            re = st_new_pixel_vector(a->len);
-            break;
-
-        case st_int:
-            re = st_new_int_vector(a->len);
-            break;
-
-        case st_double:
-            re = st_new_vector(a->len);
-            break;
-
-        default:
-            __st_raise_dtype_error();
-    }
-
-    for __st_iter_vector3(i, pa, pb, pr, a, b, re) {
-        va = __st_access_p(pa, a->dtype);
-        vb = __st_access_p(pb, b->dtype);
-        __st_assign_p(pr, fp(va, vb), re->dtype);
-    }
-
-    return re;
-}
-
-static double
-__add(double a, double b)
-{
-    return a+b;
-}
-
-/* implement vector subtraction a-b, save result to vector re */
-st_vector *
-st_vec_add(st_vector *a, st_vector *b)
-{
-    return __call_pair_fp(a, b, __add);
-}
-
-static double
-__mul(double a, double b)
-{
-    return a*b;
-}
-
-/* implement vector elemental multiply of a and b, save result to vector re */
-st_vector *
-st_vec_mul(st_vector *a, st_vector *b)
-{
-    return __call_pair_fp(a, b, __mul);
 }
 
 /* implement vector dot production a·b, return result */

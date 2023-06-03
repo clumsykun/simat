@@ -168,6 +168,7 @@ st_vector *st_new_vector(size_t len);
 void       st_vec_display(const st_vector *vec);
 void       st_vec_assign_all(st_vector *vec, double value);
 double     st_vec_access(const st_vector *vec, size_t idx);
+st_vector *st_vec_copy(st_vector *vec);
 
 st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol);
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);
@@ -187,8 +188,11 @@ void st_view_display(const st_view *view);
  * check.
  */
 
-void st_check_vec_len(st_vector *vec, size_t len);
-void st_check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol);
+size_t st_check_vec_len(st_vector *vec, size_t len);
+__st_dtype st_check_vec_dtype(st_vector *vec, __st_dtype dtype);
+size_t st_check_mat_nrow(st_matrix *mat, size_t nrow);
+size_t st_check_mat_ncol(st_matrix *mat, size_t ncol);
+__st_dtype st_check_mat_dtype(st_matrix *mat, __st_dtype dtype);
 
 /* =================================================================================================
  * iterator.

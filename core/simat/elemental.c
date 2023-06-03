@@ -137,3 +137,67 @@ void st_mat_abs(st_vector *mat)
 {
     st_mat_elemental(mat, __abs, NULL);
 }
+
+/* =================================================================================================
+ * pair function
+ */
+
+/* assign multiply value of `l` and `r` to `r` */
+static void
+__pair_mul(void *el, void *er, __st_dtype dtype, void *argv[])
+{
+    double v = __st_access_p(el, dtype);
+    v = v * __st_access_p(er, dtype);
+    __st_assign_p(er, v, dtype);
+}
+
+/* add value of `l` to value of `r` */
+static void
+
+__pair_add(void *el, void *er, __st_dtype dtype, void *argv[])
+{
+    double v = __st_access_p(el, dtype);
+    v = v + __st_access_p(er, dtype);
+    __st_assign_p(er, v, dtype);
+}
+
+/* =================================================================================================
+ * call pair function
+ */
+
+double
+st_vec_pair(st_vector *vl, st_vector *vr, fp_pair fp, void *argv[])
+{
+    __st_dtype dtype = st_check_vec_dtype(vl, vr->dtype);
+
+    size_t i;
+    void *e1, *e2;
+    for __st_iter_vector2(i, e1, e2, vl, vr)
+            fp(e1, e2, dtype, argv);
+}
+
+/* implement vector elemental multiply of a and b, save result to vector re */
+st_vector *
+st_vec_mul(st_vector *a, st_vector *b)
+{
+    st_check_vec_dtype(a, b->dtype);
+    st_check_vec_len(a, b->len);
+
+    st_vector *r = st_vec_copy(a);
+    void *eb, *er;
+    st_vec_pair(b, r, __pair_mul, NULL);
+    return r;
+}
+
+/* implement vector subtraction a-b, save result to vector re */
+st_vector *
+st_vec_add(st_vector *a, st_vector *b)
+{
+    st_check_vec_dtype(a, b->dtype);
+    st_check_vec_len(a, b->len);
+
+    st_vector *r = st_vec_copy(a);
+    void *eb, *er;
+    st_vec_pair(b, r, __pair_add, NULL);
+    return r;
+}

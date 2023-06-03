@@ -84,6 +84,7 @@ st_mat_copy(st_matrix *mat)
         mat->data->head,
         mat->data->nbyte*mat->data->size);
 
+    copy->temp = mat->temp;
     return copy;
 }
 

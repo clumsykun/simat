@@ -304,6 +304,19 @@ st_vec_access(const st_vector *vec, size_t idx)
     }
 }
 
+st_vector *
+st_vec_copy(st_vector *vec)
+{
+    st_vector *copy = __st_new_vector(vec->dtype, vec->len);
+    memcpy(
+        copy->data->head,
+        vec->data->head,
+        vec->data->nbyte * vec->data->size);
+
+    copy->temp = vec->temp;
+    return copy;
+}
+
 /* =================================================================================================
  * functions here defined to support matrix computation. 
  */
@@ -662,19 +675,47 @@ st_view_display(const st_view *view)
  * check
  */
 
-void
+size_t
 st_check_vec_len(st_vector *vec, size_t len)
 {
     if (vec->len != len)
         __st_raise_length_error();
+
+    return len;
 }
 
-void
-st_check_mat_shape(st_matrix *mat, size_t nrow, size_t ncol)
+__st_dtype
+st_check_vec_dtype(st_vector *vec, __st_dtype dtype)
+{
+    if (vec->dtype != dtype)
+        __st_raise_dtype_error();
+    
+    return dtype;
+}
+
+size_t
+st_check_mat_nrow(st_matrix *mat, size_t nrow)
 {
     if (mat->nrow != nrow)
         __st_raise_length_error();
 
+    return nrow;
+}
+
+size_t
+st_check_mat_ncol(st_matrix *mat, size_t ncol)
+{
     if (mat->ncol != ncol)
         __st_raise_length_error();
+
+    return ncol;
+}
+
+__st_dtype
+st_check_mat_dtype(st_matrix *mat, __st_dtype dtype)
+{
+    if (mat->dtype != dtype)
+        __st_raise_dtype_error();
+
+    return dtype;
 }

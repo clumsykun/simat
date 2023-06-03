@@ -67,7 +67,10 @@ st_dist_cos_ww(st_view *w1, st_view *w2)
 void
 st_dist_mat_row(st_matrix *re, st_matrix *mat, dist_fp fp)
 {
-    st_check_mat_shape(re, mat->nrow, mat->nrow);
+    // st_check_mat_shape(re, mat->nrow, mat->nrow);
+    st_check_mat_nrow(re, mat->nrow);
+    st_check_mat_ncol(re, mat->nrow);
+
     double v;
 
     for (size_t i = 0; i < mat->nrow; i++) {

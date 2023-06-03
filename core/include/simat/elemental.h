@@ -8,6 +8,7 @@
  */
 
 typedef void (*fp_elem)(void *elem, __st_dtype dtype, void *argv[]);
+typedef void (*fp_pair)(void *l, void *r, __st_dtype dtype, void *argv[]);
 
 double st_vec_elemental(st_vector *vec, fp_elem fp, void *argv[]);
 double st_mat_elemental(st_vector *mat, fp_elem fp, void *argv[]);
@@ -19,6 +20,7 @@ double st_vec_max(st_vector *vec);
 double st_vec_sum(st_vector *vec);
 double st_vec_norm(st_vector *vec);
 
-
+st_vector *st_vec_mul(st_vector *a, st_vector *b);
+st_vector *st_vec_add(st_vector *a, st_vector *b);
 
 #endif /* CORE_ELEMENTAL_H */
