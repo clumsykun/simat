@@ -50,21 +50,18 @@ call_test(fp fp)
         printf("    OK --> %s\n", rp->name);
 }
 
-void
-test__st_vec_min(void)
+result *
+test__st_vec_min(result *rp)
 {
-    char *name = "st_vec_min";
-    double ret, target = 0.577215664901532;
+    rp->name = "st_vec_min";
 
-    /* test content start */
+    st_vector *vec1 = test_vec_1();
+    st_vector *vec3 = st_vec_copy_cast(vec1, st_int);
 
-    st_vector *vec = test_vec_1();
-    ret = st_vec_min(vec);
+    rp->value = !equal(st_vec_min(vec1), 3);
+    rp->value = !equal(st_vec_min(vec3), 0);
 
-    /* test content end */
-
-    if (ret == target) printf("    OK --> %s\n", name);
-    else printf("FAILED --> %s\n", name);
+    return rp;
 }
 
 result *
@@ -81,73 +78,43 @@ test__st_vec_max(result *rp)
     return rp;
 }
 
-void
-test__st_vec_norm(void)
+result *
+test__st_vec_norm(result *rp)
 {
-    char *name = "st_vec_norm";
-    double ret, target = 4.712735130747071;
+    rp->name = "st_vec_norm";
 
-    /* test content start */
+    st_vector *vec1 = test_vec_1();
+    double ret = st_vec_norm(vec1);
 
-    st_vector *vec = test_vec_1();
-    ret = st_vec_norm(vec);
-
-    /* test content end */
-
-    if (ret == target) printf("    OK --> %s\n", name);
-    else printf("FAILED --> %s\n", name);
+    rp->value = !equal(ret, 4.712735130747071);
+    return rp;
 }
 
-void
-test__st_vec_scale(void)
+result *
+test__st_vec_scale(result *rp)
 {
-    char *name = "st_vec_scale";
-    double ret, target = 0;
+    rp->name = "st_vec_scale";
 
-    /* test content start */
-
-    ret = 0;
     st_vector *vec = test_vec_1();
     st_vec_scale(vec, 0, 1);
 
-    if (st_vec_max(vec) != 1)
-        ret = 1;
-
-    if (st_vec_min(vec) != 0)
-        ret = 1;
-
-    /* test content end */
-
-    if (ret == target) printf("    OK --> %s\n", name);
-    else printf("FAILED --> %s\n", name);
+    rp->value = !equal(st_vec_max(vec), 1);
+    rp->value = !equal(st_vec_min(vec), 0);
+    return rp;
 }
 
-void
-test__st_vec_equal(void)
+result *
+test__st_vec_equal(result *rp)
 {
-    char *name = "st_vec_equal";
-    double ret, target = 0;
+    rp->name = "st_vec_equal";
 
-    /* test content start */
-
-    ret = 0;
     st_vector *vec1 = test_vec_1();
     st_vector *vec2 = test_vec_2();
     st_vector *vec3 = test_vec_1();
 
-    if (!st_vec_equal(vec1, vec1))
-        ret = 1;
-
-    if (st_vec_equal(vec1, vec2))
-        ret = 1;
-
-    if (!st_vec_equal(vec1, vec3))
-        ret = 1;
-
-    /* test content end */
-
-    if (ret == target) printf("    OK --> %s\n", name);
-    else printf("FAILED --> %s\n", name);
+    rp->value = st_vec_equal(vec1, vec2);
+    rp->value = !st_vec_equal(vec1, vec3);
+    return rp;
 }
 
 result *
@@ -254,15 +221,13 @@ int
 test__vector()
 {
     printf("unit test of vector start:\n");
-
     st_vector *vec = test_vec_1();
 
-    test__st_vec_min();
-    test__st_vec_norm();
-    test__st_vec_scale();
-    test__st_vec_equal();
-
+    call_test(test__st_vec_equal);
+    call_test(test__st_vec_norm);
+    call_test(test__st_vec_min);
     call_test(test__st_vec_max);
+    call_test(test__st_vec_scale);
     call_test(test__st_vec_add);
     call_test(test__st_vec_mul);
     call_test(test__st_vec_dot);
