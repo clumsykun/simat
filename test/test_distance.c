@@ -7,8 +7,8 @@ test__st_dist_euclid(result *rp)
     rp->value = false;
     double target = 10.2445293;
 
-    st_vector *vec1 = test_vec_1();
-    st_vector *vec2 = test_vec_2();
+    st_vector *vec1 = test_d_vec_1();
+    st_vector *vec2 = test_d_vec_2();
     double dist = st_dist_euclid(vec1, vec2);
     rp->value = !equal(st_precise(dist, 7), target);
     return rp;
@@ -21,8 +21,8 @@ test__st_dist_cosine(result *rp)
     rp->value = false;
     double target = 0.8902623;
 
-    st_vector *vec1 = test_vec_1();
-    st_vector *vec2 = test_vec_2();
+    st_vector *vec1 = test_d_vec_1();
+    st_vector *vec2 = test_d_vec_2();
     double dist = st_dist_cosine(vec1, vec2);
     rp->value = !equal(st_precise(dist, 7), target);
 
@@ -37,8 +37,8 @@ test__st_dist_manhattan(result *rp)
 
     /* test content start */
 
-    st_vector *vec1 = test_vec_1();
-    st_vector *vec2 = test_vec_2();
+    st_vector *vec1 = test_d_vec_1();
+    st_vector *vec2 = test_d_vec_2();
     double dist = st_dist_manhattan(vec1, vec2);
     rp->value = !equal(st_precise(dist, 7), target);
 
@@ -51,8 +51,8 @@ test__st_dist_chebyshev(result *rp)
     rp->name = "st_dist_chebyshev";
     double target = 6.39110032154095;
 
-    st_vector *vec1 = test_vec_1();
-    st_vector *vec2 = test_vec_2();
+    st_vector *vec1 = test_d_vec_1();
+    st_vector *vec2 = test_d_vec_2();
     double dist = st_dist_chebyshev(vec1, vec2);
     rp->value = !equal(st_precise(dist, 14), target);
 
@@ -69,7 +69,6 @@ test__distance(void)
     call_test(test__st_dist_manhattan);
     call_test(test__st_dist_chebyshev);
 
-    printf("\n");
-    return 0;
+    printf("DONE\n\n");
     return 0;
 }

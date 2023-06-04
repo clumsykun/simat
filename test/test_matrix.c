@@ -90,6 +90,6 @@ test__matrix(void)
     call_test(test__st_mat_copy_t);
     call_test(test__st_mat_dot);
 
-    printf("\n");
+    printf("DONE\n\n");
     return 0;
 }
