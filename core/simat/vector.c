@@ -9,6 +9,7 @@
 st_vector *
 st_vec_copy_cast(st_vector *vec, __st_dtype dtype)
 {
+    __st_check_valid(vec);
     if (!__st_is_debug && vec->dtype > dtype) {
 
         if (dtype == st_pixel)

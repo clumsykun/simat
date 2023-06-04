@@ -1,3 +1,4 @@
+#include <math.h>
 #include "elemental.h"
 #include "cblas.h"
 
@@ -13,7 +14,7 @@ __abs(void *elem, __st_dtype dtype, void *argv[])
     __st_assign_p(elem, value, dtype);
 }
 
-/* assign smaller value of `p` and `argv[0]` to `argv[0]` */
+/* assign smaller value of `elem` and `argv[0]` to `argv[0]` */
 static void
 __min(void *elem, __st_dtype dtype, void *argv[])
 {
@@ -22,7 +23,7 @@ __min(void *elem, __st_dtype dtype, void *argv[])
     *min = (*(min) < value ? *(min) : value);
 }
 
-/* assign bigger value of `p` and `argv[0]` to `argv[0]` */
+/* assign bigger value of `elem` and `argv[0]` to `argv[0]` */
 static void
 __max(void *elem, __st_dtype dtype, void *argv[])
 {
@@ -31,13 +32,22 @@ __max(void *elem, __st_dtype dtype, void *argv[])
     *max = (*(max) > value ? *(max) : value);
 }
 
-/* assign sum value of `p` and `argv[0]` to `argv[0]` */
+/* assign sum value of `elem` and `argv[0]` to `argv[0]` */
 static void
 __sum(void *elem, __st_dtype dtype, void *argv[])
 {
     double *sum = (double *)argv[0];
     double value = __st_access_p(elem, dtype);
     *sum = (*sum) + value;
+}
+
+/* add square value of `elem` to `argv[0]` */
+static void
+__add_square(void *elem, __st_dtype dtype, void *argv[])
+{
+    double *norm = (double *)argv[0];
+    double value = __st_access_p(elem, dtype);
+    *norm = (*norm) + value * value;
 }
 
 /* =================================================================================================
@@ -113,7 +123,9 @@ st_vec_max(st_vector *vec)
 double
 st_vec_sum(st_vector *vec)
 {
-    if st_is_double (vec)
+    __st_check_valid(vec);
+
+    if st_is_double(vec)
         return cblas_dsum(vec->len, vec->data->head, 1);
 
     double sum = 0;
@@ -126,7 +138,16 @@ st_vec_sum(st_vector *vec)
 double
 st_vec_norm(st_vector *vec)
 {
-    return cblas_dnrm2(vec->len, vec->data->head, 1);
+    __st_check_valid(vec);
+
+    if st_is_double(vec)
+        return cblas_dnrm2(vec->len, vec->data->head, 1);
+
+    double sum_square = 0;
+    void *argv[] = {&sum_square};
+
+    st_vec_elemental(vec, __add_square, argv);
+    return sqrt(sum_square);
 }
 
 /* =================================================================================================
