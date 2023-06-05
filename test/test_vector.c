@@ -49,6 +49,17 @@ test_c_vec_1(void)
     return vec;
 }
 
+st_vector *
+test_b_vec_1(void)
+{
+    st_vector *vec = st_new_bool_vector(1000);
+    for (size_t i = 0; i < 1000; i++) {
+        __st_vec_assign(vec, i, i%2);
+    }
+
+    return vec;
+}
+
 void
 call_test(fp fp)
 {
@@ -161,8 +172,15 @@ test__st_vec_add(result *rp)
     rp->value += !equal(st_vec_access(ret, 100), 200);
     rp->value += !equal(st_vec_access(ret, 200), 144);
 
-    // st_vec_display(vec1);
-    // st_vec_display(ret);
+    vec1 = test_b_vec_1();
+    vec2 = test_b_vec_1();
+    ret = st_vec_add(vec1, vec2);
+
+    rp->value += !equal(st_vec_access(ret, 0), 0);
+    rp->value += !equal(st_vec_access(ret, 1), 1);
+    rp->value += !equal(st_vec_access(ret, 2), 0);
+    rp->value += !equal(st_vec_access(ret, 100), 0);
+    rp->value += !equal(st_vec_access(ret, 200), 0);
     return rp;
 }
 

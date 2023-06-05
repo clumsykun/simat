@@ -517,8 +517,15 @@ st_mat_mul(st_matrix *a, st_matrix *b)
 
 
 /* =================================================================================================
- * pair function
+ * vectorized simd function add
  */
+
+static void
+simd_add_d(size_t n, double *dst, double *a, double *b)
+{
+    cblas_dcopy(n, a, 1, dst, 1);
+    cblas_daxpy(n, 1, b, 1, dst, 1);
+}
 
 static void
 simd_add_i(size_t n, int *dst, int *a, int *b)
@@ -527,7 +534,7 @@ simd_add_i(size_t n, int *dst, int *a, int *b)
     __m128i *pb = (__m128i *) b;
     __m128i *pd = (__m128i *) dst;
 
-    /* 4 * 32 = 128 */
+    /* 4 * (4*8) = 128 */
     while (n >= 4) {
 
         __m128i __a = _mm_loadu_si128(pa++);
@@ -553,7 +560,7 @@ simd_add_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
     __m128i *pb = (__m128i *) b;
     __m128i *pd = (__m128i *) dst;
 
-    /* 8 * 16 = 128 */
+    /* 16 * (1*8) = 128 */
     while (n >= 16) {
 
         __m128i __a = _mm_loadu_si128(pa++);
@@ -575,9 +582,27 @@ simd_add_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
 static void
 simd_add_b(size_t n, bool *dst, bool *a, bool *b)
 {
-    while (n--) {
-        *dst++ = (*a++) || (*b++);
+    __m128i *pa = (__m128i *) a;
+    __m128i *pb = (__m128i *) b;
+    __m128i *pd = (__m128i *) dst;
+
+    /* 16 * (1*8) = 128 */
+    while (n >= 16) {
+
+        __m128i __a = _mm_loadu_si128(pa++);
+        __m128i __b = _mm_loadu_si128(pb++);
+        __b = _mm_or_si128(__a, __b);
+        _mm_storeu_si128(pd++, __b);
+
+        n -= 16;
     }
+
+    a   = (bool *)pa;
+    b   = (bool *)pb;
+    dst = (bool *)pd;
+
+    while (n--)
+        *dst++ = (*a++) || (*b++);
 }
 
 static void
@@ -589,11 +614,9 @@ __data_add(const __st_data *dst, const __st_data *a, const __st_data *b)
     st_check_data_size(dst, b->size);
 
     switch (dst->dtype) {
-        case st_double: {
-            memcpy(dst->head, a->head, dst->size*dst->nbyte);
-            cblas_daxpy(dst->size, 1, b->head, 1, dst->head, 1);
+        case st_double:
+            simd_add_d(dst->size, dst->head, a->head, b->head);
             return;
-        }
 
         case st_int:
             simd_add_i(dst->size, dst->head, a->head, b->head);
