@@ -109,7 +109,7 @@ typedef struct __st_view
                     ? (double)*(__st_bool *)(p)      \
                     : __st_raise_dtype_error()))))
 
-#define __st_cast_pixel(x) (__st_pixel)((x) > 255 ? 255 : ((x) < 0 ? 0 : (x)))
+#define __st_trim_pixel(x) ((x) > 255 ? 255 : ((x) < 0 ? 0 : (x)))
 
 /* assign double `value` to `p`, as type of `dtype` */
 #define __st_assign_p(p, value, dtype)                               \
@@ -118,7 +118,7 @@ typedef struct __st_view
          : ((dtype) == st_int                                      \
                 ? (*(__st_int *)(p) = (__st_int)(value))                 \
                 : ((dtype) == st_pixel                             \
-                       ? (*(__st_pixel *)(p) = __st_cast_pixel(value)) \
+                       ? (*(__st_pixel *)(p) = __st_trim_pixel(value)) \
                        : ((dtype) == st_bool                       \
                               ? (*(__st_bool *)(p) = (__st_bool)(value)) \
                               : __st_raise_dtype_error()))))
@@ -168,34 +168,44 @@ st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
 st_vector *st_new_vector(size_t len);
-void       st_vec_display(const st_vector *vec);
-void       st_vec_assign_all(st_vector *vec, double value);
-double     st_vec_access(const st_vector *vec, size_t idx);
-st_vector *st_vec_copy(st_vector *vec);
 
 st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol);
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_int_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_matrix(size_t nrow, size_t ncol);
-void st_mat_display(st_matrix *mat);
-void st_mat_assign_all(st_matrix *mat, double value);
 
 st_view *st_new_view();
 void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol);
 void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow);
 void st_vector_view(st_view *view, st_vector *vec);
+
+/* =================================================================================================
+ * assign/access/display/copy
+ */
+
+double __st_data_access(const __st_data *data, size_t idx);
+double st_vec_access(const st_vector *vec, size_t idx);
+
+void st_vec_display(const st_vector *vec);
+void st_vec_assign_all(st_vector *vec, double value);
+st_vector *st_vec_copy(st_vector *vec);
+void st_mat_display(st_matrix *mat);
+void st_mat_assign_all(st_matrix *mat, double value);
 void st_view_display(const st_view *view);
 
 /* =================================================================================================
  * check.
  */
 
-size_t st_check_vec_len(st_vector *vec, size_t len);
-__st_dtype st_check_vec_dtype(st_vector *vec, __st_dtype dtype);
-size_t st_check_mat_nrow(st_matrix *mat, size_t nrow);
-size_t st_check_mat_ncol(st_matrix *mat, size_t ncol);
-__st_dtype st_check_mat_dtype(st_matrix *mat, __st_dtype dtype);
+__st_dtype st_check_data_dtype(const __st_data *data, __st_dtype dtype);
+size_t st_check_data_size(const __st_data *data, size_t size);
+
+size_t st_check_vec_len(const st_vector *vec, size_t len);
+__st_dtype st_check_vec_dtype(const st_vector *vec, __st_dtype dtype);
+size_t st_check_mat_nrow(const st_matrix *mat, size_t nrow);
+size_t st_check_mat_ncol(const st_matrix *mat, size_t ncol);
+__st_dtype st_check_mat_dtype(const st_matrix *mat, __st_dtype dtype);
 
 /* =================================================================================================
  * iterator.

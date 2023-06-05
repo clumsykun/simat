@@ -3,268 +3,619 @@
 #include "cblas.h"
 
 /* =================================================================================================
- * elemental function
- */
-
-static void
-__abs(void *elem, __st_dtype dtype, void *argv[])
-{
-    double value = __st_access_p(elem, dtype);
-    value = st_abs(st_abs(value));
-    __st_assign_p(elem, value, dtype);
-}
-
-/* assign smaller value of `elem` and `argv[0]` to `argv[0]` */
-static void
-__min(void *elem, __st_dtype dtype, void *argv[])
-{
-    double *min = (double *)argv[0];
-    double value = __st_access_p(elem, dtype);
-    *min = (*(min) < value ? *(min) : value);
-}
-
-/* assign bigger value of `elem` and `argv[0]` to `argv[0]` */
-static void
-__max(void *elem, __st_dtype dtype, void *argv[])
-{
-    double *max = (double *)argv[0];
-    double value = __st_access_p(elem, dtype);
-    *max = (*(max) > value ? *(max) : value);
-}
-
-/* assign sum value of `elem` and `argv[0]` to `argv[0]` */
-static void
-__sum(void *elem, __st_dtype dtype, void *argv[])
-{
-    double *sum = (double *)argv[0];
-    double value = __st_access_p(elem, dtype);
-    *sum = (*sum) + value;
-}
-
-/* add square value of `elem` to `argv[0]` */
-static void
-__add_square(void *elem, __st_dtype dtype, void *argv[])
-{
-    double *norm = (double *)argv[0];
-    double value = __st_access_p(elem, dtype);
-    *norm = (*norm) + value * value;
-}
-
-/* =================================================================================================
  * call elemental function
  */
 
-double
-__call_fp_elem(const __st_data *data, fp_elem fp, void *argv[])
-{
-    void *elem;
-    for __st_iter_data(elem, data)
-        fp(elem, data->dtype, argv);
-}
+// /* call elemental function of double */
+// static void
+// __call_elem_d(size_t len, st_elemental *elemental, double *head, void *argv[])
+// {
+//     fp_elem_d fp = elemental->d;
 
-double
-st_vec_elemental(st_vector *vec, fp_elem fp, void *argv[])
-{
-    return __call_fp_elem(vec->data, fp, argv);
-}
+//     if (fp == NULL)
+//         return;
 
-double
-st_mat_elemental(st_matrix *mat, fp_elem fp, void *argv[])
-{
-    return __call_fp_elem(mat->data, fp, argv);
-}
+//     while (len--) {
+//         fp(head++, argv);
+//     }
+// }
 
-double
-st_view_elemental(st_view *view, fp_elem fp, void *argv[])
-{
-    void **elem;
-    size_t i;
-    double value;
-    for __st_iter_view(i, elem, view)
-        fp(*elem, view->dtype, argv);
-}
+// /* call elemental function of integer */
+// static void
+// __call_elem_i(size_t len, st_elemental *elemental, int *head, void *argv[])
+// {
+//     fp_elem_i fp = elemental->i;
+
+//     if (fp == NULL)
+//         return;
+
+//     while (len--) {
+//         fp(head++, argv);
+//     }
+// }
+
+// /* call elemental function of pixel */
+// static void
+// __call_elem_p(size_t len, st_elemental *elemental, unsigned char *head, void *argv[])
+// {
+//     fp_elem_p fp = elemental->p;
+
+//     if (fp == NULL)
+//         return;
+
+//     while (len--) {
+//         fp(head++, argv);
+//     }
+// }
+
+// /* call elemental function of bool */
+// static void
+// __call_elem_b(size_t len, st_elemental *elemental, bool *head, void *argv[])
+// {
+//     fp_elem_b fp = elemental->b;
+
+//     if (fp == NULL)
+//         return;
+
+//     while (len--) {
+//         fp(head++, argv);
+//     }
+// }
+
+// static void
+// __data_elemental(__st_data *data, st_elemental *elemental, void *argv[])
+// {
+//     switch (data->dtype) {
+//         case st_double:
+//             __call_elem_d(data->size, elemental, data->head, argv);
+//             break;
+
+//         case st_int:
+//             __call_elem_i(data->size, elemental, data->head, argv);
+//             break;
+
+//         case st_pixel:
+//             __call_elem_p(data->size, elemental, data->head, argv);
+//             break;
+
+//         case st_bool:
+//             __call_elem_b(data->size, elemental, data->head, argv);
+//             break;
+
+//         default:
+//             __st_raise_dtype_error();
+//     }
+// }
 
 /* =================================================================================================
  * vector elemental function
  */
 
+
+/** ================================================================================================
+ * vectorized `abs` function
+ * need SIMD !
+ */
+
+static void
+__abs_d(size_t n, double *elem)
+{
+    while (n--)
+        *elem++ = st_abs(*elem);
+}
+
+static void
+__abs_i(size_t n, int *elem)
+{
+    while (n--)
+        *elem++ = st_abs(*elem);
+}
+
+static void
+__data_abs(const __st_data *data)
+{
+    switch (data->dtype) {
+        case st_double:
+            __abs_d(data->size, data->head);
+            return;
+
+        case st_int:
+            __abs_i(data->size, data->head);
+            return;
+
+        case st_pixel:
+            return;
+
+        case st_bool:
+            return;
+
+        default:
+            __st_raise_dtype_error();
+    }
+}
+
 void
 st_vec_abs(st_vector *vec)
 {
-    st_vec_elemental(vec, __abs, NULL);
+    __data_abs(vec->data);
+}
+
+void
+st_mat_abs(st_matrix *mat)
+{
+    __data_abs(mat->data);
+}
+
+/** ================================================================================================
+ * vectorized `min` function
+ * need SIMD!
+ */
+
+static double
+simd_min_i(size_t n, int *elem, const size_t incx)
+{
+    double min = *elem;
+    while (n--) {
+        min = (*elem < min ? *elem : min);
+        elem++;
+    }
+    return min;
+}
+
+static double
+simd_min_p(size_t n, unsigned char *elem, const size_t incx)
+{
+    double min = *elem;
+    while (n--) {
+        min = (*elem < min ? *elem : min);
+        min = __st_trim_pixel(min);
+        elem++;
+    }
+    return min;
+}
+
+static double
+simd_min_b(size_t n, bool *elem, const size_t incx)
+{
+    double min = *elem;
+    while (n--)
+        min = (*elem) && min;
+
+    return min;
+}
+
+static double
+__data_min(const __st_data *data, const size_t incx)
+{
+    switch (data->dtype) {
+        case st_double:
+            return __st_data_access(
+                data,
+                cblas_idmin(data->size, data->head, incx));
+
+        case st_int:
+            return simd_min_i(data->size, data->head, incx);
+
+        case st_pixel:
+            return simd_min_p(data->size, data->head, incx);
+
+        case st_bool:
+            return simd_min_b(data->size, data->head, incx);
+
+        default:
+            __st_raise_dtype_error();
+    }
 }
 
 double
 st_vec_min(st_vector *vec)
 {
-    if st_is_double(vec)
-        return st_vec_access(vec, cblas_idmin(vec->len, vec->data->head, 1));
-
-    double min = st_vec_access(vec, 0);
-    void *argv[] = {&min};
-
-    st_vec_elemental(vec, __min, argv);
-    return min;
-}
-
-double
-st_vec_max(st_vector *vec)
-{
-    if st_is_double (vec)
-        return st_vec_access(vec, cblas_idmax(vec->len, vec->data->head, 1));
-
-    double max = st_vec_access(vec, 0);
-    void *argv[] = {&max};
-
-    st_vec_elemental(vec, __max, argv);
-    return max;
-}
-
-double
-st_vec_sum(st_vector *vec)
-{
-    __st_check_valid(vec);
-
-    if st_is_double(vec)
-        return cblas_dsum(vec->len, vec->data->head, 1);
-
-    double sum = 0;
-    void *argv[] = {&sum};
-
-    st_vec_elemental(vec, __sum, argv);
-    return sum;
-}
-
-double
-st_vec_norm(st_vector *vec)
-{
-    __st_check_valid(vec);
-
-    if st_is_double(vec)
-        return cblas_dnrm2(vec->len, vec->data->head, 1);
-
-    double sum_square = 0;
-    void *argv[] = {&sum_square};
-
-    st_vec_elemental(vec, __add_square, argv);
-    return sqrt(sum_square);
-}
-
-/* =================================================================================================
- * matrix elemental function
- */
-
-void
-st_mat_abs(st_matrix *mat)
-{
-    st_mat_elemental(mat, __abs, NULL);
+    return __data_min(vec->data, 1);
 }
 
 double
 st_mat_min(st_matrix *mat)
 {
-    if st_is_double(mat) {
-        size_t idx = cblas_idmin(mat->nrow*mat->ncol, mat->data->head, 1);
-        void *p = __st_data_find_p(mat->data, idx);
-        return __st_access_p(p, mat->dtype);
+    return __data_min(mat->data, 1);
+}
+
+/** ================================================================================================
+ * vectorized `max` function
+ * need SIMD!
+ */
+
+static double
+simd_max_i(size_t n, int *elem, const size_t incx)
+{
+    double max = *elem;
+    while (n--) {
+        max = (*elem > max ? *elem : max);
+        elem++;
     }
+    return max;
+}
 
-    double min = __st_mat_access(mat, 0, 0);
-    void *argv[] = {&min};
+static double
+simd_max_p(size_t n, unsigned char *elem, const size_t incx)
+{
+    double max = *elem;
+    while (n--) {
+        max = (*elem > max ? *elem : max);
+        max = __st_trim_pixel(max);
+        elem++;
+    }
+    return max;
+}
 
-    st_mat_elemental(mat, __min, argv);
-    return min;
+static double
+simd_max_b(size_t n, bool *elem, const size_t incx)
+{
+    double max = *elem;
+    while (n--)
+        max = (*elem) || max;
+
+    return max;
+}
+
+static double
+__data_max(const __st_data *data, const size_t incx)
+{
+    switch (data->dtype) {
+        case st_double:
+            return __st_data_access(
+                data,
+                cblas_idmax(data->size, data->head, incx));
+
+        case st_int:
+            return simd_max_i(data->size, data->head, incx);
+
+        case st_pixel:
+            return simd_max_p(data->size, data->head, incx);
+
+        case st_bool:
+            return simd_max_b(data->size, data->head, incx);
+
+        default:
+            __st_raise_dtype_error();
+    }
+}
+
+double
+st_vec_max(st_vector *vec)
+{
+    return __data_max(vec->data, 1);
 }
 
 double
 st_mat_max(st_matrix *mat)
 {
-    if st_is_double(mat) {
-        size_t idx = cblas_idmax(mat->nrow * mat->ncol, mat->data->head, 1);
-        void *p = __st_data_find_p(mat->data, idx);
-        return __st_access_p(p, mat->dtype);
+    return __data_max(mat->data, 1);
+}
+
+/** ================================================================================================
+ * vectorized `sum` function
+ * need SIMD!
+ */
+
+static double
+simd_sum_i(size_t n, int *elem, const size_t incx)
+{
+    double sum = 0;
+    while (n--)
+        sum += *elem++;
+
+    return sum;
+}
+
+static double
+simd_sum_p(size_t n, unsigned char *elem, const size_t incx)
+{
+    double sum = 0;
+    while (n--)
+        sum += *elem++;
+
+    return sum;
+}
+
+static double
+simd_sum_b(size_t n, bool *elem, const size_t incx)
+{
+    double sum = 0;
+    while (n--)
+        sum += *elem++;
+
+    return sum;
+}
+
+static double
+__data_sum(const __st_data *data, const size_t incx)
+{
+    switch (data->dtype) {
+        case st_double:
+            return cblas_dsum(data->size, data->head, incx);
+
+        case st_int:
+            return simd_sum_i(data->size, data->head, incx);
+
+        case st_pixel:
+            return simd_sum_p(data->size, data->head, incx);
+
+        case st_bool:
+            return simd_sum_b(data->size, data->head, incx);
+
+        default:
+            __st_raise_dtype_error();
     }
+}
 
-    double max = __st_mat_access(mat, 0, 0);
-    void *argv[] = {&max};
-
-    st_mat_elemental(mat, __max, argv);
-    return max;
+double
+st_vec_sum(st_vector *vec)
+{
+    return __data_sum(vec->data, 1);
 }
 
 double
 st_mat_sum(st_matrix *mat)
 {
-    if st_is_double(mat)
-        return cblas_dsum(mat->nrow * mat->ncol, mat->data->head, 1);
+    return __data_sum(mat->data, 1);
+}
 
+/** ================================================================================================
+ * vectorized `square_sum` function
+ * need SIMD!
+ */
+
+static double
+simd_sum_square_i(size_t n, int *elem)
+{
     double sum = 0;
-    void *argv[] = {&sum};
+    while (n--) {
+        sum += (*elem)*(*elem);
+        elem++;
+    }
 
-    st_mat_elemental(mat, __sum, argv);
     return sum;
 }
+
+static double
+simd_sum_square_p(size_t n, int *elem)
+{
+    double sum = 0;
+    while (n--) {
+        sum += (*elem)*(*elem);
+        elem++;
+    }
+
+    return sum;
+}
+
+static double
+simd_sum_square_b(size_t n, int *elem)
+{
+    double sum = 0;
+    while (n--) {
+        sum += (*elem)*(*elem);
+        elem++;
+    }
+
+    return sum;
+}
+
+static double
+__data_norm(const __st_data *data, const size_t incx)
+{
+    switch (data->dtype) {
+        case st_double:
+            return cblas_dnrm2(data->size, data->head, 1);
+
+        case st_int:
+            return sqrt(simd_sum_square_i(data->size, data->head));
+
+        case st_pixel:
+            return sqrt(simd_sum_square_p(data->size, data->head));
+
+        case st_bool:
+            return sqrt(simd_sum_square_b(data->size, data->head));
+
+        default:
+            __st_raise_dtype_error();
+    }
+}
+
+double
+st_vec_norm(st_vector *vec)
+{
+    return __data_norm(vec->data, 1);
+}
+
 
 /* =================================================================================================
  * pair function
  */
 
-/* assign multiply value of `l` and `r` to `r` */
+/* for each element, rst = a * b */
 static void
-__pair_mul(void *el, void *er, __st_dtype dtype, void *argv[])
+simd_mul_d(size_t n, double *dst, double *a, double *b)
 {
-    double v = __st_access_p(el, dtype);
-    v = v * __st_access_p(er, dtype);
-    __st_assign_p(er, v, dtype);
+    while (n--) {
+        *dst++ = (*a++) * (*b++);
+    }    
 }
 
-/* add value of `l` to value of `r` */
 static void
-
-__pair_add(void *el, void *er, __st_dtype dtype, void *argv[])
+simd_mul_i(size_t n, int *dst, int *a, int *b)
 {
-    double v = __st_access_p(el, dtype);
-    v = v + __st_access_p(er, dtype);
-    __st_assign_p(er, v, dtype);
+    while (n--) {
+        *dst++ = (*a++) * (*b++);
+    }
 }
+
+static void
+simd_mul_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
+{
+    while (n--) {
+        *dst++ = (*a++) * (*b++);
+    }
+}
+
+static void
+simd_mul_b(size_t n, bool *dst, bool *a, bool *b)
+{
+    while (n--) {
+        *dst++ = (*a++) && (*b++);
+    }
+}
+
+static void
+__data_mul(const __st_data *dst, const __st_data *a, const __st_data *b)
+{
+    st_check_data_dtype(dst, a->dtype);
+    st_check_data_dtype(dst, b->dtype);
+    st_check_data_size(dst, a->size);
+    st_check_data_size(dst, b->size);
+
+    switch (dst->dtype) {
+        case st_double:
+            simd_mul_d(dst->size, dst->head, a->head, b->head);
+            return;
+
+        case st_int:
+            simd_mul_i(dst->size, dst->head, a->head, b->head);
+            return;
+
+        case st_pixel:
+            simd_mul_p(dst->size, dst->head, a->head, b->head);
+            return;
+
+        case st_bool:
+            simd_mul_b(dst->size, dst->head, a->head, b->head);
+            return;
+
+        default:
+            __st_raise_dtype_error();
+    }
+}
+
+st_vector *
+st_vec_mul(st_vector *a, st_vector *b)
+{
+    size_t len = st_check_vec_len(a, b->len);
+    __st_dtype dtype = st_check_vec_dtype(a, b->dtype);
+    st_vector *dst = __st_new_vector(dtype, len);
+
+    __data_mul(dst->data, a->data, b->data);
+    return dst;
+}
+
+st_matrix *
+st_mat_mul(st_matrix *a, st_matrix *b)
+{
+    size_t nrow = st_check_mat_nrow(a, b->nrow);
+    size_t ncol = st_check_mat_ncol(a, b->ncol);
+    __st_dtype dtype = st_check_mat_dtype(a, b->dtype);
+    st_matrix *dst = __st_new_matrix(dtype, nrow, ncol);
+
+    __data_mul(dst->data, a->data, b->data);
+    return dst;
+}
+
+
+/* =================================================================================================
+ * pair function
+ */
+
+static void
+simd_add_i(size_t n, int *dst, int *a, int *b)
+{
+    while (n--) {
+        *dst++ = (*a++) * (*b++);
+    }
+}
+
+static void
+simd_add_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
+{
+    while (n--) {
+        *dst++ = (*a++) * (*b++);
+    }
+}
+
+static void
+simd_add_b(size_t n, bool *dst, bool *a, bool *b)
+{
+    while (n--) {
+        *dst++ = (*a++) || (*b++);
+    }
+}
+
+static void
+__data_add(const __st_data *dst, const __st_data *a, const __st_data *b)
+{
+    st_check_data_dtype(dst, a->dtype);
+    st_check_data_dtype(dst, b->dtype);
+    st_check_data_size(dst, a->size);
+    st_check_data_size(dst, b->size);
+
+    switch (dst->dtype) {
+        case st_double: {
+            memcpy(dst->head, a->head, dst->size*dst->nbyte);
+            cblas_daxpy(dst->size, 1, b->head, 1, dst->head, 1);
+            return;
+        }
+
+        case st_int:
+            simd_add_i(dst->size, dst->head, a->head, b->head);
+            return;
+
+        case st_pixel:
+            simd_add_p(dst->size, dst->head, a->head, b->head);
+            return;
+
+        case st_bool:
+            simd_add_b(dst->size, dst->head, a->head, b->head);
+            return;
+
+        default:
+            __st_raise_dtype_error();
+    }
+}
+
+st_vector *
+st_vec_add(st_vector *a, st_vector *b)
+{
+    size_t len = st_check_vec_len(a, b->len);
+    __st_dtype dtype = st_check_vec_dtype(a, b->dtype);
+    st_vector *dst = __st_new_vector(dtype, len);
+
+    __data_add(dst->data, a->data, b->data);
+    return dst;
+}
+
+st_matrix *
+st_mat_add(st_matrix *a, st_matrix *b)
+{
+    size_t nrow = st_check_mat_nrow(a, b->nrow);
+    size_t ncol = st_check_mat_ncol(a, b->ncol);
+    __st_dtype dtype = st_check_mat_dtype(a, b->dtype);
+    st_matrix *dst = __st_new_matrix(dtype, nrow, ncol);
+
+    __data_add(dst->data, a->data, b->data);
+    return dst;
+}
+
+
 
 /* =================================================================================================
  * call pair function
  */
 
-double
-st_vec_pair(st_vector *vl, st_vector *vr, fp_pair fp, void *argv[])
-{
-    __st_dtype dtype = st_check_vec_dtype(vl, vr->dtype);
+// double
+// st_vec_pair(st_vector *vl, st_vector *vr, fp_pair fp, void *argv[])
+// {
+//     __st_dtype dtype = st_check_vec_dtype(vl, vr->dtype);
 
-    size_t i;
-    void *e1, *e2;
-    for __st_iter_vector2(i, e1, e2, vl, vr)
-            fp(e1, e2, dtype, argv);
-}
-
-/* implement vector elemental multiply of a and b, save result to vector re */
-st_vector *
-st_vec_mul(st_vector *a, st_vector *b)
-{
-    st_check_vec_dtype(a, b->dtype);
-    st_check_vec_len(a, b->len);
-
-    st_vector *r = st_vec_copy(a);
-    void *eb, *er;
-    st_vec_pair(b, r, __pair_mul, NULL);
-    return r;
-}
-
-/* implement vector subtraction a-b, save result to vector re */
-st_vector *
-st_vec_add(st_vector *a, st_vector *b)
-{
-    st_check_vec_dtype(a, b->dtype);
-    st_check_vec_len(a, b->len);
-
-    st_vector *r = st_vec_copy(a);
-    void *eb, *er;
-    st_vec_pair(b, r, __pair_add, NULL);
-    return r;
-}
+//     size_t i;
+//     void *e1, *e2;
+//     for __st_iter_vector2(i, e1, e2, vl, vr)
+//             fp(e1, e2, dtype, argv);
+// }

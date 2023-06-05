@@ -277,31 +277,35 @@ st_vec_assign_all(st_vector *vec, double value)
 }
 
 double
-st_vec_access(const st_vector *vec, size_t idx)
+__st_data_access(const __st_data *data, size_t idx)
 {
-    __st_check_valid(vec);
-
-    if (idx < 0 || (vec)->len <= idx)
+    if (idx < 0 || data->size <= idx)
         __st_raise_out_range_error();
 
-    void *p = __st_vec_find_p(vec, idx);
+    void *p = __st_data_find_p(data, idx);
 
-    switch (vec->dtype) {
+    switch (data->dtype) {
         case st_bool:
-            return (double)*(__st_bool *)(p);
+            return (double)*(bool *)(p);
 
         case st_int:
-            return (double)*(__st_int *)(p);
+            return (double)*(int *)(p);
 
         case st_pixel:
-            return (double)*(__st_pixel *)(p);
+            return (double)*(unsigned int *)(p);
 
         case st_double:
-            return (double)*(__st_double *)(p);
+            return *(double *)(p);
 
         default:
             __st_raise_dtype_error();
     }
+}
+
+double
+st_vec_access(const st_vector *vec, size_t idx)
+{
+    __st_data_access(vec->data, idx);
 }
 
 st_vector *
@@ -675,8 +679,26 @@ st_view_display(const st_view *view)
  * check
  */
 
+__st_dtype
+st_check_data_dtype(const __st_data *data, __st_dtype dtype)
+{
+    if (data->dtype != dtype)
+        __st_raise_dtype_error();
+    
+    return dtype;
+}
+
 size_t
-st_check_vec_len(st_vector *vec, size_t len)
+st_check_data_size(const __st_data *data, size_t size)
+{
+    if (data->size != size)
+        __st_raise_length_error();
+
+    return size;
+}
+
+size_t
+st_check_vec_len(const st_vector *vec, size_t len)
 {
     if (vec->len != len)
         __st_raise_length_error();
@@ -685,7 +707,7 @@ st_check_vec_len(st_vector *vec, size_t len)
 }
 
 __st_dtype
-st_check_vec_dtype(st_vector *vec, __st_dtype dtype)
+st_check_vec_dtype(const st_vector *vec, __st_dtype dtype)
 {
     if (vec->dtype != dtype)
         __st_raise_dtype_error();
@@ -694,7 +716,7 @@ st_check_vec_dtype(st_vector *vec, __st_dtype dtype)
 }
 
 size_t
-st_check_mat_nrow(st_matrix *mat, size_t nrow)
+st_check_mat_nrow(const st_matrix *mat, size_t nrow)
 {
     if (mat->nrow != nrow)
         __st_raise_length_error();
@@ -703,7 +725,7 @@ st_check_mat_nrow(st_matrix *mat, size_t nrow)
 }
 
 size_t
-st_check_mat_ncol(st_matrix *mat, size_t ncol)
+st_check_mat_ncol(const st_matrix *mat, size_t ncol)
 {
     if (mat->ncol != ncol)
         __st_raise_length_error();
@@ -712,7 +734,7 @@ st_check_mat_ncol(st_matrix *mat, size_t ncol)
 }
 
 __st_dtype
-st_check_mat_dtype(st_matrix *mat, __st_dtype dtype)
+st_check_mat_dtype(const st_matrix *mat, __st_dtype dtype)
 {
     if (mat->dtype != dtype)
         __st_raise_dtype_error();

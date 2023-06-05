@@ -7,12 +7,25 @@
  * elemental function
  */
 
-typedef void (*fp_elem)(void *elem, __st_dtype dtype, void *argv[]);
-typedef void (*fp_pair)(void *l, void *r, __st_dtype dtype, void *argv[]);
+// // typedef void (*fp_elem)(void *elem, __st_dtype dtype, void *argv[]);
+// typedef void (*fp_pair)(void *l, void *r, __st_dtype dtype, void *argv[]);
 
-double st_vec_elemental(st_vector *vec, fp_elem fp, void *argv[]);
-double st_mat_elemental(st_matrix *mat, fp_elem fp, void *argv[]);
-double st_view_elemental(st_view *view, fp_elem fp, void *argv[]);
+// typedef void (*fp_elem_d)(double *elem, double argv[]);
+// typedef void (*fp_elem_i)(int *elem, void *argv[]);
+// typedef void (*fp_elem_p)(unsigned char *elem, void *argv[]);
+// typedef void (*fp_elem_b)(char *elem, void *argv[]);
+
+// typedef struct __st_elemental
+// {
+//     fp_elem_d d;
+//     fp_elem_i i;
+//     fp_elem_p p;
+//     fp_elem_b b;
+// } st_elemental;
+
+// void st_vec_elemental(st_vector *vec, st_elemental *fp, void *argv[]);
+// void st_mat_elemental(st_matrix *mat, st_elemental *elemental, void *argv[]);
+// // double st_view_elemental(st_view *view, st_elemental fp, void *argv[]);
 
 void       st_vec_abs(st_vector *vec);
 double     st_vec_min(st_vector *vec);
