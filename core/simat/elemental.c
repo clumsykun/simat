@@ -515,20 +515,19 @@ st_mat_mul(st_matrix *a, st_matrix *b)
     return dst;
 }
 
-
 /* =================================================================================================
  * vectorized simd function add
  */
 
 static void
-simd_add_d(size_t n, double *dst, double *a, double *b)
+__simd_add_d(size_t n, double *dst, double *a, double *b)
 {
     cblas_dcopy(n, a, 1, dst, 1);
     cblas_daxpy(n, 1, b, 1, dst, 1);
 }
 
 static void
-simd_add_i(size_t n, int *dst, int *a, int *b)
+__simd_add_i(size_t n, int *dst, int *a, int *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -554,7 +553,7 @@ simd_add_i(size_t n, int *dst, int *a, int *b)
 }
 
 static void
-simd_add_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
+__simd_add_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -580,7 +579,7 @@ simd_add_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
 }
 
 static void
-simd_add_b(size_t n, bool *dst, bool *a, bool *b)
+__simd_add_b(size_t n, bool *dst, bool *a, bool *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -615,19 +614,19 @@ __data_add(const __st_data *dst, const __st_data *a, const __st_data *b)
 
     switch (dst->dtype) {
         case st_double:
-            simd_add_d(dst->size, dst->head, a->head, b->head);
+            __simd_add_d(dst->size, dst->head, a->head, b->head);
             return;
 
         case st_int:
-            simd_add_i(dst->size, dst->head, a->head, b->head);
+            __simd_add_i(dst->size, dst->head, a->head, b->head);
             return;
 
         case st_pixel:
-            simd_add_p(dst->size, dst->head, a->head, b->head);
+            __simd_add_p(dst->size, dst->head, a->head, b->head);
             return;
 
         case st_bool:
-            simd_add_b(dst->size, dst->head, a->head, b->head);
+            __simd_add_b(dst->size, dst->head, a->head, b->head);
             return;
 
         default:
@@ -657,8 +656,6 @@ st_mat_add(st_matrix *a, st_matrix *b)
     __data_add(dst->data, a->data, b->data);
     return dst;
 }
-
-
 
 /* =================================================================================================
  * call pair function
