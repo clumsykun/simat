@@ -38,6 +38,17 @@ test_d_vec_2(void)
     return vec;
 }
 
+st_vector *
+test_c_vec_1(void)
+{
+    st_vector *vec = st_new_pixel_vector(1000);
+    for (size_t i = 0; i < 1000; i++) {
+        __st_vec_assign(vec, i, i%256);
+    }
+
+    return vec;
+}
+
 void
 call_test(fp fp)
 {
@@ -84,9 +95,6 @@ test__st_vec_norm(result *rp)
     st_vector *dv = test_d_vec_1();
     st_vector *iv = st_vec_copy_cast(dv, st_int);
 
-    printf("%f\n", st_vec_norm(dv));
-    printf("%f\n", st_vec_norm(iv));
-
     return rp;
 }
 
@@ -124,17 +132,37 @@ test__st_vec_add(result *rp)
 
     st_vector *vec1 = test_d_vec_1();
     st_vector *vec2 = test_d_vec_2();
-    st_vector *vec3 = st_vec_add(vec1, vec2);;
-    st_vector *ret = st_new_vector(vec1->len);
+    st_vector *ret = st_vec_add(vec1, vec2);
 
-    __st_vec_assign(ret, 0, 9.815872653589793);
-    __st_vec_assign(ret, 1, 11.827663978459045);
-    __st_vec_assign(ret, 2, 7.203284624901531);
-    __st_vec_assign(ret, 3, 6.705985648273095);
-    __st_vec_assign(ret, 4, 3.220210475749894);
+    rp->value += !equal(st_vec_access(ret, 0), 9.815872653589793);
+    rp->value += !equal(st_vec_access(ret, 1), 11.827663978459045);
+    rp->value += !equal(st_vec_access(ret, 2), 7.203284624901531);
+    rp->value += !equal(st_vec_access(ret, 3), 6.705985648273095);
+    rp->value += !equal(st_vec_access(ret, 4), 3.220210475749894);
 
-    rp->value = !st_vec_equal(vec3, ret);
+    vec1 = st_vec_copy_cast(vec1, st_int);
+    vec2 = st_vec_copy_cast(vec2, st_int);
+    ret = st_vec_add(vec1, vec2);
 
+    rp->value += !equal(st_vec_access(ret, 0), 9);
+    rp->value += !equal(st_vec_access(ret, 1), 11);
+    rp->value += !equal(st_vec_access(ret, 2), 6);
+    rp->value += !equal(st_vec_access(ret, 3), 6);
+    rp->value += !equal(st_vec_access(ret, 4), 2);
+
+    vec1 = test_c_vec_1();
+    vec2 = test_c_vec_1();
+
+    ret = st_vec_add(vec1, vec2);
+
+    rp->value += !equal(st_vec_access(ret, 0), 0);
+    rp->value += !equal(st_vec_access(ret, 1), 2);
+    rp->value += !equal(st_vec_access(ret, 2), 4);
+    rp->value += !equal(st_vec_access(ret, 100), 200);
+    rp->value += !equal(st_vec_access(ret, 200), 144);
+
+    // st_vec_display(vec1);
+    // st_vec_display(ret);
     return rp;
 }
 

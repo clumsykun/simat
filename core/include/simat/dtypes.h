@@ -118,7 +118,7 @@ typedef struct __st_view
          : ((dtype) == st_int                                      \
                 ? (*(__st_int *)(p) = (__st_int)(value))                 \
                 : ((dtype) == st_pixel                             \
-                       ? (*(__st_pixel *)(p) = __st_trim_pixel(value)) \
+                       ? (*(__st_pixel *)(p) = (__st_pixel)__st_trim_pixel(value)) \
                        : ((dtype) == st_bool                       \
                               ? (*(__st_bool *)(p) = (__st_bool)(value)) \
                               : __st_raise_dtype_error()))))

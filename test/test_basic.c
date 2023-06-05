@@ -1,4 +1,4 @@
-// #include "test.h"
+#include "test.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <immintrin.h>

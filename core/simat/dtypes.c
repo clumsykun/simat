@@ -292,7 +292,7 @@ __st_data_access(const __st_data *data, size_t idx)
             return (double)*(int *)(p);
 
         case st_pixel:
-            return (double)*(unsigned int *)(p);
+            return (double)*(unsigned char *)(p);
 
         case st_double:
             return *(double *)(p);

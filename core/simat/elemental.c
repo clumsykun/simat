@@ -1,4 +1,5 @@
 #include <math.h>
+#include <immintrin.h>
 #include "elemental.h"
 #include "cblas.h"
 
@@ -86,11 +87,6 @@
 //             __st_raise_dtype_error();
 //     }
 // }
-
-/* =================================================================================================
- * vector elemental function
- */
-
 
 /** ================================================================================================
  * vectorized `abs` function
@@ -527,17 +523,53 @@ st_mat_mul(st_matrix *a, st_matrix *b)
 static void
 simd_add_i(size_t n, int *dst, int *a, int *b)
 {
-    while (n--) {
-        *dst++ = (*a++) * (*b++);
+    __m128i *pa = (__m128i *) a;
+    __m128i *pb = (__m128i *) b;
+    __m128i *pd = (__m128i *) dst;
+
+    /* 4 * 32 = 128 */
+    while (n >= 4) {
+
+        __m128i __a = _mm_loadu_si128(pa++);
+        __m128i __b = _mm_loadu_si128(pb++);
+        __b = _mm_add_epi8(__a, __b);
+        _mm_storeu_si128(pd++, __b);
+
+        n -= 4;
     }
+
+    a   = (int *)pa;
+    b   = (int *)pb;
+    dst = (int *)pd;
+
+    while (n--)
+        *dst++ = (*a++) + (*b++);
 }
 
 static void
 simd_add_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
 {
-    while (n--) {
-        *dst++ = (*a++) * (*b++);
+    __m128i *pa = (__m128i *) a;
+    __m128i *pb = (__m128i *) b;
+    __m128i *pd = (__m128i *) dst;
+
+    /* 8 * 16 = 128 */
+    while (n >= 16) {
+
+        __m128i __a = _mm_loadu_si128(pa++);
+        __m128i __b = _mm_loadu_si128(pb++);
+        __b = _mm_add_epi8(__a, __b);
+        _mm_storeu_si128(pd++, __b);
+
+        n -= 16;
     }
+
+    a   = (unsigned char *)pa;
+    b   = (unsigned char *)pb;
+    dst = (unsigned char *)pd;
+
+    while (n--)
+        *dst++ = (*a++) + (*b++);
 }
 
 static void
