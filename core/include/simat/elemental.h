@@ -2,6 +2,7 @@
 #define CORE_ELEMENTAL_H
 
 #include "dtypes.h"
+#include "copy.h"
 
 /* =================================================================================================
  * elemental function

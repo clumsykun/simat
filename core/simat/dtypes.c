@@ -351,41 +351,6 @@ st_vec_assign(const st_vector *vec, size_t idx, double value)
     __st_data_assign(vec->data, idx, value);
 }
 
-st_vector *
-st_vec_copy(st_vector *vec)
-{
-    st_vector *copy = __st_new_vector(vec->dtype, vec->len);
-    memcpy(
-        copy->data->head,
-        vec->data->head,
-        vec->data->nbyte * vec->data->size);
-
-    return copy;
-}
-
-st_vector *
-st_vec_copy_cast(st_vector *vec, __st_dtype dtype)
-{
-    __st_check_valid(vec);
-
-    if (vec->dtype == dtype)
-        return st_vec_copy(vec);
-
-    if (!__st_is_debug && vec->dtype > dtype)
-        printf("Warning: conversion may lose significant digits.\n");
-
-    st_vector *copy = __st_new_vector(dtype, vec->len);
-    size_t i;
-    void *e_vec, *e_cp;
-    double value;
-
-    for __st_iter_vector2(i, e_vec, e_cp, vec, copy) {
-        value = __st_access_p(e_vec, vec->dtype);
-        __st_assign_p(e_cp, value, copy->dtype);
-    }
-    return copy;
-}
-
 /* =================================================================================================
  * functions here defined to support matrix computation. 
  */
