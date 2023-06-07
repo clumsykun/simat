@@ -7,13 +7,13 @@
     ((is_temp) == true ? "TEMP" : "    ")
 
 #define __st_dtype_str(dtype)           \
-    ((dtype) == st_double             \
+    ((dtype) == st_dtype_d64             \
         ? "Double"                      \
-        : ((dtype) == st_int          \
+        : ((dtype) == st_dtype_i32          \
             ? "Int"                     \
-            : ((dtype) == st_pixel    \
+            : ((dtype) == st_dtype_u8    \
                 ? "Pixel"               \
-                : ((dtype) == st_bool \
+                : ((dtype) == st_dtype_bool \
                     ? "Bool"            \
                     : "invalid"))))
 
@@ -113,24 +113,24 @@ __status_view(void *view)
 }
 
 size_t
-__st_byteof(__st_dtype dtype)
+__st_byteof(st_dtype dtype)
 {
     size_t nbyte;
     switch (dtype) {
 
-        case st_bool:
+        case st_dtype_bool:
             nbyte = sizeof(__st_bool);
             break;
 
-        case st_pixel:
+        case st_dtype_u8:
             nbyte = sizeof(__st_pixel);
             break;
 
-        case st_int:
+        case st_dtype_i32:
             nbyte = sizeof(__st_int);
             break;
 
-        case st_double:
+        case st_dtype_d64:
             nbyte = sizeof(__st_double);
             break;
 
@@ -153,7 +153,7 @@ __st_byteof(__st_dtype dtype)
  */
 
 st_vector *
-__st_new_vector(__st_dtype dtype, size_t len)
+__st_new_vector(st_dtype dtype, size_t len)
 {
     st_vector *vec;
     __st_data *data;
@@ -189,25 +189,25 @@ __st_new_vector(__st_dtype dtype, size_t len)
 st_vector *
 st_new_bool_vector(size_t len)
 {
-    return __st_new_vector(st_bool, len);
+    return __st_new_vector(st_dtype_bool, len);
 }
 
 st_vector *
 st_new_pixel_vector(size_t len)
 {
-    return __st_new_vector(st_pixel, len);
+    return __st_new_vector(st_dtype_u8, len);
 }
 
 st_vector *
 st_new_int_vector(size_t len)
 {
-    return __st_new_vector(st_int, len);
+    return __st_new_vector(st_dtype_i32, len);
 }
 
 st_vector *
 st_new_vector(size_t len)
 {
-    return __st_new_vector(st_double, len);
+    return __st_new_vector(st_dtype_d64, len);
 }
 
 void
@@ -217,7 +217,7 @@ st_vec_display(const st_vector *vec)
     char c;
     switch (vec->dtype) {
 
-        case st_bool: {
+        case st_dtype_bool: {
             printf("BoolVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++) {
@@ -229,7 +229,7 @@ st_vec_display(const st_vector *vec)
             break;
         }
 
-        case st_pixel: {
+        case st_dtype_u8: {
             printf("PixelVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
@@ -239,7 +239,7 @@ st_vec_display(const st_vector *vec)
             break;
         }
 
-        case st_int: {
+        case st_dtype_i32: {
             printf("IntVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
@@ -249,7 +249,7 @@ st_vec_display(const st_vector *vec)
             break;
         }
 
-        case st_double: {
+        case st_dtype_d64: {
             printf("Vector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
@@ -285,16 +285,16 @@ __st_data_access(const __st_data *data, size_t idx)
     void *p = __st_data_find_p(data, idx);
 
     switch (data->dtype) {
-        case st_bool:
+        case st_dtype_bool:
             return (double)*(bool *)(p);
 
-        case st_int:
+        case st_dtype_i32:
             return (double)*(int *)(p);
 
-        case st_pixel:
+        case st_dtype_u8:
             return (double)*(unsigned char *)(p);
 
-        case st_double:
+        case st_dtype_d64:
             return *(double *)(p);
 
         default:
@@ -310,25 +310,25 @@ __st_data_assign(const __st_data *data, size_t idx, double value)
 
     switch (data->dtype) {
 
-        case st_bool: {
+        case st_dtype_bool: {
             bool *e = __st_data_find_p(data, idx);
             *e = (bool) value;
             return;
         }
 
-        case st_pixel: {
+        case st_dtype_u8: {
             unsigned char *e = __st_data_find_p(data, idx);
             *e = (unsigned char) value;
             return;
         }
 
-        case st_int: {
+        case st_dtype_i32: {
             int *e = __st_data_find_p(data, idx);
             *e = (int) value;
             return;
         }
 
-        case st_double: {
+        case st_dtype_d64: {
             double *e = __st_data_find_p(data, idx);
             *e = (double) value;
             return;
@@ -356,7 +356,7 @@ st_vec_assign(const st_vector *vec, size_t idx, double value)
  */
 
 static void
-__new_row(void *row, void *row_data_head, __st_dtype dtype, size_t len)
+__new_row(void *row, void *row_data_head, st_dtype dtype, size_t len)
 {
     size_t nbyte = __st_byteof(dtype);
     __st_data *data = malloc(sizeof(__st_data));
@@ -382,7 +382,7 @@ __new_row(void *row, void *row_data_head, __st_dtype dtype, size_t len)
 }
 
 st_matrix *
-__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
+__st_new_matrix(st_dtype dtype, size_t nrow, size_t ncol)
 {
     st_matrix *mat;
     st_vector *_tmp_vec;
@@ -431,25 +431,25 @@ __st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol)
 st_matrix *
 st_new_bool_matrix(size_t nrow, size_t ncol)
 {
-    return __st_new_matrix(st_bool, nrow, ncol);
+    return __st_new_matrix(st_dtype_bool, nrow, ncol);
 }
 
 st_matrix *
 st_new_pixel_matrix(size_t nrow, size_t ncol)
 {
-    return __st_new_matrix(st_pixel, nrow, ncol);
+    return __st_new_matrix(st_dtype_u8, nrow, ncol);
 }
 
 st_matrix *
 st_new_int_matrix(size_t nrow, size_t ncol)
 {
-    return __st_new_matrix(st_int, nrow, ncol);
+    return __st_new_matrix(st_dtype_i32, nrow, ncol);
 }
 
 st_matrix *
 st_new_matrix(size_t nrow, size_t ncol)
 {
-    return __st_new_matrix(st_double, nrow, ncol);
+    return __st_new_matrix(st_dtype_d64, nrow, ncol);
 }
 
 void
@@ -460,7 +460,7 @@ st_mat_display(st_matrix *mat)
     char c;
     switch (mat->dtype) {
 
-        case st_bool: {
+        case st_dtype_bool: {
             printf("BoolMatrix([");
 
             for (size_t i = 0; i < mat->nrow; i++) {
@@ -481,7 +481,7 @@ st_mat_display(st_matrix *mat)
         }
         break;
 
-        case st_pixel: {
+        case st_dtype_u8: {
             printf("PixelMatrix([");
 
             for (size_t i = 0; i < mat->nrow; i++) {
@@ -501,7 +501,7 @@ st_mat_display(st_matrix *mat)
         }
         break;
 
-        case st_int: {
+        case st_dtype_i32: {
             printf("IntMatrix([");
 
             for (size_t i = 0; i < mat->nrow; i++) {
@@ -521,7 +521,7 @@ st_mat_display(st_matrix *mat)
         }
         break;
 
-        case st_double: {
+        case st_dtype_d64: {
             printf("Matrix([");
 
             for (size_t i = 0; i < mat->nrow; i++) {
@@ -639,7 +639,7 @@ st_view_display(const st_view *view)
     char c;
     switch (view->dtype) {
 
-        case st_bool: {
+        case st_dtype_bool: {
             printf("BoolView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
@@ -654,7 +654,7 @@ st_view_display(const st_view *view)
             break;
         }
 
-        case st_pixel: {
+        case st_dtype_u8: {
             printf("PixelView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
@@ -668,7 +668,7 @@ st_view_display(const st_view *view)
             break;
         }
 
-        case st_int: {
+        case st_dtype_i32: {
             printf("IntView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
@@ -682,7 +682,7 @@ st_view_display(const st_view *view)
             break;
         }
 
-        case st_double: {
+        case st_dtype_d64: {
             printf("View([");
 
             double d;
@@ -709,8 +709,8 @@ st_view_display(const st_view *view)
  * check
  */
 
-__st_dtype
-st_check_data_dtype(const __st_data *data, __st_dtype dtype)
+st_dtype
+st_check_data_dtype(const __st_data *data, st_dtype dtype)
 {
     if (data->dtype != dtype)
         __st_raise_dtype_error();
@@ -736,8 +736,8 @@ st_check_vec_len(const st_vector *vec, size_t len)
     return len;
 }
 
-__st_dtype
-st_check_vec_dtype(const st_vector *vec, __st_dtype dtype)
+st_dtype
+st_check_vec_dtype(const st_vector *vec, st_dtype dtype)
 {
     if (vec->dtype != dtype)
         __st_raise_dtype_error();
@@ -763,8 +763,8 @@ st_check_mat_ncol(const st_matrix *mat, size_t ncol)
     return ncol;
 }
 
-__st_dtype
-st_check_mat_dtype(const st_matrix *mat, __st_dtype dtype)
+st_dtype
+st_check_mat_dtype(const st_matrix *mat, st_dtype dtype)
 {
     if (mat->dtype != dtype)
         __st_raise_dtype_error();

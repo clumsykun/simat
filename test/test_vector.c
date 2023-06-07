@@ -87,7 +87,7 @@ test__st_vec_min(result *rp)
     rp->name = "st_vec_min";
 
     st_vector *dv = test_d_vec_1();
-    st_vector *iv = st_vec_copy_cast(dv, st_int);
+    st_vector *iv = st_vec_copy_cast(dv, st_dtype_i32);
 
     rp->value += !equal(st_vec_min(dv), 0.577215664901532);
     rp->value += !equal(st_vec_min(iv), 0);
@@ -101,7 +101,7 @@ test__st_vec_max(result *rp)
     rp->name = "st_vec_max";
 
     st_vector *dv = test_d_vec_1();
-    st_vector *iv = st_vec_copy_cast(iv, st_int);
+    st_vector *iv = st_vec_copy_cast(iv, st_dtype_i32);
 
     rp->value += !equal(st_vec_max(dv), 3.141592653589793);
     rp->value += !equal(st_vec_max(iv), 3);
@@ -115,7 +115,7 @@ test__st_vec_norm(result *rp)
     rp->name = "st_vec_norm";
 
     st_vector *dv = test_d_vec_1();
-    st_vector *iv = st_vec_copy_cast(dv, st_int);
+    st_vector *iv = st_vec_copy_cast(dv, st_dtype_i32);
 
     return rp;
 }

@@ -43,7 +43,7 @@ st_vec_std(st_vector *vec, size_t freedom)
 void
 st_vec_normalize(st_vector *vec)
 {
-    if (vec->dtype != st_double) {
+    if (vec->dtype != st_dtype_d64) {
         printf("only decimal vector support normalization, so this action was omitted.\n");
         return;
     }

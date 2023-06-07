@@ -4,16 +4,16 @@
 
 
 void
-__double_copy(void *dst, double *src, size_t n, __st_dtype dtype)
+__double_copy(void *dst, double *src, size_t n, st_dtype dtype)
 {
     switch (dtype) {
 
-        case st_double: {
+        case st_dtype_d64: {
             memcpy(dst, src, n*sizeof(double));
             break;
         }
 
-        case st_pixel: {
+        case st_dtype_u8: {
             unsigned int *head = dst;
             while (n--)
                 *head++ = (unsigned int)(*src++);
@@ -21,7 +21,7 @@ __double_copy(void *dst, double *src, size_t n, __st_dtype dtype)
             break;
         }
 
-        case st_bool: {
+        case st_dtype_bool: {
             bool *head = dst;
             while (n--)
                 *head++ = (bool)(*src++);
@@ -61,7 +61,7 @@ st_vec_copy(st_vector *vec)
 }
 
 st_vector *
-st_vec_copy_cast(st_vector *vec, __st_dtype dtype)
+st_vec_copy_cast(st_vector *vec, st_dtype dtype)
 {
     __st_check_valid(vec);
 

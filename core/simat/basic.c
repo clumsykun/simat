@@ -36,23 +36,23 @@ __rand(int min, int max)
 }
 
 static double
-__scale_value(double value, __st_dtype dtype)
+__scale_value(double value, st_dtype dtype)
 {
     switch (dtype) {
 
-        case st_bool:
+        case st_dtype_bool:
             value = ((int)value == 0 ? 0 : 1);
             break;
         
-        case st_pixel:
+        case st_dtype_u8:
             value = (value < 0 ? 0 : (value > 255 ? 255 : (int)value));
             break;
 
-        case st_int:
+        case st_dtype_i32:
             value = (int)value;
             break;
 
-        case st_double:
+        case st_dtype_d64:
             value = (double)value;
             break;
 
@@ -81,22 +81,22 @@ st_vec_rand(const st_vector *vec)
 
     switch (vec->dtype) {
 
-        case st_bool:
+        case st_dtype_bool:
             min = 0;
             max = 2;
             break;
 
-        case st_pixel:
+        case st_dtype_u8:
             min = 0;
             max = 255;
             break;
 
-        case st_int:
+        case st_dtype_i32:
             min = -RAND_MAX / 2;
             max = RAND_MAX / 2;
             break;
 
-        case st_double:
+        case st_dtype_d64:
             min = -RAND_MAX / 2;
             max = RAND_MAX / 2;
             break;
@@ -118,7 +118,7 @@ st_vec_rand(const st_vector *vec)
  * @candidate: the candidate position of pivot
  */
 static void *
-__partition(void *start, void *end, __st_dtype dtype, size_t nbyte)
+__partition(void *start, void *end, st_dtype dtype, size_t nbyte)
 {
     double pivot = __st_access_p(end, dtype);
     void *candidate = start - nbyte;
@@ -137,7 +137,7 @@ __partition(void *start, void *end, __st_dtype dtype, size_t nbyte)
 }
 
 static void
-__quick_sort(void *start, void *end, __st_dtype dtype, size_t nbyte)
+__quick_sort(void *start, void *end, st_dtype dtype, size_t nbyte)
 {
     if (start < end) {
         /**
@@ -187,22 +187,22 @@ st_view_rand(st_view *view)
 
     switch (view->dtype) {
 
-        case st_bool:
+        case st_dtype_bool:
             min = 0;
             max = 2;
             break;
 
-        case st_pixel:
+        case st_dtype_u8:
             min = 0;
             max = 255;
             break;
 
-        case st_int:
+        case st_dtype_i32:
             min = -RAND_MAX / 2;
             max = RAND_MAX / 2;
             break;
 
-        case st_double:
+        case st_dtype_d64:
             min = -RAND_MAX / 2;
             max = RAND_MAX / 2;
             break;
@@ -218,7 +218,7 @@ st_view_rand(st_view *view)
 }
 
 static void **
-__partition_p(void **start, void **end, __st_dtype dtype, size_t nbyte)
+__partition_p(void **start, void **end, st_dtype dtype, size_t nbyte)
 {
     double pivot = __st_access_p(*end, dtype);
     void **candidate = start -1;
@@ -237,7 +237,7 @@ __partition_p(void **start, void **end, __st_dtype dtype, size_t nbyte)
 }
 
 static void
-__quick_sort_view(void **start, void **end, __st_dtype dtype, size_t nbyte)
+__quick_sort_view(void **start, void **end, st_dtype dtype, size_t nbyte)
 {
     if (start < end) {
         /**

@@ -8,11 +8,11 @@
  * @__st_pixel: unsigned char
  */
 typedef enum __st_dtype__ {
-    st_bool = 1,
-    st_pixel,
-    st_int,
-    st_double,
-} __st_dtype;
+    st_dtype_bool = 1,
+    st_dtype_u8,
+    st_dtype_i32,
+    st_dtype_d64,
+} st_dtype;
 
 /**
  * @head: ptr of first element of the data
@@ -24,7 +24,7 @@ typedef struct __st_data__
 {
     void *const head;
     void *const last;
-    const __st_dtype dtype;
+    const st_dtype dtype;
     const size_t nbyte;
     const size_t size;
 } __st_data;
@@ -33,7 +33,7 @@ typedef struct __st_vector
 {
     char sha[64];
     bool temp;
-    const __st_dtype dtype;
+    const st_dtype dtype;
     __st_data *const data;
     const size_t len;  /* vec->len = vec->data->size */
 } st_vector;
@@ -48,7 +48,7 @@ typedef struct __st_matrix
 {
     char sha[64];
     bool temp;
-    const __st_dtype dtype;
+    const st_dtype dtype;
     const __st_data *data;
     const size_t nrow;
     const size_t ncol;
@@ -60,7 +60,7 @@ typedef struct __st_view
 {
     char sha[64];
     bool temp;
-    __st_dtype dtype;
+    st_dtype dtype;
     void **head;
     void **last;
     size_t len;
@@ -71,10 +71,10 @@ typedef struct __st_view
 #define __st_int int
 #define __st_double double
 
-#define st_is_bool(x) ((x)->dtype == st_bool)
-#define st_is_pixel(x) ((x)->dtype == st_pixel)
-#define st_is_int(x) ((x)->dtype == st_int)
-#define st_is_double(x) ((x)->dtype == st_double)
+#define st_is_bool(x) ((x)->dtype == st_dtype_bool)
+#define st_is_pixel(x) ((x)->dtype == st_dtype_u8)
+#define st_is_int(x) ((x)->dtype == st_dtype_i32)
+#define st_is_double(x) ((x)->dtype == st_dtype_d64)
 
 #define st_is_vector(vec) !memcmp((vec), st_sha_vector, 64)
 #define st_is_matrix(mat) !memcmp((mat), st_sha_matrix, 64)
@@ -99,13 +99,13 @@ typedef struct __st_view
 
 /* access the value of `p`, as type of `dtype` */
 #define __st_access_p(p, dtype)                      \
-    ((dtype) == st_double                        \
+    ((dtype) == st_dtype_d64                        \
         ? *(__st_double *)(p)                        \
-        : ((dtype) == st_int                     \
+        : ((dtype) == st_dtype_i32                     \
             ? (double)*(__st_int *)(p)               \
-            : ((dtype) == st_pixel               \
+            : ((dtype) == st_dtype_u8               \
                 ? (double)*(__st_pixel *)(p)         \
-                : ((dtype) == st_bool            \
+                : ((dtype) == st_dtype_bool            \
                     ? (double)*(__st_bool *)(p)      \
                     : __st_raise_dtype_error()))))
 
@@ -113,13 +113,13 @@ typedef struct __st_view
 
 /* assign double `value` to `p`, as type of `dtype` */
 #define __st_assign_p(p, value, dtype)                               \
-    ((dtype) == st_double                                          \
+    ((dtype) == st_dtype_d64                                          \
          ? (*(__st_double *)(p) = (__st_double)(value))                  \
-         : ((dtype) == st_int                                      \
+         : ((dtype) == st_dtype_i32                                      \
                 ? (*(__st_int *)(p) = (__st_int)(value))                 \
-                : ((dtype) == st_pixel                             \
+                : ((dtype) == st_dtype_u8                             \
                        ? (*(__st_pixel *)(p) = (__st_pixel)__st_trim_pixel(value)) \
-                       : ((dtype) == st_bool                       \
+                       : ((dtype) == st_dtype_bool                       \
                               ? (*(__st_bool *)(p) = (__st_bool)(value)) \
                               : __st_raise_dtype_error()))))
 
@@ -154,15 +154,15 @@ typedef struct __st_view
  * function define.
  */
 
-size_t __st_byteof(__st_dtype dtype);
+size_t __st_byteof(st_dtype dtype);
 
-st_vector *__st_new_vector(__st_dtype dtype, size_t len);
+st_vector *__st_new_vector(st_dtype dtype, size_t len);
 st_vector *st_new_bool_vector(size_t len);
 st_vector *st_new_pixel_vector(size_t len);
 st_vector *st_new_int_vector(size_t len);
 st_vector *st_new_vector(size_t len);
 
-st_matrix *__st_new_matrix(__st_dtype dtype, size_t nrow, size_t ncol);
+st_matrix *__st_new_matrix(st_dtype dtype, size_t nrow, size_t ncol);
 st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol);
 st_matrix *st_new_int_matrix(size_t nrow, size_t ncol);
@@ -188,21 +188,21 @@ void st_mat_assign_all(st_matrix *mat, double value);
 void st_view_display(const st_view *view);
 
 st_vector *st_vec_copy(st_vector *vec);
-st_vector *st_vec_copy_cast(st_vector *vec, __st_dtype dtype);
+st_vector *st_vec_copy_cast(st_vector *vec, st_dtype dtype);
 
 
 /* =================================================================================================
  * check.
  */
 
-__st_dtype st_check_data_dtype(const __st_data *data, __st_dtype dtype);
+st_dtype st_check_data_dtype(const __st_data *data, st_dtype dtype);
 size_t st_check_data_size(const __st_data *data, size_t size);
 
 size_t st_check_vec_len(const st_vector *vec, size_t len);
-__st_dtype st_check_vec_dtype(const st_vector *vec, __st_dtype dtype);
+st_dtype st_check_vec_dtype(const st_vector *vec, st_dtype dtype);
 size_t st_check_mat_nrow(const st_matrix *mat, size_t nrow);
 size_t st_check_mat_ncol(const st_matrix *mat, size_t ncol);
-__st_dtype st_check_mat_dtype(const st_matrix *mat, __st_dtype dtype);
+st_dtype st_check_mat_dtype(const st_matrix *mat, st_dtype dtype);
 
 /* =================================================================================================
  * iterator.

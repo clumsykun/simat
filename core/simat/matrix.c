@@ -117,16 +117,16 @@ st_mat_dot(st_matrix *a, st_matrix *b)
     /* specified method in order to optimize speed */
     switch (a->dtype) {
 
-        case st_bool:
+        case st_dtype_bool:
             return NULL;
     
-        case st_pixel:
+        case st_dtype_u8:
             return NULL;
 
-        case st_int:
+        case st_dtype_i32:
             return NULL;
     
-        case st_double:
+        case st_dtype_d64:
             return __mat_dot_double(a, b);
 
         default:

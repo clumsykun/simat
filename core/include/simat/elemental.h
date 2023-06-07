@@ -8,8 +8,8 @@
  * elemental function
  */
 
-// // typedef void (*fp_elem)(void *elem, __st_dtype dtype, void *argv[]);
-// typedef void (*fp_pair)(void *l, void *r, __st_dtype dtype, void *argv[]);
+// // typedef void (*fp_elem)(void *elem, st_dtype dtype, void *argv[]);
+// typedef void (*fp_pair)(void *l, void *r, st_dtype dtype, void *argv[]);
 
 // typedef void (*fp_elem_d)(double *elem, double argv[]);
 // typedef void (*fp_elem_i)(int *elem, void *argv[]);
