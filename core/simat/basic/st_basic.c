@@ -16,44 +16,44 @@ __swap(char *a, char *b, size_t len)
 }
 
 static void
-__swap_double(double *left, double *right)
+__swap_double(st_d64 *left, st_d64 *right)
 {
-    double tmp = *left;
+    st_d64 tmp = *left;
     *left = *right;
     *right = tmp;
 }
 
 /**
- * generate random double number (2 decimals) between
+ * generate random st_d64 number (2 decimals) between
  * integer `min` and `max`, both end are inclusive
  */
-static double
-__rand(int min, int max)
+static st_d64
+__rand(st_i32 min, st_i32 max)
 {
-    double integer = rand() % (max - min);
-    double decimal = (100 *( (double)rand() / RAND_MAX) ) / 100;
+    st_d64 integer = rand() % (max - min);
+    st_d64 decimal = (100 *( (st_d64)rand() / RAND_MAX) ) / 100;
     return integer + decimal;
 }
 
-static double
-__scale_value(double value, st_dtype dtype)
+static st_d64
+__scale_value(st_d64 value, st_dtype dtype)
 {
     switch (dtype) {
 
         case st_dtype_bool:
-            value = ((int)value == 0 ? 0 : 1);
+            value = ((st_i32)value == 0 ? 0 : 1);
             break;
         
         case st_dtype_u8:
-            value = (value < 0 ? 0 : (value > 255 ? 255 : (int)value));
+            value = (value < 0 ? 0 : (value > 255 ? 255 : (st_i32)value));
             break;
 
         case st_dtype_i32:
-            value = (int)value;
+            value = (st_i32)value;
             break;
 
         case st_dtype_d64:
-            value = (double)value;
+            value = (st_d64)value;
             break;
 
         default:
@@ -63,10 +63,10 @@ __scale_value(double value, st_dtype dtype)
     return value;
 }
 
-double
-st_precise(double x, size_t ndigits)
+st_d64
+st_precise(st_d64 x, size_t ndigits)
 {
-    ndigits = (ndigits >= 15 ? 15 : ndigits);  /* max precision of double */
+    ndigits = (ndigits >= 15 ? 15 : ndigits);  /* max precision of st_d64 */
     return trunc(x*pow(10, ndigits))/pow(10, ndigits);
 }
 
@@ -77,7 +77,7 @@ st_precise(double x, size_t ndigits)
 void
 st_vec_rand(const st_vector *vec)
 {
-    double value, min, max;
+    st_d64 value, min, max;
 
     switch (vec->dtype) {
 
@@ -120,7 +120,7 @@ st_vec_rand(const st_vector *vec)
 static void *
 __partition(void *start, void *end, st_dtype dtype, size_t nbyte)
 {
-    double pivot = __st_access_p(end, dtype);
+    st_d64 pivot = __st_access_p(end, dtype);
     void *candidate = start - nbyte;
 
    for (void *p = start; p < end; p+=nbyte) {
@@ -183,7 +183,7 @@ st_mat_rand(const st_matrix *mat)
 void
 st_view_rand(st_view *view)
 {
-    double value, min, max;
+    st_d64 value, min, max;
 
     switch (view->dtype) {
 
@@ -220,7 +220,7 @@ st_view_rand(st_view *view)
 static void **
 __partition_p(void **start, void **end, st_dtype dtype, size_t nbyte)
 {
-    double pivot = __st_access_p(*end, dtype);
+    st_d64 pivot = __st_access_p(*end, dtype);
     void **candidate = start -1;
 
    for (void **p = start; p < end; p++) {

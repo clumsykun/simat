@@ -6,27 +6,27 @@
 
 
 void
-__double_copy(void *dst, double *src, size_t n, st_dtype dtype)
+__double_copy(void *dst, st_d64 *src, size_t n, st_dtype dtype)
 {
     switch (dtype) {
 
         case st_dtype_d64: {
-            memcpy(dst, src, n*sizeof(double));
+            memcpy(dst, src, n*sizeof(st_d64));
             break;
         }
 
         case st_dtype_u8: {
-            unsigned int *head = dst;
+            unsigned st_i32 *head = dst;
             while (n--)
-                *head++ = (unsigned int)(*src++);
+                *head++ = (unsigned st_i32)(*src++);
 
             break;
         }
 
         case st_dtype_bool: {
-            bool *head = dst;
+            st_bool *head = dst;
             while (n--)
-                *head++ = (bool)(*src++);
+                *head++ = (st_bool)(*src++);
 
             break;
         }
@@ -37,17 +37,17 @@ __double_copy(void *dst, double *src, size_t n, st_dtype dtype)
 }
 
 void
-__double_to_pixel(size_t n, unsigned char *dst, double *src)
+__double_to_pixel(size_t n, st_u8 *dst, st_d64 *src)
 {
     while (n--)
-        *dst++ = (unsigned char)(*src++);
+        *dst++ = (st_u8)(*src++);
 }
 
 void
-__double_to_bool(size_t n, bool *dst, double *src)
+__double_to_bool(size_t n, st_bool *dst, st_d64 *src)
 {
     while (n--)
-        *dst++ = (bool)(*src++);
+        *dst++ = (st_bool)(*src++);
 }
 
 st_vector *
@@ -76,7 +76,7 @@ st_vec_copy_cast(st_vector *vec, st_dtype dtype)
     st_vector *copy = __st_new_vector(dtype, vec->len);
     size_t i;
     void *e_vec, *e_cp;
-    double value;
+    st_d64 value;
 
     for __st_iter_vector2(i, e_vec, e_cp, vec, copy) {
         value = __st_access_p(e_vec, vec->dtype);

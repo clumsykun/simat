@@ -8,7 +8,7 @@
  * which is an element of this linked list.
  */
 struct __mb {
-    bool *temp;
+    st_bool *temp;
     void *target;
     free_fp free;
     status_fp status;
@@ -24,7 +24,7 @@ struct __mb __ds_head = {
 };
 
 void
-__st_ds_add(void *target, free_fp ffp, status_fp sfp, bool *temp)
+__st_ds_add(void *target, free_fp ffp, status_fp sfp, st_bool *temp)
 {
     struct __mb *p = &__ds_head;
     struct __mb *new = (struct __mb *)malloc(sizeof(struct __mb));
@@ -43,7 +43,7 @@ __st_ds_add(void *target, free_fp ffp, status_fp sfp, bool *temp)
 
 /* clear the data space */
 static void
-__clear_ds(bool only_temp)
+__clear_ds(st_bool only_temp)
 {
     struct __mb *p = &__ds_head;
     struct __mb *next = p->next;
@@ -95,11 +95,11 @@ st_ds_clear_temp(void)
 }
 
 /* if `target` is a valid member of data space, return false. */
-bool
+st_bool
 st_is_invalid(const void *target)
 {
     struct __mb *p = &__ds_head;
-    bool is_invalid = true;
+    st_bool is_invalid = true;
 
     while (p->next != NULL) {
         if (p->next->target == target)
@@ -111,7 +111,7 @@ st_is_invalid(const void *target)
     return is_invalid;
 }
 
-int
+st_i32
 st_free(const void *target)
 {
     struct __mb *p = &__ds_head;

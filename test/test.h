@@ -13,7 +13,7 @@
 typedef struct __result
 {
     char *name;
-    bool value;
+    st_bool value;
 } result;
 
 typedef result *(*fp)(result *ret);
@@ -24,9 +24,9 @@ void call_test(fp fp);
 st_vector *test_d_vec_1(void);
 st_vector *test_d_vec_2(void);
 
-int test__vector(void);
-int test__stats(void);
-int test__distance(void);
-int test__matrix(void);
+st_i32 test__vector(void);
+st_i32 test__stats(void);
+st_i32 test__distance(void);
+st_i32 test__matrix(void);
 
 #endif /* TEST_H */

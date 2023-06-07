@@ -6,8 +6,8 @@
 
 typedef enum __st_dtype__ {
     st_dtype_bool = 1,
-    st_dtype_u8,         /* 8-bit unsigned int */
-    st_dtype_i32,        /* 32-bit int */
+    st_dtype_u8,         /* 8-bit unsigned st_i32 */
+    st_dtype_i32,        /* 32-bit st_i32 */
     st_dtype_d64,        /* 64-bit decimal */
 } st_dtype;
 
@@ -27,11 +27,11 @@ typedef enum __st_dtype__ {
 typedef void (*free_fp)(void *);
 typedef void (*status_fp)(void *);
 
-void __st_ds_add(void *target, free_fp ffp, status_fp sfp, bool *temp);
+void __st_ds_add(void *target, free_fp ffp, status_fp sfp, st_bool *temp);
 void st_ds_clear_all(void);
 void st_ds_clear_temp(void);
 void st_ds_display(void);
-bool st_is_invalid(const void *target);
-int  st_free(const void *target);
+st_bool st_is_invalid(const void *target);
+st_i32  st_free(const void *target);
 
 #endif /* CORE_DS_H */

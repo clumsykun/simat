@@ -8,10 +8,10 @@ __mat_dot_double(st_matrix *a, st_matrix *b)
         __st_raise_length_error();
 
     st_matrix *r = st_new_matrix(a->nrow, b->ncol);
-    double (*pa)[a->nrow][a->ncol] = a->data->head;
-    double (*pb)[b->nrow][b->ncol] = b->data->head;
-    double (*pr)[r->nrow][r->ncol] = r->data->head;
-    double tmp;
+    st_d64 (*pa)[a->nrow][a->ncol] = a->data->head;
+    st_d64 (*pb)[b->nrow][b->ncol] = b->data->head;
+    st_d64 (*pr)[r->nrow][r->ncol] = r->data->head;
+    st_d64 tmp;
 
     for (size_t i = 0; i < a->nrow; i++) {
         for (size_t j = 0; j < b->ncol; j++) {
@@ -27,10 +27,10 @@ __mat_dot_double(st_matrix *a, st_matrix *b)
     return r;
 }
 
-// double
+// st_d64
 // st_mat_min(st_matrix *mat)
 // {
-//     double min = __st_mat_access(mat, 0, 0);
+//     st_d64 min = __st_mat_access(mat, 0, 0);
 //     void *p;
 //     for __st_iter_data(p, mat->data)
 //         min = (min <= __st_access_p(p, mat->data->dtype)
@@ -40,10 +40,10 @@ __mat_dot_double(st_matrix *a, st_matrix *b)
 //     return min;
 // }
 
-// double
+// st_d64
 // st_mat_max(st_matrix *mat)
 // {
-//     double max = __st_mat_access(mat, 0, 0);
+//     st_d64 max = __st_mat_access(mat, 0, 0);
 //     void *p;
 //     for __st_iter_data(p, mat->data)
 //         max = (max >= __st_access_p(p, mat->data->dtype)
@@ -54,15 +54,15 @@ __mat_dot_double(st_matrix *a, st_matrix *b)
 // }
 
 void
-st_mat_scale(st_matrix *mat, double min, double max)
+st_mat_scale(st_matrix *mat, st_d64 min, st_d64 max)
 {
     if st_is_bool(mat) /* do nothing */
         return;
 
-    double mat_min = st_mat_min(mat);
-    double scale = st_mat_max(mat) - mat_min;
-    double target_scale = max - min;
-    double scaled;
+    st_d64 mat_min = st_mat_min(mat);
+    st_d64 scale = st_mat_max(mat) - mat_min;
+    st_d64 target_scale = max - min;
+    st_d64 scaled;
     void *p;
 
     for __st_iter_data(p, mat->data) {

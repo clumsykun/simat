@@ -8,13 +8,13 @@
 
 #define __st_dtype_str(dtype)           \
     ((dtype) == st_dtype_d64             \
-        ? "Double"                      \
+        ? "st_d64"                      \
         : ((dtype) == st_dtype_i32          \
-            ? "Int"                     \
+            ? "st_i32"                     \
             : ((dtype) == st_dtype_u8    \
                 ? "Pixel"               \
                 : ((dtype) == st_dtype_bool \
-                    ? "Bool"            \
+                    ? "st_bool"            \
                     : "invalid"))))
 
 /* the standard way to free memory */
@@ -139,10 +139,10 @@ __st_byteof(st_dtype dtype)
 /* =================================================================================================
  * functions here defined to support vector computation. 
  * @__st_new_vector: construct function of vector.
- * @st_new_bool_vector: construct new bool vector.
+ * @st_new_bool_vector: construct new st_bool vector.
  * @st_new_pixel_vector: construct new st_u8 vector.
- * @st_new_int_vector: construct new int vector.
- * @st_new_vector: construct new double vector.
+ * @st_new_int_vector: construct new st_i32 vector.
+ * @st_new_vector: construct new st_d64 vector.
  */
 
 st_vector *
@@ -225,9 +225,9 @@ st_vec_display(const st_vector *vec)
             printf("PixelVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("(%d), ", (int)st_vec_access(vec, i));
+                printf("(%d), ", (st_i32)st_vec_access(vec, i));
 
-            printf("(%d)])\n", (int)st_vec_access(vec, vec->len-1));
+            printf("(%d)])\n", (st_i32)st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -235,9 +235,9 @@ st_vec_display(const st_vector *vec)
             printf("IntVector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("%d, ", (int)st_vec_access(vec, i));
+                printf("%d, ", (st_i32)st_vec_access(vec, i));
 
-            printf("%d])\n", (int)st_vec_access(vec, vec->len-1));
+            printf("%d])\n", (st_i32)st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -245,9 +245,9 @@ st_vec_display(const st_vector *vec)
             printf("Vector([");
 
             for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("%f, ", (double)st_vec_access(vec, i));
+                printf("%f, ", (st_d64)st_vec_access(vec, i));
 
-            printf("%f])\n", (double)st_vec_access(vec, vec->len-1));
+            printf("%f])\n", (st_d64)st_vec_access(vec, vec->len-1));
             break;
         }
 
@@ -259,7 +259,7 @@ st_vec_display(const st_vector *vec)
 }
 
 void
-st_vec_assign_all(st_vector *vec, double value)
+st_vec_assign_all(st_vector *vec, st_d64 value)
 {
     __st_check_valid(vec);
     void *p;
@@ -268,7 +268,7 @@ st_vec_assign_all(st_vector *vec, double value)
         __st_assign_p(p, value, vec->dtype);
 }
 
-double
+st_d64
 __st_data_access(const __st_data *data, size_t idx)
 {
     if (idx < 0 || data->size <= idx)
@@ -278,16 +278,16 @@ __st_data_access(const __st_data *data, size_t idx)
 
     switch (data->dtype) {
         case st_dtype_bool:
-            return (double)*(bool *)(p);
+            return (st_d64)*(st_bool *)(p);
 
         case st_dtype_i32:
-            return (double)*(int *)(p);
+            return (st_d64)*(st_i32 *)(p);
 
         case st_dtype_u8:
-            return (double)*(unsigned char *)(p);
+            return (st_d64)*(st_u8 *)(p);
 
         case st_dtype_d64:
-            return *(double *)(p);
+            return *(st_d64 *)(p);
 
         default:
             __st_raise_dtype_error();
@@ -295,7 +295,7 @@ __st_data_access(const __st_data *data, size_t idx)
 }
 
 static void
-__st_data_assign(const __st_data *data, size_t idx, double value)
+__st_data_assign(const __st_data *data, size_t idx, st_d64 value)
 {
     if (idx < 0 || data->size <= idx)
         __st_raise_out_range_error();
@@ -303,26 +303,26 @@ __st_data_assign(const __st_data *data, size_t idx, double value)
     switch (data->dtype) {
 
         case st_dtype_bool: {
-            bool *e = __st_data_find_p(data, idx);
-            *e = (bool) value;
+            st_bool *e = __st_data_find_p(data, idx);
+            *e = (st_bool) value;
             return;
         }
 
         case st_dtype_u8: {
-            unsigned char *e = __st_data_find_p(data, idx);
-            *e = (unsigned char) value;
+            st_u8 *e = __st_data_find_p(data, idx);
+            *e = (st_u8) value;
             return;
         }
 
         case st_dtype_i32: {
-            int *e = __st_data_find_p(data, idx);
-            *e = (int) value;
+            st_i32 *e = __st_data_find_p(data, idx);
+            *e = (st_i32) value;
             return;
         }
 
         case st_dtype_d64: {
-            double *e = __st_data_find_p(data, idx);
-            *e = (double) value;
+            st_d64 *e = __st_data_find_p(data, idx);
+            *e = (st_d64) value;
             return;
         }
 
@@ -331,14 +331,14 @@ __st_data_assign(const __st_data *data, size_t idx, double value)
     }
 }
 
-double
+st_d64
 st_vec_access(const st_vector *vec, size_t idx)
 {
     __st_data_access(vec->data, idx);
 }
 
 void
-st_vec_assign(const st_vector *vec, size_t idx, double value)
+st_vec_assign(const st_vector *vec, size_t idx, st_d64 value)
 {
     __st_data_assign(vec->data, idx, value);
 }
@@ -478,9 +478,9 @@ st_mat_display(st_matrix *mat)
                 for (size_t j = 0; j < mat->ncol; j++) {
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
-                        printf("(%3d)])", (int)__st_mat_access(mat, i, j));
+                        printf("(%3d)])", (st_i32)__st_mat_access(mat, i, j));
                     else
-                        printf("(%3d), ", (int)__st_mat_access(mat, i, j));
+                        printf("(%3d), ", (st_i32)__st_mat_access(mat, i, j));
                 }
 
                 if (i == (mat->nrow-1))
@@ -498,9 +498,9 @@ st_mat_display(st_matrix *mat)
                 for (size_t j = 0; j < mat->ncol; j++) {
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
-                        printf("%3d])", (int)__st_mat_access(mat, i, j));
+                        printf("%3d])", (st_i32)__st_mat_access(mat, i, j));
                     else
-                        printf("%3d, ", (int)__st_mat_access(mat, i, j));
+                        printf("%3d, ", (st_i32)__st_mat_access(mat, i, j));
                 }
 
                 if (i == (mat->nrow-1))
@@ -539,7 +539,7 @@ st_mat_display(st_matrix *mat)
 }
 
 void
-st_mat_assign_all(st_matrix *mat, double value)
+st_mat_assign_all(st_matrix *mat, st_d64 value)
 {
     __st_check_valid(mat);
 
@@ -647,13 +647,13 @@ st_view_display(const st_view *view)
             printf("PixelView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
-                printf("(%3d), ", (int)__st_view_access(view, i));
+                printf("(%3d), ", (st_i32)__st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("(%3d)])\n", (int)__st_view_access(view, view->len-1));
+            printf("(%3d)])\n", (st_i32)__st_view_access(view, view->len-1));
             break;
         }
 
@@ -661,29 +661,29 @@ st_view_display(const st_view *view)
             printf("IntView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
-                printf("%5d, ", (int)__st_view_access(view, i));
+                printf("%5d, ", (st_i32)__st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("%5d])\n", (int)__st_view_access(view, view->len-1));
+            printf("%5d])\n", (st_i32)__st_view_access(view, view->len-1));
             break;
         }
 
         case st_dtype_d64: {
             printf("View([");
 
-            double d;
+            st_d64 d;
             for (size_t i = 0; i <= view->len - 2; i++) {
-                d = (double)__st_view_access(view, i);
-                printf("%4.2f, ", (double)__st_view_access(view, i));
+                d = (st_d64)__st_view_access(view, i);
+                printf("%4.2f, ", (st_d64)__st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n      ");
             }
 
-            printf("%4.2f])\n", (double)__st_view_access(view, view->len-1));
+            printf("%4.2f])\n", (st_d64)__st_view_access(view, view->len-1));
             break;
         }
 

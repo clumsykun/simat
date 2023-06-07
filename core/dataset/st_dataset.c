@@ -11,7 +11,7 @@ st_load_iris(void)
     st_matrix *X = st_new_matrix(n_samples, n_features);
     st_vector *Y = st_new_int_vector(n_samples);
 
-    double x_arr[] = {
+    st_d64 x_arr[] = {
         5.1, 3.5, 1.4, 0.2,
         4.9, 3.0, 1.4, 0.2,
         4.7, 3.2, 1.3, 0.2,
@@ -164,7 +164,7 @@ st_load_iris(void)
         5.9, 3.0, 5.1, 1.8
     };
 
-    int y_arr[] = {
+    st_i32 y_arr[] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

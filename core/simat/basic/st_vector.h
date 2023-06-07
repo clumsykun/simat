@@ -2,11 +2,11 @@
 #define CORE_VECTOR_H
 #include "st_elemental.h"
 
-void       st_vec_scale(st_vector *vec, double min, double max);
-void       st_vec_sub_scalar(st_vector *vec, double value);
-void       st_vec_mul_scalar(st_vector *vec, double value);
+void       st_vec_scale(st_vector *vec, st_d64 min, st_d64 max);
+void       st_vec_sub_scalar(st_vector *vec, st_d64 value);
+void       st_vec_mul_scalar(st_vector *vec, st_d64 value);
 
-double     st_vec_dot(st_vector *a, st_vector *b);
-bool       st_vec_equal(st_vector *a, st_vector *b);
+st_d64     st_vec_dot(st_vector *a, st_vector *b);
+st_bool       st_vec_equal(st_vector *a, st_vector *b);
 
 #endif /* CORE_VECTOR_H */

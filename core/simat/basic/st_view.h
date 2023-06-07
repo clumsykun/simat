@@ -2,11 +2,11 @@
 #define CORE_VIEW_H
 #include "st_elemental.h"
 
-double st_view_max(st_view *view);
-double st_view_min(st_view *view);
-double st_view_norm(st_view *view);
-void   st_view_scale(st_view *view, double min, double max);
+st_d64 st_view_max(st_view *view);
+st_d64 st_view_min(st_view *view);
+st_d64 st_view_norm(st_view *view);
+void   st_view_scale(st_view *view, st_d64 min, st_d64 max);
 
-double st_view_dot(st_view *a, st_view *b);
+st_d64 st_view_dot(st_view *a, st_view *b);
 
 #endif /* CORE_VIEW_H */

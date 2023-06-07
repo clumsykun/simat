@@ -7,9 +7,9 @@
  * call elemental function
  */
 
-// /* call elemental function of double */
+// /* call elemental function of st_d64 */
 // static void
-// __call_elem_d(size_t len, st_elemental *elemental, double *head, void *argv[])
+// __call_elem_d(size_t len, st_elemental *elemental, st_d64 *head, void *argv[])
 // {
 //     fp_elem_d fp = elemental->d;
 
@@ -23,7 +23,7 @@
 
 // /* call elemental function of integer */
 // static void
-// __call_elem_i(size_t len, st_elemental *elemental, int *head, void *argv[])
+// __call_elem_i(size_t len, st_elemental *elemental, st_i32 *head, void *argv[])
 // {
 //     fp_elem_i fp = elemental->i;
 
@@ -37,7 +37,7 @@
 
 // /* call elemental function of pixel */
 // static void
-// __call_elem_p(size_t len, st_elemental *elemental, unsigned char *head, void *argv[])
+// __call_elem_p(size_t len, st_elemental *elemental, st_u8 *head, void *argv[])
 // {
 //     fp_elem_p fp = elemental->p;
 
@@ -49,9 +49,9 @@
 //     }
 // }
 
-// /* call elemental function of bool */
+// /* call elemental function of st_bool */
 // static void
-// __call_elem_b(size_t len, st_elemental *elemental, bool *head, void *argv[])
+// __call_elem_b(size_t len, st_elemental *elemental, st_bool *head, void *argv[])
 // {
 //     fp_elem_b fp = elemental->b;
 
@@ -94,14 +94,14 @@
  */
 
 static void
-__abs_d(size_t n, double *elem)
+__abs_d(size_t n, st_d64 *elem)
 {
     while (n--)
         *elem++ = st_abs(*elem);
 }
 
 static void
-__abs_i(size_t n, int *elem)
+__abs_i(size_t n, st_i32 *elem)
 {
     while (n--)
         *elem++ = st_abs(*elem);
@@ -147,10 +147,10 @@ st_mat_abs(st_matrix *mat)
  * need SIMD!
  */
 
-static double
-simd_min_i(size_t n, int *elem, const size_t incx)
+static st_d64
+simd_min_i(size_t n, st_i32 *elem, const size_t incx)
 {
-    double min = *elem;
+    st_d64 min = *elem;
     while (n--) {
         min = (*elem < min ? *elem : min);
         elem++;
@@ -158,10 +158,10 @@ simd_min_i(size_t n, int *elem, const size_t incx)
     return min;
 }
 
-static double
-simd_min_p(size_t n, unsigned char *elem, const size_t incx)
+static st_d64
+simd_min_p(size_t n, st_u8 *elem, const size_t incx)
 {
-    double min = *elem;
+    st_d64 min = *elem;
     while (n--) {
         min = (*elem < min ? *elem : min);
         min = __st_trim_pixel(min);
@@ -170,17 +170,17 @@ simd_min_p(size_t n, unsigned char *elem, const size_t incx)
     return min;
 }
 
-static double
-simd_min_b(size_t n, bool *elem, const size_t incx)
+static st_d64
+simd_min_b(size_t n, st_bool *elem, const size_t incx)
 {
-    double min = *elem;
+    st_d64 min = *elem;
     while (n--)
         min = (*elem) && min;
 
     return min;
 }
 
-static double
+static st_d64
 __data_min(const __st_data *data, const size_t incx)
 {
     switch (data->dtype) {
@@ -203,13 +203,13 @@ __data_min(const __st_data *data, const size_t incx)
     }
 }
 
-double
+st_d64
 st_vec_min(st_vector *vec)
 {
     return __data_min(vec->data, 1);
 }
 
-double
+st_d64
 st_mat_min(st_matrix *mat)
 {
     return __data_min(mat->data, 1);
@@ -220,10 +220,10 @@ st_mat_min(st_matrix *mat)
  * need SIMD!
  */
 
-static double
-simd_max_i(size_t n, int *elem, const size_t incx)
+static st_d64
+simd_max_i(size_t n, st_i32 *elem, const size_t incx)
 {
-    double max = *elem;
+    st_d64 max = *elem;
     while (n--) {
         max = (*elem > max ? *elem : max);
         elem++;
@@ -231,10 +231,10 @@ simd_max_i(size_t n, int *elem, const size_t incx)
     return max;
 }
 
-static double
-simd_max_p(size_t n, unsigned char *elem, const size_t incx)
+static st_d64
+simd_max_p(size_t n, st_u8 *elem, const size_t incx)
 {
-    double max = *elem;
+    st_d64 max = *elem;
     while (n--) {
         max = (*elem > max ? *elem : max);
         max = __st_trim_pixel(max);
@@ -243,17 +243,17 @@ simd_max_p(size_t n, unsigned char *elem, const size_t incx)
     return max;
 }
 
-static double
-simd_max_b(size_t n, bool *elem, const size_t incx)
+static st_d64
+simd_max_b(size_t n, st_bool *elem, const size_t incx)
 {
-    double max = *elem;
+    st_d64 max = *elem;
     while (n--)
         max = (*elem) || max;
 
     return max;
 }
 
-static double
+static st_d64
 __data_max(const __st_data *data, const size_t incx)
 {
     switch (data->dtype) {
@@ -276,13 +276,13 @@ __data_max(const __st_data *data, const size_t incx)
     }
 }
 
-double
+st_d64
 st_vec_max(st_vector *vec)
 {
     return __data_max(vec->data, 1);
 }
 
-double
+st_d64
 st_mat_max(st_matrix *mat)
 {
     return __data_max(mat->data, 1);
@@ -293,37 +293,37 @@ st_mat_max(st_matrix *mat)
  * need SIMD!
  */
 
-static double
-simd_sum_i(size_t n, int *elem, const size_t incx)
+static st_d64
+simd_sum_i(size_t n, st_i32 *elem, const size_t incx)
 {
-    double sum = 0;
+    st_d64 sum = 0;
     while (n--)
         sum += *elem++;
 
     return sum;
 }
 
-static double
-simd_sum_p(size_t n, unsigned char *elem, const size_t incx)
+static st_d64
+simd_sum_p(size_t n, st_u8 *elem, const size_t incx)
 {
-    double sum = 0;
+    st_d64 sum = 0;
     while (n--)
         sum += *elem++;
 
     return sum;
 }
 
-static double
-simd_sum_b(size_t n, bool *elem, const size_t incx)
+static st_d64
+simd_sum_b(size_t n, st_bool *elem, const size_t incx)
 {
-    double sum = 0;
+    st_d64 sum = 0;
     while (n--)
         sum += *elem++;
 
     return sum;
 }
 
-static double
+static st_d64
 __data_sum(const __st_data *data, const size_t incx)
 {
     switch (data->dtype) {
@@ -344,13 +344,13 @@ __data_sum(const __st_data *data, const size_t incx)
     }
 }
 
-double
+st_d64
 st_vec_sum(st_vector *vec)
 {
     return __data_sum(vec->data, 1);
 }
 
-double
+st_d64
 st_mat_sum(st_matrix *mat)
 {
     return __data_sum(mat->data, 1);
@@ -361,10 +361,10 @@ st_mat_sum(st_matrix *mat)
  * need SIMD!
  */
 
-static double
-simd_sum_square_i(size_t n, int *elem)
+static st_d64
+simd_sum_square_i(size_t n, st_i32 *elem)
 {
-    double sum = 0;
+    st_d64 sum = 0;
     while (n--) {
         sum += (*elem)*(*elem);
         elem++;
@@ -373,10 +373,10 @@ simd_sum_square_i(size_t n, int *elem)
     return sum;
 }
 
-static double
-simd_sum_square_p(size_t n, int *elem)
+static st_d64
+simd_sum_square_p(size_t n, st_i32 *elem)
 {
-    double sum = 0;
+    st_d64 sum = 0;
     while (n--) {
         sum += (*elem)*(*elem);
         elem++;
@@ -385,10 +385,10 @@ simd_sum_square_p(size_t n, int *elem)
     return sum;
 }
 
-static double
-simd_sum_square_b(size_t n, int *elem)
+static st_d64
+simd_sum_square_b(size_t n, st_i32 *elem)
 {
-    double sum = 0;
+    st_d64 sum = 0;
     while (n--) {
         sum += (*elem)*(*elem);
         elem++;
@@ -397,7 +397,7 @@ simd_sum_square_b(size_t n, int *elem)
     return sum;
 }
 
-static double
+static st_d64
 __data_norm(const __st_data *data, const size_t incx)
 {
     switch (data->dtype) {
@@ -418,7 +418,7 @@ __data_norm(const __st_data *data, const size_t incx)
     }
 }
 
-double
+st_d64
 st_vec_norm(st_vector *vec)
 {
     return __data_norm(vec->data, 1);
@@ -431,7 +431,7 @@ st_vec_norm(st_vector *vec)
 
 /* for each element, rst = a * b */
 static void
-simd_mul_d(size_t n, double *dst, double *a, double *b)
+simd_mul_d(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 {
     __m128d *pa = (__m128d *) a;
     __m128d *pb = (__m128d *) b;
@@ -440,24 +440,24 @@ simd_mul_d(size_t n, double *dst, double *a, double *b)
     /* 2 * (8*8) = 128 */
     while (n >= 2) {
 
-        __m128d __a = _mm_loadu_pd((double *)pa++);
-        __m128d __b = _mm_loadu_pd((double *)pb++);
+        __m128d __a = _mm_loadu_pd((st_d64 *)pa++);
+        __m128d __b = _mm_loadu_pd((st_d64 *)pb++);
         __b = _mm_mul_pd(__a, __b);
-        _mm_storeu_pd((double *)pd++, __b);
+        _mm_storeu_pd((st_d64 *)pd++, __b);
 
         n -= 2;
     }
 
-    a   = (double *)pa;
-    b   = (double *)pb;
-    dst = (double *)pd;
+    a   = (st_d64 *)pa;
+    b   = (st_d64 *)pb;
+    dst = (st_d64 *)pd;
 
     while (n--)
         *dst++ = (*a++) * (*b++);
 }
 
 static void
-simd_mul_i(size_t n, int *dst, int *a, int *b)
+simd_mul_i(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -478,16 +478,16 @@ simd_mul_i(size_t n, int *dst, int *a, int *b)
         n -= 4;
     }
 
-    a   = (int *)pa;
-    b   = (int *)pb;
-    dst = (int *)pd;
+    a   = (st_i32 *)pa;
+    b   = (st_i32 *)pb;
+    dst = (st_i32 *)pd;
 
     while (n--)
         *dst++ = (*a++) * (*b++);
 }
 
 static void
-simd_mul_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
+simd_mul_p(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -508,16 +508,16 @@ simd_mul_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
         n -= 16;
     }
 
-    a   = (unsigned char *)pa;
-    b   = (unsigned char *)pb;
-    dst = (unsigned char *)pd;
+    a   = (st_u8 *)pa;
+    b   = (st_u8 *)pb;
+    dst = (st_u8 *)pd;
 
     while (n--)
         *dst++ = (*a++) * (*b++);
 }
 
 static void
-simd_mul_b(size_t n, bool *dst, bool *a, bool *b)
+simd_mul_b(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 {
     while (n--) {
         *dst++ = (*a++) && (*b++);
@@ -582,14 +582,14 @@ st_mat_mul(st_matrix *a, st_matrix *b)
  */
 
 static void
-__simd_add_d(size_t n, double *dst, double *a, double *b)
+__simd_add_d(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 {
     cblas_dcopy(n, a, 1, dst, 1);
     cblas_daxpy(n, 1, b, 1, dst, 1);
 }
 
 static void
-__simd_add_i(size_t n, int *dst, int *a, int *b)
+__simd_add_i(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -606,16 +606,16 @@ __simd_add_i(size_t n, int *dst, int *a, int *b)
         n -= 4;
     }
 
-    a   = (int *)pa;
-    b   = (int *)pb;
-    dst = (int *)pd;
+    a   = (st_i32 *)pa;
+    b   = (st_i32 *)pb;
+    dst = (st_i32 *)pd;
 
     while (n--)
         *dst++ = (*a++) + (*b++);
 }
 
 static void
-__simd_add_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
+__simd_add_p(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -632,16 +632,16 @@ __simd_add_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
         n -= 16;
     }
 
-    a   = (unsigned char *)pa;
-    b   = (unsigned char *)pb;
-    dst = (unsigned char *)pd;
+    a   = (st_u8 *)pa;
+    b   = (st_u8 *)pb;
+    dst = (st_u8 *)pd;
 
     while (n--)
         *dst++ = (*a++) + (*b++);
 }
 
 static void
-__simd_add_b(size_t n, bool *dst, bool *a, bool *b)
+__simd_add_b(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -658,9 +658,9 @@ __simd_add_b(size_t n, bool *dst, bool *a, bool *b)
         n -= 16;
     }
 
-    a   = (bool *)pa;
-    b   = (bool *)pb;
-    dst = (bool *)pd;
+    a   = (st_bool *)pa;
+    b   = (st_bool *)pb;
+    dst = (st_bool *)pd;
 
     while (n--)
         *dst++ = (*a++) || (*b++);
@@ -723,7 +723,7 @@ st_mat_add(st_matrix *a, st_matrix *b)
  * call pair function
  */
 
-// double
+// st_d64
 // st_vec_pair(st_vector *vl, st_vector *vr, fp_pair fp, void *argv[])
 // {
 //     st_dtype dtype = st_check_vec_dtype(vl, vr->dtype);

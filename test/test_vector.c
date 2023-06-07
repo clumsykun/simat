@@ -7,7 +7,7 @@ st_vector *
 test_d_vec_1(void)
 {
     st_vector *vec = st_new_vector(5);
-    double arr[5] = {
+    st_d64 arr[5] = {
         3.141592653589793,
         2.718281828459045,
         0.577215664901532,
@@ -26,7 +26,7 @@ st_vector *
 test_d_vec_2(void)
 {
     st_vector *vec = st_new_vector(5);
-    double arr[5] = {
+    st_d64 arr[5] = {
         6.67428,
         9.10938215,
         6.62606896,
@@ -240,7 +240,7 @@ test__st_vec_dot(result *rp)
 
     st_vector *vec1 = test_d_vec_1();
     st_vector *vec2 = test_d_vec_2();
-    double re = st_vec_dot(vec1, vec2);
+    st_d64 re = st_vec_dot(vec1, vec2);
 
     rp->value = !equal(st_precise(st_vec_dot(vec1, vec2), 13), 59.6304796480743);
 
@@ -291,7 +291,7 @@ test__st_vec_abs(result *rp)
     return rp;
 }
 
-int
+st_i32
 test__vector()
 {
     printf("unit test of vector start:\n");

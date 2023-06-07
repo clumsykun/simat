@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include "st_watcher.h"
 
-bool __st_is_debug = false;
-bool __st_is_error = false;
-bool __st_dtype_error = false;
-bool __st_out_range_error = false;
-bool __st_length_error = false;
-bool __st_invalid_error = false;
+st_bool __st_is_debug = false;
+st_bool __st_is_error = false;
+st_bool __st_dtype_error = false;
+st_bool __st_out_range_error = false;
+st_bool __st_length_error = false;
+st_bool __st_invalid_error = false;
 
 /* exit simat program */
 static void
@@ -43,7 +43,7 @@ __st_check(const char *file, const size_t line)
         __exit();
 }
 
-double
+st_d64
 __st_raise_invalid_error__(const char *file, const size_t line)
 {
     __st_invalid_error = true;
@@ -61,7 +61,7 @@ __st_raise_dtype_error__(const char *file, const size_t line)
     return 0;
 }
 
-double
+st_d64
 __st_raise_out_range_error__(const char *file, const size_t line)
 {
     __st_is_error = true;

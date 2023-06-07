@@ -1,6 +1,6 @@
 #include "test.h"
 
-int main()
+st_i32 main()
 {
     __st_is_debug = true;
     test__vector();

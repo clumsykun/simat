@@ -20,7 +20,7 @@ typedef struct __st_data__
 
 typedef struct __st_vector
 {
-    bool temp;
+    st_bool temp;
     const st_dtype dtype;
     __st_data *const data;
     const size_t len;  /* vec->len = vec->data->size */
@@ -34,7 +34,7 @@ typedef struct __st_vector
  */
 typedef struct __st_matrix
 {
-    bool temp;
+    st_bool temp;
     const st_dtype dtype;
     const __st_data *data;
     const size_t nrow;
@@ -45,7 +45,7 @@ typedef struct __st_matrix
 /* flexible structure contains ptr of element of target vector/matrix */
 typedef struct __st_view
 {
-    bool temp;
+    st_bool temp;
     st_dtype dtype;
     void **head;
     void **last;
@@ -83,16 +83,16 @@ typedef struct __st_view
     ((dtype) == st_dtype_d64                        \
         ? *(st_d64 *)(p)                        \
         : ((dtype) == st_dtype_i32                     \
-            ? (double)*(st_i32 *)(p)               \
+            ? (st_d64)*(st_i32 *)(p)               \
             : ((dtype) == st_dtype_u8               \
-                ? (double)*(st_u8 *)(p)         \
+                ? (st_d64)*(st_u8 *)(p)         \
                 : ((dtype) == st_dtype_bool            \
-                    ? (double)*(st_bool *)(p)      \
+                    ? (st_d64)*(st_bool *)(p)      \
                     : __st_raise_dtype_error()))))
 
 #define __st_trim_pixel(x) ((x) > 255 ? 255 : ((x) < 0 ? 0 : (x)))
 
-/* assign double `value` to `p`, as type of `dtype` */
+/* assign st_d64 `value` to `p`, as type of `dtype` */
 #define __st_assign_p(p, value, dtype)                               \
     ((dtype) == st_dtype_d64                                          \
          ? (*(st_d64 *)(p) = (st_d64)(value))                  \
@@ -158,14 +158,14 @@ void st_vector_view(st_view *view, st_vector *vec);
  * assign/access/display/copy
  */
 
-double __st_data_access(const __st_data *data, size_t idx);
-double st_vec_access(const st_vector *vec, size_t idx);
-void   st_vec_assign(const st_vector *vec, size_t idx, double value);
+st_d64 __st_data_access(const __st_data *data, size_t idx);
+st_d64 st_vec_access(const st_vector *vec, size_t idx);
+void   st_vec_assign(const st_vector *vec, size_t idx, st_d64 value);
 
 void st_vec_display(const st_vector *vec);
-void st_vec_assign_all(st_vector *vec, double value);
+void st_vec_assign_all(st_vector *vec, st_d64 value);
 void st_mat_display(st_matrix *mat);
-void st_mat_assign_all(st_matrix *mat, double value);
+void st_mat_assign_all(st_matrix *mat, st_d64 value);
 void st_view_display(const st_view *view);
 
 st_vector *st_vec_copy(st_vector *vec);

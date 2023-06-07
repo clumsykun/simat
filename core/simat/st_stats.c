@@ -10,30 +10,30 @@ check_vec_length(st_vector *a, st_vector *b)
         __st_raise_length_error();
 }
 
-double
+st_d64
 st_vec_mean(st_vector *vec)
 {
-    double sum = 0;
+    st_d64 sum = 0;
 
     for (size_t i = 0; i < vec->len; i++)
         sum += st_vec_access(vec, i);
 
-    return sum / (double)vec->len;
+    return sum / (st_d64)vec->len;
 }
 
-double
+st_d64
 st_vec_var(st_vector *vec, size_t freedom)
 {
-    double mean = st_vec_mean(vec);
-    double sum_sq_diff = 0;
+    st_d64 mean = st_vec_mean(vec);
+    st_d64 sum_sq_diff = 0;
 
     for (size_t i = 0; i < vec->len; i++)
         sum_sq_diff += (st_vec_access(vec, i) - mean) * (st_vec_access(vec, i) - mean);
 
-    return sum_sq_diff / (double) (vec->len - freedom);
+    return sum_sq_diff / (st_d64) (vec->len - freedom);
 }
 
-double
+st_d64
 st_vec_std(st_vector *vec, size_t freedom)
 {
     return sqrt(st_vec_var(vec, freedom));
@@ -48,9 +48,9 @@ st_vec_normalize(st_vector *vec)
         return;
     }
 
-    double mean = st_vec_mean(vec);
-    double std = st_vec_std(vec, 0);
-    double scaled;
+    st_d64 mean = st_vec_mean(vec);
+    st_d64 std = st_vec_std(vec, 0);
+    st_d64 scaled;
 
     for (size_t i = 0; i < vec->len; i++) {
         scaled = (st_vec_access(vec, i) - mean) / std;
@@ -58,7 +58,7 @@ st_vec_normalize(st_vector *vec)
     }
 }
 
-double
+st_d64
 st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
 {
     if (st_vec_equal(a, b))
@@ -66,9 +66,9 @@ st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
 
     check_vec_length(a, b);
 
-    double mean_a = st_vec_mean(a);
-    double mean_b = st_vec_mean(b);
-    double diff = 0;
+    st_d64 mean_a = st_vec_mean(a);
+    st_d64 mean_b = st_vec_mean(b);
+    st_d64 diff = 0;
 
     for (size_t i = 0; i < a->len; i++)
         diff += (st_vec_access(a, i) - mean_a)*(st_vec_access(b, i) - mean_b);
@@ -77,12 +77,12 @@ st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
 }
 
 /* pearson product-moment correlation coefficient */
-double
+st_d64
 st_stats_corr(st_vector *a, st_vector *b)
 {
     if (st_vec_equal(a, b))
         return 1;
 
-    double cov = st_stats_cov(a, b, 1);  /* check length as well */
+    st_d64 cov = st_stats_cov(a, b, 1);  /* check length as well */
     return cov / (st_vec_std(a, 1)*st_vec_std(b, 1));;
 }

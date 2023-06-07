@@ -12,10 +12,10 @@ check_view_length(st_view *a, st_view *b)
         __st_raise_length_error();
 }
 
-double
+st_d64
 st_view_min(st_view *view)
 {
-    double min = __st_view_access(view, 0);
+    st_d64 min = __st_view_access(view, 0);
 
     for (size_t i = 0; i < view->len; i++)
         min = (min <= __st_view_access(view, i) ? min : __st_view_access(view, i));
@@ -23,10 +23,10 @@ st_view_min(st_view *view)
     return min;
 }
 
-double
+st_d64
 st_view_max(st_view *view)
 {
-    double max = __st_view_access(view, 0);
+    st_d64 max = __st_view_access(view, 0);
 
     for (size_t i = 0; i < view->len; i++)
         max = (max >= __st_view_access(view, i) ? max : __st_view_access(view, i));
@@ -34,10 +34,10 @@ st_view_max(st_view *view)
     return max;
 }
 
-double
+st_d64
 st_view_norm(st_view *view)
 {
-    double sum_square = 0;
+    st_d64 sum_square = 0;
     for (size_t i = 0; i < view->len; i++) {
         sum_square += __st_view_access(view, i)*__st_view_access(view, i);
     }
@@ -45,12 +45,12 @@ st_view_norm(st_view *view)
 }
 
 void
-st_view_scale(st_view *view, double min, double max)
+st_view_scale(st_view *view, st_d64 min, st_d64 max)
 {
-    double v_min = st_view_min(view);
-    double scale = st_view_max(view) - v_min;
-    double target_scale = max - min;
-    double scaled;
+    st_d64 v_min = st_view_min(view);
+    st_d64 scale = st_view_max(view) - v_min;
+    st_d64 target_scale = max - min;
+    st_d64 scaled;
 
     for (size_t i = 0; i < view->len; i++) {
         scaled = min + (__st_view_access(view, i) - v_min) * target_scale / scale;
@@ -58,12 +58,12 @@ st_view_scale(st_view *view, double min, double max)
     }
 }
 
-double
+st_d64
 st_view_dot(st_view *a, st_view *b)
 {
     check_view_length(a, b);
 
-    double ret = 0;
+    st_d64 ret = 0;
     for (size_t i = 0; i < a->len; i++)
         ret += __st_view_access(a, i) * __st_view_access(b, i);
 

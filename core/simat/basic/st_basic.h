@@ -7,7 +7,7 @@
 #include "st_matrix.h"
 #include "st_view.h"
 
-double st_precise(double x, size_t ndigits);
+st_d64 st_precise(st_d64 x, size_t ndigits);
 
 void st_vec_rand(const st_vector *vec);
 void st_vec_sort(st_vector *vec);

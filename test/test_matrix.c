@@ -9,7 +9,7 @@ result *
 test__st_mat_min(result *rp)
 {
     rp->name = "st_mat_min";
-    double target = 0.1;
+    st_d64 target = 0.1;
 
     st_dataset *iris = st_load_iris();
     rp->value = !equal(st_mat_min(iris->X), target);
@@ -21,7 +21,7 @@ result *
 test__st_mat_max(result *rp)
 {
     rp->name = "st_mat_max";
-    double target = 7.9;
+    st_d64 target = 7.9;
 
     st_dataset *iris = st_load_iris();
     rp->value = !equal(st_mat_max(iris->X), target);
@@ -79,7 +79,7 @@ test__st_mat_dot(result *rp)
     return rp;
 }
 
-int
+st_i32
 test__matrix(void)
 {
     printf("unit test of matrix start:\n");
