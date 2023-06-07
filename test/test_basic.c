@@ -5,7 +5,7 @@
 
 int main()
 {
-    // printf("%d\n", sizeof(int));
+    printf("%d\n", sizeof(int));
     test__vector();
     test__matrix();
     return 0;

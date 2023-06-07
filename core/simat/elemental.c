@@ -433,25 +433,87 @@ st_vec_norm(st_vector *vec)
 static void
 simd_mul_d(size_t n, double *dst, double *a, double *b)
 {
-    while (n--) {
+    __m128d *pa = (__m128d *) a;
+    __m128d *pb = (__m128d *) b;
+    __m128d *pd = (__m128d *) dst;
+
+    /* 2 * (8*8) = 128 */
+    while (n >= 2) {
+
+        __m128d __a = _mm_loadu_pd((double *)pa++);
+        __m128d __b = _mm_loadu_pd((double *)pb++);
+        __b = _mm_mul_pd(__a, __b);
+        _mm_storeu_pd((double *)pd++, __b);
+
+        n -= 2;
+    }
+
+    a   = (double *)pa;
+    b   = (double *)pb;
+    dst = (double *)pd;
+
+    while (n--)
         *dst++ = (*a++) * (*b++);
-    }    
 }
 
 static void
 simd_mul_i(size_t n, int *dst, int *a, int *b)
 {
-    while (n--) {
-        *dst++ = (*a++) * (*b++);
+    __m128i *pa = (__m128i *) a;
+    __m128i *pb = (__m128i *) b;
+    __m128i *pd = (__m128i *) dst;
+
+    /* 4 * (4*8) = 128 */
+    while (n >= 4) {
+
+        __m128i __a = _mm_loadu_si128(pa++);
+        __m128i __b = _mm_loadu_si128(pb++);
+        __m128i __even = _mm_mul_epu32(__a, __b);
+        __m128i __odd = _mm_mul_epu32(_mm_srli_epi64(__a, 32), _mm_srli_epi64(__b, 32));
+        __m128i __low = _mm_unpacklo_epi32(__even, __odd);
+        __m128i __high = _mm_unpackhi_epi32(__even, __odd);
+        __m128i __dst = _mm_unpacklo_epi64(__low, __high);
+
+        _mm_storeu_si128(pd++, __dst);
+        n -= 4;
     }
+
+    a   = (int *)pa;
+    b   = (int *)pb;
+    dst = (int *)pd;
+
+    while (n--)
+        *dst++ = (*a++) * (*b++);
 }
 
 static void
 simd_mul_p(size_t n, unsigned char *dst, unsigned char *a, unsigned char *b)
 {
-    while (n--) {
-        *dst++ = (*a++) * (*b++);
+    __m128i *pa = (__m128i *) a;
+    __m128i *pb = (__m128i *) b;
+    __m128i *pd = (__m128i *) dst;
+
+    /* 16 * (1*8) = 128 */
+    while (n >= 16) {
+
+        __m128i __a = _mm_loadu_si128(pa++);
+        __m128i __b = _mm_loadu_si128(pb++);
+
+        const __m128i mask = _mm_set1_epi32(0xFF00FF00);
+        __m128i __even = _mm_mullo_epi16(__a, __b);
+        __m128i __odd = _mm_mullo_epi16(_mm_srai_epi16(__a, 8), _mm_srai_epi16(__b, 8));
+        __odd = _mm_slli_epi16(__odd, 8);
+        __m128i __dst = _mm_xor_si128(__even, _mm_and_si128(_mm_xor_si128(__even, __odd), mask));
+        _mm_storeu_si128(pd++, __dst);
+        n -= 16;
     }
+
+    a   = (unsigned char *)pa;
+    b   = (unsigned char *)pb;
+    dst = (unsigned char *)pd;
+
+    while (n--)
+        *dst++ = (*a++) * (*b++);
 }
 
 static void
@@ -538,7 +600,7 @@ __simd_add_i(size_t n, int *dst, int *a, int *b)
 
         __m128i __a = _mm_loadu_si128(pa++);
         __m128i __b = _mm_loadu_si128(pb++);
-        __b = _mm_add_epi8(__a, __b);
+        __b = _mm_add_epi32(__a, __b);
         _mm_storeu_si128(pd++, __b);
 
         n -= 4;

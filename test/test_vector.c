@@ -39,6 +39,17 @@ test_d_vec_2(void)
 }
 
 st_vector *
+test_i_vec_1(void)
+{
+    st_vector *vec = st_new_int_vector(1000);
+    for (size_t i = 0; i < 1000; i++) {
+        __st_vec_assign(vec, i, i);
+    }
+
+    return vec;
+}
+
+st_vector *
 test_c_vec_1(void)
 {
     st_vector *vec = st_new_pixel_vector(1000);
@@ -151,15 +162,15 @@ test__st_vec_add(result *rp)
     rp->value += !equal(st_vec_access(ret, 3), 6.705985648273095);
     rp->value += !equal(st_vec_access(ret, 4), 3.220210475749894);
 
-    vec1 = st_vec_copy_cast(vec1, st_int);
-    vec2 = st_vec_copy_cast(vec2, st_int);
+    vec1 = test_i_vec_1();
+    vec2 = test_i_vec_1();
     ret = st_vec_add(vec1, vec2);
 
-    rp->value += !equal(st_vec_access(ret, 0), 9);
-    rp->value += !equal(st_vec_access(ret, 1), 11);
-    rp->value += !equal(st_vec_access(ret, 2), 6);
-    rp->value += !equal(st_vec_access(ret, 3), 6);
-    rp->value += !equal(st_vec_access(ret, 4), 2);
+    rp->value += !equal(st_vec_access(ret, 0), 0);
+    rp->value += !equal(st_vec_access(ret, 1), 2);
+    rp->value += !equal(st_vec_access(ret, 200), 400);
+    rp->value += !equal(st_vec_access(ret, 144), 288);
+    rp->value += !equal(st_vec_access(ret, 500), 1000);
 
     vec1 = test_c_vec_1();
     vec2 = test_c_vec_1();
@@ -191,16 +202,33 @@ test__st_vec_mul(result *rp)
 
     st_vector *vec1 = test_d_vec_1();
     st_vector *vec2 = test_d_vec_2();
-    st_vector *vec3 = st_vec_mul(vec1, vec2);
-    st_vector *ret = st_new_vector(vec1->len);
+    st_vector *ret = st_vec_mul(vec1, vec2);
 
-    __st_vec_assign(ret, 0, 20.967869016001284);
-    __st_vec_assign(ret, 1, 24.76186796683419);
-    __st_vec_assign(ret, 2, 3.8246708004298022);
-    __st_vec_assign(ret, 3, 7.483695852867142);
-    __st_vec_assign(ret, 4, 2.592376011941903);
+    rp->value += !equal(st_vec_access(ret, 0), 20.967869016001284);
+    rp->value += !equal(st_vec_access(ret, 1), 24.76186796683419);
+    rp->value += !equal(st_vec_access(ret, 2), 3.8246708004298022);
+    rp->value += !equal(st_vec_access(ret, 3), 7.483695852867142);
+    rp->value += !equal(st_vec_access(ret, 4), 2.592376011941903);
 
-    rp->value = !st_vec_equal(vec3, ret);
+    vec1 = test_i_vec_1();
+    vec2 = test_i_vec_1();
+    ret = st_vec_mul(vec1, vec2);
+
+    rp->value += !equal(st_vec_access(ret, 0), 0);
+    rp->value += !equal(st_vec_access(ret, 1), 1);
+    rp->value += !equal(st_vec_access(ret, 2), 4);
+    rp->value += !equal(st_vec_access(ret, 3), 9);
+    rp->value += !equal(st_vec_access(ret, 4), 16);
+
+    vec1 = test_c_vec_1();
+    vec2 = test_c_vec_1();
+    ret = st_vec_mul(vec1, vec2);
+
+    rp->value += !equal(st_vec_access(ret, 0), 0);
+    rp->value += !equal(st_vec_access(ret, 1), 1);
+    rp->value += !equal(st_vec_access(ret, 2), 4);
+    rp->value += !equal(st_vec_access(ret, 10), 100);
+    rp->value += !equal(st_vec_access(ret, 12), 144);
 
     return rp;
 }
