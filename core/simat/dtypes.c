@@ -116,30 +116,23 @@ size_t
 __st_byteof(st_dtype dtype)
 {
     size_t nbyte;
-    switch (dtype) {
 
+    switch (dtype) {
         case st_dtype_bool:
-            nbyte = sizeof(__st_bool);
-            break;
+            return st_byte_bool;
 
         case st_dtype_u8:
-            nbyte = sizeof(__st_pixel);
-            break;
+            return st_byte_u8;
 
         case st_dtype_i32:
-            nbyte = sizeof(__st_int);
-            break;
+            return st_byte_i32;
 
         case st_dtype_d64:
-            nbyte = sizeof(__st_double);
-            break;
+            return st_byte_d64;
 
         default:
-            nbyte = 0;
             __st_raise_dtype_error();
     }
-
-    return nbyte;
 }
 
 

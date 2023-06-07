@@ -16,6 +16,11 @@ typedef enum __st_dtype__ {
 #define st_i32  in8
 #define st_d64  double
 
+#define st_byte_bool 1
+#define st_byte_u8   1
+#define st_byte_i32  4
+#define st_byte_d64  8
+
 /**
  * @head: ptr of first element of the data
  * @last: ptr of last element of the data
