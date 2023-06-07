@@ -140,7 +140,7 @@ __st_byteof(st_dtype dtype)
  * functions here defined to support vector computation. 
  * @__st_new_vector: construct function of vector.
  * @st_new_bool_vector: construct new bool vector.
- * @st_new_pixel_vector: construct new __st_pixel vector.
+ * @st_new_pixel_vector: construct new st_u8 vector.
  * @st_new_int_vector: construct new int vector.
  * @st_new_vector: construct new double vector.
  */

@@ -3,23 +3,6 @@
 
 #include "st_watcher.h"
 
-typedef enum __st_dtype__ {
-    st_dtype_bool = 1,
-    st_dtype_u8,         /* 8-bit unsigned int */
-    st_dtype_i32,        /* 32-bit int */
-    st_dtype_d64,        /* 64-bit decimal */
-} st_dtype;
-
-#define st_bool bool
-#define st_u8   unsigned char
-#define st_i32  in8
-#define st_d64  double
-
-#define st_byte_bool 1
-#define st_byte_u8   1
-#define st_byte_i32  4
-#define st_byte_d64  8
-
 /**
  * @head: ptr of first element of the data
  * @last: ptr of last element of the data
@@ -69,11 +52,6 @@ typedef struct __st_view
     size_t len;
 } st_view;
 
-#define __st_bool bool
-#define __st_pixel unsigned char
-#define __st_int int
-#define __st_double double
-
 #define st_is_bool(x) ((x)->dtype == st_dtype_bool)
 #define st_is_pixel(x) ((x)->dtype == st_dtype_u8)
 #define st_is_int(x) ((x)->dtype == st_dtype_i32)
@@ -103,13 +81,13 @@ typedef struct __st_view
 /* access the value of `p`, as type of `dtype` */
 #define __st_access_p(p, dtype)                      \
     ((dtype) == st_dtype_d64                        \
-        ? *(__st_double *)(p)                        \
+        ? *(st_d64 *)(p)                        \
         : ((dtype) == st_dtype_i32                     \
-            ? (double)*(__st_int *)(p)               \
+            ? (double)*(st_i32 *)(p)               \
             : ((dtype) == st_dtype_u8               \
-                ? (double)*(__st_pixel *)(p)         \
+                ? (double)*(st_u8 *)(p)         \
                 : ((dtype) == st_dtype_bool            \
-                    ? (double)*(__st_bool *)(p)      \
+                    ? (double)*(st_bool *)(p)      \
                     : __st_raise_dtype_error()))))
 
 #define __st_trim_pixel(x) ((x) > 255 ? 255 : ((x) < 0 ? 0 : (x)))
@@ -117,13 +95,13 @@ typedef struct __st_view
 /* assign double `value` to `p`, as type of `dtype` */
 #define __st_assign_p(p, value, dtype)                               \
     ((dtype) == st_dtype_d64                                          \
-         ? (*(__st_double *)(p) = (__st_double)(value))                  \
+         ? (*(st_d64 *)(p) = (st_d64)(value))                  \
          : ((dtype) == st_dtype_i32                                      \
-                ? (*(__st_int *)(p) = (__st_int)(value))                 \
+                ? (*(st_i32 *)(p) = (st_i32)(value))                 \
                 : ((dtype) == st_dtype_u8                             \
-                       ? (*(__st_pixel *)(p) = (__st_pixel)__st_trim_pixel(value)) \
+                       ? (*(st_u8 *)(p) = (st_u8)__st_trim_pixel(value)) \
                        : ((dtype) == st_dtype_bool                       \
-                              ? (*(__st_bool *)(p) = (__st_bool)(value)) \
+                              ? (*(st_bool *)(p) = (st_bool)(value)) \
                               : __st_raise_dtype_error()))))
 
 /* TODO: check if valid */
