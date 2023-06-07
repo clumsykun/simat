@@ -9,7 +9,7 @@
 
 // /* call elemental function of st_d64 */
 // static void
-// __call_elem_d(size_t len, st_elemental *elemental, st_d64 *head, void *argv[])
+// __call_elem_d64(size_t len, st_elemental *elemental, st_d64 *head, void *argv[])
 // {
 //     fp_elem_d fp = elemental->d;
 
@@ -23,7 +23,7 @@
 
 // /* call elemental function of integer */
 // static void
-// __call_elem_i(size_t len, st_elemental *elemental, st_i32 *head, void *argv[])
+// __call_elem_i32(size_t len, st_elemental *elemental, st_i32 *head, void *argv[])
 // {
 //     fp_elem_i fp = elemental->i;
 
@@ -37,7 +37,7 @@
 
 // /* call elemental function of pixel */
 // static void
-// __call_elem_p(size_t len, st_elemental *elemental, st_u8 *head, void *argv[])
+// __call_elem_u8(size_t len, st_elemental *elemental, st_u8 *head, void *argv[])
 // {
 //     fp_elem_p fp = elemental->p;
 
@@ -51,7 +51,7 @@
 
 // /* call elemental function of st_bool */
 // static void
-// __call_elem_b(size_t len, st_elemental *elemental, st_bool *head, void *argv[])
+// __call_elem_bool(size_t len, st_elemental *elemental, st_bool *head, void *argv[])
 // {
 //     fp_elem_b fp = elemental->b;
 
@@ -68,19 +68,19 @@
 // {
 //     switch (data->dtype) {
 //         case st_dtype_d64:
-//             __call_elem_d(data->size, elemental, data->head, argv);
+//             __call_elem_d64(data->size, elemental, data->head, argv);
 //             break;
 
 //         case st_dtype_i32:
-//             __call_elem_i(data->size, elemental, data->head, argv);
+//             __call_elem_i32(data->size, elemental, data->head, argv);
 //             break;
 
 //         case st_dtype_u8:
-//             __call_elem_p(data->size, elemental, data->head, argv);
+//             __call_elem_u8(data->size, elemental, data->head, argv);
 //             break;
 
 //         case st_dtype_bool:
-//             __call_elem_b(data->size, elemental, data->head, argv);
+//             __call_elem_bool(data->size, elemental, data->head, argv);
 //             break;
 
 //         default:
@@ -94,14 +94,14 @@
  */
 
 static void
-__abs_d(size_t n, st_d64 *elem)
+__abs_d64(size_t n, st_d64 *elem)
 {
     while (n--)
         *elem++ = st_abs(*elem);
 }
 
 static void
-__abs_i(size_t n, st_i32 *elem)
+__abs_i32(size_t n, st_i32 *elem)
 {
     while (n--)
         *elem++ = st_abs(*elem);
@@ -112,11 +112,11 @@ __data_abs(const __st_data *data)
 {
     switch (data->dtype) {
         case st_dtype_d64:
-            __abs_d(data->size, data->head);
+            __abs_d64(data->size, data->head);
             return;
 
         case st_dtype_i32:
-            __abs_i(data->size, data->head);
+            __abs_i32(data->size, data->head);
             return;
 
         case st_dtype_u8:
@@ -148,7 +148,7 @@ st_mat_abs(st_matrix *mat)
  */
 
 static st_d64
-simd_min_i(size_t n, st_i32 *elem, const size_t incx)
+simd_min_i32(size_t n, st_i32 *elem, const size_t incx)
 {
     st_d64 min = *elem;
     while (n--) {
@@ -159,7 +159,7 @@ simd_min_i(size_t n, st_i32 *elem, const size_t incx)
 }
 
 static st_d64
-simd_min_p(size_t n, st_u8 *elem, const size_t incx)
+simd_min_u8(size_t n, st_u8 *elem, const size_t incx)
 {
     st_d64 min = *elem;
     while (n--) {
@@ -171,7 +171,7 @@ simd_min_p(size_t n, st_u8 *elem, const size_t incx)
 }
 
 static st_d64
-simd_min_b(size_t n, st_bool *elem, const size_t incx)
+simd_min_bool(size_t n, st_bool *elem, const size_t incx)
 {
     st_d64 min = *elem;
     while (n--)
@@ -190,13 +190,13 @@ __data_min(const __st_data *data, const size_t incx)
                 cblas_idmin(data->size, data->head, incx));
 
         case st_dtype_i32:
-            return simd_min_i(data->size, data->head, incx);
+            return simd_min_i32(data->size, data->head, incx);
 
         case st_dtype_u8:
-            return simd_min_p(data->size, data->head, incx);
+            return simd_min_u8(data->size, data->head, incx);
 
         case st_dtype_bool:
-            return simd_min_b(data->size, data->head, incx);
+            return simd_min_bool(data->size, data->head, incx);
 
         default:
             __st_raise_dtype_error();
@@ -221,7 +221,7 @@ st_mat_min(st_matrix *mat)
  */
 
 static st_d64
-simd_max_i(size_t n, st_i32 *elem, const size_t incx)
+simd_max_i32(size_t n, st_i32 *elem, const size_t incx)
 {
     st_d64 max = *elem;
     while (n--) {
@@ -232,7 +232,7 @@ simd_max_i(size_t n, st_i32 *elem, const size_t incx)
 }
 
 static st_d64
-simd_max_p(size_t n, st_u8 *elem, const size_t incx)
+simd_max_u8(size_t n, st_u8 *elem, const size_t incx)
 {
     st_d64 max = *elem;
     while (n--) {
@@ -244,7 +244,7 @@ simd_max_p(size_t n, st_u8 *elem, const size_t incx)
 }
 
 static st_d64
-simd_max_b(size_t n, st_bool *elem, const size_t incx)
+simd_max_bool(size_t n, st_bool *elem, const size_t incx)
 {
     st_d64 max = *elem;
     while (n--)
@@ -263,13 +263,13 @@ __data_max(const __st_data *data, const size_t incx)
                 cblas_idmax(data->size, data->head, incx));
 
         case st_dtype_i32:
-            return simd_max_i(data->size, data->head, incx);
+            return simd_max_i32(data->size, data->head, incx);
 
         case st_dtype_u8:
-            return simd_max_p(data->size, data->head, incx);
+            return simd_max_u8(data->size, data->head, incx);
 
         case st_dtype_bool:
-            return simd_max_b(data->size, data->head, incx);
+            return simd_max_bool(data->size, data->head, incx);
 
         default:
             __st_raise_dtype_error();
@@ -294,7 +294,7 @@ st_mat_max(st_matrix *mat)
  */
 
 static st_d64
-simd_sum_i(size_t n, st_i32 *elem, const size_t incx)
+simd_sum_i32(size_t n, st_i32 *elem, const size_t incx)
 {
     st_d64 sum = 0;
     while (n--)
@@ -304,7 +304,7 @@ simd_sum_i(size_t n, st_i32 *elem, const size_t incx)
 }
 
 static st_d64
-simd_sum_p(size_t n, st_u8 *elem, const size_t incx)
+simd_sum_u8(size_t n, st_u8 *elem, const size_t incx)
 {
     st_d64 sum = 0;
     while (n--)
@@ -314,7 +314,7 @@ simd_sum_p(size_t n, st_u8 *elem, const size_t incx)
 }
 
 static st_d64
-simd_sum_b(size_t n, st_bool *elem, const size_t incx)
+simd_sum_bool(size_t n, st_bool *elem, const size_t incx)
 {
     st_d64 sum = 0;
     while (n--)
@@ -331,13 +331,13 @@ __data_sum(const __st_data *data, const size_t incx)
             return cblas_dsum(data->size, data->head, incx);
 
         case st_dtype_i32:
-            return simd_sum_i(data->size, data->head, incx);
+            return simd_sum_i32(data->size, data->head, incx);
 
         case st_dtype_u8:
-            return simd_sum_p(data->size, data->head, incx);
+            return simd_sum_u8(data->size, data->head, incx);
 
         case st_dtype_bool:
-            return simd_sum_b(data->size, data->head, incx);
+            return simd_sum_bool(data->size, data->head, incx);
 
         default:
             __st_raise_dtype_error();
@@ -362,7 +362,7 @@ st_mat_sum(st_matrix *mat)
  */
 
 static st_d64
-simd_sum_square_i(size_t n, st_i32 *elem)
+simd_sum_square_i32(size_t n, st_i32 *elem)
 {
     st_d64 sum = 0;
     while (n--) {
@@ -374,7 +374,7 @@ simd_sum_square_i(size_t n, st_i32 *elem)
 }
 
 static st_d64
-simd_sum_square_p(size_t n, st_i32 *elem)
+simd_sum_square_u8(size_t n, st_i32 *elem)
 {
     st_d64 sum = 0;
     while (n--) {
@@ -386,7 +386,7 @@ simd_sum_square_p(size_t n, st_i32 *elem)
 }
 
 static st_d64
-simd_sum_square_b(size_t n, st_i32 *elem)
+simd_sum_square_bool(size_t n, st_i32 *elem)
 {
     st_d64 sum = 0;
     while (n--) {
@@ -405,13 +405,13 @@ __data_norm(const __st_data *data, const size_t incx)
             return cblas_dnrm2(data->size, data->head, 1);
 
         case st_dtype_i32:
-            return sqrt(simd_sum_square_i(data->size, data->head));
+            return sqrt(simd_sum_square_i32(data->size, data->head));
 
         case st_dtype_u8:
-            return sqrt(simd_sum_square_p(data->size, data->head));
+            return sqrt(simd_sum_square_u8(data->size, data->head));
 
         case st_dtype_bool:
-            return sqrt(simd_sum_square_b(data->size, data->head));
+            return sqrt(simd_sum_square_bool(data->size, data->head));
 
         default:
             __st_raise_dtype_error();
@@ -431,7 +431,7 @@ st_vec_norm(st_vector *vec)
 
 /* for each element, rst = a * b */
 static void
-simd_mul_d(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
+simd_mul_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 {
     __m128d *pa = (__m128d *) a;
     __m128d *pb = (__m128d *) b;
@@ -457,7 +457,7 @@ simd_mul_d(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 }
 
 static void
-simd_mul_i(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
+simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -487,7 +487,7 @@ simd_mul_i(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 }
 
 static void
-simd_mul_p(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
+simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -517,7 +517,7 @@ simd_mul_p(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 }
 
 static void
-simd_mul_b(size_t n, st_bool *dst, st_bool *a, st_bool *b)
+simd_mul_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 {
     while (n--) {
         *dst++ = (*a++) && (*b++);
@@ -534,19 +534,19 @@ __data_mul(const __st_data *dst, const __st_data *a, const __st_data *b)
 
     switch (dst->dtype) {
         case st_dtype_d64:
-            simd_mul_d(dst->size, dst->head, a->head, b->head);
+            simd_mul_d64(dst->size, dst->head, a->head, b->head);
             return;
 
         case st_dtype_i32:
-            simd_mul_i(dst->size, dst->head, a->head, b->head);
+            simd_mul_i32(dst->size, dst->head, a->head, b->head);
             return;
 
         case st_dtype_u8:
-            simd_mul_p(dst->size, dst->head, a->head, b->head);
+            simd_mul_u8(dst->size, dst->head, a->head, b->head);
             return;
 
         case st_dtype_bool:
-            simd_mul_b(dst->size, dst->head, a->head, b->head);
+            simd_mul_bool(dst->size, dst->head, a->head, b->head);
             return;
 
         default:
@@ -582,14 +582,14 @@ st_mat_mul(st_matrix *a, st_matrix *b)
  */
 
 static void
-__simd_add_d(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
+__simd_add_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 {
     cblas_dcopy(n, a, 1, dst, 1);
     cblas_daxpy(n, 1, b, 1, dst, 1);
 }
 
 static void
-__simd_add_i(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
+__simd_add_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -615,7 +615,7 @@ __simd_add_i(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 }
 
 static void
-__simd_add_p(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
+__simd_add_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -641,7 +641,7 @@ __simd_add_p(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 }
 
 static void
-__simd_add_b(size_t n, st_bool *dst, st_bool *a, st_bool *b)
+__simd_add_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 {
     __m128i *pa = (__m128i *) a;
     __m128i *pb = (__m128i *) b;
@@ -676,19 +676,19 @@ __data_add(const __st_data *dst, const __st_data *a, const __st_data *b)
 
     switch (dst->dtype) {
         case st_dtype_d64:
-            __simd_add_d(dst->size, dst->head, a->head, b->head);
+            __simd_add_d64(dst->size, dst->head, a->head, b->head);
             return;
 
         case st_dtype_i32:
-            __simd_add_i(dst->size, dst->head, a->head, b->head);
+            __simd_add_i32(dst->size, dst->head, a->head, b->head);
             return;
 
         case st_dtype_u8:
-            __simd_add_p(dst->size, dst->head, a->head, b->head);
+            __simd_add_u8(dst->size, dst->head, a->head, b->head);
             return;
 
         case st_dtype_bool:
-            __simd_add_b(dst->size, dst->head, a->head, b->head);
+            __simd_add_bool(dst->size, dst->head, a->head, b->head);
             return;
 
         default:
