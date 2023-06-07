@@ -25,7 +25,6 @@ dataset.a: simat.a
 	$(cc) $(flag) -I$(i) -I$(st) -I$(st)/basic -c $(ds)/st_dataset.c -o $(lib)/dataset/st_dataset.o
 	$(ar) rcs $(lib)/libds.a $(lib)/dataset/st_dataset.o \
 
-
 simat.a:
 	mkdir -p $(lib)/simat
 	$(cc) $(flag) -c $(st)/basic/st_ds.c -o $(lib)/simat/st_ds.o

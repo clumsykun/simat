@@ -2,6 +2,7 @@
 #define CORE_BASIC_H
 
 #include <math.h>
+#include "st_copy.h"
 #include "st_vector.h"
 #include "st_matrix.h"
 #include "st_view.h"
