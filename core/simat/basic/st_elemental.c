@@ -1,7 +1,7 @@
 #include <math.h>
 #include <immintrin.h>
 #include "st_elemental.h"
-#include "cblas.h"
+#include "st_blas.h"
 
 /* =================================================================================================
  * call elemental function
