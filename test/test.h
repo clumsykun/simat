@@ -8,6 +8,7 @@
 #include <math.h>
 #include <time.h>
 #include "simat.h"
+#include "simat_dataset.h"
 
 typedef struct __result
 {

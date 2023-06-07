@@ -1,4 +1,5 @@
 .vscode/*
-core/Lib/*
+core/lib/simat/*.o
+core/lib/dataset/*.o
 core/lib/*.o
 core/lib/*.a

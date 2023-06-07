@@ -1,8 +1,7 @@
 #ifndef CORE_DTYPES_H
 #define CORE_DTYPES_H
 
-#include <string.h>
-#include "watcher.h"
+#include "st_watcher.h"
 
 typedef enum __st_dtype__ {
     st_dtype_bool = 1,

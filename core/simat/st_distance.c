@@ -1,5 +1,5 @@
 #include <math.h>
-#include "distance.h"
+#include "st_distance.h"
 
 double
 st_dist_euclid(st_vector *a, st_vector *b)

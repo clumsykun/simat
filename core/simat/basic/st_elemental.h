@@ -1,8 +1,8 @@
 #ifndef CORE_ELEMENTAL_H
 #define CORE_ELEMENTAL_H
 
-#include "dtypes.h"
-#include "copy.h"
+#include "st_dtypes.h"
+#include "st_copy.h"
 
 /* =================================================================================================
  * elemental function

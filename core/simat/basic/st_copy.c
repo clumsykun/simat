@@ -1,6 +1,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
-#include "copy.h"
+#include <string.h>
+#include <stdio.h>
+#include "st_copy.h"
 
 
 void

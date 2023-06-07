@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "stats.h"
+#include "st_stats.h"
 
 static void
 check_vec_length(st_vector *a, st_vector *b)

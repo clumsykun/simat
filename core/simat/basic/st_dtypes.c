@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "dtypes.h"
+#include "st_dtypes.h"
 
 #define __st_temp_str(is_temp) \
     ((is_temp) == true ? "TEMP" : "    ")

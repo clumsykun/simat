@@ -1,6 +1,6 @@
 #include <math.h>
 #include <immintrin.h>
-#include "elemental.h"
+#include "st_elemental.h"
 #include "cblas.h"
 
 /* =================================================================================================

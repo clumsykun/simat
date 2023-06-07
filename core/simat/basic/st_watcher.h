@@ -1,11 +1,7 @@
 #ifndef CORE_WATCHER_H
 #define CORE_WATCHER_H
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <stdio.h>
-#include "ds.h"
+#include "st_ds.h"
 
 extern bool __st_is_debug;
 extern bool __st_is_error;

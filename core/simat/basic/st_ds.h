@@ -1,6 +1,7 @@
 #ifndef CORE_DS_H
 #define CORE_DS_H
 
+#include <stdlib.h>
 #include <stdbool.h>
 
 #define st_abs(x) ((x) >= 0 ? (x) : -(x))

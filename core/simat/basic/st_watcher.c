@@ -1,4 +1,6 @@
-#include "watcher.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include "st_watcher.h"
 
 bool __st_is_debug = false;
 bool __st_is_error = false;

@@ -2,10 +2,9 @@
 #define CORE_BASIC_H
 
 #include <math.h>
-#include "vector.h"
-#include "matrix.h"
-#include "view.h"
-#include "dataset.h"
+#include "st_vector.h"
+#include "st_matrix.h"
+#include "st_view.h"
 
 double st_precise(double x, size_t ndigits);
 

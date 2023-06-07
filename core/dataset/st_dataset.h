@@ -1,7 +1,7 @@
 #ifndef CORE_DATASET_H
 #define CORE_DATASET_H
 
-#include "dtypes.h"
+#include "simat.h"
 
 typedef struct __st_dataset
 {

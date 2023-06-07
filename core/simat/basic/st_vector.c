@@ -3,8 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include "vector.h"
-#include "cblas.h"
+#include "st_vector.h"
 
 /* scale the vector to make sure that its max value and min value match `max` and `min`. */
 void
