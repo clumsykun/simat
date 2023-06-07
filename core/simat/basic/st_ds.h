@@ -6,7 +6,7 @@
 
 typedef enum __st_dtype__ {
     st_dtype_bool = 1,
-    st_dtype_u8,         /* 8-bit unsigned st_i32 */
+    st_dtype_u8,         /* 8-bit unsigned char */
     st_dtype_i32,        /* 32-bit st_i32 */
     st_dtype_d64,        /* 64-bit decimal */
 } st_dtype;

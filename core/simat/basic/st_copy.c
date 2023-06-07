@@ -2,23 +2,54 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <immintrin.h>
 #include "st_copy.h"
 
 
-void
-__double_copy(void *dst, st_d64 *src, size_t n, st_dtype dtype)
+static void 
+__copy_d64(st_d64 *dst, st_d64 *src, size_t n)
+{
+    __m128d *ps = (__m128d *) src;
+    __m128d *pd = (__m128d *) dst;
+
+    /* pair of d64 in one loop */
+    while (n >= 2) {
+
+        __m128d tmp = _mm_loadu_pd((st_d64 *)ps++);
+        _mm_storeu_pd((st_d64 *)pd++, tmp);
+
+        n -= 2;
+    }
+
+    src = (st_d64 *)ps;
+    dst = (st_d64 *)pd;
+
+    while (n--)
+        *dst++ = *src++;
+}
+
+static void
+__cast_d64(void *dst, st_d64 *src, size_t n, st_dtype dtype)
 {
     switch (dtype) {
 
         case st_dtype_d64: {
-            memcpy(dst, src, n*sizeof(st_d64));
+            __copy_d64(dst, src, n*sizeof(st_d64));
+            break;
+        }
+
+        case st_dtype_i32: {
+            st_i32 *head = dst;
+            while (n--)
+                *head++ = (st_i32)(*src++);
+
             break;
         }
 
         case st_dtype_u8: {
-            unsigned st_i32 *head = dst;
+            st_u8 *head = dst;
             while (n--)
-                *head++ = (unsigned st_i32)(*src++);
+                *head++ = (st_u8)(*src++);
 
             break;
         }
