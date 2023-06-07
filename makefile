@@ -1,31 +1,33 @@
-workspace := /home/dev/simat
-lib       := $(workspace)/core/lib
-i         := $(workspace)/core/include
-ib        := $(workspace)/core/include/open_blas
-st        := $(workspace)/core/simat
-ds        := $(workspace)/core/dataset
-test      := $(workspace)/test
-blas      := /opt/OpenBLAS/lib/libopenblas.a
+workspace   := /home/dev/simat
+lib         := $(workspace)/core/lib
+i           := $(workspace)/core/include
+ib          := $(workspace)/core/include/open_blas
+st          := $(workspace)/core/simat
+ds          := $(workspace)/core/dataset
+test        := $(workspace)/test
+OpenBLAS    := /opt/OpenBLAS/lib/libopenblas.a
 
-cc	      := gcc
-ar        := ar
-flag      := -std=c99 -lpthread
+cc	        := gcc
+ar          := ar
+flag        := -std=c99 -lpthread
 
 
-test_simat.o: simat.a dataset.a
+test_simat.o:
 	$(cc) -I$(i) -I$(ds) -I$(st) -I$(st)/basic -I$(test) \
 								$(test)/test_vector.c \
 								$(test)/test_matrix.c \
 								$(test)/test_stats.c \
 								$(test)/test_distance.c \
-								$(test)/test_simat.c -L$(lib) -lsimat -lds -lm $(blas) $(flag) -o $(lib)/test_simat.o
+								$(test)/test_simat.c -L$(lib) -lsimatall -lm $(flag) -o $(lib)/test_simat.o
 
-dataset.a: simat.a
+simatall: simat dataset
+	$(ar) rcs $(lib)/libsimatall.a $(lib)/simat/*.o $(lib)/OpenBLAS/*.o $(lib)/dataset/*.o
+
+dataset: simat
 	mkdir -p $(lib)/dataset
 	$(cc) $(flag) -I$(i) -I$(st) -I$(st)/basic -c $(ds)/st_dataset.c -o $(lib)/dataset/st_dataset.o
-	$(ar) rcs $(lib)/libds.a $(lib)/dataset/st_dataset.o \
 
-simat.a:
+simat: OpenBLAS
 	mkdir -p $(lib)/simat
 	$(cc) $(flag) -c $(st)/basic/st_ds.c -o $(lib)/simat/st_ds.o
 	$(cc) $(flag) -c $(st)/basic/st_watcher.c -o $(lib)/simat/st_watcher.o
@@ -39,21 +41,16 @@ simat.a:
 	$(cc) $(flag) -c $(st)/st_distance.c -o $(lib)/simat/st_distance.o
 	$(cc) $(flag) -c $(st)/st_stats.c -o $(lib)/simat/st_stats.o
 
-	$(ar) rcs $(lib)/libsimat.a $(lib)/simat/st_ds.o \
-								$(lib)/simat/st_watcher.o \
-								$(lib)/simat/st_dtypes.o \
-								$(lib)/simat/st_copy.o \
-								$(lib)/simat/st_elemental.o \
-								$(lib)/simat/st_vector.o \
-								$(lib)/simat/st_matrix.o \
-								$(lib)/simat/st_view.o \
-								$(lib)/simat/st_basic.o \
-								$(lib)/simat/st_distance.o \
-								$(lib)/simat/st_stats.o
+	$(ar) rcs $(lib)/libsimat.a $(lib)/simat/*.o $(lib)/OpenBLAS/*.o
+
+
+OpenBLAS:
+	mkdir -p $(lib)/OpenBLAS
+	ar -x $(OpenBLAS) --output /home/dev/simat/core/lib/OpenBLAS
 
 
 .PHONY: clean
 
 
 clean:
-	rm -fr $(lib)/*
+	rm -rf $(lib)/*
