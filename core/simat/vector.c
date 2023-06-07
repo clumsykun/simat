@@ -6,31 +6,6 @@
 #include "vector.h"
 #include "cblas.h"
 
-st_vector *
-st_vec_copy_cast(st_vector *vec, __st_dtype dtype)
-{
-    __st_check_valid(vec);
-    if (!__st_is_debug && vec->dtype > dtype) {
-
-        if (dtype == st_pixel)
-            printf("Warning: conversion may lose significant digits, "
-                   "value will be trimmed to pixel of range [0,255].\n");
-        else
-            printf("Warning: conversion may lose significant digits.\n");
-    }
-
-    st_vector *copy = __st_new_vector(dtype, vec->len);
-    size_t i;
-    void *e_vec, *e_cp;
-    double value;
-
-    for __st_iter_vector2(i, e_vec, e_cp, vec, copy) {
-        value = __st_access_p(e_vec, vec->dtype);
-        __st_assign_p(e_cp, value, copy->dtype);
-    }
-    return copy;
-}
-
 /* scale the vector to make sure that its max value and min value match `max` and `min`. */
 void
 st_vec_scale(st_vector *vec, double min, double max)

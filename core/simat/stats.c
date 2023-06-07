@@ -54,7 +54,7 @@ st_vec_normalize(st_vector *vec)
 
     for (size_t i = 0; i < vec->len; i++) {
         scaled = (st_vec_access(vec, i) - mean) / std;
-        __st_vec_assign(vec, i, scaled);
+        st_vec_assign(vec, i, scaled);
     }
 }
 

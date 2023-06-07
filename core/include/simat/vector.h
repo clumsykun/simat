@@ -2,7 +2,6 @@
 #define CORE_VECTOR_H
 #include "elemental.h"
 
-st_vector *st_vec_copy_cast(st_vector *vec, __st_dtype dtype);
 void       st_vec_scale(st_vector *vec, double min, double max);
 void       st_vec_sub_scalar(st_vector *vec, double value);
 void       st_vec_mul_scalar(st_vector *vec, double value);

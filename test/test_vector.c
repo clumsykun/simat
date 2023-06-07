@@ -43,7 +43,7 @@ test_i_vec_1(void)
 {
     st_vector *vec = st_new_int_vector(1000);
     for (size_t i = 0; i < 1000; i++) {
-        __st_vec_assign(vec, i, i);
+        st_vec_assign(vec, i, i);
     }
 
     return vec;
@@ -54,7 +54,7 @@ test_c_vec_1(void)
 {
     st_vector *vec = st_new_pixel_vector(1000);
     for (size_t i = 0; i < 1000; i++) {
-        __st_vec_assign(vec, i, i%256);
+        st_vec_assign(vec, i, i%256);
     }
 
     return vec;
@@ -65,7 +65,7 @@ test_b_vec_1(void)
 {
     st_vector *vec = st_new_bool_vector(1000);
     for (size_t i = 0; i < 1000; i++) {
-        __st_vec_assign(vec, i, i%2);
+        st_vec_assign(vec, i, i%2);
     }
 
     return vec;

@@ -107,7 +107,7 @@ st_vec_rand(const st_vector *vec)
 
     for (size_t i = 0; i < vec->len; i++) {
         value = __scale_value(__rand(min, max), vec->dtype);
-        __st_vec_assign(vec, i, value);
+        st_vec_assign(vec, i, value);
     }
 }
 

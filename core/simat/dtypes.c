@@ -302,10 +302,53 @@ __st_data_access(const __st_data *data, size_t idx)
     }
 }
 
+static void
+__st_data_assign(const __st_data *data, size_t idx, double value)
+{
+    if (idx < 0 || data->size <= idx)
+        __st_raise_out_range_error();
+
+    switch (data->dtype) {
+
+        case st_bool: {
+            bool *e = __st_data_find_p(data, idx);
+            *e = (bool) value;
+            return;
+        }
+
+        case st_pixel: {
+            unsigned char *e = __st_data_find_p(data, idx);
+            *e = (unsigned char) value;
+            return;
+        }
+
+        case st_int: {
+            int *e = __st_data_find_p(data, idx);
+            *e = (int) value;
+            return;
+        }
+
+        case st_double: {
+            double *e = __st_data_find_p(data, idx);
+            *e = (double) value;
+            return;
+        }
+
+        default:
+            __st_raise_dtype_error();
+    }
+}
+
 double
 st_vec_access(const st_vector *vec, size_t idx)
 {
     __st_data_access(vec->data, idx);
+}
+
+void
+st_vec_assign(const st_vector *vec, size_t idx, double value)
+{
+    __st_data_assign(vec->data, idx, value);
 }
 
 st_vector *
@@ -317,7 +360,29 @@ st_vec_copy(st_vector *vec)
         vec->data->head,
         vec->data->nbyte * vec->data->size);
 
-    copy->temp = vec->temp;
+    return copy;
+}
+
+st_vector *
+st_vec_copy_cast(st_vector *vec, __st_dtype dtype)
+{
+    __st_check_valid(vec);
+
+    if (vec->dtype == dtype)
+        return st_vec_copy(vec);
+
+    if (!__st_is_debug && vec->dtype > dtype)
+        printf("Warning: conversion may lose significant digits.\n");
+
+    st_vector *copy = __st_new_vector(dtype, vec->len);
+    size_t i;
+    void *e_vec, *e_cp;
+    double value;
+
+    for __st_iter_vector2(i, e_vec, e_cp, vec, copy) {
+        value = __st_access_p(e_vec, vec->dtype);
+        __st_assign_p(e_cp, value, copy->dtype);
+    }
     return copy;
 }
 

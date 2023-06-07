@@ -137,13 +137,6 @@ typedef struct __st_view
 #define __st_mat_access_row(mat, irow) \
     ((st_vector *)(mat)->first+(irow))
 
-#define __st_vec_assign(vec, idx, value)                    \
-    (((idx) < 0 || (vec)->len <= (idx))                   \
-        ? __st_raise_out_range_error()                    \
-        : (__st_assign_p(__st_vec_find_p((vec), (idx)),   \
-                             (value),                     \
-                             (vec)->dtype)))
-
 #define __st_mat_assign(mat, irow, icol, value)    \
     (((irow) < 0 || (mat)->nrow <= (irow))       \
         ? __st_raise_out_range_error()           \
@@ -186,13 +179,17 @@ void st_vector_view(st_view *view, st_vector *vec);
 
 double __st_data_access(const __st_data *data, size_t idx);
 double st_vec_access(const st_vector *vec, size_t idx);
+void   st_vec_assign(const st_vector *vec, size_t idx, double value);
 
 void st_vec_display(const st_vector *vec);
 void st_vec_assign_all(st_vector *vec, double value);
-st_vector *st_vec_copy(st_vector *vec);
 void st_mat_display(st_matrix *mat);
 void st_mat_assign_all(st_matrix *mat, double value);
 void st_view_display(const st_view *view);
+
+st_vector *st_vec_copy(st_vector *vec);
+st_vector *st_vec_copy_cast(st_vector *vec, __st_dtype dtype);
+
 
 /* =================================================================================================
  * check.
