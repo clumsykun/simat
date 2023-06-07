@@ -11,10 +11,11 @@ typedef enum __st_dtype__ {
     st_dtype_d64,        /* 64-bit decimal */
 } st_dtype;
 
-#define st_bool bool
-#define st_u8   unsigned char
-#define st_i32  int
-#define st_d64  double
+#define st_bool    bool
+#define st_u8      unsigned char
+#define st_i32     int
+#define st_d64     double
+#define st_decimal st_d64
 
 #define st_byte_bool 1
 #define st_byte_u8   1
