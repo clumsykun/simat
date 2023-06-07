@@ -173,7 +173,6 @@ __st_new_vector(st_dtype dtype, size_t len)
     };
 
     st_vector _vec = {
-        st_sha_vector,
         true,
         dtype,
         data, /* data */
@@ -368,7 +367,6 @@ __new_row(void *row, void *row_data_head, st_dtype dtype, size_t len)
         len,
     };
     st_vector _vec = {
-        st_sha_vector,
         false,  /* this options here doesn't work because
                    this vector is not constructed by __st_new_vector */
         dtype,
@@ -413,7 +411,6 @@ __st_new_matrix(st_dtype dtype, size_t nrow, size_t ncol)
     }
 
     st_matrix _mat = {
-        st_sha_matrix,
         true,
         dtype,
         data,
@@ -568,7 +565,6 @@ st_new_view()
 {
     st_view *view = malloc(sizeof(st_view));
     st_view _view = {
-        st_sha_view,
         true,
         0,    /* default dtype */
         NULL, /* initialize it to NULL so that realloc() will work properly */

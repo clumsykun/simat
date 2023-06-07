@@ -4,15 +4,17 @@
 #include <string.h>
 #include "watcher.h"
 
-/**
- * @__st_pixel: unsigned char
- */
 typedef enum __st_dtype__ {
     st_dtype_bool = 1,
-    st_dtype_u8,
-    st_dtype_i32,
-    st_dtype_d64,
+    st_dtype_u8,         /* 8-bit unsigned int */
+    st_dtype_i32,        /* 32-bit int */
+    st_dtype_d64,        /* 64-bit decimal */
 } st_dtype;
+
+#define st_bool bool
+#define st_u8   unsigned char
+#define st_i32  in8
+#define st_d64  double
 
 /**
  * @head: ptr of first element of the data
@@ -31,7 +33,6 @@ typedef struct __st_data__
 
 typedef struct __st_vector
 {
-    char sha[64];
     bool temp;
     const st_dtype dtype;
     __st_data *const data;
@@ -46,7 +47,6 @@ typedef struct __st_vector
  */
 typedef struct __st_matrix
 {
-    char sha[64];
     bool temp;
     const st_dtype dtype;
     const __st_data *data;
@@ -58,7 +58,6 @@ typedef struct __st_matrix
 /* flexible structure contains ptr of element of target vector/matrix */
 typedef struct __st_view
 {
-    char sha[64];
     bool temp;
     st_dtype dtype;
     void **head;
