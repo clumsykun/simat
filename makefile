@@ -36,7 +36,7 @@ simat.a:
 	$(cc) $(flag) -c $(st)/basic/st_vector.c -o $(lib)/simat/st_vector.o
 	$(cc) $(flag) -c $(st)/basic/st_matrix.c -o $(lib)/simat/st_matrix.o
 	$(cc) $(flag) -c $(st)/basic/st_view.c -o $(lib)/simat/st_view.o
-	$(cc) $(flag) -c $(st)/basic/st_tools.c -o $(lib)/simat/st_tools.o
+	$(cc) $(flag) -c $(st)/basic/st_basic.c -o $(lib)/simat/st_basic.o
 	$(cc) $(flag) -c $(st)/st_distance.c -o $(lib)/simat/st_distance.o
 	$(cc) $(flag) -c $(st)/st_stats.c -o $(lib)/simat/st_stats.o
 
@@ -48,7 +48,7 @@ simat.a:
 								$(lib)/simat/st_vector.o \
 								$(lib)/simat/st_matrix.o \
 								$(lib)/simat/st_view.o \
-								$(lib)/simat/st_tools.o \
+								$(lib)/simat/st_basic.o \
 								$(lib)/simat/st_distance.o \
 								$(lib)/simat/st_stats.o
 

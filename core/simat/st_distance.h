@@ -1,7 +1,7 @@
 #ifndef CORE_DISTANCE_H
 #define CORE_DISTANCE_H
 
-#include "basic/st_tools.h"
+#include "basic/st_basic.h"
 
 typedef double (*dist_fp)(st_vector *,  st_vector *);
 

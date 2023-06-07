@@ -1,6 +1,6 @@
 #ifndef CORE_STATS_H
 #define CORE_STATS_H
-#include "basic/st_tools.h"
+#include "basic/st_basic.h"
 
 double st_vec_mean(st_vector *vec);
 double st_vec_var(st_vector *vec, size_t freedom);
