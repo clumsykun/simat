@@ -441,10 +441,10 @@ simd_mul_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
     /* 2 * (8*8) = 128 */
     while (n >= 2) {
 
-        st_simd_d128 __a = _mm_loadu_pd((st_d64 *)pa++);
-        st_simd_d128 __b = _mm_loadu_pd((st_d64 *)pb++);
-        __b = _mm_mul_pd(__a, __b);
-        _mm_storeu_pd((st_d64 *)pd++, __b);
+        st_simd_d128 __a = st_access_d128((st_d64 *)pa++);
+        st_simd_d128 __b = st_access_d128((st_d64 *)pb++);
+        __b = st_simd_mul_d128(__a, __b);
+        st_assign_d128((st_d64 *)pd++, __b);
 
         n -= 2;
     }
@@ -467,8 +467,8 @@ simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
     /* 4 * (4*8) = 128 */
     while (n >= 4) {
 
-        st_simd_i128 __a = _mm_loadu_si128(pa++);
-        st_simd_i128 __b = _mm_loadu_si128(pb++);
+        st_simd_i128 __a = st_access_i128(pa++);
+        st_simd_i128 __b = st_access_i128(pb++);
         st_simd_i128 __even = _mm_mul_epu32(__a, __b);
         st_simd_i128 __odd = _mm_mul_epu32(_mm_srli_epi64(__a, 32), _mm_srli_epi64(__b, 32));
         st_simd_i128 __low = _mm_unpacklo_epi32(__even, __odd);
@@ -497,8 +497,8 @@ simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
     /* 16 * (1*8) = 128 */
     while (n >= 16) {
 
-        st_simd_i128 __a = _mm_loadu_si128(pa++);
-        st_simd_i128 __b = _mm_loadu_si128(pb++);
+        st_simd_i128 __a = st_access_i128(pa++);
+        st_simd_i128 __b = st_access_i128(pb++);
 
         const st_simd_i128 mask = _mm_set1_epi32(0xFF00FF00);
         st_simd_i128 __even = _mm_mullo_epi16(__a, __b);
@@ -599,8 +599,8 @@ __simd_add_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
     /* 4 * (4*8) = 128 */
     while (n >= 4) {
 
-        st_simd_i128 __a = _mm_loadu_si128(pa++);
-        st_simd_i128 __b = _mm_loadu_si128(pb++);
+        st_simd_i128 __a = st_access_i128(pa++);
+        st_simd_i128 __b = st_access_i128(pb++);
         __b = _mm_add_epi32(__a, __b);
         _mm_storeu_si128(pd++, __b);
 
@@ -625,8 +625,8 @@ __simd_add_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
     /* 16 * (1*8) = 128 */
     while (n >= 16) {
 
-        st_simd_i128 __a = _mm_loadu_si128(pa++);
-        st_simd_i128 __b = _mm_loadu_si128(pb++);
+        st_simd_i128 __a = st_access_i128(pa++);
+        st_simd_i128 __b = st_access_i128(pb++);
         __b = _mm_add_epi8(__a, __b);
         _mm_storeu_si128(pd++, __b);
 
@@ -651,8 +651,8 @@ __simd_add_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
     /* 16 * (1*8) = 128 */
     while (n >= 16) {
 
-        st_simd_i128 __a = _mm_loadu_si128(pa++);
-        st_simd_i128 __b = _mm_loadu_si128(pb++);
+        st_simd_i128 __a = st_access_i128(pa++);
+        st_simd_i128 __b = st_access_i128(pb++);
         __b = _mm_or_si128(__a, __b);
         _mm_storeu_si128(pd++, __b);
 

@@ -1,3 +1,4 @@
+#include "st_a_simd.h"
 #include "st_c_struct.h"
 
 

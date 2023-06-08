@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <immintrin.h>
 #include "st_c_copy.h"
-#include "st_a_simd.h"
 
 
 static void 
@@ -16,8 +15,8 @@ __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
     /* pair of d64 in one loop */
     while (n >= 2) {
 
-        st_simd_d128 tmp = _mm_loadu_pd((st_d64 *)ps++);
-        _mm_storeu_pd((st_d64 *)pd++, tmp);
+        st_simd_d128 tmp = st_access_d128((st_d64 *)ps++);
+        st_assign_d128((st_d64 *)pd++, tmp);
 
         n -= 2;
     }
