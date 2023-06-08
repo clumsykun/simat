@@ -17,6 +17,10 @@ typedef enum __st_dtype__ {
 #define st_d64     double
 #define st_decimal st_d64
 
+#define st_simd_128  __m128
+#define st_simd_i128 __m128i
+#define st_simd_d128 __m128d
+
 #define st_byte_bool 1
 #define st_byte_u8   1
 #define st_byte_i32  4

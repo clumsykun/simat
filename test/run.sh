@@ -1,4 +1,4 @@
 # ----- test vector ----- #
-make test_simat.o
+make test_simatall
 echo ""
 ./core/lib/test_simat.o
