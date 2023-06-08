@@ -1,7 +1,7 @@
 #ifndef CORE_ELEMENTAL_H
 #define CORE_ELEMENTAL_H
 
-#include "st_dtypes.h"
+#include "st_struct.h"
 #include "st_copy.h"
 
 /* =================================================================================================

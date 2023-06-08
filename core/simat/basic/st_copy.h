@@ -1,4 +1,4 @@
-#include "st_dtypes.h"
+#include "st_struct.h"
 
 
 st_vector *st_vec_copy(st_vector *vec);

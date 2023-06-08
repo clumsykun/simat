@@ -2,6 +2,7 @@
 #include <immintrin.h>
 #include "st_elemental.h"
 #include "st_blas.h"
+#include "st_simd.h"
 
 /* =================================================================================================
  * call elemental function

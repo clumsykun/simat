@@ -37,7 +37,7 @@ cc_simat:
 	mkdir -p $(lib)/simat
 	$(cc) $(flag) -c $(st)/basic/st_ds.c -o $(lib)/simat/st_ds.o
 	$(cc) $(flag) -c $(st)/basic/st_watcher.c -o $(lib)/simat/st_watcher.o
-	$(cc) $(flag) -c $(st)/basic/st_dtypes.c -o $(lib)/simat/st_dtypes.o
+	$(cc) $(flag) -c $(st)/basic/st_struct.c -o $(lib)/simat/st_struct.o
 	$(cc) $(flag) -c $(st)/basic/st_copy.c -o $(lib)/simat/st_copy.o
 	$(cc) $(flag) -I$(ib) -c $(st)/basic/st_elemental.c -o $(lib)/simat/st_elemental.o
 	$(cc) $(flag) -c $(st)/basic/st_vector.c -o $(lib)/simat/st_vector.o

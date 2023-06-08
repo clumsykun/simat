@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <immintrin.h>
 #include "st_copy.h"
+#include "st_simd.h"
 
 
 static void 
