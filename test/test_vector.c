@@ -148,6 +148,23 @@ test__st_vec_equal(result *rp)
 }
 
 result *
+test__st_vec_copy(result *rp)
+{
+    rp->name = "st_vec_copy";
+
+    st_vector *vec1 = test_d_vec_1();
+    st_vector *vec2 = test_d_vec_2();
+
+    st_vector *cp_vec1 = st_vec_copy(vec1);
+    st_vector *cp_vec2 = st_vec_copy(vec2);
+
+    rp->value += !st_vec_equal(vec1, cp_vec1);
+    rp->value += !st_vec_equal(vec2, cp_vec2);
+
+    return rp;
+}
+
+result *
 test__st_vec_add(result *rp)
 {
     rp->name = "st_vec_add";
@@ -296,8 +313,8 @@ test__vector()
 {
     printf("unit test of vector start:\n");
     st_vector *vec = test_d_vec_1();
-
     call_test(test__st_vec_equal);
+    call_test(test__st_vec_copy);
     call_test(test__st_vec_norm);
     call_test(test__st_vec_min);
     call_test(test__st_vec_max);

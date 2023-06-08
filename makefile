@@ -9,7 +9,7 @@ OpenBLAS    := /opt/OpenBLAS/lib/libopenblas.a
 
 cc	        := gcc
 ar          := ar
-flag        := -std=c99 -lpthread
+flag        := -std=c99 -pthread
 
 
 test_simatall: cc_simat cc_dataset
@@ -19,9 +19,9 @@ test_simatall: cc_simat cc_dataset
 								$(test)/test_matrix.c \
 								$(test)/test_stats.c \
 								$(test)/test_distance.c \
-								$(test)/test_simat.c \
-								-L$(lib) $(OpenBLAS) -lsimatall -lm $(flag) \
-								-o $(lib)/test_simat.o
+								$(test)/test.c \
+								-L$(lib) -lsimatall -lm $(flag) $(OpenBLAS) \
+								-o $(lib)/test_simatall.o
 
 simatall: unpack_OpenBLAS cc_simat cc_dataset
 	$(ar) rcs $(lib)/libsimatall.a $(lib)/OpenBLAS/*.o $(lib)/simat/*.o $(lib)/dataset/*.o
