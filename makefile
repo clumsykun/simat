@@ -12,22 +12,28 @@ ar          := ar
 flag        := -std=c99 -lpthread
 
 
-test_simat.o:
+test_simatall: cc_simat cc_dataset
+	$(ar) rcs $(lib)/libsimatall.a $(lib)/simat/*.o $(lib)/dataset/*.o
 	$(cc) -I$(i) -I$(ds) -I$(st) -I$(st)/basic -I$(test) \
 								$(test)/test_vector.c \
 								$(test)/test_matrix.c \
 								$(test)/test_stats.c \
 								$(test)/test_distance.c \
-								$(test)/test_simat.c -L$(lib) -lsimatall -lm $(flag) -o $(lib)/test_simat.o
+								$(test)/test_simat.c \
+								-L$(lib) $(OpenBLAS) -lsimatall -lm $(flag) \
+								-o $(lib)/test_simat.o
 
-simatall: simat dataset
-	$(ar) rcs $(lib)/libsimatall.a $(lib)/simat/*.o $(lib)/OpenBLAS/*.o $(lib)/dataset/*.o
+simatall: unpack_OpenBLAS cc_simat cc_dataset
+	$(ar) rcs $(lib)/libsimatall.a $(lib)/OpenBLAS/*.o $(lib)/simat/*.o $(lib)/dataset/*.o
 
-dataset: simat
+simat: cc_simat unpack_OpenBLAS
+	$(ar) rcs $(lib)/libsimat.a $(lib)/OpenBLAS/*.o $(lib)/simat/*.o
+
+cc_dataset:
 	mkdir -p $(lib)/dataset
 	$(cc) $(flag) -I$(i) -I$(st) -I$(st)/basic -c $(ds)/st_dataset.c -o $(lib)/dataset/st_dataset.o
 
-simat: OpenBLAS
+cc_simat:
 	mkdir -p $(lib)/simat
 	$(cc) $(flag) -c $(st)/basic/st_ds.c -o $(lib)/simat/st_ds.o
 	$(cc) $(flag) -c $(st)/basic/st_watcher.c -o $(lib)/simat/st_watcher.o
@@ -41,10 +47,7 @@ simat: OpenBLAS
 	$(cc) $(flag) -c $(st)/st_distance.c -o $(lib)/simat/st_distance.o
 	$(cc) $(flag) -c $(st)/st_stats.c -o $(lib)/simat/st_stats.o
 
-	$(ar) rcs $(lib)/libsimat.a $(lib)/simat/*.o $(lib)/OpenBLAS/*.o
-
-
-OpenBLAS:
+unpack_OpenBLAS:
 	mkdir -p $(lib)/OpenBLAS
 	ar -x $(OpenBLAS) --output /home/dev/simat/core/lib/OpenBLAS
 
