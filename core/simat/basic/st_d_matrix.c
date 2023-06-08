@@ -1,5 +1,5 @@
 #include <string.h>
-#include "st_matrix.h"
+#include "st_d_matrix.h"
 
 static st_matrix *
 __mat_dot_double(st_matrix *a, st_matrix *b)

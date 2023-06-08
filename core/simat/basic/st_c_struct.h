@@ -1,7 +1,7 @@
 #ifndef CORE_struct_H
 #define CORE_struct_H
 
-#include "st_watcher.h"
+#include "st_b_watcher.h"
 
 /**
  * @head: ptr of first element of the data

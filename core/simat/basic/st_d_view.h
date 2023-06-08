@@ -1,6 +1,6 @@
 #ifndef CORE_VIEW_H
 #define CORE_VIEW_H
-#include "st_elemental.h"
+#include "st_c_elemental.h"
 
 st_d64 st_view_max(st_view *view);
 st_d64 st_view_min(st_view *view);

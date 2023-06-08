@@ -1,6 +1,6 @@
 #ifndef CORE_VECTOR_H
 #define CORE_VECTOR_H
-#include "st_elemental.h"
+#include "st_c_elemental.h"
 
 void       st_vec_scale(st_vector *vec, st_d64 min, st_d64 max);
 void       st_vec_sub_scalar(st_vector *vec, st_d64 value);

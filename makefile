@@ -35,14 +35,14 @@ cc_dataset:
 
 cc_simat:
 	mkdir -p $(lib)/simat
-	$(cc) $(flag) -c $(st)/basic/st_ds.c -o $(lib)/simat/st_ds.o
-	$(cc) $(flag) -c $(st)/basic/st_watcher.c -o $(lib)/simat/st_watcher.o
-	$(cc) $(flag) -c $(st)/basic/st_struct.c -o $(lib)/simat/st_struct.o
-	$(cc) $(flag) -c $(st)/basic/st_copy.c -o $(lib)/simat/st_copy.o
-	$(cc) $(flag) -I$(ib) -c $(st)/basic/st_elemental.c -o $(lib)/simat/st_elemental.o
-	$(cc) $(flag) -c $(st)/basic/st_vector.c -o $(lib)/simat/st_vector.o
-	$(cc) $(flag) -c $(st)/basic/st_matrix.c -o $(lib)/simat/st_matrix.o
-	$(cc) $(flag) -c $(st)/basic/st_view.c -o $(lib)/simat/st_view.o
+	$(cc) $(flag) -c $(st)/basic/st_b_ds.c -o $(lib)/simat/st_b_ds.o
+	$(cc) $(flag) -c $(st)/basic/st_b_watcher.c -o $(lib)/simat/st_b_watcher.o
+	$(cc) $(flag) -c $(st)/basic/st_c_struct.c -o $(lib)/simat/st_c_struct.o
+	$(cc) $(flag) -c $(st)/basic/st_c_copy.c -o $(lib)/simat/st_c_copy.o
+	$(cc) $(flag) -I$(ib) -c $(st)/basic/st_c_elemental.c -o $(lib)/simat/st_c_elemental.o
+	$(cc) $(flag) -c $(st)/basic/st_d_vector.c -o $(lib)/simat/st_d_vector.o
+	$(cc) $(flag) -c $(st)/basic/st_d_matrix.c -o $(lib)/simat/st_d_matrix.o
+	$(cc) $(flag) -c $(st)/basic/st_d_view.c -o $(lib)/simat/st_d_view.o
 	$(cc) $(flag) -c $(st)/basic/st_basic.c -o $(lib)/simat/st_basic.o
 	$(cc) $(flag) -c $(st)/st_distance.c -o $(lib)/simat/st_distance.o
 	$(cc) $(flag) -c $(st)/st_stats.c -o $(lib)/simat/st_stats.o

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "st_ds.h"
+#include "st_b_ds.h"
 
 /**
  * this linked list implements the the data space.
@@ -24,7 +24,7 @@ struct __mb __ds_head = {
 };
 
 void
-__st_ds_add(void *target, free_fp ffp, status_fp sfp, st_bool *temp)
+__st_b_ds_add(void *target, free_fp ffp, status_fp sfp, st_bool *temp)
 {
     struct __mb *p = &__ds_head;
     struct __mb *new = (struct __mb *)malloc(sizeof(struct __mb));
@@ -82,14 +82,14 @@ __clear_ds(st_bool only_temp)
 
 /* clear all member of the data space */
 void
-st_ds_clear_all(void)
+st_b_ds_clear_all(void)
 {
     __clear_ds(false);
 }
 
 /* clear temporary member of the data space */
 void
-st_ds_clear_temp(void)
+st_b_ds_clear_temp(void)
 {
     __clear_ds(true);
 }
@@ -128,7 +128,7 @@ st_free(const void *target)
 }
 
 void
-st_ds_display(void)
+st_b_ds_display(void)
 {
     struct __mb *p = &__ds_head;
 

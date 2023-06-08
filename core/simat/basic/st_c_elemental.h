@@ -1,8 +1,8 @@
 #ifndef CORE_ELEMENTAL_H
 #define CORE_ELEMENTAL_H
 
-#include "st_struct.h"
-#include "st_copy.h"
+#include "st_c_struct.h"
+#include "st_c_copy.h"
 
 /* =================================================================================================
  * elemental function

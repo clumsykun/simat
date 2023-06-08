@@ -1,4 +1,4 @@
-#include "st_struct.h"
+#include "st_c_struct.h"
 
 
 st_vector *st_vec_copy(st_vector *vec);

@@ -1,11 +1,9 @@
 #ifndef CORE_BASIC_H
 #define CORE_BASIC_H
 
-#include <math.h>
-#include "st_copy.h"
-#include "st_vector.h"
-#include "st_matrix.h"
-#include "st_view.h"
+#include "st_d_matrix.h"
+#include "st_d_vector.h"
+#include "st_d_view.h"
 
 st_d64 st_precise(st_d64 x, size_t ndigits);
 

@@ -2,7 +2,7 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include "st_view.h"
+#include "st_d_view.h"
 
 
 static void

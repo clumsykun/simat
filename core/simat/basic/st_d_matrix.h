@@ -1,6 +1,6 @@
 #ifndef CORE_MATRIX_H
 #define CORE_MATRIX_H
-#include "st_elemental.h"
+#include "st_c_elemental.h"
 
 void   st_mat_scale(st_matrix *mat, st_d64 min, st_d64 max);
 

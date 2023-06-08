@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "st_struct.h"
+#include "st_c_struct.h"
 
 #define __st_temp_str(is_temp) \
     ((is_temp) == true ? "TEMP" : "    ")
@@ -174,7 +174,7 @@ __st_new_vector(st_dtype dtype, size_t len)
 
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(vec, &_vec, sizeof(st_vector));
-    __st_ds_add(vec, __free_vector, __status_vector, &vec->temp);
+    __st_b_ds_add(vec, __free_vector, __status_vector, &vec->temp);
     return vec;
 }
 
@@ -369,7 +369,7 @@ __new_row(void *row, void *row_data_head, st_dtype dtype, size_t len)
 
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(row, &_vec, sizeof(st_vector));
-    __st_ds_add(row, NULL, NULL, &((st_vector *)row)->temp);
+    __st_b_ds_add(row, NULL, NULL, &((st_vector *)row)->temp);
 }
 
 st_matrix *
@@ -413,7 +413,7 @@ __st_new_matrix(st_dtype dtype, size_t nrow, size_t ncol)
     };
     memcpy(data, &_data, sizeof(__st_data));
     memcpy(mat, &_mat, sizeof(st_matrix));
-    __st_ds_add(mat, __free_matrix, __status_matrix, &mat->temp);
+    __st_b_ds_add(mat, __free_matrix, __status_matrix, &mat->temp);
 
     return mat;
 }
@@ -569,7 +569,7 @@ st_new_view()
         &_view,
         sizeof(st_view)
     );
-    __st_ds_add(view, __free_view, __status_view, &view->temp);
+    __st_b_ds_add(view, __free_view, __status_view, &view->temp);
     return view;
 }
 
