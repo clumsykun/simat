@@ -46,6 +46,26 @@ __copy_i32(st_i32 *dst, st_i32 *src, size_t n)
         *dst++ = *src++;
 }
 
+static void 
+__copy_u8_bool(st_u8 *dst, st_u8 *src, size_t n)
+{
+    st_simd_i128 *ps = (st_simd_i128 *) src;
+    st_simd_i128 *pd = (st_simd_i128 *) dst;
+
+    size_t batches = n / 16;
+    size_t remainder = n % 16;
+
+    /* 16 of u8 in one loop */
+    while (batches--)
+        st_assign_i128(pd++, st_access_i128(ps++));
+
+    src = (st_u8 *)ps;
+    dst = (st_u8 *)pd;
+
+    while (remainder--)
+        *dst++ = *src++;
+}
+
 static void
 __cast_d64(void *dst, st_d64 *src, size_t n, st_dtype dtype)
 {
@@ -105,18 +125,27 @@ st_vec_copy(st_vector *vec)
     st_vector *copy = __st_new_vector(vec->dtype, vec->len);
     void *dst = copy->data->head;
     void *src = vec->data->head;
+    size_t n  = vec->len;
 
     switch (vec->dtype) {
         case st_dtype_d64:
-            __copy_d64(dst, src, vec->len);
+            __copy_d64(dst, src, n);
             break;
 
         case st_dtype_i32:
-            __copy_i32(dst, src, vec->len);
+            __copy_i32(dst, src, n);
+            break;
+
+        case st_dtype_u8:
+            __copy_u8_bool(dst, src, n);
+            break;
+
+        case st_dtype_bool:
+            __copy_u8_bool(dst, src, n);
             break;
 
         default:
-            memcpy(dst, src, vec->data->nbyte * vec->data->size);
+            __st_raise_dtype_error();
     }
 
     return copy;
