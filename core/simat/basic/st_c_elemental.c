@@ -443,7 +443,7 @@ simd_mul_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 
         st_simd_d128 __a = st_access_d128((st_d64 *)pa++);
         st_simd_d128 __b = st_access_d128((st_d64 *)pb++);
-        __b = st_simd_mul_d128(__a, __b);
+        __b = st_simd_mul_d64(__a, __b);
         st_assign_d128((st_d64 *)pd++, __b);
 
         n -= 2;
@@ -475,7 +475,7 @@ simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
         st_simd_i128 __high = _mm_unpackhi_epi32(__even, __odd);
         st_simd_i128 __dst = _mm_unpacklo_epi64(__low, __high);
 
-        _mm_storeu_si128(pd++, __dst);
+        st_assign_i128(pd++, __dst);
         n -= 4;
     }
 
@@ -505,7 +505,7 @@ simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
         st_simd_i128 __odd = _mm_mullo_epi16(_mm_srai_epi16(__a, 8), _mm_srai_epi16(__b, 8));
         __odd = _mm_slli_epi16(__odd, 8);
         st_simd_i128 __dst = _mm_xor_si128(__even, _mm_and_si128(_mm_xor_si128(__even, __odd), mask));
-        _mm_storeu_si128(pd++, __dst);
+        st_assign_i128(pd++, __dst);
         n -= 16;
     }
 
@@ -601,8 +601,8 @@ __simd_add_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 
         st_simd_i128 __a = st_access_i128(pa++);
         st_simd_i128 __b = st_access_i128(pb++);
-        __b = _mm_add_epi32(__a, __b);
-        _mm_storeu_si128(pd++, __b);
+        __b = st_simd_add_i32(__a, __b);
+        st_assign_i128(pd++, __b);
 
         n -= 4;
     }
@@ -628,7 +628,7 @@ __simd_add_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
         st_simd_i128 __a = st_access_i128(pa++);
         st_simd_i128 __b = st_access_i128(pb++);
         __b = _mm_add_epi8(__a, __b);
-        _mm_storeu_si128(pd++, __b);
+        st_assign_i128(pd++, __b);
 
         n -= 16;
     }
@@ -654,7 +654,7 @@ __simd_add_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
         st_simd_i128 __a = st_access_i128(pa++);
         st_simd_i128 __b = st_access_i128(pb++);
         __b = _mm_or_si128(__a, __b);
-        _mm_storeu_si128(pd++, __b);
+        st_assign_i128(pd++, __b);
 
         n -= 16;
     }
