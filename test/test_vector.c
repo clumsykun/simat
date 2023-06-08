@@ -161,6 +161,12 @@ test__st_vec_copy(result *rp)
     rp->value += !st_vec_equal(vec1, cp_vec1);
     rp->value += !st_vec_equal(vec2, cp_vec2);
 
+    vec1 = test_i_vec_1();
+    cp_vec1 = st_vec_copy(vec1);
+
+    rp->value += !st_vec_equal(vec1, cp_vec1);
+    rp->value += !st_vec_equal(vec2, cp_vec2);
+
     return rp;
 }
 

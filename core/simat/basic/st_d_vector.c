@@ -55,6 +55,7 @@ st_vec_dot(st_vector *a, st_vector *b)
     return re;
 }
 
+/* Return true if a equals b. */
 st_bool
 st_vec_equal(st_vector *a, st_vector *b)
 {

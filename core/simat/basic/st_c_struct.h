@@ -168,8 +168,8 @@ void st_mat_display(st_matrix *mat);
 void st_mat_assign_all(st_matrix *mat, st_d64 value);
 void st_view_display(const st_view *view);
 
-st_vector *st_vec_copy(st_vector *vec);
-st_vector *st_vec_copy_cast(st_vector *vec, st_dtype dtype);
+// st_vector *st_vec_copy(st_vector *vec);
+// st_vector *st_vec_copy_cast(st_vector *vec, st_dtype dtype);
 
 
 /* =================================================================================================

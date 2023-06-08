@@ -12,19 +12,37 @@ __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
     st_simd_d128 *ps = (st_simd_d128 *) src;
     st_simd_d128 *pd = (st_simd_d128 *) dst;
 
+    size_t batches = n / 2;
+    size_t remainder = n % 2;
+
     /* pair of d64 in one loop */
-    while (n >= 2) {
-
-        st_simd_d128 tmp = st_access_d128((st_d64 *)ps++);
-        st_assign_d128((st_d64 *)pd++, tmp);
-
-        n -= 2;
-    }
+    while (batches--)
+        st_assign_d128((st_d64 *)pd++, st_access_d128((st_d64 *)ps++));
 
     src = (st_d64 *)ps;
     dst = (st_d64 *)pd;
 
-    while (n--)
+    while (remainder--)
+        *dst++ = *src++;
+}
+
+static void 
+__copy_i32(st_i32 *dst, st_i32 *src, size_t n)
+{
+    st_simd_i128 *ps = (st_simd_i128 *) src;
+    st_simd_i128 *pd = (st_simd_i128 *) dst;
+
+    size_t batches = n / 4;
+    size_t remainder = n % 4;
+
+    /* 4 of i32 in one loop */
+    while (batches--)
+        st_assign_i128(pd++, st_access_i128(ps++));
+
+    src = (st_i32 *)ps;
+    dst = (st_i32 *)pd;
+
+    while (remainder--)
         *dst++ = *src++;
 }
 
@@ -85,10 +103,21 @@ st_vector *
 st_vec_copy(st_vector *vec)
 {
     st_vector *copy = __st_new_vector(vec->dtype, vec->len);
-    memcpy(
-        copy->data->head,
-        vec->data->head,
-        vec->data->nbyte * vec->data->size);
+    void *dst = copy->data->head;
+    void *src = vec->data->head;
+
+    switch (vec->dtype) {
+        case st_dtype_d64:
+            __copy_d64(dst, src, vec->len);
+            break;
+
+        case st_dtype_i32:
+            __copy_i32(dst, src, vec->len);
+            break;
+
+        default:
+            memcpy(dst, src, vec->data->nbyte * vec->data->size);
+    }
 
     return copy;
 }
