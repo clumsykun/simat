@@ -137,7 +137,7 @@ __st_byteof(st_dtype dtype)
 
 
 /* =================================================================================================
- * functions here defined to support vector computation. 
+ * Create new vector/matrix/view.
  */
 
 static st_vector *
@@ -193,151 +193,6 @@ st_new_vector(size_t len, st_dtype dtype)
             __st_raise_dtype_error();
     }
 }
-
-void
-st_vec_display(const st_vector *vec)
-{
-    __st_check_valid(vec);
-    char c;
-    switch (vec->dtype) {
-
-        case st_dtype_bool: {
-            printf("BoolVector([");
-
-            for (size_t i = 0; i <= vec->len - 2; i++) {
-                c = (st_vec_access(vec, i) == false ? '-' : '+');
-                printf("(%c), ", c);
-            }
-
-            printf("(%c)])\n", (st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
-            break;
-        }
-
-        case st_dtype_u8: {
-            printf("PixelVector([");
-
-            for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("(%d), ", (st_i32)st_vec_access(vec, i));
-
-            printf("(%d)])\n", (st_i32)st_vec_access(vec, vec->len-1));
-            break;
-        }
-
-        case st_dtype_i32: {
-            printf("IntVector([");
-
-            for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("%d, ", (st_i32)st_vec_access(vec, i));
-
-            printf("%d])\n", (st_i32)st_vec_access(vec, vec->len-1));
-            break;
-        }
-
-        case st_dtype_d64: {
-            printf("Vector([");
-
-            for (size_t i = 0; i <= vec->len - 2; i++)
-                printf("%f, ", (st_d64)st_vec_access(vec, i));
-
-            printf("%f])\n", (st_d64)st_vec_access(vec, vec->len-1));
-            break;
-        }
-
-        default:
-            __st_raise_dtype_error();
-            break;
-    }
-    printf("\n");
-}
-
-void
-st_vec_assign_all(st_vector *vec, st_d64 value)
-{
-    __st_check_valid(vec);
-    void *p;
-
-    for __st_iter_data(p, vec->data)
-        __st_assign_p(p, value, vec->dtype);
-}
-
-st_d64
-__st_data_access(const __st_data *data, size_t idx)
-{
-    if (idx < 0 || data->size <= idx)
-        __st_raise_out_range_error();
-
-    void *p = __st_data_find_p(data, idx);
-
-    switch (data->dtype) {
-        case st_dtype_bool:
-            return (st_d64)*(st_bool *)(p);
-
-        case st_dtype_i32:
-            return (st_d64)*(st_i32 *)(p);
-
-        case st_dtype_u8:
-            return (st_d64)*(st_u8 *)(p);
-
-        case st_dtype_d64:
-            return *(st_d64 *)(p);
-
-        default:
-            __st_raise_dtype_error();
-    }
-}
-
-static void
-__st_data_assign(const __st_data *data, size_t idx, st_d64 value)
-{
-    if (idx < 0 || data->size <= idx)
-        __st_raise_out_range_error();
-
-    switch (data->dtype) {
-
-        case st_dtype_bool: {
-            st_bool *e = __st_data_find_p(data, idx);
-            *e = (st_bool) value;
-            return;
-        }
-
-        case st_dtype_u8: {
-            st_u8 *e = __st_data_find_p(data, idx);
-            *e = (st_u8) value;
-            return;
-        }
-
-        case st_dtype_i32: {
-            st_i32 *e = __st_data_find_p(data, idx);
-            *e = (st_i32) value;
-            return;
-        }
-
-        case st_dtype_d64: {
-            st_d64 *e = __st_data_find_p(data, idx);
-            *e = (st_d64) value;
-            return;
-        }
-
-        default:
-            __st_raise_dtype_error();
-    }
-}
-
-st_d64
-st_vec_access(const st_vector *vec, size_t idx)
-{
-    __st_data_access(vec->data, idx);
-}
-
-void
-st_vec_assign(const st_vector *vec, size_t idx, st_d64 value)
-{
-    __st_data_assign(vec->data, idx, value);
-}
-
-/* =================================================================================================
- * functions here defined to support matrix computation. 
- */
 
 static void
 __new_row(void *row, void *row_data_head, st_dtype dtype, size_t len)
@@ -434,6 +289,235 @@ st_new_matrix(size_t nrow, size_t ncol)
     return __st_new_matrix(st_dtype_d64, nrow, ncol);
 }
 
+st_view *
+st_new_view()
+{
+    st_view *view = malloc(sizeof(st_view));
+    st_view _view = {
+        true,
+        0,    /* default dtype */
+        NULL, /* initialize it to NULL so that realloc() will work properly */
+        NULL,
+        0,
+        0,
+    };
+    memcpy(
+        view,
+        &_view,
+        sizeof(st_view)
+    );
+    __st_b_ds_add(view, __free_view, __status_view, &view->temp);
+    return view;
+}
+
+void
+st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
+{
+    void *p;
+    size_t i;
+    view->dtype = mat->dtype;
+    view->nbyte = mat->data->nbyte;
+
+    if (view->len != mat->ncol) {
+        view->len = mat->ncol;
+        view->head = realloc(view->head, view->len * sizeof(void *));
+        view->last = view->head + view->len-1;
+    }
+
+    for __st_iter_vector(i, p, __st_mat_access_row(mat, irow))
+        view->head[i] = p;
+}
+
+void
+st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
+{
+    view->dtype = mat->dtype;
+    view->nbyte = mat->data->nbyte;
+
+    if (view->len != mat->nrow) {
+        view->len = mat->nrow;
+        view->head = realloc(view->head, view->len * sizeof(void *));
+        view->last = view->head + view->len-1;
+    }
+
+    for (size_t i = 0; i < view->len; i++)
+        view->head[i] = __st_mat_find_p(mat, i, icol);
+}
+
+void
+st_vector_view(st_view *view, st_vector *vec)
+{
+    void *p;
+    size_t i;
+    view->dtype = vec->dtype;
+    view->nbyte = vec->data->nbyte;
+
+    if (view->len != vec->len) {
+        view->len = vec->len;
+        view->head = realloc(view->head, view->len * sizeof(void *));
+        view->last = view->head + view->len-1;
+    }
+
+    for __st_iter_vector(i, p, vec)
+        view->head[i] = p;
+}
+
+/* =================================================================================================
+ * Access/Assign/Display
+ */
+
+st_d64
+__st_data_access(const __st_data *data, size_t idx)
+{
+    if (idx < 0 || data->size <= idx)
+        __st_raise_out_range_error();
+
+    void *p = __st_data_find_p(data, idx);
+
+    switch (data->dtype) {
+        case st_dtype_bool:
+            return (st_d64)*(st_bool *)(p);
+
+        case st_dtype_i32:
+            return (st_d64)*(st_i32 *)(p);
+
+        case st_dtype_u8:
+            return (st_d64)*(st_u8 *)(p);
+
+        case st_dtype_d64:
+            return *(st_d64 *)(p);
+
+        default:
+            __st_raise_dtype_error();
+    }
+}
+
+st_d64
+st_vec_access(const st_vector *vec, size_t idx)
+{
+    __st_data_access(vec->data, idx);
+}
+
+static void
+__st_data_assign(const __st_data *data, size_t idx, st_d64 value)
+{
+    if (idx < 0 || data->size <= idx)
+        __st_raise_out_range_error();
+
+    switch (data->dtype) {
+
+        case st_dtype_bool: {
+            st_bool *e = __st_data_find_p(data, idx);
+            *e = (st_bool) value;
+            return;
+        }
+
+        case st_dtype_u8: {
+            st_u8 *e = __st_data_find_p(data, idx);
+            *e = (st_u8) value;
+            return;
+        }
+
+        case st_dtype_i32: {
+            st_i32 *e = __st_data_find_p(data, idx);
+            *e = (st_i32) value;
+            return;
+        }
+
+        case st_dtype_d64: {
+            st_d64 *e = __st_data_find_p(data, idx);
+            *e = (st_d64) value;
+            return;
+        }
+
+        default:
+            __st_raise_dtype_error();
+    }
+}
+
+void
+st_vec_assign(const st_vector *vec, size_t idx, st_d64 value)
+{
+    __st_data_assign(vec->data, idx, value);
+}
+
+void
+st_vec_assign_all(st_vector *vec, st_d64 value)
+{
+    __st_check_valid(vec);
+    void *p;
+
+    for __st_iter_data(p, vec->data)
+        __st_assign_p(p, value, vec->dtype);
+}
+
+void
+st_mat_assign_all(st_matrix *mat, st_d64 value)
+{
+    __st_check_valid(mat);
+
+    void *p;
+
+    for __st_iter_data(p, mat->data)
+        __st_assign_p(p, value, mat->data->dtype);
+}
+
+void
+st_vec_display(const st_vector *vec)
+{
+    __st_check_valid(vec);
+    char c;
+    switch (vec->dtype) {
+
+        case st_dtype_bool: {
+            printf("BoolVector([");
+
+            for (size_t i = 0; i <= vec->len - 2; i++) {
+                c = (st_vec_access(vec, i) == false ? '-' : '+');
+                printf("(%c), ", c);
+            }
+
+            printf("(%c)])\n", (st_vec_access(vec, vec->len-1) == false ? '-' : '+'));
+            break;
+        }
+
+        case st_dtype_u8: {
+            printf("PixelVector([");
+
+            for (size_t i = 0; i <= vec->len - 2; i++)
+                printf("(%d), ", (st_i32)st_vec_access(vec, i));
+
+            printf("(%d)])\n", (st_i32)st_vec_access(vec, vec->len-1));
+            break;
+        }
+
+        case st_dtype_i32: {
+            printf("IntVector([");
+
+            for (size_t i = 0; i <= vec->len - 2; i++)
+                printf("%d, ", (st_i32)st_vec_access(vec, i));
+
+            printf("%d])\n", (st_i32)st_vec_access(vec, vec->len-1));
+            break;
+        }
+
+        case st_dtype_d64: {
+            printf("Vector([");
+
+            for (size_t i = 0; i <= vec->len - 2; i++)
+                printf("%f, ", (st_d64)st_vec_access(vec, i));
+
+            printf("%f])\n", (st_d64)st_vec_access(vec, vec->len-1));
+            break;
+        }
+
+        default:
+            __st_raise_dtype_error();
+            break;
+    }
+    printf("\n");
+}
+
 void
 st_mat_display(st_matrix *mat)
 {
@@ -528,94 +612,6 @@ st_mat_display(st_matrix *mat)
     }
 
     printf("\n");
-}
-
-void
-st_mat_assign_all(st_matrix *mat, st_d64 value)
-{
-    __st_check_valid(mat);
-
-    void *p;
-
-    for __st_iter_data(p, mat->data)
-        __st_assign_p(p, value, mat->data->dtype);
-}
-
-/* =================================================================================================
- * functions here defined to support view computation. 
- */
-
-st_view *
-st_new_view()
-{
-    st_view *view = malloc(sizeof(st_view));
-    st_view _view = {
-        true,
-        0,    /* default dtype */
-        NULL, /* initialize it to NULL so that realloc() will work properly */
-        NULL,
-        0,
-        0,
-    };
-    memcpy(
-        view,
-        &_view,
-        sizeof(st_view)
-    );
-    __st_b_ds_add(view, __free_view, __status_view, &view->temp);
-    return view;
-}
-
-void
-st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
-{
-    void *p;
-    size_t i;
-    view->dtype = mat->dtype;
-    view->nbyte = mat->data->nbyte;
-
-    if (view->len != mat->ncol) {
-        view->len = mat->ncol;
-        view->head = realloc(view->head, view->len * sizeof(void *));
-        view->last = view->head + view->len-1;
-    }
-
-    for __st_iter_vector(i, p, __st_mat_access_row(mat, irow))
-        view->head[i] = p;
-}
-
-void
-st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
-{
-    view->dtype = mat->dtype;
-    view->nbyte = mat->data->nbyte;
-
-    if (view->len != mat->nrow) {
-        view->len = mat->nrow;
-        view->head = realloc(view->head, view->len * sizeof(void *));
-        view->last = view->head + view->len-1;
-    }
-
-    for (size_t i = 0; i < view->len; i++)
-        view->head[i] = __st_mat_find_p(mat, i, icol);
-}
-
-void
-st_vector_view(st_view *view, st_vector *vec)
-{
-    void *p;
-    size_t i;
-    view->dtype = vec->dtype;
-    view->nbyte = vec->data->nbyte;
-
-    if (view->len != vec->len) {
-        view->len = vec->len;
-        view->head = realloc(view->head, view->len * sizeof(void *));
-        view->last = view->head + view->len-1;
-    }
-
-    for __st_iter_vector(i, p, vec)
-        view->head[i] = p;
 }
 
 void
