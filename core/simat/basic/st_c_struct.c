@@ -369,7 +369,7 @@ __st_data_access(const __st_data *data, size_t idx)
     if (idx < 0 || data->size <= idx)
         __st_raise_out_range_error();
 
-    void *p = __st_data_find_p(data, idx);
+    void *p = data->head + idx * data->nbyte;
 
     switch (data->dtype) {
         case st_dtype_bool:
@@ -407,19 +407,33 @@ st_mat_access_row(const st_matrix *mat, size_t irow)
     return (st_vector *)(mat->first+irow);
 }
 
-// void *
-// st_view_access(st_view *view, size_t idx)
-// {
-//     if (idx < 0 || data->size <= idx)
-//         __st_raise_out_range_error();
+st_d64
+st_view_access(st_view *view, size_t idx)
+{
+    __st_check_valid(view);
 
-// /* TODO: check if valid */
-// #define __st_view_access(view, idx)                         \
-//     (((idx) < 0 || (view)->len <= (idx))                  \
-//         ? __st_raise_out_range_error()                    \
-//             : __st_access_p(*((void **)(view)->head+(idx)), \
-//                             (view)->dtype))
-// }
+    if (idx < 0 || view->len <= idx)
+        __st_raise_out_range_error();
+
+    void *p = *(view->head+idx);
+
+    switch (view->dtype) {
+        case st_dtype_bool:
+            return (st_d64)*(st_bool *)(p);
+
+        case st_dtype_i32:
+            return (st_d64)*(st_i32 *)(p);
+
+        case st_dtype_u8:
+            return (st_d64)*(st_u8 *)(p);
+
+        case st_dtype_d64:
+            return *(st_d64 *)(p);
+
+        default:
+            __st_raise_dtype_error();
+    }
+}
 
 static void
 __st_data_assign(const __st_data *data, size_t idx, st_d64 value)
