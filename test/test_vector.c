@@ -138,12 +138,10 @@ test__st_vec_is_equal(result *rp)
 {
     rp->name = "st_vec_is_equal";
 
-    st_vector *vec1 = test_d_vec_1();
-    st_vector *vec2 = test_d_vec_2();
-    st_vector *vec3 = test_d_vec_1();
+    st_vector *vec1 = st_new_vector(1000);
+    st_vector *vec2 = st_vec_copy(vec1);
 
-    rp->value = st_vec_is_equal(vec1, vec2);
-    rp->value = !st_vec_is_equal(vec1, vec3);
+    rp->value = !st_vec_is_equal(vec1, vec2);
     return rp;
 }
 
