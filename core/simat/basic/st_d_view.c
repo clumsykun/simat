@@ -12,7 +12,7 @@ check_view_length(st_view *a, st_view *b)
         __st_raise_length_error();
 }
 
-st_d64
+st_decimal
 st_view_min(st_view *view)
 {
     st_d64 min = st_view_access(view, 0);
@@ -23,7 +23,7 @@ st_view_min(st_view *view)
     return min;
 }
 
-st_d64
+st_decimal
 st_view_max(st_view *view)
 {
     st_d64 max = st_view_access(view, 0);
@@ -34,7 +34,7 @@ st_view_max(st_view *view)
     return max;
 }
 
-st_d64
+st_decimal
 st_view_norm(st_view *view)
 {
     st_d64 sum_square = 0;
@@ -58,7 +58,7 @@ st_view_scale(st_view *view, st_d64 min, st_d64 max)
     }
 }
 
-st_d64
+st_decimal
 st_view_dot(st_view *a, st_view *b)
 {
     check_view_length(a, b);

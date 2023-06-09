@@ -5,7 +5,7 @@
 #include "st_d_vector.h"
 #include "st_d_view.h"
 
-st_d64 st_precise(st_d64 x, size_t ndigits);
+st_decimal st_precise(st_d64 x, size_t ndigits);
 
 void st_vec_rand(const st_vector *vec);
 void st_vec_sort(st_vector *vec);

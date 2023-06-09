@@ -42,7 +42,7 @@ st_vec_mul_scalar(st_vector *vec, st_d64 value)
 }
 
 /* implement vector dot production a·b, return result */
-st_d64
+st_decimal
 st_vec_dot(st_vector *a, st_vector *b)
 {
     st_check_vec_len(a, b->len);

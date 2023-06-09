@@ -28,7 +28,7 @@ __swap_double(st_d64 *left, st_d64 *right)
  * generate random st_d64 number (2 decimals) between
  * integer `min` and `max`, both end are inclusive
  */
-static st_d64
+static st_decimal
 __rand(st_i32 min, st_i32 max)
 {
     st_d64 integer = rand() % (max - min);
@@ -36,7 +36,7 @@ __rand(st_i32 min, st_i32 max)
     return integer + decimal;
 }
 
-static st_d64
+static st_decimal
 __scale_value(st_d64 value, st_dtype dtype)
 {
     switch (dtype) {
@@ -64,7 +64,7 @@ __scale_value(st_d64 value, st_dtype dtype)
     return value;
 }
 
-st_d64
+st_decimal
 st_precise(st_d64 x, size_t ndigits)
 {
     ndigits = (ndigits >= 15 ? 15 : ndigits);  /* max precision of st_d64 */

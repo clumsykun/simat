@@ -362,7 +362,7 @@ st_vector_view(st_view *view, st_vector *vec)
 /* =================================================================================================
  * Access/Assign/Display
  */
-static st_d64
+static st_decimal
 __access_p(void *p, st_dtype dtype)
 {
     switch (dtype) {
@@ -383,7 +383,7 @@ __access_p(void *p, st_dtype dtype)
     }
 }
 
-st_d64
+st_decimal
 __st_data_access(const __st_data *data, size_t idx)
 {
     if (idx < 0 || data->size <= idx)
@@ -393,13 +393,13 @@ __st_data_access(const __st_data *data, size_t idx)
     return __access_p(p, data->dtype);
 }
 
-inline st_d64
+inline st_decimal
 st_vec_access(const st_vector *vec, size_t idx)
 {
     __st_data_access(vec->data, idx);
 }
 
-inline st_d64
+inline st_decimal
 st_mat_access(const st_matrix *mat, size_t irow, size_t icol)
 {
     __st_data_access(mat->data, (irow*mat->ncol)+icol);
@@ -411,7 +411,7 @@ st_mat_access_row(const st_matrix *mat, size_t irow)
     return (st_vector *)(mat->first+irow);
 }
 
-st_d64
+st_decimal
 st_view_access(const st_view *view, size_t idx)
 {
     __st_check_valid(view);

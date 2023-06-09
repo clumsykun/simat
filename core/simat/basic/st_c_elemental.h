@@ -29,14 +29,14 @@
 // // st_d64 st_view_elemental(st_view *view, st_elemental fp, void *argv[]);
 
 void       st_vec_abs(st_vector *vec);
-st_d64     st_vec_min(st_vector *vec);
-st_d64     st_vec_max(st_vector *vec);
-st_d64     st_vec_sum(st_vector *vec);
-st_d64     st_vec_norm(st_vector *vec);
+st_decimal     st_vec_min(st_vector *vec);
+st_decimal     st_vec_max(st_vector *vec);
+st_decimal     st_vec_sum(st_vector *vec);
+st_decimal     st_vec_norm(st_vector *vec);
 st_vector *st_vec_mul(st_vector *a, st_vector *b);
 st_vector *st_vec_add(st_vector *a, st_vector *b);
 
-st_d64 st_mat_min(st_matrix *mat);
-st_d64 st_mat_max(st_matrix *mat);
+st_decimal st_mat_min(st_matrix *mat);
+st_decimal st_mat_max(st_matrix *mat);
 
 #endif /* CORE_ELEMENTAL_H */

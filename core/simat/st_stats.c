@@ -10,7 +10,7 @@ check_vec_length(st_vector *a, st_vector *b)
         __st_raise_length_error();
 }
 
-st_d64
+st_decimal
 st_vec_mean(st_vector *vec)
 {
     st_d64 sum = 0;
@@ -21,7 +21,7 @@ st_vec_mean(st_vector *vec)
     return sum / (st_d64)vec->len;
 }
 
-st_d64
+st_decimal
 st_vec_var(st_vector *vec, size_t freedom)
 {
     st_d64 mean = st_vec_mean(vec);
@@ -33,7 +33,7 @@ st_vec_var(st_vector *vec, size_t freedom)
     return sum_sq_diff / (st_d64) (vec->len - freedom);
 }
 
-st_d64
+st_decimal
 st_vec_std(st_vector *vec, size_t freedom)
 {
     return sqrt(st_vec_var(vec, freedom));
@@ -58,7 +58,7 @@ st_vec_normalize(st_vector *vec)
     }
 }
 
-st_d64
+st_decimal
 st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
 {
     if (st_vec_is_equal(a, b))
@@ -77,7 +77,7 @@ st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
 }
 
 /* pearson product-moment correlation coefficient */
-st_d64
+st_decimal
 st_stats_corr(st_vector *a, st_vector *b)
 {
     if (st_vec_is_equal(a, b))

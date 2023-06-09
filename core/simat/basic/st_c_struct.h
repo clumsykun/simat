@@ -135,11 +135,11 @@ void st_vector_view(st_view *view, st_vector *vec);
  * Assign/Access/Display
  */
 
-st_d64     __st_data_access(const __st_data *data, size_t idx);
-st_d64     st_vec_access(const st_vector *vec, size_t idx);
-st_d64     st_mat_access(const st_matrix *mat, size_t irow, size_t icol);
+st_decimal     __st_data_access(const __st_data *data, size_t idx);
+st_decimal     st_vec_access(const st_vector *vec, size_t idx);
+st_decimal     st_mat_access(const st_matrix *mat, size_t irow, size_t icol);
 st_vector *st_mat_access_row(const st_matrix *mat, size_t irow);
-st_d64     st_view_access(const st_view *view, size_t idx);
+st_decimal     st_view_access(const st_view *view, size_t idx);
 
 void st_vec_assign(const st_vector *vec, size_t idx, st_d64 value);
 void st_vec_assign_all(st_vector *vec, st_d64 value);

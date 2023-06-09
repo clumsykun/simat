@@ -1,7 +1,7 @@
 #include <math.h>
 #include "st_distance.h"
 
-st_d64
+st_decimal
 st_dist_euclid(st_vector *a, st_vector *b)
 {
     st_check_vec_len(a, b->len);
@@ -17,7 +17,7 @@ st_dist_euclid(st_vector *a, st_vector *b)
 }
 
 /* cosine similarity of vector v1 and v2. */
-st_d64
+st_decimal
 st_dist_cosine(st_vector *a, st_vector *b)
 {
     st_check_vec_len(a, b->len);
@@ -25,7 +25,7 @@ st_dist_cosine(st_vector *a, st_vector *b)
 }
 
 /* manhattan distance of vector v1 and v2. */
-st_d64
+st_decimal
 st_dist_manhattan(st_vector *a, st_vector *b)
 {
     st_check_vec_len(a, b->len);
@@ -41,7 +41,7 @@ st_dist_manhattan(st_vector *a, st_vector *b)
     return dist;
 }
 
-st_d64
+st_decimal
 st_dist_chebyshev(st_vector *a, st_vector *b)
 {
     st_check_vec_len(a, b->len);
@@ -57,7 +57,7 @@ st_dist_chebyshev(st_vector *a, st_vector *b)
     return dist;
 }
 
-st_d64
+st_decimal
 st_dist_cos_ww(st_view *w1, st_view *w2)
 {
     return st_view_dot(w1,w2)/(st_view_norm(w1)*st_view_norm(w2));

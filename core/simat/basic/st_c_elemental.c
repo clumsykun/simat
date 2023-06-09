@@ -148,7 +148,7 @@ st_mat_abs(st_matrix *mat)
  * need SIMD!
  */
 
-static st_d64
+static st_decimal
 simd_min_i32(size_t n, st_i32 *elem, const size_t incx)
 {
     st_d64 min = *elem;
@@ -159,7 +159,7 @@ simd_min_i32(size_t n, st_i32 *elem, const size_t incx)
     return min;
 }
 
-static st_d64
+static st_decimal
 simd_min_u8(size_t n, st_u8 *elem, const size_t incx)
 {
     st_d64 min = *elem;
@@ -171,7 +171,7 @@ simd_min_u8(size_t n, st_u8 *elem, const size_t incx)
     return min;
 }
 
-static st_d64
+static st_decimal
 simd_min_bool(size_t n, st_bool *elem, const size_t incx)
 {
     st_d64 min = *elem;
@@ -181,7 +181,7 @@ simd_min_bool(size_t n, st_bool *elem, const size_t incx)
     return min;
 }
 
-static st_d64
+static st_decimal
 __data_min(const __st_data *data, const size_t incx)
 {
     switch (data->dtype) {
@@ -204,13 +204,13 @@ __data_min(const __st_data *data, const size_t incx)
     }
 }
 
-st_d64
+st_decimal
 st_vec_min(st_vector *vec)
 {
     return __data_min(vec->data, 1);
 }
 
-st_d64
+st_decimal
 st_mat_min(st_matrix *mat)
 {
     return __data_min(mat->data, 1);
@@ -221,7 +221,7 @@ st_mat_min(st_matrix *mat)
  * need SIMD!
  */
 
-static st_d64
+static st_decimal
 simd_max_i32(size_t n, st_i32 *elem, const size_t incx)
 {
     st_d64 max = *elem;
@@ -232,7 +232,7 @@ simd_max_i32(size_t n, st_i32 *elem, const size_t incx)
     return max;
 }
 
-static st_d64
+static st_decimal
 simd_max_u8(size_t n, st_u8 *elem, const size_t incx)
 {
     st_d64 max = *elem;
@@ -244,7 +244,7 @@ simd_max_u8(size_t n, st_u8 *elem, const size_t incx)
     return max;
 }
 
-static st_d64
+static st_decimal
 simd_max_bool(size_t n, st_bool *elem, const size_t incx)
 {
     st_d64 max = *elem;
@@ -254,7 +254,7 @@ simd_max_bool(size_t n, st_bool *elem, const size_t incx)
     return max;
 }
 
-static st_d64
+static st_decimal
 __data_max(const __st_data *data, const size_t incx)
 {
     switch (data->dtype) {
@@ -277,13 +277,13 @@ __data_max(const __st_data *data, const size_t incx)
     }
 }
 
-st_d64
+st_decimal
 st_vec_max(st_vector *vec)
 {
     return __data_max(vec->data, 1);
 }
 
-st_d64
+st_decimal
 st_mat_max(st_matrix *mat)
 {
     return __data_max(mat->data, 1);
@@ -294,7 +294,7 @@ st_mat_max(st_matrix *mat)
  * need SIMD!
  */
 
-static st_d64
+static st_decimal
 simd_sum_i32(size_t n, st_i32 *elem, const size_t incx)
 {
     st_d64 sum = 0;
@@ -304,7 +304,7 @@ simd_sum_i32(size_t n, st_i32 *elem, const size_t incx)
     return sum;
 }
 
-static st_d64
+static st_decimal
 simd_sum_u8(size_t n, st_u8 *elem, const size_t incx)
 {
     st_d64 sum = 0;
@@ -314,7 +314,7 @@ simd_sum_u8(size_t n, st_u8 *elem, const size_t incx)
     return sum;
 }
 
-static st_d64
+static st_decimal
 simd_sum_bool(size_t n, st_bool *elem, const size_t incx)
 {
     st_d64 sum = 0;
@@ -324,7 +324,7 @@ simd_sum_bool(size_t n, st_bool *elem, const size_t incx)
     return sum;
 }
 
-static st_d64
+static st_decimal
 __data_sum(const __st_data *data, const size_t incx)
 {
     switch (data->dtype) {
@@ -345,13 +345,13 @@ __data_sum(const __st_data *data, const size_t incx)
     }
 }
 
-st_d64
+st_decimal
 st_vec_sum(st_vector *vec)
 {
     return __data_sum(vec->data, 1);
 }
 
-st_d64
+st_decimal
 st_mat_sum(st_matrix *mat)
 {
     return __data_sum(mat->data, 1);
@@ -362,7 +362,7 @@ st_mat_sum(st_matrix *mat)
  * need SIMD!
  */
 
-static st_d64
+static st_decimal
 simd_sum_square_i32(size_t n, st_i32 *elem)
 {
     st_d64 sum = 0;
@@ -374,7 +374,7 @@ simd_sum_square_i32(size_t n, st_i32 *elem)
     return sum;
 }
 
-static st_d64
+static st_decimal
 simd_sum_square_u8(size_t n, st_i32 *elem)
 {
     st_d64 sum = 0;
@@ -386,7 +386,7 @@ simd_sum_square_u8(size_t n, st_i32 *elem)
     return sum;
 }
 
-static st_d64
+static st_decimal
 simd_sum_square_bool(size_t n, st_i32 *elem)
 {
     st_d64 sum = 0;
@@ -398,7 +398,7 @@ simd_sum_square_bool(size_t n, st_i32 *elem)
     return sum;
 }
 
-static st_d64
+static st_decimal
 __data_norm(const __st_data *data, const size_t incx)
 {
     switch (data->dtype) {
@@ -419,7 +419,7 @@ __data_norm(const __st_data *data, const size_t incx)
     }
 }
 
-st_d64
+st_decimal
 st_vec_norm(st_vector *vec)
 {
     return __data_norm(vec->data, 1);
@@ -724,7 +724,7 @@ st_mat_add(st_matrix *a, st_matrix *b)
  * call pair function
  */
 
-// st_d64
+// st_decimal
 // st_vec_pair(st_vector *vl, st_vector *vr, fp_pair fp, void *argv[])
 // {
 //     st_dtype dtype = st_check_vec_dtype(vl, vr->dtype);

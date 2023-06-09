@@ -43,7 +43,7 @@ __st_check(const char *file, const size_t line)
         __exit();
 }
 
-st_d64
+st_decimal
 __st_raise_invalid_error__(const char *file, const size_t line)
 {
     __st_invalid_error = true;
@@ -61,7 +61,7 @@ __st_raise_dtype_error__(const char *file, const size_t line)
     return 0;
 }
 
-st_d64
+st_decimal
 __st_raise_out_range_error__(const char *file, const size_t line)
 {
     __st_is_error = true;
