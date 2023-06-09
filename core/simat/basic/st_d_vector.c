@@ -75,13 +75,13 @@ __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
     st_d64 diff[bsize];
 
     while (batches--) {
-        st_simd_d128 pk_a = st_access_d128((st_d64 *)pa++);
-        st_simd_d128 pk_b = st_access_d128((st_d64 *)pb++);
+        st_simd_d128 pk_a = st_load_d128((st_d64 *)pa++);
+        st_simd_d128 pk_b = st_load_d128((st_d64 *)pb++);
         st_simd_d128 tmp = _mm_xor_pd(pk_a, pk_b);
         pk_diff = _mm_or_pd(pk_diff, tmp);
 
         if (batches % n_loops == 0) {
-            st_assign_d128(diff, pk_diff);
+            st_store_d128(diff, pk_diff);
 
             for (size_t i = 0; i < bsize; i++)
                 if (diff[i] != 0)
@@ -113,13 +113,13 @@ __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
     st_i32 diff[bsize];
 
     while (batches--) {
-        st_simd_i128 pk_a = st_access_i128(pa++);
-        st_simd_i128 pk_b = st_access_i128(pb++);
+        st_simd_i128 pk_a = st_load_i128(pa++);
+        st_simd_i128 pk_b = st_load_i128(pb++);
         st_simd_i128 tmp = _mm_xor_si128(pk_a, pk_b);
         pk_diff = _mm_or_si128(pk_diff, tmp);
 
         if (batches % n_loops == 0) {
-            st_assign_i128((st_simd_i128 *)diff, pk_diff);
+            st_store_i128((st_simd_i128 *)diff, pk_diff);
 
             for (size_t i = 0; i < bsize; i++)
                 if (diff[i] != 0)
@@ -151,13 +151,13 @@ __is_equal_u8_bool(size_t n, st_u8 *a, st_u8 *b)
     st_u8 diff[bsize];
 
     while (batches--) {
-        st_simd_i128 pk_a = st_access_i128(pa++);
-        st_simd_i128 pk_b = st_access_i128(pb++);
+        st_simd_i128 pk_a = st_load_i128(pa++);
+        st_simd_i128 pk_b = st_load_i128(pb++);
         st_simd_i128 tmp = _mm_xor_si128(pk_a, pk_b);
         pk_diff = _mm_or_si128(pk_diff, tmp);
 
         if (batches % n_loops == 0) {
-            st_assign_i128((st_simd_i128 *)diff, pk_diff);
+            st_store_i128((st_simd_i128 *)diff, pk_diff);
 
             for (size_t i = 0; i < bsize; i++)
                 if (diff[i] != 0)

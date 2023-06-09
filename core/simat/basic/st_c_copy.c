@@ -17,7 +17,7 @@ __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
 
     /* pair of d64 in one loop */
     while (batches--)
-        st_assign_d128((st_d64 *)pd++, st_access_d128((st_d64 *)ps++));
+        st_store_d128((st_d64 *)pd++, st_load_d128((st_d64 *)ps++));
 
     src = (st_d64 *)ps;
     dst = (st_d64 *)pd;
@@ -37,7 +37,7 @@ __copy_i32(st_i32 *dst, st_i32 *src, size_t n)
 
     /* 4 of i32 in one loop */
     while (batches--)
-        st_assign_i128(pd++, st_access_i128(ps++));
+        st_store_i128(pd++, st_load_i128(ps++));
 
     src = (st_i32 *)ps;
     dst = (st_i32 *)pd;
@@ -57,7 +57,7 @@ __copy_u8_bool(st_u8 *dst, st_u8 *src, size_t n)
 
     /* 16 of u8 in one loop */
     while (batches--)
-        st_assign_i128(pd++, st_access_i128(ps++));
+        st_store_i128(pd++, st_load_i128(ps++));
 
     src = (st_u8 *)ps;
     dst = (st_u8 *)pd;
