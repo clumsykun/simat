@@ -61,7 +61,7 @@ st_vec_normalize(st_vector *vec)
 st_d64
 st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
 {
-    if (st_vec_equal(a, b))
+    if (st_vec_is_equal(a, b))
         return st_vec_var(a, freedom);
 
     check_vec_length(a, b);
@@ -80,7 +80,7 @@ st_stats_cov(st_vector *a, st_vector *b, size_t freedom)
 st_d64
 st_stats_corr(st_vector *a, st_vector *b)
 {
-    if (st_vec_equal(a, b))
+    if (st_vec_is_equal(a, b))
         return 1;
 
     st_d64 cov = st_stats_cov(a, b, 1);  /* check length as well */

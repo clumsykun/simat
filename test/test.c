@@ -1,4 +1,6 @@
+#include <immintrin.h>
 #include "test.h"
+
 
 st_i32 main()
 {

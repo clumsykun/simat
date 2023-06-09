@@ -134,16 +134,16 @@ test__st_vec_scale(result *rp)
 }
 
 result *
-test__st_vec_equal(result *rp)
+test__st_vec_is_equal(result *rp)
 {
-    rp->name = "st_vec_equal";
+    rp->name = "st_vec_is_equal";
 
     st_vector *vec1 = test_d_vec_1();
     st_vector *vec2 = test_d_vec_2();
     st_vector *vec3 = test_d_vec_1();
 
-    rp->value = st_vec_equal(vec1, vec2);
-    rp->value = !st_vec_equal(vec1, vec3);
+    rp->value = st_vec_is_equal(vec1, vec2);
+    rp->value = !st_vec_is_equal(vec1, vec3);
     return rp;
 }
 
@@ -158,26 +158,26 @@ test__st_vec_copy(result *rp)
     st_vector *cp_vec1 = st_vec_copy(vec1);
     st_vector *cp_vec2 = st_vec_copy(vec2);
 
-    rp->value += !st_vec_equal(vec1, cp_vec1);
-    rp->value += !st_vec_equal(vec2, cp_vec2);
+    rp->value += !st_vec_is_equal(vec1, cp_vec1);
+    rp->value += !st_vec_is_equal(vec2, cp_vec2);
 
     vec1 = test_i_vec_1();
     cp_vec1 = st_vec_copy(vec1);
 
-    rp->value += !st_vec_equal(vec1, cp_vec1);
-    rp->value += !st_vec_equal(vec2, cp_vec2);
+    rp->value += !st_vec_is_equal(vec1, cp_vec1);
+    rp->value += !st_vec_is_equal(vec2, cp_vec2);
 
     vec1 = test_u_vec_1();
     cp_vec1 = st_vec_copy(vec1);
 
-    rp->value += !st_vec_equal(vec1, cp_vec1);
-    rp->value += !st_vec_equal(vec2, cp_vec2);
+    rp->value += !st_vec_is_equal(vec1, cp_vec1);
+    rp->value += !st_vec_is_equal(vec2, cp_vec2);
 
     vec1 = test_b_vec_1();
     cp_vec1 = st_vec_copy(vec1);
 
-    rp->value += !st_vec_equal(vec1, cp_vec1);
-    rp->value += !st_vec_equal(vec2, cp_vec2);
+    rp->value += !st_vec_is_equal(vec1, cp_vec1);
+    rp->value += !st_vec_is_equal(vec2, cp_vec2);
 
 
     return rp;
@@ -332,7 +332,7 @@ test__vector()
 {
     printf("unit test of vector start:\n");
     st_vector *vec = test_d_vec_1();
-    call_test(test__st_vec_equal);
+    call_test(test__st_vec_is_equal);
     call_test(test__st_vec_copy);
     call_test(test__st_vec_norm);
     call_test(test__st_vec_min);
