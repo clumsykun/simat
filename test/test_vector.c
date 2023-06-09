@@ -82,6 +82,69 @@ call_test(fp fp)
 }
 
 result *
+test__st_vec_is_equal(result *rp)
+{
+    rp->name = "st_vec_is_equal";
+
+    st_vector *vec1 = st_new_vector(1000);
+    st_vec_rand(vec1);
+    st_vector *vec2 = st_vec_copy(vec1);
+    rp->value += !st_vec_is_equal(vec1, vec2);
+
+    vec1 = st_new_int_vector(1000);
+    st_vec_rand(vec1);
+    vec2 = st_vec_copy(vec1);
+    rp->value += !st_vec_is_equal(vec1, vec2);
+
+    vec1 = st_new_pixel_vector(1000);
+    st_vec_rand(vec1);
+    vec2 = st_vec_copy(vec1);
+    rp->value += !st_vec_is_equal(vec1, vec2);
+
+    vec1 = st_new_bool_vector(1000);
+    st_vec_rand(vec1);
+    vec2 = st_vec_copy(vec1);
+    rp->value += !st_vec_is_equal(vec1, vec2);
+
+    return rp;
+}
+
+result *
+test__st_vec_copy(result *rp)
+{
+    rp->name = "st_vec_copy";
+
+    st_vector *vec1 = test_d_vec_1();
+    st_vector *vec2 = test_d_vec_2();
+
+    st_vector *cp_vec1 = st_vec_copy(vec1);
+    st_vector *cp_vec2 = st_vec_copy(vec2);
+
+    rp->value += !st_vec_is_equal(vec1, cp_vec1);
+    rp->value += !st_vec_is_equal(vec2, cp_vec2);
+
+    vec1 = test_i_vec_1();
+    cp_vec1 = st_vec_copy(vec1);
+
+    rp->value += !st_vec_is_equal(vec1, cp_vec1);
+
+    vec1 = test_u_vec_1();
+    cp_vec1 = st_vec_copy(vec1);
+
+    rp->value += !st_vec_is_equal(vec1, cp_vec1);
+    rp->value += !st_vec_is_equal(vec2, cp_vec2);
+
+    vec1 = test_b_vec_1();
+    cp_vec1 = st_vec_copy(vec1);
+
+    rp->value += !st_vec_is_equal(vec1, cp_vec1);
+    rp->value += !st_vec_is_equal(vec2, cp_vec2);
+
+
+    return rp;
+}
+
+result *
 test__st_vec_min(result *rp)
 {
     rp->name = "st_vec_min";
@@ -130,60 +193,6 @@ test__st_vec_scale(result *rp)
 
     rp->value = !equal(st_vec_max(vec), 1);
     rp->value = !equal(st_vec_min(vec), 0);
-    return rp;
-}
-
-result *
-test__st_vec_is_equal(result *rp)
-{
-    rp->name = "st_vec_is_equal";
-
-    st_vector *vec1 = st_new_vector(1000);
-    st_vec_rand(vec1);
-    st_vector *vec2 = st_vec_copy(vec1);
-    rp->value += !st_vec_is_equal(vec1, vec2);
-
-    vec1 = st_new_int_vector(1000);
-    st_vec_rand(vec1);
-    vec2 = st_vec_copy(vec1);
-    rp->value += !st_vec_is_equal(vec1, vec2);
-
-    return rp;
-}
-
-result *
-test__st_vec_copy(result *rp)
-{
-    rp->name = "st_vec_copy";
-
-    st_vector *vec1 = test_d_vec_1();
-    st_vector *vec2 = test_d_vec_2();
-
-    st_vector *cp_vec1 = st_vec_copy(vec1);
-    st_vector *cp_vec2 = st_vec_copy(vec2);
-
-    rp->value += !st_vec_is_equal(vec1, cp_vec1);
-    rp->value += !st_vec_is_equal(vec2, cp_vec2);
-
-    vec1 = test_i_vec_1();
-    cp_vec1 = st_vec_copy(vec1);
-
-    rp->value += !st_vec_is_equal(vec1, cp_vec1);
-    rp->value += !st_vec_is_equal(vec2, cp_vec2);
-
-    vec1 = test_u_vec_1();
-    cp_vec1 = st_vec_copy(vec1);
-
-    rp->value += !st_vec_is_equal(vec1, cp_vec1);
-    rp->value += !st_vec_is_equal(vec2, cp_vec2);
-
-    vec1 = test_b_vec_1();
-    cp_vec1 = st_vec_copy(vec1);
-
-    rp->value += !st_vec_is_equal(vec1, cp_vec1);
-    rp->value += !st_vec_is_equal(vec2, cp_vec2);
-
-
     return rp;
 }
 

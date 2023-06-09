@@ -62,7 +62,7 @@ st_vec_dot(st_vector *a, st_vector *b)
 
 #define n_loops 100
 
-st_bool
+static st_bool
 __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
 {
     size_t bsize     = st_bsize_128_d64;
@@ -100,7 +100,7 @@ __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
     return true;
 }
 
-st_bool
+static st_bool
 __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
 {
     size_t bsize     = st_bsize_128_i32;
@@ -138,6 +138,43 @@ __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
     return true;
 }
 
+static st_bool
+__is_equal_u8_bool(size_t n, st_u8 *a, st_u8 *b)
+{
+    size_t bsize     = st_bsize_128_u8;
+    size_t batches   = n / bsize;
+    size_t remainder = n % bsize;
+    st_simd_i128 *pa = (st_simd_i128 *) a;
+    st_simd_i128 *pb = (st_simd_i128 *) b;
+
+    st_simd_i128 pk_diff = {0, 0};
+    st_u8 diff[bsize];
+
+    while (batches--) {
+        st_simd_i128 pk_a = st_access_i128(pa++);
+        st_simd_i128 pk_b = st_access_i128(pb++);
+        st_simd_i128 tmp = _mm_xor_si128(pk_a, pk_b);
+        pk_diff = _mm_or_si128(pk_diff, tmp);
+
+        if (batches % n_loops == 0) {
+            st_assign_i128((st_simd_i128 *)diff, pk_diff);
+
+            for (size_t i = 0; i < bsize; i++)
+                if (diff[i] != 0)
+                    return false;            
+        }
+    }
+
+    a = (st_u8 *)pa;
+    b = (st_u8 *)pb;
+
+    /* check the remainder of element */
+    while (remainder--)
+        if ((*a++) != (*b++))
+            return false;
+
+    return true;
+}
 
 /* Return true if a equals b. */
 st_bool
@@ -152,16 +189,21 @@ st_vec_is_equal(st_vector *a, st_vector *b)
     if (a->dtype != b->dtype)
         return false;
 
-    // for (size_t i = 0; i < a->len; i++)
-    // if (st_vec_access(a, i) != st_vec_access(b, i))
-    //     is_equal = false;
-
     switch (a->dtype) {
 
         case st_dtype_d64:
             return __is_equal_d64(a->len, a->data->head, b->data->head);
 
+        case st_dtype_i32:
+            return __is_equal_i32(a->len, a->data->head, b->data->head);
+
+        case st_dtype_u8:
+            return __is_equal_u8_bool(a->len, a->data->head, b->data->head);
+
+        case st_dtype_bool:
+            return __is_equal_u8_bool(a->len, a->data->head, b->data->head);
+
         default:
-            return true;
+            __st_raise_dtype_error();
     }
 }
