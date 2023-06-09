@@ -362,16 +362,10 @@ st_vector_view(st_view *view, st_vector *vec)
 /* =================================================================================================
  * Access/Assign/Display
  */
-
-__inline st_d64
-__st_data_access(const __st_data *data, size_t idx)
+static __inline st_d64
+__access_p(void *p, st_dtype dtype)
 {
-    if (idx < 0 || data->size <= idx)
-        __st_raise_out_range_error();
-
-    void *p = data->head + idx * data->nbyte;
-
-    switch (data->dtype) {
+    switch (dtype) {
         case st_dtype_bool:
             return (st_d64)*(st_bool *)(p);
 
@@ -390,12 +384,22 @@ __st_data_access(const __st_data *data, size_t idx)
 }
 
 __inline st_d64
+__st_data_access(const __st_data *data, size_t idx)
+{
+    if (idx < 0 || data->size <= idx)
+        __st_raise_out_range_error();
+
+    void *p = data->head + idx * data->nbyte;
+    return __access_p(p, data->dtype);
+}
+
+st_d64
 st_vec_access(const st_vector *vec, size_t idx)
 {
     __st_data_access(vec->data, idx);
 }
 
-__inline st_d64
+st_d64
 st_mat_access(const st_matrix *mat, size_t irow, size_t icol)
 {
     __st_data_access(mat->data, (irow*mat->ncol)+icol);
