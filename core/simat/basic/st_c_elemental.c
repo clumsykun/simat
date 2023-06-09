@@ -560,7 +560,7 @@ st_vec_mul(st_vector *a, st_vector *b)
 {
     size_t len = st_check_vec_len(a, b->len);
     st_dtype dtype = st_check_vec_dtype(a, b->dtype);
-    st_vector *dst = __st_new_vector(dtype, len);
+    st_vector *dst = st_new_vector(len, dtype);
 
     __data_mul(dst->data, a->data, b->data);
     return dst;
@@ -702,7 +702,7 @@ st_vec_add(st_vector *a, st_vector *b)
 {
     size_t len = st_check_vec_len(a, b->len);
     st_dtype dtype = st_check_vec_dtype(a, b->dtype);
-    st_vector *dst = __st_new_vector(dtype, len);
+    st_vector *dst = st_new_vector(len, dtype);
 
     __data_add(dst->data, a->data, b->data);
     return dst;

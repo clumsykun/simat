@@ -122,7 +122,7 @@ __double_to_bool(size_t n, st_bool *dst, st_d64 *src)
 st_vector *
 st_vec_copy(st_vector *vec)
 {
-    st_vector *copy = __st_new_vector(vec->dtype, vec->len);
+    st_vector *copy = st_new_vector(vec->len, vec->dtype);
     void *dst = copy->data->head;
     void *src = vec->data->head;
     size_t n  = vec->len;
@@ -162,7 +162,7 @@ st_vec_copy_cast(st_vector *vec, st_dtype dtype)
     if (!__st_is_debug && vec->dtype > dtype)
         printf("Warning: conversion may lose significant digits.\n");
 
-    st_vector *copy = __st_new_vector(dtype, vec->len);
+    st_vector *copy = st_new_vector(vec->len, dtype);
     size_t i;
     void *e_vec, *e_cp;
     st_d64 value;

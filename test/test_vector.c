@@ -6,7 +6,7 @@
 st_vector *
 test_d_vec_1(void)
 {
-    st_vector *vec = st_new_vector(5);
+    st_vector *vec = st_new_vector(5, st_dtype_d64);
     st_d64 arr[5] = {
         3.141592653589793,
         2.718281828459045,
@@ -25,7 +25,7 @@ test_d_vec_1(void)
 st_vector *
 test_d_vec_2(void)
 {
-    st_vector *vec = st_new_vector(5);
+    st_vector *vec = st_new_vector(5, st_dtype_d64);
     st_d64 arr[5] = {
         6.67428,
         9.10938215,
@@ -41,7 +41,7 @@ test_d_vec_2(void)
 st_vector *
 test_i_vec_1(void)
 {
-    st_vector *vec = st_new_int_vector(1000);
+    st_vector *vec = st_new_vector(1000, st_dtype_i32);
     for (size_t i = 0; i < 1000; i++) {
         st_vec_assign(vec, i, i);
     }
@@ -52,7 +52,7 @@ test_i_vec_1(void)
 st_vector *
 test_u_vec_1(void)
 {
-    st_vector *vec = st_new_pixel_vector(1000);
+    st_vector *vec = st_new_vector(1000, st_dtype_u8);
     for (size_t i = 0; i < 1000; i++) {
         st_vec_assign(vec, i, i%256);
     }
@@ -63,7 +63,7 @@ test_u_vec_1(void)
 st_vector *
 test_b_vec_1(void)
 {
-    st_vector *vec = st_new_bool_vector(1000);
+    st_vector *vec = st_new_vector(1000, st_dtype_bool);
     for (size_t i = 0; i < 1000; i++) {
         st_vec_assign(vec, i, i%2);
     }
@@ -86,22 +86,22 @@ test__st_vec_is_equal(result *rp)
 {
     rp->name = "st_vec_is_equal";
 
-    st_vector *vec1 = st_new_vector(1000);
+    st_vector *vec1 = st_new_vector(1000, st_dtype_d64);
     st_vec_rand(vec1);
     st_vector *vec2 = st_vec_copy(vec1);
     rp->value += !st_vec_is_equal(vec1, vec2);
 
-    vec1 = st_new_int_vector(1000);
+    vec1 = st_new_vector(1000, st_dtype_i32);
     st_vec_rand(vec1);
     vec2 = st_vec_copy(vec1);
     rp->value += !st_vec_is_equal(vec1, vec2);
 
-    vec1 = st_new_pixel_vector(1000);
+    vec1 = st_new_vector(1000, st_dtype_u8);
     st_vec_rand(vec1);
     vec2 = st_vec_copy(vec1);
     rp->value += !st_vec_is_equal(vec1, vec2);
 
-    vec1 = st_new_bool_vector(1000);
+    vec1 = st_new_vector(1000, st_dtype_bool);
     st_vec_rand(vec1);
     vec2 = st_vec_copy(vec1);
     rp->value += !st_vec_is_equal(vec1, vec2);
@@ -344,7 +344,6 @@ st_i32
 test__vector()
 {
     printf("unit test of vector start:\n");
-    st_vector *vec = test_d_vec_1();
     call_test(test__st_vec_is_equal);
     call_test(test__st_vec_copy);
     call_test(test__st_vec_norm);

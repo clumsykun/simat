@@ -138,15 +138,10 @@ __st_byteof(st_dtype dtype)
 
 /* =================================================================================================
  * functions here defined to support vector computation. 
- * @__st_new_vector: construct function of vector.
- * @st_new_bool_vector: construct new st_bool vector.
- * @st_new_pixel_vector: construct new st_u8 vector.
- * @st_new_int_vector: construct new st_i32 vector.
- * @st_new_vector: construct new st_d64 vector.
  */
 
-st_vector *
-__st_new_vector(st_dtype dtype, size_t len)
+static st_vector *
+__new_vector(size_t len, st_dtype dtype)
 {
     st_vector *vec;
     __st_data *data;
@@ -179,27 +174,24 @@ __st_new_vector(st_dtype dtype, size_t len)
 }
 
 st_vector *
-st_new_bool_vector(size_t len)
+st_new_vector(size_t len, st_dtype dtype)
 {
-    return __st_new_vector(st_dtype_bool, len);
-}
+    switch (dtype) {
+        case st_dtype_d64:
+            return __new_vector(len, st_dtype_d64);
+        
+        case st_dtype_i32:
+            return __new_vector(len, st_dtype_i32);
 
-st_vector *
-st_new_pixel_vector(size_t len)
-{
-    return __st_new_vector(st_dtype_u8, len);
-}
+        case st_dtype_u8:
+            return __new_vector(len, st_dtype_u8);
 
-st_vector *
-st_new_int_vector(size_t len)
-{
-    return __st_new_vector(st_dtype_i32, len);
-}
+        case st_dtype_bool:
+            return __new_vector(len, st_dtype_bool);
 
-st_vector *
-st_new_vector(size_t len)
-{
-    return __st_new_vector(st_dtype_d64, len);
+        default:
+            __st_raise_dtype_error();
+    }
 }
 
 void
@@ -361,7 +353,7 @@ __new_row(void *row, void *row_data_head, st_dtype dtype, size_t len)
     };
     st_vector _vec = {
         false,  /* this options here doesn't work because
-                   this vector is not constructed by __st_new_vector */
+                   this vector is not constructed by st_new_vector */
         dtype,
         data,
         len
