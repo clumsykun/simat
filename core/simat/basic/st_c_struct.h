@@ -105,13 +105,6 @@ typedef struct __st_view
                               ? (*(st_bool *)(p) = (st_bool)(value)) \
                               : __st_raise_dtype_error()))))
 
-/* TODO: check if valid */
-#define __st_view_access(view, idx)                         \
-    (((idx) < 0 || (view)->len <= (idx))                  \
-        ? __st_raise_out_range_error()                    \
-            : __st_access_p(*((void **)(view)->head+(idx)), \
-                            (view)->dtype))
-
 #define __st_mat_assign(mat, irow, icol, value)    \
     (((irow) < 0 || (mat)->nrow <= (irow))       \
         ? __st_raise_out_range_error()           \
@@ -142,12 +135,13 @@ void st_vector_view(st_view *view, st_vector *vec);
  * Assign/Access/Display
  */
 
-st_d64 __st_data_access(const __st_data *data, size_t idx);
-st_d64 st_vec_access(const st_vector *vec, size_t idx);
-st_d64 st_mat_access(const st_matrix *mat, size_t irow, size_t icol);
+st_d64     __st_data_access(const __st_data *data, size_t idx);
+st_d64     st_vec_access(const st_vector *vec, size_t idx);
+st_d64     st_mat_access(const st_matrix *mat, size_t irow, size_t icol);
 st_vector *st_mat_access_row(const st_matrix *mat, size_t irow);
+st_d64     st_view_access(const st_view *view, size_t idx);
 
-void   st_vec_assign(const st_vector *vec, size_t idx, st_d64 value);
+void st_vec_assign(const st_vector *vec, size_t idx, st_d64 value);
 void st_vec_assign_all(st_vector *vec, st_d64 value);
 void st_mat_assign_all(st_matrix *mat, st_d64 value);
 

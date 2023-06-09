@@ -408,7 +408,7 @@ st_mat_access_row(const st_matrix *mat, size_t irow)
 }
 
 st_d64
-st_view_access(st_view *view, size_t idx)
+st_view_access(const st_view *view, size_t idx)
 {
     __st_check_valid(view);
 
@@ -661,14 +661,14 @@ st_view_display(const st_view *view)
             printf("BoolView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
-                c = (__st_view_access(view, i) == false ? '-' : '+');
+                c = (st_view_access(view, i) == false ? '-' : '+');
                 printf("(%c), ", c);
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("(%c)])\n", (__st_view_access(view, view->len-1) == false ? '-' : '+'));
+            printf("(%c)])\n", (st_view_access(view, view->len-1) == false ? '-' : '+'));
             break;
         }
 
@@ -676,13 +676,13 @@ st_view_display(const st_view *view)
             printf("PixelView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
-                printf("(%3d), ", (st_i32)__st_view_access(view, i));
+                printf("(%3d), ", (st_i32)st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("(%3d)])\n", (st_i32)__st_view_access(view, view->len-1));
+            printf("(%3d)])\n", (st_i32)st_view_access(view, view->len-1));
             break;
         }
 
@@ -690,13 +690,13 @@ st_view_display(const st_view *view)
             printf("IntView([\n");
 
             for (size_t i = 0; i <= view->len - 2; i++) {
-                printf("%5d, ", (st_i32)__st_view_access(view, i));
+                printf("%5d, ", (st_i32)st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n");
             }
 
-            printf("%5d])\n", (st_i32)__st_view_access(view, view->len-1));
+            printf("%5d])\n", (st_i32)st_view_access(view, view->len-1));
             break;
         }
 
@@ -705,14 +705,14 @@ st_view_display(const st_view *view)
 
             st_d64 d;
             for (size_t i = 0; i <= view->len - 2; i++) {
-                d = (st_d64)__st_view_access(view, i);
-                printf("%4.2f, ", (st_d64)__st_view_access(view, i));
+                d = (st_d64)st_view_access(view, i);
+                printf("%4.2f, ", (st_d64)st_view_access(view, i));
 
                 if ((i + 1) % 10 == 0)
                     printf("\n      ");
             }
 
-            printf("%4.2f])\n", (st_d64)__st_view_access(view, view->len-1));
+            printf("%4.2f])\n", (st_d64)st_view_access(view, view->len-1));
             break;
         }
 
