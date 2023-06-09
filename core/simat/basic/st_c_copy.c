@@ -9,15 +9,15 @@
 static void 
 __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
 {
-    st_simd_d128 *ps = (st_simd_d128 *) src;
-    st_simd_d128 *pd = (st_simd_d128 *) dst;
+    st_md *ps = (st_md *) src;
+    st_md *pd = (st_md *) dst;
 
     size_t batches = n / 2;
     size_t remainder = n % 2;
 
     /* pair of d64 in one loop */
     while (batches--)
-        st_store_d128((st_d64 *)pd++, st_load_d128((st_d64 *)ps++));
+        st_store_d64((st_d64 *)pd++, st_load_d64((st_d64 *)ps++));
 
     src = (st_d64 *)ps;
     dst = (st_d64 *)pd;
@@ -29,15 +29,15 @@ __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
 static void 
 __copy_i32(st_i32 *dst, st_i32 *src, size_t n)
 {
-    st_simd_i128 *ps = (st_simd_i128 *) src;
-    st_simd_i128 *pd = (st_simd_i128 *) dst;
+    st_mi *ps = (st_mi *) src;
+    st_mi *pd = (st_mi *) dst;
 
     size_t batches = n / 4;
     size_t remainder = n % 4;
 
     /* 4 of i32 in one loop */
     while (batches--)
-        st_store_i128(pd++, st_load_i128(ps++));
+        st_store_i32(pd++, st_load_i32(ps++));
 
     src = (st_i32 *)ps;
     dst = (st_i32 *)pd;
@@ -49,15 +49,15 @@ __copy_i32(st_i32 *dst, st_i32 *src, size_t n)
 static void 
 __copy_u8_bool(st_u8 *dst, st_u8 *src, size_t n)
 {
-    st_simd_i128 *ps = (st_simd_i128 *) src;
-    st_simd_i128 *pd = (st_simd_i128 *) dst;
+    st_mi *ps = (st_mi *) src;
+    st_mi *pd = (st_mi *) dst;
 
     size_t batches = n / 16;
     size_t remainder = n % 16;
 
     /* 16 of u8 in one loop */
     while (batches--)
-        st_store_i128(pd++, st_load_i128(ps++));
+        st_store_i32(pd++, st_load_i32(ps++));
 
     src = (st_u8 *)ps;
     dst = (st_u8 *)pd;
