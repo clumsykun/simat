@@ -77,13 +77,13 @@ st_dist_mat_row(st_matrix *re, st_matrix *mat, dist_fp fp)
         for (size_t j = 0; j < mat->nrow; j++) {
 
             if (i > j) {
-                v = __st_mat_access(re, j, i);
+                v = st_mat_access(re, j, i);
                 __st_mat_assign(re, i, j, v);
             }
             else {
                 v = fp(
-                    __st_mat_access_row(mat, i),
-                    __st_mat_access_row(mat, j));
+                    st_mat_access_row(mat, i),
+                    st_mat_access_row(mat, j));
 
                 __st_mat_assign(re, i, j, v);
             }

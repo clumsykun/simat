@@ -178,7 +178,7 @@ void
 st_mat_rand(const st_matrix *mat)
 {
     for (size_t i = 0; i < mat->nrow; i++)
-        st_vec_rand(__st_mat_access_row(mat, i));
+        st_vec_rand(st_mat_access_row(mat, i));
 }
 
 void

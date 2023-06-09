@@ -30,7 +30,7 @@ __mat_dot_double(st_matrix *a, st_matrix *b)
 // st_d64
 // st_mat_min(st_matrix *mat)
 // {
-//     st_d64 min = __st_mat_access(mat, 0, 0);
+//     st_d64 min = st_mat_access(mat, 0, 0);
 //     void *p;
 //     for __st_iter_data(p, mat->data)
 //         min = (min <= __st_access_p(p, mat->data->dtype)
@@ -43,7 +43,7 @@ __mat_dot_double(st_matrix *a, st_matrix *b)
 // st_d64
 // st_mat_max(st_matrix *mat)
 // {
-//     st_d64 max = __st_mat_access(mat, 0, 0);
+//     st_d64 max = st_mat_access(mat, 0, 0);
 //     void *p;
 //     for __st_iter_data(p, mat->data)
 //         max = (max >= __st_access_p(p, mat->data->dtype)

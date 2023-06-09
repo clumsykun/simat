@@ -53,8 +53,8 @@ test__st_mat_copy_t(result *rp)
     for (size_t i = 0; i < iris->X->nrow; i++) {
         for (size_t j = 0; j < iris->X->ncol; j++) {
             rp->value = !equal(
-                __st_mat_access(iris->X, i, j),
-                __st_mat_access(iris_t, j, i)
+                st_mat_access(iris->X, i, j),
+                st_mat_access(iris_t, j, i)
             );
         }
     }
@@ -71,10 +71,10 @@ test__st_mat_dot(result *rp)
 
     st_matrix *ret = st_mat_dot(iris_t, iris->X);
 
-    rp->value = !equal(st_precise(__st_mat_access(ret, 0, 0), 2), 5223.84);
-    rp->value = !equal(st_precise(__st_mat_access(ret, 1, 1), 2), 1430.39);
-    rp->value = !equal(st_precise(__st_mat_access(ret, 2, 2), 2), 2582.71);
-    rp->value = !equal(st_precise(__st_mat_access(ret, 3, 3), 2), 302.33);
+    rp->value = !equal(st_precise(st_mat_access(ret, 0, 0), 2), 5223.84);
+    rp->value = !equal(st_precise(st_mat_access(ret, 1, 1), 2), 1430.39);
+    rp->value = !equal(st_precise(st_mat_access(ret, 2, 2), 2), 2582.71);
+    rp->value = !equal(st_precise(st_mat_access(ret, 3, 3), 2), 302.33);
 
     return rp;
 }

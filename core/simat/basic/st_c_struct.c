@@ -53,8 +53,8 @@ __free_matrix(void *matrix)
     __free_data(mat->data);
 
     for (size_t i = 0; i < mat->nrow; i++) {
-        memset(__st_mat_access_row(mat, i)->data, 0, sizeof(__st_data));
-        __free(__st_mat_access_row(mat, i)->data);
+        memset(st_mat_access_row(mat, i)->data, 0, sizeof(__st_data));
+        __free(st_mat_access_row(mat, i)->data);
     }
 
     p = (void *)mat->first;
@@ -321,7 +321,7 @@ st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
         view->last = view->head + view->len-1;
     }
 
-    for __st_iter_vector(i, p, __st_mat_access_row(mat, irow))
+    for __st_iter_vector(i, p, st_mat_access_row(mat, irow))
         view->head[i] = p;
 }
 
@@ -363,7 +363,7 @@ st_vector_view(st_view *view, st_vector *vec)
  * Access/Assign/Display
  */
 
-st_d64
+__inline st_d64
 __st_data_access(const __st_data *data, size_t idx)
 {
     if (idx < 0 || data->size <= idx)
@@ -389,11 +389,37 @@ __st_data_access(const __st_data *data, size_t idx)
     }
 }
 
-st_d64
+__inline st_d64
 st_vec_access(const st_vector *vec, size_t idx)
 {
     __st_data_access(vec->data, idx);
 }
+
+__inline st_d64
+st_mat_access(const st_matrix *mat, size_t irow, size_t icol)
+{
+    __st_data_access(mat->data, (irow*mat->ncol)+icol);
+}
+
+st_vector *
+st_mat_access_row(const st_matrix *mat, size_t irow)
+{
+    return (st_vector *)(mat->first+irow);
+}
+
+// void *
+// st_view_access(st_view *view, size_t idx)
+// {
+//     if (idx < 0 || data->size <= idx)
+//         __st_raise_out_range_error();
+
+// /* TODO: check if valid */
+// #define __st_view_access(view, idx)                         \
+//     (((idx) < 0 || (view)->len <= (idx))                  \
+//         ? __st_raise_out_range_error()                    \
+//             : __st_access_p(*((void **)(view)->head+(idx)), \
+//                             (view)->dtype))
+// }
 
 static void
 __st_data_assign(const __st_data *data, size_t idx, st_d64 value)
@@ -528,7 +554,7 @@ st_mat_display(st_matrix *mat)
 
             for (size_t i = 0; i < mat->nrow; i++) {
                 for (size_t j = 0; j < mat->ncol; j++) {
-                    c = (__st_mat_access(mat, i, j) == false ? '-': '+');
+                    c = (st_mat_access(mat, i, j) == false ? '-': '+');
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
                         printf("(%c)])", c);
@@ -551,9 +577,9 @@ st_mat_display(st_matrix *mat)
                 for (size_t j = 0; j < mat->ncol; j++) {
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
-                        printf("(%3d)])", (st_i32)__st_mat_access(mat, i, j));
+                        printf("(%3d)])", (st_i32)st_mat_access(mat, i, j));
                     else
-                        printf("(%3d), ", (st_i32)__st_mat_access(mat, i, j));
+                        printf("(%3d), ", (st_i32)st_mat_access(mat, i, j));
                 }
 
                 if (i == (mat->nrow-1))
@@ -571,9 +597,9 @@ st_mat_display(st_matrix *mat)
                 for (size_t j = 0; j < mat->ncol; j++) {
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
-                        printf("%3d])", (st_i32)__st_mat_access(mat, i, j));
+                        printf("%3d])", (st_i32)st_mat_access(mat, i, j));
                     else
-                        printf("%3d, ", (st_i32)__st_mat_access(mat, i, j));
+                        printf("%3d, ", (st_i32)st_mat_access(mat, i, j));
                 }
 
                 if (i == (mat->nrow-1))
@@ -591,9 +617,9 @@ st_mat_display(st_matrix *mat)
                 for (size_t j = 0; j < mat->ncol; j++) {
 
                     if (i == (mat->nrow-1) && j == (mat->ncol-1))
-                        printf("%.2f])", __st_mat_access(mat, i, j));
+                        printf("%.2f])", st_mat_access(mat, i, j));
                     else
-                        printf("%.2f,  ", __st_mat_access(mat, i, j));
+                        printf("%.2f,  ", st_mat_access(mat, i, j));
                 }
 
                 if (i == (mat->nrow-1))

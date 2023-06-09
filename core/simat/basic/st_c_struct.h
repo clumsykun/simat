@@ -112,13 +112,6 @@ typedef struct __st_view
             : __st_access_p(*((void **)(view)->head+(idx)), \
                             (view)->dtype))
 
-/* TODO: check irow/icol are in range and if valid */
-#define __st_mat_access(mat, irow, icol) \
-    __st_access_p(__st_mat_find_p((mat), (irow), (icol)), (mat)->data->dtype)
-
-#define __st_mat_access_row(mat, irow) \
-    ((st_vector *)(mat)->first+(irow))
-
 #define __st_mat_assign(mat, irow, icol, value)    \
     (((irow) < 0 || (mat)->nrow <= (irow))       \
         ? __st_raise_out_range_error()           \
@@ -151,6 +144,8 @@ void st_vector_view(st_view *view, st_vector *vec);
 
 st_d64 __st_data_access(const __st_data *data, size_t idx);
 st_d64 st_vec_access(const st_vector *vec, size_t idx);
+st_d64 st_mat_access(const st_matrix *mat, size_t irow, size_t icol);
+st_vector *st_mat_access_row(const st_matrix *mat, size_t irow);
 
 void   st_vec_assign(const st_vector *vec, size_t idx, st_d64 value);
 void st_vec_assign_all(st_vector *vec, st_d64 value);
