@@ -258,7 +258,7 @@ st_view_sort(st_view *view)
         view->head,
         view->last,
         view->dtype,
-        __st_byteof(view->dtype)
+        view->nbyte
     );
 }
 
@@ -270,5 +270,5 @@ st_view_reverse(st_view *view)
     size_t step = view->len / 2;
 
     while (step--)
-        __swap(*++l, *--r, __st_byteof(view->dtype));
+        __swap(*++l, *--r, view->nbyte);
 }

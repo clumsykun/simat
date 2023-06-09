@@ -49,6 +49,7 @@ typedef struct __st_view
     st_dtype dtype;
     void **head;
     void **last;
+    size_t nbyte;
     size_t len;
 } st_view;
 
@@ -134,8 +135,6 @@ typedef struct __st_view
 /* =================================================================================================
  * function define.
  */
-
-size_t __st_byteof(st_dtype dtype);
 
 st_vector *st_new_vector(size_t len, st_dtype dtype);
 

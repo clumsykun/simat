@@ -112,7 +112,7 @@ __status_view(void *view)
     );
 }
 
-size_t
+static size_t
 __st_byteof(st_dtype dtype)
 {
     size_t nbyte;
@@ -555,6 +555,7 @@ st_new_view()
         NULL, /* initialize it to NULL so that realloc() will work properly */
         NULL,
         0,
+        0,
     };
     memcpy(
         view,
@@ -571,6 +572,7 @@ st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow)
     void *p;
     size_t i;
     view->dtype = mat->dtype;
+    view->nbyte = mat->data->nbyte;
 
     if (view->len != mat->ncol) {
         view->len = mat->ncol;
@@ -586,6 +588,7 @@ void
 st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol)
 {
     view->dtype = mat->dtype;
+    view->nbyte = mat->data->nbyte;
 
     if (view->len != mat->nrow) {
         view->len = mat->nrow;
@@ -603,6 +606,7 @@ st_vector_view(st_view *view, st_vector *vec)
     void *p;
     size_t i;
     view->dtype = vec->dtype;
+    view->nbyte = vec->data->nbyte;
 
     if (view->len != vec->len) {
         view->len = vec->len;
