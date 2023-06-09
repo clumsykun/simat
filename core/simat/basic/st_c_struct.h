@@ -146,22 +146,19 @@ void st_matrix_view_row(st_view *view, st_matrix *mat, size_t irow);
 void st_vector_view(st_view *view, st_vector *vec);
 
 /* =================================================================================================
- * assign/access/display/copy
+ * Assign/Access/Display
  */
 
 st_d64 __st_data_access(const __st_data *data, size_t idx);
 st_d64 st_vec_access(const st_vector *vec, size_t idx);
+
 void   st_vec_assign(const st_vector *vec, size_t idx, st_d64 value);
+void st_vec_assign_all(st_vector *vec, st_d64 value);
+void st_mat_assign_all(st_matrix *mat, st_d64 value);
 
 void st_vec_display(const st_vector *vec);
-void st_vec_assign_all(st_vector *vec, st_d64 value);
 void st_mat_display(st_matrix *mat);
-void st_mat_assign_all(st_matrix *mat, st_d64 value);
 void st_view_display(const st_view *view);
-
-// st_vector *st_vec_copy(st_vector *vec);
-// st_vector *st_vec_copy_cast(st_vector *vec, st_dtype dtype);
-
 
 /* =================================================================================================
  * check.
