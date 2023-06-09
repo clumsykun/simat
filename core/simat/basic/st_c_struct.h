@@ -138,11 +138,7 @@ typedef struct __st_view
 
 st_vector *st_new_vector(size_t len, st_dtype dtype);
 
-st_matrix *__st_new_matrix(st_dtype dtype, size_t nrow, size_t ncol);
-st_matrix *st_new_bool_matrix(size_t nrow, size_t ncol);
-st_matrix *st_new_pixel_matrix(size_t nrow, size_t ncol);
-st_matrix *st_new_int_matrix(size_t nrow, size_t ncol);
-st_matrix *st_new_matrix(size_t nrow, size_t ncol);
+st_matrix *st_new_matrix(size_t nrow, size_t ncol, st_dtype dtype);
 
 st_view *st_new_view();
 void st_matrix_view_col(st_view *view, st_matrix *mat, size_t icol);

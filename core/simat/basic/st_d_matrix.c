@@ -7,7 +7,7 @@ __mat_dot_double(st_matrix *a, st_matrix *b)
     if (a->ncol != b->nrow)
         __st_raise_length_error();
 
-    st_matrix *r = st_new_matrix(a->nrow, b->ncol);
+    st_matrix *r = st_new_matrix(a->nrow, b->ncol, st_dtype_d64);
     st_d64 (*pa)[a->nrow][a->ncol] = a->data->head;
     st_d64 (*pb)[b->nrow][b->ncol] = b->data->head;
     st_d64 (*pr)[r->nrow][r->ncol] = r->data->head;
@@ -74,10 +74,10 @@ st_mat_scale(st_matrix *mat, st_d64 min, st_d64 max)
 st_matrix *
 st_mat_copy(st_matrix *mat)
 {
-    st_matrix *copy = __st_new_matrix(
-        mat->dtype,
+    st_matrix *copy = st_new_matrix(
         mat->nrow,
-        mat->ncol);
+        mat->ncol,
+        mat->dtype);
 
     memcpy(
         copy->data->head,
@@ -94,10 +94,10 @@ st_mat_copy_t(st_matrix *mat)
 {
     void *p;
     size_t irow, icol;
-    st_matrix *t = __st_new_matrix(
-        mat->dtype,
+    st_matrix *t = st_new_matrix(
         mat->ncol,
-        mat->nrow);
+        mat->nrow,
+        mat->dtype);
 
     for __st_iter_matrix(irow, icol, p, mat)
         memcpy(

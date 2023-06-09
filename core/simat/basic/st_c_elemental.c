@@ -572,7 +572,7 @@ st_mat_mul(st_matrix *a, st_matrix *b)
     size_t nrow = st_check_mat_nrow(a, b->nrow);
     size_t ncol = st_check_mat_ncol(a, b->ncol);
     st_dtype dtype = st_check_mat_dtype(a, b->dtype);
-    st_matrix *dst = __st_new_matrix(dtype, nrow, ncol);
+    st_matrix *dst = st_new_matrix(nrow, ncol, dtype);
 
     __data_mul(dst->data, a->data, b->data);
     return dst;
@@ -714,7 +714,7 @@ st_mat_add(st_matrix *a, st_matrix *b)
     size_t nrow = st_check_mat_nrow(a, b->nrow);
     size_t ncol = st_check_mat_ncol(a, b->ncol);
     st_dtype dtype = st_check_mat_dtype(a, b->dtype);
-    st_matrix *dst = __st_new_matrix(dtype, nrow, ncol);
+    st_matrix *dst = st_new_matrix(nrow, ncol, dtype);
 
     __data_add(dst->data, a->data, b->data);
     return dst;

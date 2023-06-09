@@ -219,8 +219,8 @@ __new_row(void *row, void *row_data_head, st_dtype dtype, size_t len)
     __st_b_ds_add(row, NULL, NULL, &((st_vector *)row)->temp);
 }
 
-st_matrix *
-__st_new_matrix(st_dtype dtype, size_t nrow, size_t ncol)
+static st_matrix *
+__new_matrix(size_t nrow, size_t ncol, st_dtype dtype)
 {
     st_matrix *mat;
     st_vector *_tmp_vec;
@@ -266,27 +266,24 @@ __st_new_matrix(st_dtype dtype, size_t nrow, size_t ncol)
 }
 
 st_matrix *
-st_new_bool_matrix(size_t nrow, size_t ncol)
+st_new_matrix(size_t nrow, size_t ncol, st_dtype dtype)
 {
-    return __st_new_matrix(st_dtype_bool, nrow, ncol);
-}
+    switch (dtype) {
+        case st_dtype_d64:
+            return __new_matrix(nrow, ncol, st_dtype_d64);
+        
+        case st_dtype_i32:
+            return __new_matrix(nrow, ncol, st_dtype_i32);
 
-st_matrix *
-st_new_pixel_matrix(size_t nrow, size_t ncol)
-{
-    return __st_new_matrix(st_dtype_u8, nrow, ncol);
-}
+        case st_dtype_u8:
+            return __new_matrix(nrow, ncol, st_dtype_u8);
 
-st_matrix *
-st_new_int_matrix(size_t nrow, size_t ncol)
-{
-    return __st_new_matrix(st_dtype_i32, nrow, ncol);
-}
+        case st_dtype_bool:
+            return __new_matrix(nrow, ncol, st_dtype_bool);
 
-st_matrix *
-st_new_matrix(size_t nrow, size_t ncol)
-{
-    return __st_new_matrix(st_dtype_d64, nrow, ncol);
+        default:
+            __st_raise_dtype_error();
+    }
 }
 
 st_view *

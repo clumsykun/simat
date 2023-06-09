@@ -8,7 +8,7 @@ st_load_iris(void)
     size_t n_samples = 150;
 
     st_dataset *iris = (st_dataset *)malloc(sizeof(st_dataset));
-    st_matrix *X = st_new_matrix(n_samples, n_features);
+    st_matrix *X = st_new_matrix(n_samples, n_features, st_dtype_d64);
     st_vector *Y = st_new_vector(n_samples, st_dtype_i32);
 
     st_d64 x_arr[] = {
