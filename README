@@ -1,4 +1,7 @@
-SImple MATrix
-=============
-A simple matrix computing package with Python interface.
+SImple MATrix with algorithm
+============================
+          [S]  [ ]
+          [ ]  [T]
+============================
+SIMAT is a simple matrix computing package with several algorithms.
 Contact me at clumsykundev@gmail.com.
