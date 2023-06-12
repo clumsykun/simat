@@ -155,12 +155,11 @@ void st_view_display(const st_view *view);
 
 st_bool st_check_data_dtype(const __st_data *data, st_dtype dtype);
 st_bool st_check_data_size(const __st_data *data, size_t size);
-
 st_bool st_check_vec_len(const st_vector *vec, size_t len);
-st_dtype st_check_vec_dtype(const st_vector *vec, st_dtype dtype);
-size_t st_check_mat_nrow(const st_matrix *mat, size_t nrow);
-size_t st_check_mat_ncol(const st_matrix *mat, size_t ncol);
-st_dtype st_check_mat_dtype(const st_matrix *mat, st_dtype dtype);
+st_bool st_check_vec_dtype(const st_vector *vec, st_dtype dtype);
+st_bool st_check_mat_nrow(const st_matrix *mat, size_t nrow);
+st_bool st_check_mat_ncol(const st_matrix *mat, size_t ncol);
+st_bool st_check_mat_dtype(const st_matrix *mat, st_dtype dtype);
 
 /* =================================================================================================
  * iterator.

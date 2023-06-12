@@ -760,38 +760,38 @@ st_check_vec_len(const st_vector *vec, size_t len)
         return 1;
 }
 
-st_dtype
+st_bool
 st_check_vec_dtype(const st_vector *vec, st_dtype dtype)
 {
-    if (vec->dtype != dtype)
-        __st_raise_dtype_error();
-    
-    return dtype;
+    if (vec->dtype == dtype)
+        return 0;
+    else
+        return 1;
 }
 
-size_t
+st_bool
 st_check_mat_nrow(const st_matrix *mat, size_t nrow)
 {
-    if (mat->nrow != nrow)
-        __st_raise_length_error();
-
-    return nrow;
+    if (mat->nrow == nrow)
+        return 0;
+    else
+        return 1;
 }
 
-size_t
+st_bool
 st_check_mat_ncol(const st_matrix *mat, size_t ncol)
 {
-    if (mat->ncol != ncol)
-        __st_raise_length_error();
-
-    return ncol;
+    if (mat->ncol == ncol)
+        return 0;
+    else
+        return 1;
 }
 
-st_dtype
+st_bool
 st_check_mat_dtype(const st_matrix *mat, st_dtype dtype)
 {
-    if (mat->dtype != dtype)
-        __st_raise_dtype_error();
-
-    return dtype;
+    if (mat->dtype == dtype)
+        return 0;
+    else
+        return 1;
 }

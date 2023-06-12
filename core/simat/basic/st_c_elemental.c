@@ -568,8 +568,12 @@ st_vec_mul(st_vector *a, st_vector *b)
     if (st_check_vec_len(a, b->len))
         __st_raise_length_error();
 
+    if (st_check_vec_dtype(a, b->dtype))
+        __st_raise_dtype_error();
+
+
     size_t len = a->len;
-    st_dtype dtype = st_check_vec_dtype(a, b->dtype);
+    st_dtype dtype = a->dtype;
     st_vector *dst = st_new_vector(len, dtype);
 
     __data_mul(dst->data, a->data, b->data);
@@ -579,9 +583,18 @@ st_vec_mul(st_vector *a, st_vector *b)
 st_matrix *
 st_mat_mul(st_matrix *a, st_matrix *b)
 {
-    size_t nrow = st_check_mat_nrow(a, b->nrow);
-    size_t ncol = st_check_mat_ncol(a, b->ncol);
-    st_dtype dtype = st_check_mat_dtype(a, b->dtype);
+    if (st_check_mat_nrow(a, b->nrow))
+        __st_raise_length_error();
+
+    if (st_check_mat_ncol(a, b->ncol))
+        __st_raise_length_error();
+
+    if (st_check_mat_dtype(a, b->dtype))
+        __st_raise_dtype_error();
+
+    size_t nrow = a->nrow;
+    size_t ncol = a->ncol;
+    st_dtype dtype = a->dtype;
     st_matrix *dst = st_new_matrix(nrow, ncol, dtype);
 
     __data_mul(dst->data, a->data, b->data);
@@ -720,8 +733,11 @@ st_vec_add(st_vector *a, st_vector *b)
     if (st_check_vec_len(a, b->len))
         __st_raise_length_error();
 
+    if (st_check_vec_dtype(a, b->dtype))
+        __st_raise_dtype_error();
+
     size_t len = a->len;
-    st_dtype dtype = st_check_vec_dtype(a, b->dtype);
+    st_dtype dtype = a->dtype;
     st_vector *dst = st_new_vector(len, dtype);
 
     __data_add(dst->data, a->data, b->data);
@@ -731,9 +747,18 @@ st_vec_add(st_vector *a, st_vector *b)
 st_matrix *
 st_mat_add(st_matrix *a, st_matrix *b)
 {
-    size_t nrow = st_check_mat_nrow(a, b->nrow);
-    size_t ncol = st_check_mat_ncol(a, b->ncol);
-    st_dtype dtype = st_check_mat_dtype(a, b->dtype);
+    if (st_check_mat_nrow(a, b->nrow))
+        __st_raise_length_error();
+
+    if (st_check_mat_ncol(a, b->ncol))
+        __st_raise_length_error();
+
+    if (st_check_mat_dtype(a, b->dtype))
+        __st_raise_dtype_error();
+
+    size_t nrow = a->nrow;
+    size_t ncol = a->ncol;
+    st_dtype dtype = a->dtype;
     st_matrix *dst = st_new_matrix(nrow, ncol, dtype);
 
     __data_add(dst->data, a->data, b->data);
