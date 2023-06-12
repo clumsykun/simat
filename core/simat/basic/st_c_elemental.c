@@ -565,7 +565,10 @@ __data_mul(const __st_data *dst, const __st_data *a, const __st_data *b)
 st_vector *
 st_vec_mul(st_vector *a, st_vector *b)
 {
-    size_t len = st_check_vec_len(a, b->len);
+    if (st_check_vec_len(a, b->len))
+        __st_raise_length_error();
+
+    size_t len = a->len;
     st_dtype dtype = st_check_vec_dtype(a, b->dtype);
     st_vector *dst = st_new_vector(len, dtype);
 
@@ -714,7 +717,10 @@ __data_add(const __st_data *dst, const __st_data *a, const __st_data *b)
 st_vector *
 st_vec_add(st_vector *a, st_vector *b)
 {
-    size_t len = st_check_vec_len(a, b->len);
+    if (st_check_vec_len(a, b->len))
+        __st_raise_length_error();
+
+    size_t len = a->len;
     st_dtype dtype = st_check_vec_dtype(a, b->dtype);
     st_vector *dst = st_new_vector(len, dtype);
 

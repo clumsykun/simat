@@ -751,13 +751,13 @@ st_check_data_size(const __st_data *data, size_t size)
         return 1;
 }
 
-size_t
+st_bool
 st_check_vec_len(const st_vector *vec, size_t len)
 {
-    if (vec->len != len)
-        __st_raise_length_error();
-
-    return len;
+    if (vec->len == len)
+        return 0;
+    else
+        return 1;
 }
 
 st_dtype

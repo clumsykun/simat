@@ -4,7 +4,9 @@
 st_decimal
 st_dist_euclid(st_vector *a, st_vector *b)
 {
-    st_check_vec_len(a, b->len);
+    if (st_check_vec_len(a, b->len))
+        __st_raise_length_error();
+    
     st_d64 diff, sum_square = 0;
     size_t i;
     void *pa, *pb;
@@ -20,7 +22,9 @@ st_dist_euclid(st_vector *a, st_vector *b)
 st_decimal
 st_dist_cosine(st_vector *a, st_vector *b)
 {
-    st_check_vec_len(a, b->len);
+    if (st_check_vec_len(a, b->len))
+        __st_raise_length_error();
+
     return st_vec_dot(a,b)/(st_vec_norm(a)*st_vec_norm(b));
 }
 
@@ -28,7 +32,9 @@ st_dist_cosine(st_vector *a, st_vector *b)
 st_decimal
 st_dist_manhattan(st_vector *a, st_vector *b)
 {
-    st_check_vec_len(a, b->len);
+    if (st_check_vec_len(a, b->len))
+        __st_raise_dtype_error();
+
     st_d64 diff, dist = 0;
     size_t i;
     void *pa, *pb;
@@ -44,7 +50,9 @@ st_dist_manhattan(st_vector *a, st_vector *b)
 st_decimal
 st_dist_chebyshev(st_vector *a, st_vector *b)
 {
-    st_check_vec_len(a, b->len);
+    if (st_check_vec_len(a, b->len))
+        __st_raise_length_error();
+
     st_d64 diff, dist = 0;
     size_t i;
     void *pa, *pb;

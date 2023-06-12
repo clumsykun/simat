@@ -45,7 +45,8 @@ st_vec_mul_scalar(st_vector *vec, st_d64 value)
 st_decimal
 st_vec_dot(st_vector *a, st_vector *b)
 {
-    st_check_vec_len(a, b->len);
+    if (st_check_vec_len(a, b->len))
+        __st_raise_length_error();
 
     st_d64 re = 0;
     void *pa, *pb;
