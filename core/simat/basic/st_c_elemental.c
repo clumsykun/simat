@@ -534,8 +534,11 @@ __data_mul(const __st_data *dst, const __st_data *a, const __st_data *b)
     if (st_check_data_dtype(dst, b->dtype))
         __st_raise_dtype_error();
 
-    st_check_data_size(dst, a->size);
-    st_check_data_size(dst, b->size);
+    if (st_check_data_size(dst, a->size))
+        __st_raise_length_error();
+
+    if (st_check_data_size(dst, b->size))
+        __st_raise_length_error();
 
     switch (dst->dtype) {
         case st_dtype_d64:
@@ -680,8 +683,11 @@ __data_add(const __st_data *dst, const __st_data *a, const __st_data *b)
     if (st_check_data_dtype(dst, b->dtype))
         __st_raise_dtype_error();
 
-    st_check_data_size(dst, a->size);
-    st_check_data_size(dst, b->size);
+    if (st_check_data_size(dst, a->size))
+        __st_raise_length_error();
+
+    if (st_check_data_size(dst, b->size))
+        __st_raise_length_error();
 
     switch (dst->dtype) {
         case st_dtype_d64:

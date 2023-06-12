@@ -742,13 +742,13 @@ st_check_data_dtype(const __st_data *data, st_dtype dtype)
         return 1;
 }
 
-size_t
+st_bool
 st_check_data_size(const __st_data *data, size_t size)
 {
-    if (data->size != size)
-        __st_raise_length_error();
-
-    return size;
+    if (data->size == size)
+        return 0;
+    else
+        return 1;
 }
 
 size_t
