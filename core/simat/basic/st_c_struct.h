@@ -153,7 +153,7 @@ void st_view_display(const st_view *view);
  * check.
  */
 
-st_dtype st_check_data_dtype(const __st_data *data, st_dtype dtype);
+st_bool st_check_data_dtype(const __st_data *data, st_dtype dtype);
 size_t st_check_data_size(const __st_data *data, size_t size);
 
 size_t st_check_vec_len(const st_vector *vec, size_t len);

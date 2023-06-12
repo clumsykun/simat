@@ -362,6 +362,7 @@ st_vector_view(st_view *view, st_vector *vec)
 /* =================================================================================================
  * Access/Assign/Display
  */
+
 static st_decimal
 __access_p(void *p, st_dtype dtype)
 {
@@ -731,13 +732,14 @@ st_view_display(const st_view *view)
  * check
  */
 
-st_dtype
+/* Return 0 if `data->dtype == dtype`, return 1 if not. */
+st_bool
 st_check_data_dtype(const __st_data *data, st_dtype dtype)
 {
-    if (data->dtype != dtype)
-        __st_raise_dtype_error();
-    
-    return dtype;
+    if (data->dtype == dtype)
+        return 0;
+    else
+        return 1;
 }
 
 size_t

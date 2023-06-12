@@ -528,8 +528,12 @@ simd_mul_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 static void
 __data_mul(const __st_data *dst, const __st_data *a, const __st_data *b)
 {
-    st_check_data_dtype(dst, a->dtype);
-    st_check_data_dtype(dst, b->dtype);
+    if (st_check_data_dtype(dst, a->dtype))
+        __st_raise_dtype_error();
+
+    if (st_check_data_dtype(dst, b->dtype))
+        __st_raise_dtype_error();
+
     st_check_data_size(dst, a->size);
     st_check_data_size(dst, b->size);
 
@@ -670,8 +674,12 @@ __simd_add_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 static void
 __data_add(const __st_data *dst, const __st_data *a, const __st_data *b)
 {
-    st_check_data_dtype(dst, a->dtype);
-    st_check_data_dtype(dst, b->dtype);
+    if (st_check_data_dtype(dst, a->dtype))
+        __st_raise_dtype_error();
+
+    if (st_check_data_dtype(dst, b->dtype))
+        __st_raise_dtype_error();
+
     st_check_data_size(dst, a->size);
     st_check_data_size(dst, b->size);
 
