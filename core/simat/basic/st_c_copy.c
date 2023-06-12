@@ -5,6 +5,9 @@
 #include <immintrin.h>
 #include "st_c_copy.h"
 
+/* =================================================================================================
+ * Copy
+ */
 
 static void 
 __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
@@ -105,20 +108,6 @@ __cast_d64(void *dst, st_d64 *src, size_t n, st_dtype dtype)
     }
 }
 
-void
-__double_to_pixel(size_t n, st_u8 *dst, st_d64 *src)
-{
-    while (n--)
-        *dst++ = (st_u8)(*src++);
-}
-
-void
-__double_to_bool(size_t n, st_bool *dst, st_d64 *src)
-{
-    while (n--)
-        *dst++ = (st_bool)(*src++);
-}
-
 st_vector *
 st_vec_copy(st_vector *vec)
 {
@@ -151,6 +140,57 @@ st_vec_copy(st_vector *vec)
     return copy;
 }
 
+st_matrix *
+st_mat_copy(st_matrix *mat)
+{
+    st_matrix *copy = st_new_matrix(mat->nrow, mat->ncol, mat->dtype);
+    void *dst = copy->data->head;
+    void *src = mat->data->head;
+    size_t n  = mat->data->size;
+
+    switch (mat->dtype) {
+        case st_dtype_d64:
+            __copy_d64(dst, src, n);
+            break;
+
+        case st_dtype_i32:
+            __copy_i32(dst, src, n);
+            break;
+
+        case st_dtype_u8:
+            __copy_u8_bool(dst, src, n);
+            break;
+
+        case st_dtype_bool:
+            __copy_u8_bool(dst, src, n);
+            break;
+
+        default:
+            __st_raise_dtype_error();
+    }
+
+    return copy;
+}
+
+
+/* =================================================================================================
+ * Copy Cast
+ */
+
+void
+__double_to_pixel(size_t n, st_u8 *dst, st_d64 *src)
+{
+    while (n--)
+        *dst++ = (st_u8)(*src++);
+}
+
+void
+__double_to_bool(size_t n, st_bool *dst, st_d64 *src)
+{
+    while (n--)
+        *dst++ = (st_bool)(*src++);
+}
+
 st_vector *
 st_vec_copy_cast(st_vector *vec, st_dtype dtype)
 {
@@ -173,3 +213,8 @@ st_vec_copy_cast(st_vector *vec, st_dtype dtype)
     }
     return copy;
 }
+
+
+/* =================================================================================================
+ * Copy Transpose
+ */

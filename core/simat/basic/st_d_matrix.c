@@ -71,23 +71,6 @@ st_mat_scale(st_matrix *mat, st_d64 min, st_d64 max)
     }
 }
 
-st_matrix *
-st_mat_copy(st_matrix *mat)
-{
-    st_matrix *copy = st_new_matrix(
-        mat->nrow,
-        mat->ncol,
-        mat->dtype);
-
-    memcpy(
-        copy->data->head,
-        mat->data->head,
-        mat->data->nbyte*mat->data->size);
-
-    copy->temp = mat->temp;
-    return copy;
-}
-
 /* copy the input matrix in transpose form */
 st_matrix *
 st_mat_copy_t(st_matrix *mat)
