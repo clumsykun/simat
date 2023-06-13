@@ -15,8 +15,9 @@
 #define st_store_d64(p, d128)         _mm_store_pd((double *)p, d128)
 #define st_store_i32(p, i128)         _mm_store_si128((__m128i *)p, i128)
 #define st_m_mul_d64(d128_a, d128_b)  _mm_mul_pd(d128_a, d128_b)
-#define st_m_add_i32(i128_a, i128_b)  _mm_add_epi32(i128_a, i128_b)
+#define st_m_mul_i32(i128_a, i128_b)  _mm_mullo_epi32(i128_a, i128_b)
 #define st_m_add_d64(d128_a, d128_b)  _mm_add_pd(d128_a, d128_b)
+#define st_m_add_i32(i128_a, i128_b)  _mm_add_epi32(i128_a, i128_b)
 
 #define st_m_sub_i32(i128_a, i128_b)  _mm_sub_epi32(i128_a, i128_b)
 

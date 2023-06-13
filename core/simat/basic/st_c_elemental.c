@@ -460,30 +460,27 @@ simd_mul_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 static void
 simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 {
+    size_t bsize     = st_m_size_i32;
+    size_t batches   = n / bsize;
+    size_t remainder = n % bsize;
+
     st_mi *pa = (st_mi *) a;
     st_mi *pb = (st_mi *) b;
     st_mi *pd = (st_mi *) dst;
 
-    /* 4 * (4*8) = 128 */
-    while (n >= 4) {
+    while (batches--) {
 
-        st_mi __a = st_load_i32(pa++);
-        st_mi __b = st_load_i32(pb++);
-        st_mi __even = _mm_mul_epu32(__a, __b);
-        st_mi __odd = _mm_mul_epu32(_mm_srli_epi64(__a, 32), _mm_srli_epi64(__b, 32));
-        st_mi __low = _mm_unpacklo_epi32(__even, __odd);
-        st_mi __high = _mm_unpackhi_epi32(__even, __odd);
-        st_mi __dst = _mm_unpacklo_epi64(__low, __high);
-
-        st_store_i32(pd++, __dst);
-        n -= 4;
+        st_mi pk_a = st_load_i32(pa++);
+        st_mi pk_b = st_load_i32(pb++);
+        st_mi pk_r = st_m_mul_i32(pk_a, pk_b);
+        st_store_i32(pd++, pk_r);
     }
 
     a   = (st_i32 *)pa;
     b   = (st_i32 *)pb;
     dst = (st_i32 *)pd;
 
-    while (n--)
+    while (remainder--)
         *dst++ = (*a++) * (*b++);
 }
 
