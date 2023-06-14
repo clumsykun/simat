@@ -78,8 +78,8 @@ __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
     while (batches--) {
         st_md pk_a = st_load_d64((st_d64 *)pa++);
         st_md pk_b = st_load_d64((st_d64 *)pb++);
-        st_md tmp = _mm_xor_pd(pk_a, pk_b);
-        pk_diff = _mm_or_pd(pk_diff, tmp);
+        st_md tmp = st_m_xor_d(pk_a, pk_b);
+        pk_diff = st_m_or_d(pk_diff, tmp);
 
         if (batches % n_loops == 0) {
             st_store_d64(diff, pk_diff);
@@ -116,8 +116,8 @@ __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
     while (batches--) {
         st_mi pk_a = st_load_i32(pa++);
         st_mi pk_b = st_load_i32(pb++);
-        st_mi tmp = st_m_xor_i128(pk_a, pk_b);
-        pk_diff = st_m_or_i128(pk_diff, tmp);
+        st_mi tmp = st_m_xor_i(pk_a, pk_b);
+        pk_diff = st_m_or_i(pk_diff, tmp);
 
         if (batches % n_loops == 0) {
             st_store_i32((st_mi *)diff, pk_diff);
@@ -154,8 +154,8 @@ __is_equal_u8_bool(size_t n, st_u8 *a, st_u8 *b)
     while (batches--) {
         st_mi pk_a = st_load_i32(pa++);
         st_mi pk_b = st_load_i32(pb++);
-        st_mi tmp = st_m_xor_i128(pk_a, pk_b);
-        pk_diff = st_m_or_i128(pk_diff, tmp);
+        st_mi tmp = st_m_xor_i(pk_a, pk_b);
+        pk_diff = st_m_or_i(pk_diff, tmp);
 
         if (batches % n_loops == 0) {
             st_store_i32((st_mi *)diff, pk_diff);

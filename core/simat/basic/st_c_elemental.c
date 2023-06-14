@@ -513,10 +513,10 @@ simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
         st_mi pk_even = st_m_mullo_i16(pk_a, pk_b);
         st_mi pk_odd = st_m_mullo_i16(st_m_srai_i16(pk_a, 8), st_m_srai_i16(pk_b, 8));
         pk_odd = st_m_slli_i16(pk_odd, 8);
-        st_mi pk_dst = st_m_xor_i128(
+        st_mi pk_dst = st_m_xor_i(
             pk_even,
-            st_m_and_i128(
-                st_m_xor_i128(pk_even, pk_odd),
+            st_m_and_i(
+                st_m_xor_i(pk_even, pk_odd),
                 mask
             )
         );
@@ -664,7 +664,7 @@ __simd_add_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 
         st_mi __a = st_load_i32(pa++);
         st_mi __b = st_load_i32(pb++);
-        __b = _mm_add_epi8(__a, __b);
+        __b = st_m_add_i8(__a, __b);
         st_store_i32(pd++, __b);
 
         n -= 16;
@@ -690,7 +690,7 @@ __simd_add_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 
         st_mi __a = st_load_i32(pa++);
         st_mi __b = st_load_i32(pb++);
-        __b = st_m_or_i128(__a, __b);
+        __b = st_m_or_i(__a, __b);
         st_store_i32(pd++, __b);
 
         n -= 16;

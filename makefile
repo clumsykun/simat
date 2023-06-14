@@ -9,7 +9,7 @@ OpenBLAS    := /opt/OpenBLAS/lib/libopenblas.a
 
 cc	        := gcc
 ar          := ar
-flag        := -std=c99 -pthread -msse4.1
+flag        := -std=c99 -pthread -march=native
 
 
 test_simatall: cc_simat cc_dataset
