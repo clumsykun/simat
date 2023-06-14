@@ -12,7 +12,7 @@ __dist_euclid_double(size_t n, double *a, double *b)
     st_md *pa = (st_md *) a;
     st_md *pb = (st_md *) b;
 
-    st_md pk_sum_diff = st_m_zero_d64();
+    st_md pk_sum_diff = st_m_zero_d();
     st_d64 arr_sum_diff[st_m_size_d64];
     st_d64 diff, sum_diff = 0;
 

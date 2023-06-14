@@ -1,6 +1,6 @@
 
-#define st_sse4_1
-// #define st_avx2
+// #define st_sse4_1
+#define st_avx2
 
 /* =================================================================================================
  * SSE4.1 settings
@@ -11,10 +11,10 @@
 #define st_mi     __m128i
 #define st_md     __m128d
 
-#define st_load_d64(p)                _mm_load_pd((double *)p)
-#define st_load_i32(p)                _mm_load_si128((__m128i *)p)
-#define st_store_d64(p, d128)         _mm_store_pd((double *)p, d128)
-#define st_store_i32(p, i128)         _mm_store_si128((__m128i *)p, i128)
+#define st_load_d64(p)                _mm_loadu_pd((double *)p)
+#define st_load_i32(p)                _mm_loadu_si128((__m128i *)p)
+#define st_store_d64(p, d128)         _mm_storeu_pd((double *)p, d128)
+#define st_store_i32(p, i128)         _mm_storeu_si128((__m128i *)p, i128)
 #define st_m_mul_d64(d128_a, d128_b)  _mm_mul_pd(d128_a, d128_b)
 #define st_m_mul_i32(i128_a, i128_b)  _mm_mullo_epi32(i128_a, i128_b)
 #define st_m_add_d64(d128_a, d128_b)  _mm_add_pd(d128_a, d128_b)
@@ -34,7 +34,8 @@
 #define st_m_and_i(i128_a, i128_b) _mm_and_si128(i128_a, i128_b)
 
 #define st_m_set_i32(st_i32) _mm_set1_epi32(st_i32)
-#define st_m_zero_d64() _mm_setzero_pd()
+#define st_m_zero_d() _mm_setzero_pd()
+#define st_m_zero_i() _mm_setzero_si128()
 
 #define st_m_size_d64 2
 #define st_m_size_i32 4
@@ -53,10 +54,10 @@
 #define st_mi     __m256i
 #define st_md     __m256d
 
-#define st_load_d64(p)                _mm256_load_pd((double *)p)
-#define st_load_i32(p)                _mm256_load_si256((__m256i *)p)
-#define st_store_d64(p, d256)         _mm256_store_pd((double *)p, d256)
-#define st_store_i32(p, i256)         _mm256_store_si256((__m256i *)p, i256)
+#define st_load_d64(p)                _mm256_loadu_pd((double *)p)
+#define st_load_i32(p)                _mm256_loadu_si256((__m256i *)p)
+#define st_store_d64(p, d256)         _mm256_storeu_pd((double *)p, d256)
+#define st_store_i32(p, i256)         _mm256_storeu_si256((__m256i *)p, i256)
 #define st_m_mul_d64(d256_a, d256_b)  _mm256_mul_pd(d256_a, d256_b)
 #define st_m_mul_i32(i256_a, i256_b)  _mm256_mullo_epi32(i256_a, i256_b)
 #define st_m_add_d64(d256_a, d256_b)  _mm256_add_pd(d256_a, d256_b)
@@ -76,7 +77,8 @@
 #define st_m_and_i(i256_a, i256_b) _mm256_and_si256(i256_a, i256_b)
 
 #define st_m_set_i32(st_i32) _mm256_set1_epi32(st_i32)
-#define st_m_zero_d64() _mm256_setzero_pd()
+#define st_m_zero_d() _mm256_setzero_pd()
+#define st_m_zero_i() _mm256_setzero_si256()
 
 #define st_m_size_d64 4
 #define st_m_size_i32 8

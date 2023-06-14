@@ -72,7 +72,7 @@ __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
     st_md *pa = (st_md *) a;
     st_md *pb = (st_md *) b;
 
-    st_md pk_diff = {0, 0};
+    st_md pk_diff = st_m_zero_d();
     st_d64 diff[bsize];
 
     while (batches--) {
@@ -110,7 +110,7 @@ __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
     st_mi *pa = (st_mi *) a;
     st_mi *pb = (st_mi *) b;
 
-    st_mi pk_diff = {0, 0};
+    st_mi pk_diff = st_m_zero_i();
     st_i32 diff[bsize];
 
     while (batches--) {
@@ -148,7 +148,7 @@ __is_equal_u8_bool(size_t n, st_u8 *a, st_u8 *b)
     st_mi *pa = (st_mi *) a;
     st_mi *pb = (st_mi *) b;
 
-    st_mi pk_diff = {0, 0};
+    st_mi pk_diff = st_m_zero_i();
     st_u8 diff[bsize];
 
     while (batches--) {

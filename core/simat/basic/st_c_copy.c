@@ -19,8 +19,10 @@ __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
     st_md *ps = (st_md *) src;
     st_md *pd = (st_md *) dst;
 
-    while (batches--)
-        st_store_d64((st_d64 *)pd++, st_load_d64((st_d64 *)ps++));
+    while (batches--) {
+        st_md pk_s = st_load_d64(ps++);
+        st_store_d64(pd++, pk_s);
+    }
 
     src = (st_d64 *)ps;
     dst = (st_d64 *)pd;
