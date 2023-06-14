@@ -487,30 +487,47 @@ simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 static void
 simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 {
+    size_t bsize     = st_m_size_u8;
+    size_t batches   = n / bsize;
+    size_t remainder = n % bsize;
+
     st_mi *pa = (st_mi *) a;
     st_mi *pb = (st_mi *) b;
     st_mi *pd = (st_mi *) dst;
 
     /* 16 * (1*8) = 128 */
-    while (n >= 16) {
 
-        st_mi __a = st_load_i32(pa++);
-        st_mi __b = st_load_i32(pb++);
+    /**
+     * Code of -16711936:       10000000111111110000000100000000
+     * Inverse of -16711936:    11111111000000001111111011111111
+     * Complement of -16711936: 11111111000000001111111100000000
+     * Code of0xFF00FF00:       11111111000000001111111100000000
+     *
+     */
+    while (batches--) {
 
-        const st_mi mask = _mm_set1_epi32(0xFF00FF00);
-        st_mi __even = _mm_mullo_epi16(__a, __b);
-        st_mi __odd = _mm_mullo_epi16(_mm_srai_epi16(__a, 8), _mm_srai_epi16(__b, 8));
-        __odd = _mm_slli_epi16(__odd, 8);
-        st_mi __dst = st_m_xor_i128(__even, _mm_and_si128(st_m_xor_i128(__even, __odd), mask));
-        st_store_i32(pd++, __dst);
-        n -= 16;
+        st_mi pk_a = st_load_i32(pa++);
+        st_mi pk_b = st_load_i32(pb++);
+
+        const st_mi mask = st_m_set_i32(0xFF00FF00);
+        st_mi pk_even = st_m_mullo_i16(pk_a, pk_b);
+        st_mi pk_odd = st_m_mullo_i16(st_m_srai_i16(pk_a, 8), st_m_srai_i16(pk_b, 8));
+        pk_odd = st_m_slli_i16(pk_odd, 8);
+        st_mi pk_dst = st_m_xor_i128(
+            pk_even,
+            st_m_and_i128(
+                st_m_xor_i128(pk_even, pk_odd),
+                mask
+            )
+        );
+        st_store_i32(pd++, pk_dst);
     }
 
     a   = (st_u8 *)pa;
     b   = (st_u8 *)pb;
     dst = (st_u8 *)pd;
 
-    while (n--)
+    while (remainder--)
         *dst++ = (*a++) * (*b++);
 }
 

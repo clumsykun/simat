@@ -19,12 +19,17 @@
 #define st_m_add_d64(d128_a, d128_b)  _mm_add_pd(d128_a, d128_b)
 #define st_m_add_i32(i128_a, i128_b)  _mm_add_epi32(i128_a, i128_b)
 
-#define st_m_sub_i32(i128_a, i128_b)  _mm_sub_epi32(i128_a, i128_b)
+#define st_m_sub_i32(i128_a, i128_b)   _mm_sub_epi32(i128_a, i128_b)
+#define st_m_mullo_i16(i128_a, i128_b) _mm_mullo_epi16(i128_a, i128_b)
+#define st_m_srai_i16(i128, imm8)      _mm_srai_epi16(i128, imm8)
+#define st_m_slli_i16(i128, imm8)      _mm_slli_epi16(i128, imm8)
 
 #define st_m_sub_d64(d128_a, d128_b)  _mm_sub_pd(d128_a, d128_b)
 #define st_m_xor_i128(i128_a, i128_b) _mm_xor_si128(i128_a, i128_b)
 #define st_m_or_i128(i128_a, i128_b)  _mm_or_si128(i128_a, i128_b)
+#define st_m_and_i128(i128_a, i128_b) _mm_and_si128(i128_a, i128_b)
 
+#define st_m_set_i32(st_i32) _mm_set1_epi32(st_i32)
 #define st_m_zero_d64() _mm_setzero_pd()
 
 #define st_m_size_d64 2
