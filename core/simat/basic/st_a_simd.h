@@ -1,6 +1,6 @@
 
-// #define st_sse4_1
-#define st_avx2
+#define st_sse4_1
+// #define st_avx2
 
 /* =================================================================================================
  * SSE4.1 settings
@@ -37,8 +37,9 @@
 #define st_m_zero_d() _mm_setzero_pd()
 #define st_m_set_i32(st_i32) _mm_set1_epi32(st_i32)
 
-#define st_m_srai_i16(i128, imm8)      _mm_srai_epi16(i128, imm8)
-#define st_m_slli_i16(i128, imm8)      _mm_slli_epi16(i128, imm8)
+/* Shift left and right */
+#define st_m_sr_i16(i128, imm8)      _mm_srai_epi16(i128, imm8)
+#define st_m_sl_i16(i128, imm8)      _mm_slli_epi16(i128, imm8)
 
 #define st_m_size_d64 2
 #define st_m_size_i32 4
@@ -83,8 +84,9 @@
 #define st_m_zero_d() _mm256_setzero_pd()
 #define st_m_set_i32(st_i32) _mm256_set1_epi32(st_i32)
 
-#define st_m_srai_i16(i256, imm8)      _mm256_srai_epi16(i256, imm8)
-#define st_m_slli_i16(i256, imm8)      _mm256_slli_epi16(i256, imm8)
+/* Shift left and right */
+#define st_m_sr_i16(i256, imm8)      _mm256_srai_epi16(i256, imm8)
+#define st_m_sl_i16(i256, imm8)      _mm256_slli_epi16(i256, imm8)
 
 #define st_m_size_d64 4
 #define st_m_size_i32 8

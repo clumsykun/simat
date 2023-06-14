@@ -513,8 +513,8 @@ simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 
         const st_mi mask = st_m_set_i32(0xFF00FF00);
         st_mi pk_even = st_m_mullo_i16(pk_a, pk_b);
-        st_mi pk_odd = st_m_mullo_i16(st_m_srai_i16(pk_a, 8), st_m_srai_i16(pk_b, 8));
-        pk_odd = st_m_slli_i16(pk_odd, 8);
+        st_mi pk_odd = st_m_mullo_i16(st_m_sr_i16(pk_a, 8), st_m_sr_i16(pk_b, 8));
+        pk_odd = st_m_sl_i16(pk_odd, 8);
         st_mi pk_dst = st_m_xor_i(
             pk_even,
             st_m_and_i(
