@@ -11,7 +11,7 @@ test__st_mat_min(result *rp)
     rp->name = "st_mat_min";
     st_d64 target = 0.1;
 
-    st_dataset *iris = st_load_iris();
+    st_dataset *iris = __st_load_iris();
     rp->value = !equal(st_mat_min(iris->X), target);
 
     return rp;
@@ -23,7 +23,7 @@ test__st_mat_max(result *rp)
     rp->name = "st_mat_max";
     st_d64 target = 7.9;
 
-    st_dataset *iris = st_load_iris();
+    st_dataset *iris = __st_load_iris();
     rp->value = !equal(st_mat_max(iris->X), target);
 
     return rp;
@@ -34,7 +34,7 @@ test__st_mat_scale(result *rp)
 {
     rp->name = "st_mat_scale";
 
-    st_dataset *iris = st_load_iris();
+    st_dataset *iris = __st_load_iris();
     st_mat_scale(iris->X, 0, 1);
     rp->value = !equal(st_mat_min(iris->X), 0);
     rp->value = !equal(st_mat_max(iris->X), 1);
@@ -47,7 +47,7 @@ test__st_mat_copy_t(result *rp)
 {
     rp->name = "st_mat_copy_t";
 
-    st_dataset *iris = st_load_iris();
+    st_dataset *iris = __st_load_iris();
     st_matrix *iris_t = st_mat_copy_t(iris->X);
 
     for (size_t i = 0; i < iris->X->nrow; i++) {
@@ -66,7 +66,7 @@ test__st_mat_dot(result *rp)
 {
     rp->name = "st_mat_dot";
 
-    st_dataset *iris = st_load_iris();
+    st_dataset *iris = __st_load_iris();
     st_matrix *iris_t = st_mat_copy_t(iris->X);
 
     st_matrix *ret = st_mat_dot(iris_t, iris->X);

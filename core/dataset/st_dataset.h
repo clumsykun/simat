@@ -10,6 +10,6 @@ typedef struct __st_dataset
     st_view *labels;
 } st_dataset;
 
-st_dataset *st_load_iris(void);
+st_dataset *__st_load_iris(void);
 
 #endif /* CORE_DATASET_H */

@@ -97,20 +97,20 @@
 static void
 __abs_d64(size_t n, st_d64 *elem)
 {
-    size_t bsize     = st_m_size_d64;
+    size_t bsize     = __st_m_size_d64;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_md *pe = (st_md *) elem;
+    __st_md *pe = (__st_md *) elem;
 
     while (batches--) {
 
-        st_md pk_e = st_load_d64(pe);
-        st_md pk_s = st_m_and_d(
+        __st_md pk_e = __st_load_d64(pe);
+        __st_md pk_s = __st_m_and_d(
             pk_e,
-            st_m_cast_i2d(st_m_setall_i64(0x7fffffffffffffffLL))
+            __st_m_cast_i2d(__st_m_setall_i64(0x7fffffffffffffffLL))
         );
-        st_store_d64(pe++, pk_s);
+        __st_store_d64(pe++, pk_s);
     }
 
     elem = (st_d64 *)pe;
@@ -452,21 +452,21 @@ st_vec_norm(st_vector *vec)
 static void
 simd_mul_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 {
-    size_t bsize     = st_m_size_d64;
+    size_t bsize     = __st_m_size_d64;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_md *pa = (st_md *) a;
-    st_md *pb = (st_md *) b;
-    st_md *pd = (st_md *) dst;
+    __st_md *pa = (__st_md *) a;
+    __st_md *pb = (__st_md *) b;
+    __st_md *pd = (__st_md *) dst;
 
     /* 2 * (8*8) = 128 */
     while (batches--) {
 
-        st_md __a = st_load_d64((st_d64 *)pa++);
-        st_md __b = st_load_d64((st_d64 *)pb++);
-        __b = st_m_mul_d64(__a, __b);
-        st_store_d64((st_d64 *)pd++, __b);
+        __st_md __a = __st_load_d64((st_d64 *)pa++);
+        __st_md __b = __st_load_d64((st_d64 *)pb++);
+        __b = __st_m_mul_d64(__a, __b);
+        __st_store_d64((st_d64 *)pd++, __b);
     }
 
     a   = (st_d64 *)pa;
@@ -480,20 +480,20 @@ simd_mul_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 static void
 simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 {
-    size_t bsize     = st_m_size_i32;
+    size_t bsize     = __st_m_size_i32;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_mi *pa = (st_mi *) a;
-    st_mi *pb = (st_mi *) b;
-    st_mi *pd = (st_mi *) dst;
+    __st_mi *pa = (__st_mi *) a;
+    __st_mi *pb = (__st_mi *) b;
+    __st_mi *pd = (__st_mi *) dst;
 
     while (batches--) {
 
-        st_mi pk_a = st_load_i32(pa++);
-        st_mi pk_b = st_load_i32(pb++);
-        st_mi pk_r = st_m_mul_i32(pk_a, pk_b);
-        st_store_i32(pd++, pk_r);
+        __st_mi pk_a = __st_load_i32(pa++);
+        __st_mi pk_b = __st_load_i32(pb++);
+        __st_mi pk_r = __st_m_mul_i32(pk_a, pk_b);
+        __st_store_i32(pd++, pk_r);
     }
 
     a   = (st_i32 *)pa;
@@ -507,13 +507,13 @@ simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 static void
 simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 {
-    size_t bsize     = st_m_size_u8;
+    size_t bsize     = __st_m_size_u8;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_mi *pa = (st_mi *) a;
-    st_mi *pb = (st_mi *) b;
-    st_mi *pd = (st_mi *) dst;
+    __st_mi *pa = (__st_mi *) a;
+    __st_mi *pb = (__st_mi *) b;
+    __st_mi *pd = (__st_mi *) dst;
 
     /* 16 * (1*8) = 128 */
 
@@ -526,21 +526,21 @@ simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
      */
     while (batches--) {
 
-        st_mi pk_a = st_load_i32(pa++);
-        st_mi pk_b = st_load_i32(pb++);
+        __st_mi pk_a = __st_load_i32(pa++);
+        __st_mi pk_b = __st_load_i32(pb++);
 
-        const st_mi mask = st_m_setall_i32(0xFF00FF00);
-        st_mi pk_even = st_m_mullo_i16(pk_a, pk_b);
-        st_mi pk_odd = st_m_mullo_i16(st_m_sr_i16(pk_a, 8), st_m_sr_i16(pk_b, 8));
-        pk_odd = st_m_sl_i16(pk_odd, 8);
-        st_mi pk_dst = st_m_xor_i(
+        const __st_mi mask = __st_m_setall_i32(0xFF00FF00);
+        __st_mi pk_even = __st_m_mullo_i16(pk_a, pk_b);
+        __st_mi pk_odd = __st_m_mullo_i16(__st_m_sr_i16(pk_a, 8), __st_m_sr_i16(pk_b, 8));
+        pk_odd = __st_m_sl_i16(pk_odd, 8);
+        __st_mi pk_dst = __st_m_xor_i(
             pk_even,
-            st_m_and_i(
-                st_m_xor_i(pk_even, pk_odd),
+            __st_m_and_i(
+                __st_m_xor_i(pk_even, pk_odd),
                 mask
             )
         );
-        st_store_i32(pd++, pk_dst);
+        __st_store_i32(pd++, pk_dst);
     }
 
     a   = (st_u8 *)pa;
@@ -649,20 +649,20 @@ __simd_add_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 static void
 __simd_add_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 {
-    size_t bsize     = st_m_size_i32;
+    size_t bsize     = __st_m_size_i32;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_mi *pa = (st_mi *) a;
-    st_mi *pb = (st_mi *) b;
-    st_mi *pd = (st_mi *) dst;
+    __st_mi *pa = (__st_mi *) a;
+    __st_mi *pb = (__st_mi *) b;
+    __st_mi *pd = (__st_mi *) dst;
 
     while (batches--) {
 
-        st_mi __a = st_load_i32(pa++);
-        st_mi __b = st_load_i32(pb++);
-        __b = st_m_add_i32(__a, __b);
-        st_store_i32(pd++, __b);
+        __st_mi __a = __st_load_i32(pa++);
+        __st_mi __b = __st_load_i32(pb++);
+        __b = __st_m_add_i32(__a, __b);
+        __st_store_i32(pd++, __b);
     }
 
     a   = (st_i32 *)pa;
@@ -676,21 +676,21 @@ __simd_add_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 static void
 __simd_add_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 {
-    size_t bsize     = st_m_size_u8;
+    size_t bsize     = __st_m_size_u8;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_mi *pa = (st_mi *) a;
-    st_mi *pb = (st_mi *) b;
-    st_mi *pd = (st_mi *) dst;
+    __st_mi *pa = (__st_mi *) a;
+    __st_mi *pb = (__st_mi *) b;
+    __st_mi *pd = (__st_mi *) dst;
 
     /* 16 * (1*8) = 128 */
     while (batches--) {
 
-        st_mi __a = st_load_i32(pa++);
-        st_mi __b = st_load_i32(pb++);
-        __b = st_m_add_i8(__a, __b);
-        st_store_i32(pd++, __b);
+        __st_mi __a = __st_load_i32(pa++);
+        __st_mi __b = __st_load_i32(pb++);
+        __b = __st_m_add_i8(__a, __b);
+        __st_store_i32(pd++, __b);
     }
 
     a   = (st_u8 *)pa;
@@ -704,20 +704,20 @@ __simd_add_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 static void
 __simd_add_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 {
-    size_t bsize     = st_m_size_u8;
+    size_t bsize     = __st_m_size_u8;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_mi *pa = (st_mi *) a;
-    st_mi *pb = (st_mi *) b;
-    st_mi *pd = (st_mi *) dst;
+    __st_mi *pa = (__st_mi *) a;
+    __st_mi *pb = (__st_mi *) b;
+    __st_mi *pd = (__st_mi *) dst;
 
     while (batches--) {
 
-        st_mi __a = st_load_i32(pa++);
-        st_mi __b = st_load_i32(pb++);
-        __b = st_m_or_i(__a, __b);
-        st_store_i32(pd++, __b);
+        __st_mi __a = __st_load_i32(pa++);
+        __st_mi __b = __st_load_i32(pb++);
+        __b = __st_m_or_i(__a, __b);
+        __st_store_i32(pd++, __b);
     }
 
     a   = (st_bool *)pa;

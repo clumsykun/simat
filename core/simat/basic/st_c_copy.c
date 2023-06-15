@@ -12,16 +12,16 @@
 static void 
 __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
 {
-    size_t bsize     = st_m_size_d64;
+    size_t bsize     = __st_m_size_d64;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_md *ps = (st_md *) src;
-    st_md *pd = (st_md *) dst;
+    __st_md *ps = (__st_md *) src;
+    __st_md *pd = (__st_md *) dst;
 
     while (batches--) {
-        st_md pk_s = st_load_d64(ps++);
-        st_store_d64(pd++, pk_s);
+        __st_md pk_s = __st_load_d64(ps++);
+        __st_store_d64(pd++, pk_s);
     }
 
     src = (st_d64 *)ps;
@@ -34,15 +34,15 @@ __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
 static void 
 __copy_i32(st_i32 *dst, st_i32 *src, size_t n)
 {
-    size_t bsize     = st_m_size_i32;
+    size_t bsize     = __st_m_size_i32;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_mi *ps = (st_mi *) src;
-    st_mi *pd = (st_mi *) dst;
+    __st_mi *ps = (__st_mi *) src;
+    __st_mi *pd = (__st_mi *) dst;
 
     while (batches--)
-        st_store_i32(pd++, st_load_i32(ps++));
+        __st_store_i32(pd++, __st_load_i32(ps++));
 
     src = (st_i32 *)ps;
     dst = (st_i32 *)pd;
@@ -54,15 +54,15 @@ __copy_i32(st_i32 *dst, st_i32 *src, size_t n)
 static void 
 __copy_u8_bool(st_u8 *dst, st_u8 *src, size_t n)
 {
-    size_t bsize     = st_m_size_u8;
+    size_t bsize     = __st_m_size_u8;
     size_t batches   = n / bsize;
     size_t remainder = n % bsize;
 
-    st_mi *ps = (st_mi *) src;
-    st_mi *pd = (st_mi *) dst;
+    __st_mi *ps = (__st_mi *) src;
+    __st_mi *pd = (__st_mi *) dst;
 
     while (batches--)
-        st_store_i32(pd++, st_load_i32(ps++));
+        __st_store_i32(pd++, __st_load_i32(ps++));
 
     src = (st_u8 *)ps;
     dst = (st_u8 *)pd;
