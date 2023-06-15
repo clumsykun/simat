@@ -5,15 +5,15 @@
 static double
 __dist_euclid_double(size_t n, double *a, double *b)
 {
-    size_t bsize     = __st_m_size_d64;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_d64;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_md *pa = (__st_md *) a;
     __st_md *pb = (__st_md *) b;
 
     __st_md pk_sum_diff = __st_m_zero_d();
-    st_d64 arr_sum_diff[__st_m_size_d64];
+    st_d64 arr_sum_diff[__st_m_psize_d64];
     st_d64 diff, sum_diff = 0;
 
     while (packs--) {
@@ -27,7 +27,7 @@ __dist_euclid_double(size_t n, double *a, double *b)
 
     __st_store_d64(arr_sum_diff, pk_sum_diff);
 
-    for (size_t i = 0; i < __st_m_size_d64; i++)
+    for (size_t i = 0; i < __st_m_psize_d64; i++)
         sum_diff += arr_sum_diff[i];
 
     a = (st_d64 *)pa;

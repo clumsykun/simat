@@ -12,9 +12,9 @@
 static void 
 __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
 {
-    size_t bsize     = __st_m_size_d64;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_d64;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_md *ps = (__st_md *) src;
     __st_md *pd = (__st_md *) dst;
@@ -34,9 +34,9 @@ __copy_d64(st_d64 *dst, st_d64 *src, size_t n)
 static void 
 __copy_i32(st_i32 *dst, st_i32 *src, size_t n)
 {
-    size_t bsize     = __st_m_size_i32;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_i32;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_mi *ps = (__st_mi *) src;
     __st_mi *pd = (__st_mi *) dst;
@@ -54,9 +54,9 @@ __copy_i32(st_i32 *dst, st_i32 *src, size_t n)
 static void 
 __copy_u8_bool(st_u8 *dst, st_u8 *src, size_t n)
 {
-    size_t bsize     = __st_m_size_u8;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_u8;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_mi *ps = (__st_mi *) src;
     __st_mi *pd = (__st_mi *) dst;

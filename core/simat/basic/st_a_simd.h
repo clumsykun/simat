@@ -10,10 +10,10 @@
 
 #define __st_mi         __m128i
 #define __st_md         __m128d
-#define __st_m_size_d64 2
-#define __st_m_size_i32 4
-#define __st_m_size_u8  16
-#define __st_m_size_b   16
+#define __st_m_psize_d64 2
+#define __st_m_psize_i32 4
+#define __st_m_psize_u8  16
+#define __st_m_psize_b   16
 
 #define __st_load_i32(p)         _mm_loadu_si128((__m128i *)p)
 #define __st_load_d64(p)         _mm_loadu_pd((double *)p)
@@ -66,10 +66,10 @@
 
 #define __st_mi         __m256i
 #define __st_md         __m256d
-#define __st_m_size_d64 4
-#define __st_m_size_i32 8
-#define __st_m_size_u8  32
-#define __st_m_size_b   32
+#define __st_m_psize_d64 4
+#define __st_m_psize_i32 8
+#define __st_m_psize_u8  32
+#define __st_m_psize_b   32
 
 #define __st_load_i32(p)         _mm256_loadu_si256((__m256i *)p)
 #define __st_load_d64(p)         _mm256_loadu_pd((double *)p)

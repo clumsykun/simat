@@ -66,14 +66,14 @@ st_vec_dot(st_vector *a, st_vector *b)
 static st_bool
 __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
 {
-    size_t bsize     = __st_m_size_d64;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_d64;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
     __st_md *pa = (__st_md *) a;
     __st_md *pb = (__st_md *) b;
 
     __st_md pk_diff = __st_m_zero_d();
-    st_d64 diff[bsize];
+    st_d64 diff[psize];
 
     while (packs--) {
         __st_md pk_a = __st_load_d64((st_d64 *)pa++);
@@ -84,7 +84,7 @@ __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
         if (packs % n_loops == 0) {
             __st_store_d64(diff, pk_diff);
 
-            for (size_t i = 0; i < bsize; i++)
+            for (size_t i = 0; i < psize; i++)
                 if (diff[i] != 0)
                     return false;            
         }
@@ -104,14 +104,14 @@ __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
 static st_bool
 __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
 {
-    size_t bsize     = __st_m_size_i32;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_i32;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
     __st_mi *pa = (__st_mi *) a;
     __st_mi *pb = (__st_mi *) b;
 
     __st_mi pk_diff = __st_m_zero_i();
-    st_i32 diff[bsize];
+    st_i32 diff[psize];
 
     while (packs--) {
         __st_mi pk_a = __st_load_i32(pa++);
@@ -122,7 +122,7 @@ __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
         if (packs % n_loops == 0) {
             __st_store_i32((__st_mi *)diff, pk_diff);
 
-            for (size_t i = 0; i < bsize; i++)
+            for (size_t i = 0; i < psize; i++)
                 if (diff[i] != 0)
                     return false;            
         }
@@ -142,14 +142,14 @@ __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
 static st_bool
 __is_equal_u8_bool(size_t n, st_u8 *a, st_u8 *b)
 {
-    size_t bsize     = __st_m_size_u8;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_u8;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
     __st_mi *pa = (__st_mi *) a;
     __st_mi *pb = (__st_mi *) b;
 
     __st_mi pk_diff = __st_m_zero_i();
-    st_u8 diff[bsize];
+    st_u8 diff[psize];
 
     while (packs--) {
         __st_mi pk_a = __st_load_i32(pa++);
@@ -160,7 +160,7 @@ __is_equal_u8_bool(size_t n, st_u8 *a, st_u8 *b)
         if (packs % n_loops == 0) {
             __st_store_i32((__st_mi *)diff, pk_diff);
 
-            for (size_t i = 0; i < bsize; i++)
+            for (size_t i = 0; i < psize; i++)
                 if (diff[i] != 0)
                     return false;            
         }

@@ -97,9 +97,9 @@
 static void
 __abs_d64(size_t n, st_d64 *elem)
 {
-    size_t bsize     = __st_m_size_d64;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_d64;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_md *pe = (__st_md *) elem;
 
@@ -452,9 +452,9 @@ st_vec_norm(st_vector *vec)
 static void
 simd_mul_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 {
-    size_t bsize     = __st_m_size_d64;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_d64;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_md *pa = (__st_md *) a;
     __st_md *pb = (__st_md *) b;
@@ -480,9 +480,9 @@ simd_mul_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 static void
 simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 {
-    size_t bsize     = __st_m_size_i32;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_i32;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_mi *pa = (__st_mi *) a;
     __st_mi *pb = (__st_mi *) b;
@@ -507,9 +507,9 @@ simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 static void
 simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 {
-    size_t bsize     = __st_m_size_u8;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_u8;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_mi *pa = (__st_mi *) a;
     __st_mi *pb = (__st_mi *) b;
@@ -649,9 +649,9 @@ __simd_add_d64(size_t n, st_d64 *dst, st_d64 *a, st_d64 *b)
 static void
 __simd_add_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 {
-    size_t bsize     = __st_m_size_i32;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_i32;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_mi *pa = (__st_mi *) a;
     __st_mi *pb = (__st_mi *) b;
@@ -676,9 +676,9 @@ __simd_add_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 static void
 __simd_add_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 {
-    size_t bsize     = __st_m_size_u8;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_u8;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_mi *pa = (__st_mi *) a;
     __st_mi *pb = (__st_mi *) b;
@@ -704,9 +704,9 @@ __simd_add_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
 static void
 __simd_add_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 {
-    size_t bsize     = __st_m_size_u8;
-    size_t packs   = n / bsize;
-    size_t remainder = n % bsize;
+    size_t psize     = __st_m_psize_u8;
+    size_t packs   = n / psize;
+    size_t remainder = n % psize;
 
     __st_mi *pa = (__st_mi *) a;
     __st_mi *pb = (__st_mi *) b;
