@@ -6,7 +6,7 @@ static double
 __dist_euclid_double(size_t n, double *a, double *b)
 {
     size_t bsize     = __st_m_size_d64;
-    size_t batches   = n / bsize;
+    size_t packs   = n / bsize;
     size_t remainder = n % bsize;
 
     __st_md *pa = (__st_md *) a;
@@ -16,7 +16,7 @@ __dist_euclid_double(size_t n, double *a, double *b)
     st_d64 arr_sum_diff[__st_m_size_d64];
     st_d64 diff, sum_diff = 0;
 
-    while (batches--) {
+    while (packs--) {
 
         __st_md pk_a = __st_load_d64((st_d64 *)pa++);
         __st_md pk_b = __st_load_d64((st_d64 *)pb++);

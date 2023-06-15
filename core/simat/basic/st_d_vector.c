@@ -67,7 +67,7 @@ static st_bool
 __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
 {
     size_t bsize     = __st_m_size_d64;
-    size_t batches   = n / bsize;
+    size_t packs   = n / bsize;
     size_t remainder = n % bsize;
     __st_md *pa = (__st_md *) a;
     __st_md *pb = (__st_md *) b;
@@ -75,13 +75,13 @@ __is_equal_d64(size_t n, st_d64 *a, st_d64 *b)
     __st_md pk_diff = __st_m_zero_d();
     st_d64 diff[bsize];
 
-    while (batches--) {
+    while (packs--) {
         __st_md pk_a = __st_load_d64((st_d64 *)pa++);
         __st_md pk_b = __st_load_d64((st_d64 *)pb++);
         __st_md tmp = __st_m_xor_d(pk_a, pk_b);
         pk_diff = __st_m_or_d(pk_diff, tmp);
 
-        if (batches % n_loops == 0) {
+        if (packs % n_loops == 0) {
             __st_store_d64(diff, pk_diff);
 
             for (size_t i = 0; i < bsize; i++)
@@ -105,7 +105,7 @@ static st_bool
 __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
 {
     size_t bsize     = __st_m_size_i32;
-    size_t batches   = n / bsize;
+    size_t packs   = n / bsize;
     size_t remainder = n % bsize;
     __st_mi *pa = (__st_mi *) a;
     __st_mi *pb = (__st_mi *) b;
@@ -113,13 +113,13 @@ __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
     __st_mi pk_diff = __st_m_zero_i();
     st_i32 diff[bsize];
 
-    while (batches--) {
+    while (packs--) {
         __st_mi pk_a = __st_load_i32(pa++);
         __st_mi pk_b = __st_load_i32(pb++);
         __st_mi tmp = __st_m_xor_i(pk_a, pk_b);
         pk_diff = __st_m_or_i(pk_diff, tmp);
 
-        if (batches % n_loops == 0) {
+        if (packs % n_loops == 0) {
             __st_store_i32((__st_mi *)diff, pk_diff);
 
             for (size_t i = 0; i < bsize; i++)
@@ -143,7 +143,7 @@ static st_bool
 __is_equal_u8_bool(size_t n, st_u8 *a, st_u8 *b)
 {
     size_t bsize     = __st_m_size_u8;
-    size_t batches   = n / bsize;
+    size_t packs   = n / bsize;
     size_t remainder = n % bsize;
     __st_mi *pa = (__st_mi *) a;
     __st_mi *pb = (__st_mi *) b;
@@ -151,13 +151,13 @@ __is_equal_u8_bool(size_t n, st_u8 *a, st_u8 *b)
     __st_mi pk_diff = __st_m_zero_i();
     st_u8 diff[bsize];
 
-    while (batches--) {
+    while (packs--) {
         __st_mi pk_a = __st_load_i32(pa++);
         __st_mi pk_b = __st_load_i32(pb++);
         __st_mi tmp = __st_m_xor_i(pk_a, pk_b);
         pk_diff = __st_m_or_i(pk_diff, tmp);
 
-        if (batches % n_loops == 0) {
+        if (packs % n_loops == 0) {
             __st_store_i32((__st_mi *)diff, pk_diff);
 
             for (size_t i = 0; i < bsize; i++)
