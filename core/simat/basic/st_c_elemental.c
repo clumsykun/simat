@@ -97,8 +97,26 @@
 static void
 __abs_d64(size_t n, st_d64 *elem)
 {
-    while (n--)
-        *elem++ = st_abs(*elem);
+    size_t bsize     = st_m_size_d64;
+    size_t batches   = n / bsize;
+    size_t remainder = n % bsize;
+
+    st_md *pe = (st_md *) elem;
+
+    while (batches--) {
+
+        st_md pk_e = st_load_d64(pe);
+        st_md pk_s = st_m_and_d(
+            pk_e,
+            st_m_cast_i2d(st_m_setall_i64(0x7fffffffffffffffLL))
+        );
+        st_store_d64(pe++, pk_s);
+    }
+
+    elem = (st_d64 *)pe;
+
+    while (remainder--)
+        *elem++ = fabs(*elem);
 }
 
 static void
