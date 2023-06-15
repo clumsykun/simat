@@ -90,15 +90,14 @@
 // }
 
 /** ================================================================================================
- * vectorized `abs` function
- * need SIMD !
+ * Compute absolute value
  */
 
 static void
 __abs_d64(size_t n, st_d64 *elem)
 {
     size_t psize     = __st_m_psize_d64;
-    size_t packs   = n / psize;
+    size_t packs     = n / psize;
     size_t remainder = n % psize;
 
     __st_md *pe = (__st_md *) elem;
@@ -106,11 +105,11 @@ __abs_d64(size_t n, st_d64 *elem)
     while (packs--) {
 
         __st_md pk_e = __st_load_d64(pe);
-        __st_md pk_s = __st_m_and_d(
+        pk_e = __st_m_and_d(
             pk_e,
             __st_m_cast_i2d(__st_m_setall_i64(0x7fffffffffffffffLL))
         );
-        __st_store_d64(pe++, pk_s);
+        __st_store_d64(pe++, pk_e);
     }
 
     elem = (st_d64 *)pe;
@@ -122,8 +121,23 @@ __abs_d64(size_t n, st_d64 *elem)
 static void
 __abs_i32(size_t n, st_i32 *elem)
 {
-    while (n--)
-        *elem++ = st_abs(*elem);
+    size_t psize     = __st_m_psize_d64;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    __st_mi *pe = (__st_mi *) elem;
+
+    while (packs--) {
+
+        __st_mi pk_e = __st_load_i32(pe);
+        pk_e = __st_m_abs_i32(pk_e);
+        __st_store_i32(pe++, pk_e);
+    }
+
+    elem = (st_i32 *)pe;
+
+    while (remainder--)
+        *elem++ = abs(*elem);
 }
 
 static void

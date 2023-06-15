@@ -145,6 +145,40 @@ test__st_vec_copy(result *rp)
 }
 
 result *
+test__st_vec_abs(result *rp)
+{
+    rp->name = "st_vec_abs";
+
+    size_t n = 1000;
+
+    st_vector *dv = st_new_vector(n, st_dtype_d64);
+    st_vec_assign_all(dv, -1);
+
+    st_vector *dv_abs = st_vec_copy(dv);
+    st_vec_abs(dv_abs);
+
+    for (size_t i = 0; i < n; i++)
+        rp->value += !equal(-st_vec_access(dv, i), st_vec_access(dv_abs, i));
+
+    st_vector *iv = st_new_vector(n, st_dtype_i32);
+    st_vec_assign_all(iv, -1);
+
+    st_vector *iv_abs = st_vec_copy(iv);
+    st_vec_abs(iv_abs);
+
+    for (size_t i = 0; i < n; i++)
+        rp->value += !equal(-st_vec_access(iv, i), st_vec_access(iv_abs, i));
+
+
+
+
+
+
+    return rp;
+}
+
+
+result *
 test__st_vec_min(result *rp)
 {
     rp->name = "st_vec_min";
@@ -315,31 +349,6 @@ test__st_vec_mul_scalar(result *rp)
     return rp;
 }
 
-result *
-test__st_vec_abs(result *rp)
-{
-    rp->name = "st_vec_abs";
-
-    st_vector *vec1 = test_d_vec_1();
-    st_vector *vec2 = test_d_vec_1();
-
-    st_vec_mul_scalar(vec1, -1);
-    
-    st_vec_abs(vec1);
-    st_vec_abs(vec2);
-
-    st_vec_mul_scalar(vec1, -1);
-    
-    for (size_t i = 0; i < vec1->len; i++) {
-        rp->value = !equal(
-            st_vec_access(vec1, i),
-            -1*st_vec_access(vec2, i)
-        );
-    }
-
-    return rp;
-}
-
 st_i32
 test__vector()
 {
@@ -347,6 +356,7 @@ test__vector()
     call_test(test__st_vec_is_equal);
     call_test(test__st_vec_copy);
     call_test(test__st_vec_norm);
+    call_test(test__st_vec_abs);
     call_test(test__st_vec_min);
     call_test(test__st_vec_max);
     call_test(test__st_vec_scale);
@@ -354,7 +364,6 @@ test__vector()
     call_test(test__st_vec_mul);
     call_test(test__st_vec_dot);
     call_test(test__st_vec_mul_scalar);
-    call_test(test__st_vec_abs);
 
     printf("DONE\n\n");
     return 0;
