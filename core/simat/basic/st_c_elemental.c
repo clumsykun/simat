@@ -529,7 +529,7 @@ simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
         st_mi pk_a = st_load_i32(pa++);
         st_mi pk_b = st_load_i32(pb++);
 
-        const st_mi mask = st_m_set_i32(0xFF00FF00);
+        const st_mi mask = st_m_setall_i32(0xFF00FF00);
         st_mi pk_even = st_m_mullo_i16(pk_a, pk_b);
         st_mi pk_odd = st_m_mullo_i16(st_m_sr_i16(pk_a, 8), st_m_sr_i16(pk_b, 8));
         pk_odd = st_m_sl_i16(pk_odd, 8);
