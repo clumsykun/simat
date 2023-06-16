@@ -34,6 +34,8 @@
 #define __st_m_mul_d64(d1, d2)   _mm_mul_pd(d1, d2)
 #define __st_m_mullo_i16(i1, i2) _mm_mullo_epi16(i1, i2)
 
+#define __st_m_min_d64(d1, d2)   _mm_min_pd(d1, d2)
+
 #define __st_m_and_i(i1, i2)     _mm_and_si128(i1, i2)
 #define __st_m_and_d(d1, d2)     _mm_and_pd(d1, d2)
 #define __st_m_or_i(i1, i2)      _mm_or_si128(i1, i2)
@@ -89,6 +91,8 @@
 #define __st_m_mul_i32(i1, i2)   _mm256_mullo_epi32(i1, i2)
 #define __st_m_mul_d64(d1, d2)   _mm256_mul_pd(d1, d2)
 #define __st_m_mullo_i16(i1, i2) _mm256_mullo_epi16(i1, i2)
+
+#define __st_m_min_d64(d1, d2)   _mm256_min_pd(d1, d2)
 
 #define __st_m_and_i(i1, i2)     _mm256_and_si256(i1, i2)
 #define __st_m_and_d(da, db)     _mm256_and_pd(da, db)

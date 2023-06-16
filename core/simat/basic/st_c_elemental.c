@@ -180,8 +180,38 @@ st_mat_abs(st_matrix *mat)
  * need SIMD!
  */
 
+static st_d64
+__min_d64(size_t n, st_d64 *head)
+{
+    size_t psize     = __st_m_psize_d64;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_d64 value;
+    st_d64 min     = *head;
+    __st_md pk_min = __st_load_d64(head);
+    __st_md *pe    = (__st_md *) head;
+
+    while (packs--) {
+
+        __st_md pk_e = __st_load_d64(pe++);
+        pk_min = __st_m_min_d64(pk_e, pk_min);
+    }
+
+    for (size_t i = 0; i < psize; i++)
+        min = (min < pk_min[i] ? min : pk_min[i]);    
+
+    head = (st_d64 *)pe;
+
+    while (remainder--) {
+        value = *head++;
+        min = (min < value ? min : value);
+    }
+    return min;
+}
+
 static st_decimal
-simd_min_i32(size_t n, st_i32 *elem, const size_t incx)
+__min_i32(size_t n, st_i32 *elem, const size_t incx)
 {
     st_d64 min = *elem;
     while (n--) {
@@ -192,7 +222,7 @@ simd_min_i32(size_t n, st_i32 *elem, const size_t incx)
 }
 
 static st_decimal
-simd_min_u8(size_t n, st_u8 *elem, const size_t incx)
+__min_u8(size_t n, st_u8 *elem, const size_t incx)
 {
     st_d64 min = *elem;
     while (n--) {
@@ -204,7 +234,7 @@ simd_min_u8(size_t n, st_u8 *elem, const size_t incx)
 }
 
 static st_decimal
-simd_min_bool(size_t n, st_bool *elem, const size_t incx)
+__min_bool(size_t n, st_bool *elem, const size_t incx)
 {
     st_d64 min = *elem;
     while (n--)
@@ -216,20 +246,21 @@ simd_min_bool(size_t n, st_bool *elem, const size_t incx)
 static st_decimal
 __data_min(const __st_data *data, const size_t incx)
 {
+    size_t n = data->size;
+    void *head = data->head;
+
     switch (data->dtype) {
         case st_dtype_d64:
-            return __st_data_access(
-                data,
-                cblas_idmin(data->size, data->head, incx));
+            return __min_d64(n, head);
 
         case st_dtype_i32:
-            return simd_min_i32(data->size, data->head, incx);
+            return __min_i32(n, head, incx);
 
         case st_dtype_u8:
-            return simd_min_u8(data->size, data->head, incx);
+            return __min_u8(n, head, incx);
 
         case st_dtype_bool:
-            return simd_min_bool(data->size, data->head, incx);
+            return __min_bool(n, head, incx);
 
         default:
             __st_raise_dtype_error();
