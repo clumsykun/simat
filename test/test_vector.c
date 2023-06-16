@@ -190,6 +190,15 @@ test__st_vec_min(result *rp)
     rp->value += !equal(st_vec_min(dv), 1.602176487);
     rp->value += !equal(st_vec_min(iv), 1);
 
+    st_vector *uv = st_vec_copy_cast(dv, st_dtype_u8);
+    rp->value += !equal(st_vec_min(uv), 1);
+
+    uv = test_u_vec_1();
+    rp->value += !equal(st_vec_min(uv), 0);
+
+    st_vector *bv = test_b_vec_1();
+    rp->value += !equal(st_vec_min(bv), 0);
+
     return rp;
 }
 
