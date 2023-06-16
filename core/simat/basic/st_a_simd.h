@@ -15,9 +15,9 @@
 #define __st_m_psize_u8  16
 #define __st_m_psize_b   16
 
-#define __st_load_i32(p)         _mm_loadu_si128((__m128i *)p)
+#define __st_load_i(p)           _mm_loadu_si128((__m128i *)p)
 #define __st_load_d64(p)         _mm_loadu_pd((double *)p)
-#define __st_store_i32(p, i)     _mm_storeu_si128((__m128i *)p, i)
+#define __st_store_i(p, i)       _mm_storeu_si128((__m128i *)p, i)
 #define __st_store_d64(p, d)     _mm_storeu_pd((double *)p, d)
 
 #define __st_m_abs_i8(i)         _mm_abs_epi8(i)
@@ -78,9 +78,9 @@
 #define __st_m_psize_u8  32
 #define __st_m_psize_b   32
 
-#define __st_load_i32(p)         _mm256_loadu_si256((__m256i *)p)
+#define __st_load_i(p)           _mm256_loadu_si256((__m256i *)p)
 #define __st_load_d64(p)         _mm256_loadu_pd((double *)p)
-#define __st_store_i32(p, i)     _mm256_storeu_si256((__m256i *)p, i)
+#define __st_store_i(p, i)       _mm256_storeu_si256((__m256i *)p, i)
 #define __st_store_d64(p, d)     _mm256_storeu_pd((double *)p, d)
 
 #define __st_m_abs_i8(i)         _mm256_abs_epi8(i)

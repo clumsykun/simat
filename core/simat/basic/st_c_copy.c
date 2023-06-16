@@ -42,7 +42,7 @@ __copy_i32(st_i32 *dst, st_i32 *src, size_t n)
     __st_mi *pd = (__st_mi *) dst;
 
     while (packs--)
-        __st_store_i32(pd++, __st_load_i32(ps++));
+        __st_store_i(pd++, __st_load_i(ps++));
 
     src = (st_i32 *)ps;
     dst = (st_i32 *)pd;
@@ -62,7 +62,7 @@ __copy_u8_bool(st_u8 *dst, st_u8 *src, size_t n)
     __st_mi *pd = (__st_mi *) dst;
 
     while (packs--)
-        __st_store_i32(pd++, __st_load_i32(ps++));
+        __st_store_i(pd++, __st_load_i(ps++));
 
     src = (st_u8 *)ps;
     dst = (st_u8 *)pd;

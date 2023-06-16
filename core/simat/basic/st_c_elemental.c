@@ -129,9 +129,9 @@ __abs_i32(size_t n, st_i32 *elem)
 
     while (packs--) {
 
-        __st_mi pk_e = __st_load_i32(pe);
+        __st_mi pk_e = __st_load_i(pe);
         pk_e = __st_m_abs_i32(pk_e);
-        __st_store_i32(pe++, pk_e);
+        __st_store_i(pe++, pk_e);
     }
 
     elem = (st_i32 *)pe;
@@ -218,18 +218,18 @@ __min_i32(size_t n, st_i32 *head)
     st_i32 arr_min[psize];
     st_i32 min = *head;
     __st_mi pk_e;
-    __st_mi pk_min = __st_load_i32(head);
+    __st_mi pk_min = __st_load_i(head);
     __st_mi *pe = (__st_mi *)head;
 
     while (packs--) {
 
-        pk_e = __st_load_i32(pe++);
+        pk_e = __st_load_i(pe++);
         pk_min = __st_m_min_i32(pk_e, pk_min);
     }
 
     if (n > remainder) {
 
-        __st_store_i32(arr_min, pk_min);
+        __st_store_i(arr_min, pk_min);
 
         for (size_t i = 0; i < psize; i++)
             min = (min < arr_min[i] ? min : arr_min[i]);
@@ -255,18 +255,18 @@ __min_u8_bool(size_t n, st_u8 *head)
     st_u8 arr_min[psize];
     st_u8 min = *head;
     __st_mi pk_e;
-    __st_mi pk_min = __st_load_i32(head);
+    __st_mi pk_min = __st_load_i(head);
     __st_mi *pe = (__st_mi *)head;
 
     while (packs--) {
 
-        pk_e = __st_load_i32(pe++);
+        pk_e = __st_load_i(pe++);
         pk_min = __st_m_min_u8(pk_e, pk_min);
     }
 
     if (n > remainder) {
 
-        __st_store_i32(arr_min, pk_min);
+        __st_store_i(arr_min, pk_min);
 
         for (size_t i = 0; i < psize; i++)
             min = (min < arr_min[i] ? min : arr_min[i]);
@@ -356,18 +356,18 @@ __max_i32(size_t n, st_i32 *head)
     st_i32 arr_max[psize];
     st_i32 max = *head;
     __st_mi pk_e;
-    __st_mi pk_max = __st_load_i32(head);
+    __st_mi pk_max = __st_load_i(head);
     __st_mi *pe = (__st_mi *)head;
 
     while (packs--) {
 
-        pk_e = __st_load_i32(pe++);
+        pk_e = __st_load_i(pe++);
         pk_max = __st_m_max_i32(pk_e, pk_max);
     }
 
     if (n > remainder) {
 
-        __st_store_i32(arr_max, pk_max);
+        __st_store_i(arr_max, pk_max);
 
         for (size_t i = 0; i < psize; i++)
             max = (max > arr_max[i] ? max : arr_max[i]);
@@ -393,18 +393,18 @@ __max_u8_bool(size_t n, st_u8 *head)
     st_u8 arr_max[psize];
     st_u8 max = *head;
     __st_mi pk_e;
-    __st_mi pk_max = __st_load_i32(head);
+    __st_mi pk_max = __st_load_i(head);
     __st_mi *pe = (__st_mi *)head;
 
     while (packs--) {
 
-        pk_e = __st_load_i32(pe++);
+        pk_e = __st_load_i(pe++);
         pk_max = __st_m_max_u8(pk_e, pk_max);
     }
 
     if (n > remainder) {
 
-        __st_store_i32(arr_max, pk_max);
+        __st_store_i(arr_max, pk_max);
 
         for (size_t i = 0; i < psize; i++)
             max = (max > arr_max[i] ? max : arr_max[i]);
@@ -638,10 +638,10 @@ simd_mul_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 
     while (packs--) {
 
-        __st_mi pk_a = __st_load_i32(pa++);
-        __st_mi pk_b = __st_load_i32(pb++);
+        __st_mi pk_a = __st_load_i(pa++);
+        __st_mi pk_b = __st_load_i(pb++);
         __st_mi pk_r = __st_m_mul_i32(pk_a, pk_b);
-        __st_store_i32(pd++, pk_r);
+        __st_store_i(pd++, pk_r);
     }
 
     a   = (st_i32 *)pa;
@@ -674,8 +674,8 @@ simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
      */
     while (packs--) {
 
-        __st_mi pk_a = __st_load_i32(pa++);
-        __st_mi pk_b = __st_load_i32(pb++);
+        __st_mi pk_a = __st_load_i(pa++);
+        __st_mi pk_b = __st_load_i(pb++);
 
         const __st_mi mask = __st_m_setall_i32(0xFF00FF00);
         __st_mi pk_even = __st_m_mullo_i16(pk_a, pk_b);
@@ -688,7 +688,7 @@ simd_mul_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
                 mask
             )
         );
-        __st_store_i32(pd++, pk_dst);
+        __st_store_i(pd++, pk_dst);
     }
 
     a   = (st_u8 *)pa;
@@ -807,10 +807,10 @@ __simd_add_i32(size_t n, st_i32 *dst, st_i32 *a, st_i32 *b)
 
     while (packs--) {
 
-        __st_mi __a = __st_load_i32(pa++);
-        __st_mi __b = __st_load_i32(pb++);
+        __st_mi __a = __st_load_i(pa++);
+        __st_mi __b = __st_load_i(pb++);
         __b = __st_m_add_i32(__a, __b);
-        __st_store_i32(pd++, __b);
+        __st_store_i(pd++, __b);
     }
 
     a   = (st_i32 *)pa;
@@ -835,10 +835,10 @@ __simd_add_u8(size_t n, st_u8 *dst, st_u8 *a, st_u8 *b)
     /* 16 * (1*8) = 128 */
     while (packs--) {
 
-        __st_mi __a = __st_load_i32(pa++);
-        __st_mi __b = __st_load_i32(pb++);
+        __st_mi __a = __st_load_i(pa++);
+        __st_mi __b = __st_load_i(pb++);
         __b = __st_m_add_i8(__a, __b);
-        __st_store_i32(pd++, __b);
+        __st_store_i(pd++, __b);
     }
 
     a   = (st_u8 *)pa;
@@ -862,10 +862,10 @@ __simd_add_bool(size_t n, st_bool *dst, st_bool *a, st_bool *b)
 
     while (packs--) {
 
-        __st_mi __a = __st_load_i32(pa++);
-        __st_mi __b = __st_load_i32(pb++);
+        __st_mi __a = __st_load_i(pa++);
+        __st_mi __b = __st_load_i(pb++);
         __b = __st_m_or_i(__a, __b);
-        __st_store_i32(pd++, __b);
+        __st_store_i(pd++, __b);
     }
 
     a   = (st_bool *)pa;

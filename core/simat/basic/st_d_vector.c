@@ -114,13 +114,13 @@ __is_equal_i32(size_t n, st_i32 *a, st_i32 *b)
     st_i32 diff[psize];
 
     while (packs--) {
-        __st_mi pk_a = __st_load_i32(pa++);
-        __st_mi pk_b = __st_load_i32(pb++);
+        __st_mi pk_a = __st_load_i(pa++);
+        __st_mi pk_b = __st_load_i(pb++);
         __st_mi tmp = __st_m_xor_i(pk_a, pk_b);
         pk_diff = __st_m_or_i(pk_diff, tmp);
 
         if (packs % n_loops == 0) {
-            __st_store_i32((__st_mi *)diff, pk_diff);
+            __st_store_i((__st_mi *)diff, pk_diff);
 
             for (size_t i = 0; i < psize; i++)
                 if (diff[i] != 0)
@@ -152,13 +152,13 @@ __is_equal_u8_bool(size_t n, st_u8 *a, st_u8 *b)
     st_u8 diff[psize];
 
     while (packs--) {
-        __st_mi pk_a = __st_load_i32(pa++);
-        __st_mi pk_b = __st_load_i32(pb++);
+        __st_mi pk_a = __st_load_i(pa++);
+        __st_mi pk_b = __st_load_i(pb++);
         __st_mi tmp = __st_m_xor_i(pk_a, pk_b);
         pk_diff = __st_m_or_i(pk_diff, tmp);
 
         if (packs % n_loops == 0) {
-            __st_store_i32((__st_mi *)diff, pk_diff);
+            __st_store_i((__st_mi *)diff, pk_diff);
 
             for (size_t i = 0; i < psize; i++)
                 if (diff[i] != 0)
