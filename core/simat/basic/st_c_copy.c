@@ -204,15 +204,16 @@ st_vec_copy_cast(st_vector *vec, st_dtype dtype)
     if (!__st_is_debug && vec->dtype > dtype)
         printf("Warning: conversion may lose significant digits.\n");
 
-    st_vector *copy = st_new_vector(vec->len, dtype);
-    size_t i;
+    size_t n = vec->len;
+    st_vector *copy = st_new_vector(n, dtype);
     void *e_vec, *e_cp;
     st_d64 value;
 
-    for __st_iter_vector2(i, e_vec, e_cp, vec, copy) {
-        value = __st_access_p(e_vec, vec->dtype);
-        __st_assign_p(e_cp, value, copy->dtype);
+    while (n--) {
+        value = st_vec_access(vec, n);
+        st_vec_assign(copy, n, value);
     }
+
     return copy;
 }
 

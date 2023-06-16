@@ -210,13 +210,39 @@ __min_d64(size_t n, st_d64 *head)
     return min;
 }
 
-static st_decimal
-__min_i32(size_t n, st_i32 *elem, const size_t incx)
+static st_i32
+__min_i32(size_t n, st_i32 *head)
 {
-    st_d64 min = *elem;
-    while (n--) {
-        min = (*elem < min ? *elem : min);
-        elem++;
+    size_t psize     = __st_m_psize_i32;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_i32 value;
+    st_i32 arr_min[psize];
+    st_i32 min = *head;
+    __st_mi pk_e;
+    __st_mi pk_min = __st_load_i32(head);
+    __st_mi *pe = (__st_mi *)head;
+
+    while (packs--) {
+
+        pk_e = __st_load_i32(pe++);
+        pk_min = __st_m_min_i32(pk_e, pk_min);
+    }
+
+    if (n > remainder) {
+
+        __st_store_i32(arr_min, pk_min);
+
+        for (size_t i = 0; i < psize; i++)
+            min = (min < arr_min[i] ? min : arr_min[i]);
+    }
+
+    head = (st_i32 *)pe;
+
+    while (remainder--) {
+        value = *head++;
+        min = (min < value ? min : value);
     }
     return min;
 }
@@ -251,16 +277,16 @@ __data_min(const __st_data *data, const size_t incx)
 
     switch (data->dtype) {
         case st_dtype_d64:
-            return __min_d64(n, head);
+            return (st_decimal)__min_d64(n, head);
 
         case st_dtype_i32:
-            return __min_i32(n, head, incx);
+            return (st_decimal)__min_i32(n, head);
 
         case st_dtype_u8:
-            return __min_u8(n, head, incx);
+            return (st_decimal)__min_u8(n, head, incx);
 
         case st_dtype_bool:
-            return __min_bool(n, head, incx);
+            return (st_decimal)__min_bool(n, head, incx);
 
         default:
             __st_raise_dtype_error();
