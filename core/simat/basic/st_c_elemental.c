@@ -283,7 +283,7 @@ __min_u8_bool(size_t n, st_u8 *head)
 }
 
 static st_decimal
-__data_min(const __st_data *data, const size_t incx)
+__data_min(const __st_data *data)
 {
     size_t n = data->size;
     void *head = data->head;
@@ -309,13 +309,13 @@ __data_min(const __st_data *data, const size_t incx)
 st_decimal
 st_vec_min(st_vector *vec)
 {
-    return __data_min(vec->data, 1);
+    return __data_min(vec->data);
 }
 
 st_decimal
 st_mat_min(st_matrix *mat)
 {
-    return __data_min(mat->data, 1);
+    return __data_min(mat->data);
 }
 
 /** ================================================================================================
