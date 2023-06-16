@@ -306,13 +306,13 @@ __data_min(const __st_data *data)
     }
 }
 
-st_decimal
+inline st_decimal
 st_vec_min(st_vector *vec)
 {
     return __data_min(vec->data);
 }
 
-st_decimal
+inline st_decimal
 st_mat_min(st_matrix *mat)
 {
     return __data_min(mat->data);
