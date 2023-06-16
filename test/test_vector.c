@@ -169,11 +169,6 @@ test__st_vec_abs(result *rp)
     for (size_t i = 0; i < n; i++)
         rp->value += !equal(-st_vec_access(iv, i), st_vec_access(iv_abs, i));
 
-
-
-
-
-
     return rp;
 }
 
@@ -189,6 +184,12 @@ test__st_vec_min(result *rp)
     rp->value += !equal(st_vec_min(dv), 0.577215664901532);
     rp->value += !equal(st_vec_min(iv), 0);
 
+    dv = test_d_vec_2();
+    iv = st_vec_copy_cast(dv, st_dtype_i32);
+
+    rp->value += !equal(st_vec_min(dv), 1.602176487);
+    rp->value += !equal(st_vec_min(iv), 1);
+
     return rp;
 }
 
@@ -198,7 +199,7 @@ test__st_vec_max(result *rp)
     rp->name = "st_vec_max";
 
     st_vector *dv = test_d_vec_1();
-    st_vector *iv = st_vec_copy_cast(iv, st_dtype_i32);
+    st_vector *iv = st_vec_copy_cast(dv, st_dtype_i32);
 
     rp->value += !equal(st_vec_max(dv), 3.141592653589793);
     rp->value += !equal(st_vec_max(iv), 3);
