@@ -1,6 +1,6 @@
 
-#define st_sse4_1
-// #define st_avx2
+// #define st_sse4_1
+#define st_avx2
 
 /* =================================================================================================
  * SSE4.1 settings
@@ -37,6 +37,9 @@
 #define __st_m_min_u8(i1,i2)     _mm_min_epu8 (i1, i2)
 #define __st_m_min_i32(i1, i2)   _mm_min_epi32(i1, i2)
 #define __st_m_min_d64(d1, d2)   _mm_min_pd(d1, d2)
+#define __st_m_max_u8(i1,i2)     _mm_max_epu8 (i1, i2)
+#define __st_m_max_i32(i1, i2)   _mm_max_epi32(i1, i2)
+#define __st_m_max_d64(d1, d2)   _mm_max_pd(d1, d2)
 
 #define __st_m_and_i(i1, i2)     _mm_and_si128(i1, i2)
 #define __st_m_and_d(d1, d2)     _mm_and_pd(d1, d2)
@@ -97,6 +100,9 @@
 #define __st_m_min_u8(i1,i2)     _mm256_min_epu8 (i1, i2)
 #define __st_m_min_i32(i1, i2)   _mm256_min_epi32(i1, i2)
 #define __st_m_min_d64(d1, d2)   _mm256_min_pd(d1, d2)
+#define __st_m_max_u8(i1,i2)     _mm256_max_epu8 (i1, i2)
+#define __st_m_max_i32(i1, i2)   _mm256_max_epi32(i1, i2)
+#define __st_m_max_d64(d1, d2)   _mm256_max_pd(d1, d2)
 
 #define __st_m_and_i(i1, i2)     _mm256_and_si256(i1, i2)
 #define __st_m_and_d(da, db)     _mm256_and_pd(da, db)

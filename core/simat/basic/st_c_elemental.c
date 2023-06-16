@@ -90,7 +90,7 @@
 // }
 
 /** ================================================================================================
- * Compute absolute value
+ *  Compute absolute value
  */
 
 static void
@@ -176,8 +176,7 @@ st_mat_abs(st_matrix *mat)
 }
 
 /** ================================================================================================
- * vectorized `min` function
- * need SIMD!
+ *  min/max functions
  */
 
 static st_d64
@@ -318,77 +317,142 @@ st_mat_min(st_matrix *mat)
     return __data_min(mat->data);
 }
 
-/** ================================================================================================
- * vectorized `max` function
- * need SIMD!
- */
-
-static st_decimal
-simd_max_i32(size_t n, st_i32 *elem, const size_t incx)
+static st_d64
+__max_d64(size_t n, st_d64 *head)
 {
-    st_d64 max = *elem;
-    while (n--) {
-        max = (*elem > max ? *elem : max);
-        elem++;
+    size_t psize     = __st_m_psize_d64;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_d64 value;
+    st_d64 max     = *head;
+    __st_md pk_max = __st_load_d64(head);
+    __st_md *pe    = (__st_md *) head;
+
+    while (packs--)
+        pk_max = __st_m_max_d64(__st_load_d64(pe++), pk_max);
+
+    if (n > remainder)
+        for (size_t i = 0; i < psize; i++)
+            max = (max > pk_max[i] ? max : pk_max[i]);
+
+    head = (st_d64 *)pe;
+
+    while (remainder--) {
+        value = *head++;
+        max = (max > value ? max : value);
+    }
+    return max;
+}
+
+static st_i32
+__max_i32(size_t n, st_i32 *head)
+{
+    size_t psize     = __st_m_psize_i32;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_i32 value;
+    st_i32 arr_max[psize];
+    st_i32 max = *head;
+    __st_mi pk_e;
+    __st_mi pk_max = __st_load_i32(head);
+    __st_mi *pe = (__st_mi *)head;
+
+    while (packs--) {
+
+        pk_e = __st_load_i32(pe++);
+        pk_max = __st_m_max_i32(pk_e, pk_max);
+    }
+
+    if (n > remainder) {
+
+        __st_store_i32(arr_max, pk_max);
+
+        for (size_t i = 0; i < psize; i++)
+            max = (max > arr_max[i] ? max : arr_max[i]);
+    }
+
+    head = (st_i32 *)pe;
+
+    while (remainder--) {
+        value = *head++;
+        max = (max > value ? max : value);
+    }
+    return max;
+}
+
+static st_u8
+__max_u8_bool(size_t n, st_u8 *head)
+{
+    size_t psize     = __st_m_psize_u8;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_u8 value;
+    st_u8 arr_max[psize];
+    st_u8 max = *head;
+    __st_mi pk_e;
+    __st_mi pk_max = __st_load_i32(head);
+    __st_mi *pe = (__st_mi *)head;
+
+    while (packs--) {
+
+        pk_e = __st_load_i32(pe++);
+        pk_max = __st_m_max_u8(pk_e, pk_max);
+    }
+
+    if (n > remainder) {
+
+        __st_store_i32(arr_max, pk_max);
+
+        for (size_t i = 0; i < psize; i++)
+            max = (max > arr_max[i] ? max : arr_max[i]);
+    }
+
+    head = (st_u8 *)pe;
+
+    while (remainder--) {
+        value = *head++;
+        max = (max > value ? max : value);
     }
     return max;
 }
 
 static st_decimal
-simd_max_u8(size_t n, st_u8 *elem, const size_t incx)
+__data_max(const __st_data *data)
 {
-    st_d64 max = *elem;
-    while (n--) {
-        max = (*elem > max ? *elem : max);
-        max = __st_trim_pixel(max);
-        elem++;
-    }
-    return max;
-}
+    size_t n = data->size;
+    void *head = data->head;
 
-static st_decimal
-simd_max_bool(size_t n, st_bool *elem, const size_t incx)
-{
-    st_d64 max = *elem;
-    while (n--)
-        max = (*elem) || max;
-
-    return max;
-}
-
-static st_decimal
-__data_max(const __st_data *data, const size_t incx)
-{
     switch (data->dtype) {
         case st_dtype_d64:
-            return __st_data_access(
-                data,
-                cblas_idmax(data->size, data->head, incx));
+            return (st_decimal)__max_d64(n, head);
 
         case st_dtype_i32:
-            return simd_max_i32(data->size, data->head, incx);
+            return (st_decimal)__max_i32(n, head);
 
         case st_dtype_u8:
-            return simd_max_u8(data->size, data->head, incx);
+            return (st_decimal)__max_u8_bool(n, head);
 
         case st_dtype_bool:
-            return simd_max_bool(data->size, data->head, incx);
+            return (st_decimal)__max_u8_bool(n, head);
 
         default:
             __st_raise_dtype_error();
     }
 }
 
-st_decimal
+inline st_decimal
 st_vec_max(st_vector *vec)
 {
-    return __data_max(vec->data, 1);
+    return __data_max(vec->data);
 }
 
-st_decimal
+inline st_decimal
 st_mat_max(st_matrix *mat)
 {
-    return __data_max(mat->data, 1);
+    return __data_max(mat->data);
 }
 
 /** ================================================================================================
