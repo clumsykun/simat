@@ -8,6 +8,7 @@ typedef enum __st_dtype__ {
 #define st_bool    bool
 #define st_u8      unsigned char
 #define st_i32     int
+#define st_i64     long long
 #define st_d64     double
 #define st_decimal st_d64
 

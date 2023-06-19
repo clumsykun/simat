@@ -11,6 +11,7 @@
 #define __st_mi         __m128i
 #define __st_md         __m128d
 #define __st_m_psize_d64 2
+#define __st_m_psize_i64 2
 #define __st_m_psize_i32 4
 #define __st_m_psize_u8  16
 #define __st_m_psize_b   16
@@ -20,11 +21,11 @@
 #define __st_store_i(p, i)       _mm_storeu_si128((__m128i *)p, i)
 #define __st_store_d64(p, d)     _mm_storeu_pd((double *)p, d)
 
-#define __st_m_abs_i8(i)         _mm_abs_epi8(i)
 #define __st_m_abs_i32(i)        _mm_abs_epi32(i)
 
 #define __st_m_add_i8(i1, i2)    _mm_add_epi8(i1, i2)
 #define __st_m_add_i32(i1, i2)   _mm_add_epi32(i1, i2)
+#define __st_m_add_i64(i1, i2)   _mm_add_epi64(i1, i2)
 #define __st_m_add_d64(d1, d2)   _mm_add_pd(d1, d2)
 
 #define __st_m_sub_i32(i1, i2)   _mm_sub_epi32(i1, i2)
@@ -33,6 +34,8 @@
 #define __st_m_mul_i32(i1, i2)   _mm_mullo_epi32(i1, i2)
 #define __st_m_mul_d64(d1, d2)   _mm_mul_pd(d1, d2)
 #define __st_m_mullo_i16(i1, i2) _mm_mullo_epi16(i1, i2)
+
+#define __st_m_sad_u8(i1, i2)    _mm_sad_epu8(i1, i2)
 
 #define __st_m_min_u8(i1,i2)     _mm_min_epu8 (i1, i2)
 #define __st_m_min_i32(i1, i2)   _mm_min_epi32(i1, i2)
@@ -74,6 +77,7 @@
 #define __st_mi         __m256i
 #define __st_md         __m256d
 #define __st_m_psize_d64 4
+#define __st_m_psize_i64 4
 #define __st_m_psize_i32 8
 #define __st_m_psize_u8  32
 #define __st_m_psize_b   32
@@ -83,11 +87,11 @@
 #define __st_store_i(p, i)       _mm256_storeu_si256((__m256i *)p, i)
 #define __st_store_d64(p, d)     _mm256_storeu_pd((double *)p, d)
 
-#define __st_m_abs_i8(i)         _mm256_abs_epi8(i)
 #define __st_m_abs_i32(i)        _mm256_abs_epi32(i)
 
 #define __st_m_add_i8(i1, i2)    _mm256_add_epi8(i1, i2)
 #define __st_m_add_i32(i1, i2)   _mm256_add_epi32(i1, i2)
+#define __st_m_add_i64(i1, i2)   _mm256_add_epi64(i1, i2)
 #define __st_m_add_d64(d1, d2)   _mm256_add_pd(d1, d2)
 
 #define __st_m_sub_i32(i1, i2)   _mm256_sub_epi32(i1, i2)
@@ -96,6 +100,8 @@
 #define __st_m_mul_i32(i1, i2)   _mm256_mullo_epi32(i1, i2)
 #define __st_m_mul_d64(d1, d2)   _mm256_mul_pd(d1, d2)
 #define __st_m_mullo_i16(i1, i2) _mm256_mullo_epi16(i1, i2)
+
+#define __st_m_sad_u8(i1, i2)    _mm256_sad_epu8(i1, i2)
 
 #define __st_m_min_u8(i1,i2)     _mm256_min_epu8 (i1, i2)
 #define __st_m_min_i32(i1, i2)   _mm256_min_epi32(i1, i2)

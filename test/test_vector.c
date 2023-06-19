@@ -217,6 +217,23 @@ test__st_vec_max(result *rp)
 }
 
 result *
+test__st_vec_sum(result *rp)
+{
+    rp->name = "st_vec_sum";
+
+    st_vector *dv = test_d_vec_1();
+    st_vector *iv = st_vec_copy_cast(dv, st_dtype_i32);
+
+    rp->value += !equal(st_precise(st_vec_sum(dv),8), 9.46933769);
+    rp->value += !equal(st_vec_sum(iv), 7);
+
+    st_vector *uv = test_u_vec_1();
+    rp->value += !equal(st_vec_sum(uv), 124716);
+
+    return rp;
+}
+
+result *
 test__st_vec_norm(result *rp)
 {
     rp->name = "st_vec_norm";
@@ -369,6 +386,7 @@ test__vector()
     call_test(test__st_vec_abs);
     call_test(test__st_vec_min);
     call_test(test__st_vec_max);
+    call_test(test__st_vec_sum);
     call_test(test__st_vec_scale);
     call_test(test__st_vec_add);
     call_test(test__st_vec_mul);

@@ -461,31 +461,89 @@ st_mat_max(st_matrix *mat)
  */
 
 static st_decimal
-simd_sum_i32(size_t n, st_i32 *elem, const size_t incx)
+__sum_d64(size_t n, st_d64 *head)
 {
-    st_d64 sum = 0;
-    while (n--)
-        sum += *elem++;
+    size_t psize     = __st_m_psize_d64;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_d64 sum     = 0;
+    __st_md pk_sum = __st_m_zero_d();
+    __st_md *p     = (__st_md *) head;
+
+    while (packs--)
+        pk_sum = __st_m_add_d64(__st_load_d64(p++), pk_sum);
+
+    if (n > remainder)
+        for (size_t i = 0; i < psize; i++)
+            sum += pk_sum[i];
+
+    head = (st_d64 *)p;
+
+    while (remainder--)
+        sum += *head++;
 
     return sum;
 }
 
-static st_decimal
-simd_sum_u8(size_t n, st_u8 *elem, const size_t incx)
+static st_i32
+__sum_i32(size_t n, st_i32 *head)
 {
-    st_d64 sum = 0;
-    while (n--)
-        sum += *elem++;
+    size_t psize     = __st_m_psize_i32;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_i32 arr_sum[psize];
+    st_i32 sum     = 0;
+    __st_mi pk_sum = __st_m_zero_i();
+    __st_mi *p     = (__st_mi *) head;
+
+    while (packs--)
+        pk_sum = __st_m_add_i32(__st_load_i(p++), pk_sum);
+
+    __st_store_i(arr_sum, pk_sum);
+
+    if (n > remainder)
+        for (size_t i = 0; i < psize; i++)
+            sum += pk_sum[i];
+
+    head = (st_i32 *)p;
+
+    while (remainder--)
+        sum += *head++;
 
     return sum;
 }
 
-static st_decimal
-simd_sum_bool(size_t n, st_bool *elem, const size_t incx)
+static st_i64
+__sum_u8_bool(size_t n, st_u8 *head)
 {
-    st_d64 sum = 0;
-    while (n--)
-        sum += *elem++;
+    size_t psize     = __st_m_psize_u8;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_i64 arr_sum[__st_m_psize_i64];
+    st_i64 sum = 0;
+    __st_mi pk_sum = __st_m_zero_i();
+    __st_mi zero   = __st_m_zero_i();
+    __st_mi *p     = (__st_mi *) head;
+    __st_mi pk_sad;
+
+    while (packs--) {
+        pk_sad = __st_m_sad_u8(__st_load_i(p++), zero);
+        pk_sum = __st_m_add_i64(pk_sad, pk_sum);
+    }
+
+    __st_store_i(arr_sum, pk_sum);
+
+    if (n > remainder)
+        for (size_t i = 0; i < __st_m_psize_i64; i++)
+            sum += pk_sum[i];
+
+    head = (st_u8 *)p;
+
+    while (remainder--)
+        sum += *head++;
 
     return sum;
 }
@@ -493,18 +551,21 @@ simd_sum_bool(size_t n, st_bool *elem, const size_t incx)
 static st_decimal
 __data_sum(const __st_data *data, const size_t incx)
 {
+    size_t n = data->size;
+    void *head = data->head;
+
     switch (data->dtype) {
         case st_dtype_d64:
-            return cblas_dsum(data->size, data->head, incx);
+            return (st_decimal)__sum_d64(n, head);
 
         case st_dtype_i32:
-            return simd_sum_i32(data->size, data->head, incx);
+            return (st_decimal)__sum_i32(data->size, data->head);
 
         case st_dtype_u8:
-            return simd_sum_u8(data->size, data->head, incx);
+            return (st_decimal)__sum_u8_bool(data->size, data->head);
 
         case st_dtype_bool:
-            return simd_sum_bool(data->size, data->head, incx);
+            return (st_decimal)__sum_u8_bool(data->size, data->head);
 
         default:
             __st_raise_dtype_error();
