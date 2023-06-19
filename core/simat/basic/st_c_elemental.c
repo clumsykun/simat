@@ -90,7 +90,7 @@
 // }
 
 /** ================================================================================================
- *  Compute absolute value
+ *  Compute absolute value.
  */
 
 static void
@@ -176,7 +176,7 @@ st_mat_abs(st_matrix *mat)
 }
 
 /** ================================================================================================
- *  min/max functions
+ *  Compute min/max value.
  */
 
 static st_d64
@@ -456,8 +456,7 @@ st_mat_max(st_matrix *mat)
 }
 
 /** ================================================================================================
- * vectorized `sum` function
- * need SIMD!
+ *  Compute sum value.
  */
 
 static st_decimal
@@ -467,6 +466,7 @@ __sum_d64(size_t n, st_d64 *head)
     size_t packs     = n / psize;
     size_t remainder = n % psize;
 
+    st_d64 arr_sum[psize];
     st_d64 sum     = 0;
     __st_md pk_sum = __st_m_zero_d();
     __st_md *p     = (__st_md *) head;
@@ -474,9 +474,11 @@ __sum_d64(size_t n, st_d64 *head)
     while (packs--)
         pk_sum = __st_m_add_d64(__st_load_d64(p++), pk_sum);
 
+    __st_store_d64(arr_sum, pk_sum);
+
     if (n > remainder)
         for (size_t i = 0; i < psize; i++)
-            sum += pk_sum[i];
+            sum += arr_sum[i];
 
     head = (st_d64 *)p;
 
@@ -559,13 +561,13 @@ __data_sum(const __st_data *data, const size_t incx)
             return (st_decimal)__sum_d64(n, head);
 
         case st_dtype_i32:
-            return (st_decimal)__sum_i32(data->size, data->head);
+            return (st_decimal)__sum_i32(n, head);
 
         case st_dtype_u8:
-            return (st_decimal)__sum_u8_bool(data->size, data->head);
+            return (st_decimal)__sum_u8_bool(n, head);
 
         case st_dtype_bool:
-            return (st_decimal)__sum_u8_bool(data->size, data->head);
+            return (st_decimal)__sum_u8_bool(n, head);
 
         default:
             __st_raise_dtype_error();
@@ -585,9 +587,44 @@ st_mat_sum(st_matrix *mat)
 }
 
 /** ================================================================================================
- * vectorized `square_sum` function
- * need SIMD!
+ *  Compute square sum value.
  */
+
+static st_d64
+__sum_square_d64(size_t n, st_d64 *head)
+{
+    size_t psize     = __st_m_psize_d64;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_d64 elem, arr_sum[psize];
+    st_d64 sum     = 0;
+    __st_md pk_elem;
+    __st_md pk_sum = __st_m_zero_d();
+    __st_md *p     = (__st_md *)head;
+
+    while (packs--) {
+        pk_elem = __st_load_d64(p++);
+        pk_elem = __st_m_mul_d64(pk_elem, pk_elem);
+        pk_sum = __st_m_add_d64(pk_elem, pk_sum);
+    }
+
+    if (n > remainder) {
+        __st_store_d64(arr_sum, pk_sum);
+
+        for (size_t i = 0; i < psize; i++)
+            sum += arr_sum[i];
+    }
+
+    head = (st_d64 *)p;
+
+    while (remainder--) {
+        elem = *head++;
+        sum += elem*elem;
+    }
+
+    return sum;
+}
 
 static st_decimal
 simd_sum_square_i32(size_t n, st_i32 *elem)
@@ -628,18 +665,21 @@ simd_sum_square_bool(size_t n, st_i32 *elem)
 static st_decimal
 __data_norm(const __st_data *data, const size_t incx)
 {
+    size_t n = data->size;
+    void *head = data->head;
+
     switch (data->dtype) {
         case st_dtype_d64:
-            return cblas_dnrm2(data->size, data->head, 1);
+            return sqrt((st_decimal)__sum_square_d64(n, head));
 
         case st_dtype_i32:
-            return sqrt(simd_sum_square_i32(data->size, data->head));
+            return sqrt((st_decimal)simd_sum_square_i32(data->size, data->head));
 
         case st_dtype_u8:
-            return sqrt(simd_sum_square_u8(data->size, data->head));
+            return sqrt((st_decimal)simd_sum_square_u8(data->size, data->head));
 
         case st_dtype_bool:
-            return sqrt(simd_sum_square_bool(data->size, data->head));
+            return sqrt((st_decimal)simd_sum_square_bool(data->size, data->head));
 
         default:
             __st_raise_dtype_error();
