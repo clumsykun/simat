@@ -587,7 +587,7 @@ st_mat_sum(st_matrix *mat)
 }
 
 /** ================================================================================================
- *  Compute square sum value.
+ *  Compute sum of square.
  */
 
 static st_d64
@@ -626,44 +626,80 @@ __sum_square_d64(size_t n, st_d64 *head)
     return sum;
 }
 
-static st_decimal
-simd_sum_square_i32(size_t n, st_i32 *elem)
+static st_i32
+__sum_square_i32(size_t n, st_i32 *head)
 {
-    st_d64 sum = 0;
-    while (n--) {
-        sum += (*elem)*(*elem);
-        elem++;
+    size_t psize     = __st_m_psize_i32;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_i32 elem, arr_sum[psize];
+    st_i32 sum     = 0;
+    __st_mi pk_elem;
+    __st_mi pk_sum = __st_m_zero_i();
+    __st_mi *p     = (__st_mi *) head;
+
+    while (packs--) {
+        pk_elem = __st_load_i(p++);
+        pk_elem = __st_m_mul_i32(pk_elem, pk_elem);
+        pk_sum  = __st_m_add_i32(pk_elem, pk_sum);
+    }
+
+    if (n > remainder) {
+        __st_store_i(arr_sum, pk_sum);
+
+        for (size_t i = 0; i < psize; i++)
+            sum += pk_sum[i];
+    }
+
+    head = (st_i32 *)p;
+
+    while (remainder--) {
+        elem = *head++;
+        sum += elem * elem;
+    }
+
+    return sum;
+}
+
+static st_i32
+__sum_square_u8_bool(size_t n, st_i32 *head)
+{
+    size_t psize     = __st_m_psize_u8;
+    size_t packs     = n / psize;
+    size_t remainder = n % psize;
+
+    st_i32 value, arr_sum[__st_m_psize_i32];
+    st_i32 sum = 0;
+    __st_mi pk_sum = __st_m_zero_i();
+    __st_mi zero   = __st_m_zero_i();
+    __st_mi *p     = (__st_mi *) head;
+    __st_mi pk_sad;
+
+    while (packs--) {
+        pk_sad = __st_m_sad_u8(__st_load_i(p++), zero);
+        pk_sad = __st_m_mul_i32(pk_sad, pk_sad);
+        pk_sum = __st_m_add_i32(pk_sad, pk_sum);
+    }
+
+    __st_store_i(arr_sum, pk_sum);
+
+    if (n > remainder)
+        for (size_t i = 0; i < __st_m_psize_i64; i++)
+            sum += pk_sum[i];
+
+    head = (st_u8 *)p;
+
+    while (remainder--) {
+        value = *head++;
+        sum += value * value;
     }
 
     return sum;
 }
 
 static st_decimal
-simd_sum_square_u8(size_t n, st_i32 *elem)
-{
-    st_d64 sum = 0;
-    while (n--) {
-        sum += (*elem)*(*elem);
-        elem++;
-    }
-
-    return sum;
-}
-
-static st_decimal
-simd_sum_square_bool(size_t n, st_i32 *elem)
-{
-    st_d64 sum = 0;
-    while (n--) {
-        sum += (*elem)*(*elem);
-        elem++;
-    }
-
-    return sum;
-}
-
-static st_decimal
-__data_norm(const __st_data *data, const size_t incx)
+__data_norm(const __st_data *data)
 {
     size_t n = data->size;
     void *head = data->head;
@@ -673,13 +709,13 @@ __data_norm(const __st_data *data, const size_t incx)
             return sqrt((st_decimal)__sum_square_d64(n, head));
 
         case st_dtype_i32:
-            return sqrt((st_decimal)simd_sum_square_i32(data->size, data->head));
+            return sqrt((st_decimal)__sum_square_i32(n, head));
 
         case st_dtype_u8:
-            return sqrt((st_decimal)simd_sum_square_u8(data->size, data->head));
+            return sqrt((st_decimal)__sum_square_u8_bool(n, head));
 
         case st_dtype_bool:
-            return sqrt((st_decimal)simd_sum_square_bool(data->size, data->head));
+            return sqrt((st_decimal)__sum_square_u8_bool(n, head));
 
         default:
             __st_raise_dtype_error();
@@ -689,9 +725,14 @@ __data_norm(const __st_data *data, const size_t incx)
 st_decimal
 st_vec_norm(st_vector *vec)
 {
-    return __data_norm(vec->data, 1);
+    return __data_norm(vec->data);
 }
 
+st_decimal
+st_mat_norm(st_matrix *mat)
+{
+    return __data_norm(mat->data);
+}
 
 /* =================================================================================================
  * pair function
